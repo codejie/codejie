@@ -173,7 +173,7 @@ public class ActorStage extends Stage {
 	}
 	
 	protected BodyImageActor createBodyImageActor(BodyImageActorElement elm) {
-		
+		return null;
 	}
 	
 	public void addBodyImageActor(BodyImageActor actor) {

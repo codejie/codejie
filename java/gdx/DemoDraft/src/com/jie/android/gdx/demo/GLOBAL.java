@@ -8,7 +8,7 @@ public class GLOBAL {
 	public static final float SCREEN_HEIGHT		=	800;//800;
 	
 	public static final float WORLD_SCALE		=	100;
-	public static final Vector2 WORLD_GRAVITY	=	new Vector2(0, -2f);
+	public static final Vector2 WORLD_GRAVITY	=	new Vector2(0, -9.8f);
 	
 	public static boolean DEBUG					=	true;
 	

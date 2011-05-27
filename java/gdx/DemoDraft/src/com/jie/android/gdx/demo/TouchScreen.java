@@ -37,7 +37,7 @@ public class TouchScreen extends Screen implements InputProcessor {
 		bgStage.step(timestep);
 		actStage.step(timestep);
 		
-		bgStage.draw();
+		//bgStage.draw();
 		actStage.draw();
 	}	
 	

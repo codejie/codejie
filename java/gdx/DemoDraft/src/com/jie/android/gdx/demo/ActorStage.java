@@ -5,6 +5,8 @@
  */
 package com.jie.android.gdx.demo;
 
+import java.util.Vector;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -16,6 +18,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.jie.android.gdx.demo.BodyImageActorElement.ActorShape;
+import com.jie.android.gdx.demo.BodyImageActorElement.ActorType;
 
 public class ActorStage extends Stage {
 	
@@ -27,7 +31,8 @@ public class ActorStage extends Stage {
 	
 	private Group frameGroup = new Group("frame");
 	private Group actorGroup = new Group("actor");
-	private Group storeGroup = new Group("stroe");
+	
+	private Vector<BodyImageActorElement> actorVector = new Vector<BodyImageActorElement>();
 	
 	public ActorStage() {
 		super(GLOBAL.SCREEN_WIDTH, GLOBAL.SCREEN_HEIGHT, true);
@@ -38,7 +43,7 @@ public class ActorStage extends Stage {
 	
 	private void initWorld() {
 		world = new World(GLOBAL.WORLD_GRAVITY, true);
-		
+	
 		//create frame
 		BodyDef def = new BodyDef();
 		def.type = BodyType.StaticBody;
@@ -103,52 +108,37 @@ public class ActorStage extends Stage {
 		shape.dispose();	
 		
 		this.addActor(frameGroup);
+
 	}
 	
 	private void initActors() {
-		float width = 32;
-		float height = 32;
 		
-		BodyDef def = new BodyDef();
-		def.type = BodyType.DynamicBody;
-		
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(TOOLKIT.Screen2World(width) / 2, TOOLKIT.Screen2World(height) / 2);
-		
-		FixtureDef fd = new FixtureDef();
-		fd.shape = shape;
-		fd.restitution = 0.1f;
-		fd.density = 1.0f;
-	
 		for(int i = 0; i < NUMBER_ACTOR; ++ i) {
-			float x = MathUtils.random(width, width + 32);//GLOBAL.SCREEN_WIDTH - width);
-			float y = 300 + GLOBAL.GROUND_Y + i * 64;
-			def.position.set(TOOLKIT.getWorldBoxCenter(TOOLKIT.Screen2World(x, y), TOOLKIT.Screen2World(width, height)));
-			def.angle = i * 0.5f;
+			BodyImageActorElement ele = new BodyImageActorElement();
 			
-			BodyImageActor actor = new BodyImageActor("actor" + i, new TextureRegion(RESOURCE.colorTexture, 0, 64 * (i % 4), 32, 32), world, def, fd);
-
-			storeGroup.addActor(actor);
-			//actorArray[i].width = width;
-			//actorArray[i].height = height;
+			ele.name = "actor" + i;
+			ele.width = 32;
+			ele.height = 32;
+			ele.x = MathUtils.random(ele.width, GLOBAL.SCREEN_WIDTH - ele.width);
+			ele.y = 200 + GLOBAL.GROUND_Y + i * 64;
+			ele.type = ActorType.Dynamic;
+			ele.shape = ActorShape.Box;
+			ele.texture = RESOURCE.colorTexture;
+			ele.tx = 0;
+			ele.ty = 0;
 			
-			//this.addActor(actorArray[i]);
+			actorVector.add(ele);
 		}
 		
-		shape.dispose();
-		
-		
-		actorGroup.addActor(storeGroup.getActors().get(0));
-		actorGroup.addActor(storeGroup.getActors().get(1));
-		
-		this.addActor(actorGroup);
+		//this.addActor(actorGroup);
 	}
 	
 	private float count = 0.0f;
 	private boolean done = false;
+	
 	public void step(float delta) {
 		world.step(delta, 3, 3);
-		
+/*	
 		int index = 0;
 		while(index < root.getGroups().size()) {
 			if(root.getGroups().get(index).name != "store") {
@@ -159,11 +149,12 @@ public class ActorStage extends Stage {
 			}
 			++ index;
 		}
-		
-		if(count > 5.0f && done == false) {
-			actorGroup.addActor(storeGroup.getActors().get(2));
-			actorGroup.addActor(storeGroup.getActors().get(3));
-			actorGroup.removeActor(storeGroup.getActors().get(0));
+*/		
+		if(count > 1.0f && done == false) {
+			
+			addBodyImageActor(actorVector.get(1));
+			addBodyImageActor(actorVector.get(2));
+			
 			count = 0.0f;
 			done = true;
 		}
@@ -172,16 +163,17 @@ public class ActorStage extends Stage {
 		}
 	}
 	
-	protected BodyImageActor createBodyImageActor(BodyImageActorElement elm) {
-		return null;
-	}
-	
-	public void addBodyImageActor(BodyImageActor actor) {
+	public void addBodyImageActor(BodyImageActorElement ele) {
 		
+		this.addActor(ele.makeActor(world));
 	}
 	
 	public void removeBodyImageActor(String name) {
-		
+		BodyImageActor actor = (BodyImageActor)this.findActor(name);
+		if(actor != null) {
+			actor.finalize();
+			this.removeActor(actor);
+		}
 	}
 	
 }

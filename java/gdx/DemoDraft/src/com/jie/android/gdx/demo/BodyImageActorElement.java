@@ -39,7 +39,7 @@ public class BodyImageActorElement {
 	public float friction = 0.0f;
 	
 	public Texture texture;
-	public float tx, ty;
+	public int tx, ty;
 	
 	public int data = 0;
 
@@ -85,7 +85,7 @@ public class BodyImageActorElement {
 		PolygonShape pshape = makePolygonShape();
 		FixtureDef fd = makeFixtureDef(pshape);
 		
-		BodyImageActor actor = new BodyImageActor(name, new TextureRegion(texture, tx, ty, width, height), world, def, fd);
+		BodyImageActor actor = new BodyImageActor(name, new TextureRegion(texture, tx, ty, (int)width, (int)height), world, def, fd);
 		actor.x = x;
 		actor.y = y;
 		actor.width = width;

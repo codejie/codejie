@@ -41,7 +41,7 @@ public class BodyImageActor extends Image {
 		pworld = world;
 	}
 	
-	public void destoryBody() {
+	public void destroyBody() {
 		if(pworld != null && body != null) {
 			pworld.destroyBody(body);
 			body = null;
@@ -65,12 +65,17 @@ public class BodyImageActor extends Image {
 		}
 	}
 	
+	public boolean isBodyDestroy() {
+		return ((body == null) ? true : false);
+	}
+	
 	protected void draw(SpriteBatch batch, float parentAlpha) {
+		if (body != null) {
+			this.x = body.getPosition().x * GLOBAL.WORLD_SCALE - this.width / 2;
+			this.y = body.getPosition().y * GLOBAL.WORLD_SCALE - this.height / 2;
 		
-		this.x = body.getPosition().x * GLOBAL.WORLD_SCALE - this.width / 2;
-		this.y = body.getPosition().y * GLOBAL.WORLD_SCALE - this.height / 2;
-		
-		this.rotation = MathUtils.radiansToDegrees * body.getAngle();
+			this.rotation = MathUtils.radiansToDegrees * body.getAngle();
+		}
 		
 		if(GLOBAL.DEBUG == false) {
 			super.draw(batch, parentAlpha);

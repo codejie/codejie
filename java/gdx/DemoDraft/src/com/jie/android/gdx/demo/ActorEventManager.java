@@ -33,7 +33,7 @@ public class ActorEventManager {
 		}
 		
 		public void exec(BodyImageActor actor) {
-			actor.destoryBody();
+			actor.destroyBody();
 			if (hasStageParent == true) {
 				stage.removeActor(actor);
 			}
@@ -44,14 +44,29 @@ public class ActorEventManager {
 	}
 	
 	private class ActionElement {
-		public ArrayList<Action> actionList = null;
+		public ArrayList<Action> actionList = new ArrayList<Action>();
+		public boolean clearAction = false;
+		
+		public void addAction(Action action) {
+			actionList.add(action);
+		}
 		
 		public void clean(BodyImageActor actor) {
 			actionList.clear();
 		}
 		
 		public void exec(BodyImageActor actor) {
-			
+			if (this.clearAction == false) {
+				if (this.actionList.size() > 0) {
+					actor.destroyBody();
+					for (Action it:this.actionList) {
+						actor.action(it);
+					}
+				}				
+			}
+			else {
+				actor.clearActions();
+			}
 		}
 	}
 	
@@ -65,8 +80,7 @@ public class ActorEventManager {
 				point = p;
 			}
 		}
-		public ArrayList<Force> forceList = new ArrayList<Force>();
-		
+		public ArrayList<Force> forceList = new ArrayList<Force>();	
 		
 		public void addForce(final Vector2 f, final Vector2 p) {
 			this.forceList.add(new Force(f, p));
@@ -160,7 +174,13 @@ public class ActorEventManager {
 			eventMap.put(actor, ele);
 		}
 		else {
-			
+			if (ele.forceElement == null) {
+				ele.forceElement = new ForceElement();
+				ele.forceElement.addForce(force, point);
+			}
+			else {
+				ele.forceElement.addForce(force, point);
+			}
 		}
 	}
 	
@@ -171,10 +191,36 @@ public class ActorEventManager {
 				ele.forceElement.clean(actor);
 				ele.forceElement = null;
 			}
+		}		
+	}
+	
+	public void applyAction(BodyImageActor actor, Action action) {
+		EventElement ele = eventMap.get(actor);
+		if (ele == null) {
+			ele = new EventElement();
+			ele.actionElement = new ActionElement();
+			ele.actionElement.addAction(action);
+			
+			eventMap.put(actor, ele);
 		}
 		else {
-			
-		}		
+			if (ele.actionElement == null) {
+				ele.actionElement = new ActionElement();
+				ele.actionElement.addAction(action);
+			}
+			else {
+				ele.actionElement.addAction(action);
+			}
+		}
+	}
+	
+	public void clearActions(BodyImageActor actor) {
+		EventElement ele = eventMap.get(actor);
+		if (ele != null) {
+			if (ele.actionElement != null) {
+				ele.actionElement.clearAction = true;
+			}
+		}
 	}
 	
 	

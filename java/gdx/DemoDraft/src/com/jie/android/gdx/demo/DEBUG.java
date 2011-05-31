@@ -27,6 +27,8 @@ public final class DEBUG {
 	public static void renderBody(Body body) {
 		if(GLOBAL.DEBUG == false)
 			return;
+		if (body == null)
+			return;
 		
 		PolygonShape poly = (PolygonShape)body.getFixtureList().get(0).getShape();
 		Transform transform = body.getTransform();

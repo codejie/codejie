@@ -23,6 +23,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveTo;
 import com.badlogic.gdx.scenes.scene2d.actors.Image;
 import com.badlogic.gdx.scenes.scene2d.actors.Label;
 import com.jie.android.gdx.demo.BodyImageActorElement.ActorShape;
@@ -176,13 +177,17 @@ public class ActorStage extends Stage {
 					}
 				}
 			}
-			//done = true;
+			done = true;
 		}
-		if (count > 3.0f && done2 == false) {
+		if (count > 2.0f && done2 == false) {
 			BodyImageActor actor = (BodyImageActor)actorGroup.findActor("actor0");
-			applyForce(actor, new Vector2(0, 1f * actor.getBodyMass()), new Vector2(0, 0));
-			done2 = true;
+			//applyForce(actor, new Vector2(0, 1f * actor.getBodyMass()), new Vector2(0, 0));
+			//done2 = true;
 			//actor.applyForce(new Vector2(0, 2f * actor.getBodyMass()), new Vector2(0, 0));
+			
+			MoveTo action = MoveTo.$(0.0f, 0.0f, 3.0f);
+			actorEventManager.applyAction(actor, action);
+			done2 = true;
 		}
 		
 		{

@@ -30,11 +30,15 @@ public class TouchScreen extends Screen implements InputProcessor {
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub
+		if(GLOBAL.DEBUG == true)
+			Gdx.gl.glClearColor(0.2f, 0.2f, 0.4f, 1.0f);
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
+		//GL10 gl = Gdx.app.getGraphics().getGL10();
+		//gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		float timestep = Gdx.graphics.getDeltaTime();
 		
-		bgStage.step(timestep);
+		//bgStage.step(timestep);
 		actStage.step(timestep);
 		
 		//bgStage.draw();

@@ -81,17 +81,26 @@ public class BodyImageActorElement {
 	
 	public BodyImageActor makeActor(World world) {
 		
-		BodyDef def = makeBodyDef();
-		PolygonShape pshape = makePolygonShape();
-		FixtureDef fd = makeFixtureDef(pshape);
+		BodyDef def = new BodyDef();
+		if(type == ActorType.Dynamic) {
+			def.type = BodyType.DynamicBody;
+		}
+		else {
+			def.type = BodyType.StaticBody;
+		}
+		def.position.set(TOOLKIT.getWorldBoxCenter(TOOLKIT.Screen2World(x, y),TOOLKIT.Screen2World(width, height)));
+		def.angle = angle;
 		
-		BodyImageActor actor = new BodyImageActor(name, new TextureRegion(texture, tx, ty, (int)width, (int)height), world, def, fd);
-		actor.x = x;
-		actor.y = y;
-		actor.width = width;
-		actor.height = height;
+		PolygonShape pshape = new PolygonShape();
+		if(shape == ActorShape.Box) {
+			pshape.setAsBox(TOOLKIT.Screen2World(width) / 2, TOOLKIT.Screen2World(height) / 2);
+		}
+		else {
+			pshape.setRadius(TOOLKIT.Screen2World(width) / 2);
+		}	
 		
-		pshape.dispose();
+		BodyImageActor actor = new BodyImageActor(name, new TextureRegion(texture, tx, ty, (int)width, (int)height), world, def, pshape, 1.0f);		
+
 		
 		return actor;
 	}

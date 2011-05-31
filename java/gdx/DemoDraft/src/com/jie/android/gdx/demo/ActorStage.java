@@ -5,9 +5,13 @@
  */
 package com.jie.android.gdx.demo;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -16,16 +20,22 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actors.Image;
+import com.badlogic.gdx.scenes.scene2d.actors.Label;
 import com.jie.android.gdx.demo.BodyImageActorElement.ActorShape;
 import com.jie.android.gdx.demo.BodyImageActorElement.ActorType;
 
 public class ActorStage extends Stage {
 	
+	private int actorID = 0;
+	
 	private static int NUMBER_ACTOR		=	5;
 	
 	private World world;
+	private ActorContactListener actorContactListener;
 	
 	//private BodyImageActor[] actorArray = new BodyImageActor[NUMBER_ACTOR];
 	
@@ -34,9 +44,11 @@ public class ActorStage extends Stage {
 	
 	private Vector<BodyImageActorElement> actorVector = new Vector<BodyImageActorElement>();
 	
+	private ArrayList<BodyImageActor> removeList = new ArrayList<BodyImageActor>();
+	
 	public ActorStage() {
 		super(GLOBAL.SCREEN_WIDTH, GLOBAL.SCREEN_HEIGHT, true);
-		
+				
 		initWorld();
 		initActors();
 	}
@@ -44,6 +56,11 @@ public class ActorStage extends Stage {
 	private void initWorld() {
 		world = new World(GLOBAL.WORLD_GRAVITY, true);
 	
+		actorContactListener = new ActorContactListener();
+		actorContactListener.setStage(this);
+		
+		world.setContactListener(actorContactListener);
+		
 		//create frame
 		BodyDef def = new BodyDef();
 		def.type = BodyType.StaticBody;
@@ -107,8 +124,7 @@ public class ActorStage extends Stage {
 
 		shape.dispose();	
 		
-		this.addActor(frameGroup);
-
+		this.addActor(frameGroup);		
 	}
 	
 	private void initActors() {
@@ -130,7 +146,7 @@ public class ActorStage extends Stage {
 			actorVector.add(ele);
 		}
 		
-		//this.addActor(actorGroup);
+		this.addActor(actorGroup);
 	}
 	
 	private float count = 0.0f;
@@ -150,30 +166,57 @@ public class ActorStage extends Stage {
 			++ index;
 		}
 */		
+		Iterator<BodyImageActor> it = removeList.iterator();
+		while(it.hasNext()) {
+			BodyImageActor actor = it.next();
+			removeBodyImageActor(actor);
+		}
+		removeList.clear();
+		
+		this.act(delta);
+/*		
+		for(Group group:this.root.getGroups()) {
+			for(Actor actor:group.getActors()) {
+				((BodyImageActor)actor).step(delta);
+			}
+		}
+*/
+		
 		if(count > 1.0f && done == false) {
 			
 			addBodyImageActor(actorVector.get(1));
 			addBodyImageActor(actorVector.get(2));
 			
 			count = 0.0f;
-			done = true;
+			//done = true;
 		}
+		
 		else {
 			count += delta;
 		}
 	}
 	
 	public void addBodyImageActor(BodyImageActorElement ele) {
-		
-		this.addActor(ele.makeActor(world));
+		ele.name = "actor" + actorID ++;
+		actorGroup.addActor(ele.makeActor(world));
+		//this.addActor(ele.makeActor(world));
 	}
 	
-	public void removeBodyImageActor(String name) {
-		BodyImageActor actor = (BodyImageActor)this.findActor(name);
-		if(actor != null) {
-			actor.finalize();
-			this.removeActor(actor);
+	
+	public void removeBodyImageActor(BodyImageActor actor) {
+		actor.destoryBody();
+		actorGroup.removeActor(actor);
+		//actor.remove();
+		//this.removeActor(actor);
+	}
+	
+	public void onActorContact(BodyImageActor a, BodyImageActor b) {
+		//Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
+		if(b.name.startsWith("actor1") || b.name.endsWith("9") || a.name.endsWith("5")) {
+			Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
+			removeList.add(b);
 		}
+			
 	}
 	
 }

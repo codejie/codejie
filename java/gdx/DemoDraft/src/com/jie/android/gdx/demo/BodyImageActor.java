@@ -22,12 +22,12 @@ public class BodyImageActor extends Image {
 	private World pworld = null;
 	private Body body = null;
 	
-	
 	public BodyImageActor(String name, TextureRegion texture, World world, BodyDef def, PolygonShape shape, float density) {
 		super(name, texture);
 		
 		body = world.createBody(def);
 		body.createFixture(shape, density);
+		body.setUserData(this);
 		
 		pworld = world; 
 	}
@@ -48,17 +48,19 @@ public class BodyImageActor extends Image {
 		}
 	}
 	
-	public void step(float delta) {
-	
-		this.rotation = MathUtils.radiansToDegrees * body.getAngle();
-		
-		this.x = body.getPosition().x * GLOBAL.WORLD_SCALE - this.width / 2;
-		this.y = body.getPosition().y * GLOBAL.WORLD_SCALE - this.height / 2;
-	
+	public void destoryBody() {
+		if(pworld != null && body != null) {
+			pworld.destroyBody(body);
+			body = null;
+		}
 	}
 	
 	protected void draw(SpriteBatch batch, float parentAlpha) {
-		step(0.0f);
+		
+		this.x = body.getPosition().x * GLOBAL.WORLD_SCALE - this.width / 2;
+		this.y = body.getPosition().y * GLOBAL.WORLD_SCALE - this.height / 2;
+		
+		this.rotation = MathUtils.radiansToDegrees * body.getAngle();
 		
 		if(GLOBAL.DEBUG == false) {
 			super.draw(batch, parentAlpha);
@@ -68,4 +70,5 @@ public class BodyImageActor extends Image {
 			super.draw(batch, parentAlpha);
 		}
 	}
+	
 }

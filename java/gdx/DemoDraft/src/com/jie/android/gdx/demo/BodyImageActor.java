@@ -41,17 +41,27 @@ public class BodyImageActor extends Image {
 		pworld = world;
 	}
 	
-	public void finalize() {
+	public void destoryBody() {
 		if(pworld != null && body != null) {
 			pworld.destroyBody(body);
 			body = null;
 		}
 	}
 	
-	public void destoryBody() {
-		if(pworld != null && body != null) {
-			pworld.destroyBody(body);
-			body = null;
+	public void applyForce(Vector2 force, Vector2 point) {
+		if (body != null) {
+			Vector2 f = body.getWorldVector(new Vector2(0.0f, 1f * body.getMass()));
+			Vector2 p = body.getWorldPoint(new Vector2(0f,0f));
+			body.applyForce(f, p);
+		}
+	}
+	
+	public float getBodyMass() {
+		if (body != null) {
+			return body.getMass();
+		}
+		else {
+			return 0.0f;
 		}
 	}
 	
@@ -67,7 +77,7 @@ public class BodyImageActor extends Image {
 		}
 		else {
 			DEBUG.renderBody(body);
-			super.draw(batch, parentAlpha);
+			//super.draw(batch, parentAlpha);
 		}
 	}
 	

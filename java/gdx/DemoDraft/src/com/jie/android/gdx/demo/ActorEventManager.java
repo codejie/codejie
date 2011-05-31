@@ -33,7 +33,7 @@ public class ActorEventManager {
 		}
 		
 		public void exec(BodyImageActor actor) {
-			actor.finalize();
+			actor.destoryBody();
 			if (hasStageParent == true) {
 				stage.removeActor(actor);
 			}
@@ -59,15 +59,27 @@ public class ActorEventManager {
 		private class Force {
 			public Vector2 force = null;
 			public Vector2 point = null;
+						
+			public Force(final Vector2 f, final Vector2 p) {
+				force = f;
+				point = p;
+			}
 		}
-		public ArrayList<Force> forceList = null;
+		public ArrayList<Force> forceList = new ArrayList<Force>();
+		
+		
+		public void addForce(final Vector2 f, final Vector2 p) {
+			this.forceList.add(new Force(f, p));
+		}
 		
 		public void clean(BodyImageActor actor) {
 			forceList.clear();
 		}
 		
 		public void exec(BodyImageActor actor) {
-			
+			for (Force it:this.forceList) {
+				actor.applyForce(it.force, it.point);
+			}
 		}		
 	}
 	
@@ -112,7 +124,15 @@ public class ActorEventManager {
 	
 	public void markToRemove(BodyImageActor actor, Group group) {
 		EventElement ele = eventMap.get(actor);
-		if (ele != null) {
+		if (ele == null) {
+			ele = new EventElement();
+			ele.removeElement = new RemoveElement();
+			ele.removeElement.hasStageParent = false;
+			ele.removeElement.group = group;
+			
+			eventMap.put(actor, ele);
+		}
+		else {
 			if(ele.removeElement == null) {
 				if (ele.actionElement != null) {
 					ele.actionElement.clean(actor);
@@ -128,23 +148,42 @@ public class ActorEventManager {
 				ele.removeElement.group = group;
 			}
 		}
-		else {
+	}
+	
+	public void applyForce(BodyImageActor actor, Vector2 force, Vector2 point) {
+		EventElement ele = eventMap.get(actor);
+		if (ele == null) {
 			ele = new EventElement();
-			ele.removeElement = new RemoveElement();
-			ele.removeElement.hasStageParent = false;
-			ele.removeElement.group = group;
+			ele.forceElement = new ForceElement();
+			ele.forceElement.addForce(force, point);
 			
 			eventMap.put(actor, ele);
 		}
+		else {
+			
+		}
+	}
+	
+	public void clearForces(BodyImageActor actor) {
+		EventElement ele = eventMap.get(actor);
+		if (ele != null) {
+			if (ele.forceElement != null) {
+				ele.forceElement.clean(actor);
+				ele.forceElement = null;
+			}
+		}
+		else {
+			
+		}		
 	}
 	
 	
 	public void step(float delta) {
 	
-		Iterator<Entry<BodyImageActor, EventElement>> it = eventMap.entrySet().iterator();
+		Iterator<Map.Entry<BodyImageActor, EventElement>> it = eventMap.entrySet().iterator();
 		
 		while(it.hasNext()) {
-			Entry<BodyImageActor, EventElement> ele = (Entry<BodyImageActor, EventElement>)it.next();
+			Map.Entry<BodyImageActor, EventElement> ele = (Map.Entry<BodyImageActor, EventElement>)it.next();
 			
 			if (ele != null) {
 				if (ele.getValue().actionElement != null) {

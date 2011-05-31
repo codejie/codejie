@@ -135,8 +135,8 @@ public class ActorStage extends Stage {
 			ele.name = "actor" + i;
 			ele.width = 32;
 			ele.height = 32;
-			ele.x = MathUtils.random(ele.width, GLOBAL.SCREEN_WIDTH - ele.width);
-			ele.y = 200 + GLOBAL.GROUND_Y + i * 64;
+			ele.x = 100;//MathUtils.random(ele.width, GLOBAL.SCREEN_WIDTH - ele.width);
+			ele.y = GLOBAL.GROUND_Y + 32;// + i * 64;
 			ele.type = ActorType.Dynamic;
 			ele.shape = ActorShape.Box;
 			ele.texture = RESOURCE.colorTexture;
@@ -150,7 +150,7 @@ public class ActorStage extends Stage {
 	}
 	
 	private float count = 0.0f;
-	private boolean done = false;
+	private boolean done = false, done2 = false;
 	
 	public void step(float delta) {
 		
@@ -166,10 +166,26 @@ public class ActorStage extends Stage {
 			addBodyImageActor(actorVector.get(2));
 			
 			count = 0.0f;
+			
+			if(done2 == false) {
+				if(actorID > 30) {
+					BodyImageActor actor = (BodyImageActor)actorGroup.findActor("actor10");
+					if(actor != null) {
+						applyForce(actor, new Vector2(0, 1f * actor.getBodyMass()), new Vector2(0, 0));
+						done2 = true;
+					}
+				}
+			}
 			//done = true;
 		}
+		if (count > 3.0f && done2 == false) {
+			BodyImageActor actor = (BodyImageActor)actorGroup.findActor("actor0");
+			applyForce(actor, new Vector2(0, 1f * actor.getBodyMass()), new Vector2(0, 0));
+			done2 = true;
+			//actor.applyForce(new Vector2(0, 2f * actor.getBodyMass()), new Vector2(0, 0));
+		}
 		
-		else {
+		{
 			count += delta;
 		}
 	}
@@ -180,14 +196,22 @@ public class ActorStage extends Stage {
 		//this.addActor(ele.makeActor(world));
 	}
 	
+	public void applyForce(BodyImageActor actor, Vector2 force, Vector2 point) {
+		actorEventManager.applyForce(actor, force, point);
+	}
 	
 	public void onActorContact(BodyImageActor a, BodyImageActor b) {
 		//Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
-		if(a.name.startsWith("actor") && (b.name.startsWith("actor") && b.name.endsWith("9"))) {
+/*		
+		if(a.name.startsWith("actor0") && b.name.startsWith("top")) {
 			Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
-			actorEventManager.markToRemove(a, actorGroup);
+			actorEventManager.clearForces(a);
 		}
-			
+		else if(a.name.startsWith("top") && b.name.startsWith("actor0")) {
+			Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
+			actorEventManager.clearForces(b);
+		}
+*/			
 	}
 	
 }

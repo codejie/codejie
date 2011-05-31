@@ -37,18 +37,18 @@ public class ActorStage extends Stage {
 	private World world;
 	private ActorContactListener actorContactListener;
 	
-	//private BodyImageActor[] actorArray = new BodyImageActor[NUMBER_ACTOR];
+	private ActorEventManager actorEventManager;
 	
 	private Group frameGroup = new Group("frame");
 	private Group actorGroup = new Group("actor");
 	
 	private Vector<BodyImageActorElement> actorVector = new Vector<BodyImageActorElement>();
 	
-	private ArrayList<BodyImageActor> removeList = new ArrayList<BodyImageActor>();
-	
 	public ActorStage() {
 		super(GLOBAL.SCREEN_WIDTH, GLOBAL.SCREEN_HEIGHT, true);
-				
+		
+		actorEventManager = new ActorEventManager();
+		
 		initWorld();
 		initActors();
 	}
@@ -153,35 +153,13 @@ public class ActorStage extends Stage {
 	private boolean done = false;
 	
 	public void step(float delta) {
+		
+		actorEventManager.step(delta);
+		
 		world.step(delta, 3, 3);
-/*	
-		int index = 0;
-		while(index < root.getGroups().size()) {
-			if(root.getGroups().get(index).name != "store") {
-				for(int i = 0; i < root.getGroups().get(index).getActors().size(); ++ i) {
-					//Gdx.app.log("ActorStage:", "actor name : " + root.getGroups().get(index).getActors().get(i).name);
-					((BodyImageActor)root.getGroups().get(index).getActors().get(i)).step(delta);
-				}
-			}
-			++ index;
-		}
-*/		
-		Iterator<BodyImageActor> it = removeList.iterator();
-		while(it.hasNext()) {
-			BodyImageActor actor = it.next();
-			removeBodyImageActor(actor);
-		}
-		removeList.clear();
 		
 		this.act(delta);
-/*		
-		for(Group group:this.root.getGroups()) {
-			for(Actor actor:group.getActors()) {
-				((BodyImageActor)actor).step(delta);
-			}
-		}
-*/
-		
+	
 		if(count > 1.0f && done == false) {
 			
 			addBodyImageActor(actorVector.get(1));
@@ -203,18 +181,11 @@ public class ActorStage extends Stage {
 	}
 	
 	
-	public void removeBodyImageActor(BodyImageActor actor) {
-		actor.destoryBody();
-		actorGroup.removeActor(actor);
-		//actor.remove();
-		//this.removeActor(actor);
-	}
-	
 	public void onActorContact(BodyImageActor a, BodyImageActor b) {
 		//Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
-		if(b.name.startsWith("actor1") || b.name.endsWith("9") || a.name.endsWith("5")) {
+		if(a.name.startsWith("actor") && (b.name.startsWith("actor") && b.name.endsWith("9"))) {
 			Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
-			removeList.add(b);
+			actorEventManager.markToRemove(a, actorGroup);
 		}
 			
 	}

@@ -149,14 +149,16 @@ public class ActorEventManager {
 			if (ele != null) {
 				if (ele.getValue().actionElement != null) {
 					ele.getValue().actionElement.exec(ele.getKey());
-					eventMap.remove(ele.getKey());
+					it.remove();
+					//eventMap.remove(ele.getKey());
 				}
 				else if (ele.getValue().forceElement != null) {
 					ele.getValue().forceElement.exec(ele.getKey());
 				}
 				else if (ele.getValue().removeElement != null) {
 					ele.getValue().removeElement.exec(ele.getKey());
-					eventMap.remove(ele.getKey());
+					it.remove();
+					//eventMap.remove(ele.getKey());
 				}
 			}
 		}	

@@ -22,8 +22,8 @@ public class BackgroundStage extends Stage {
 		bgImage.y = 0;
 		bgImage.width = GLOBAL.SCREEN_WIDTH;
 		bgImage.height = GLOBAL.SCREEN_HEIGHT;
-		
-		this.addActor(bgImage);
+		if (GLOBAL.DEBUG == false)
+			this.addActor(bgImage);
 		
 		output = new Label("output", new BitmapFont());
 		output.x = 30;

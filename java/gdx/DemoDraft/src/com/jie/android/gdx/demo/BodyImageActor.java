@@ -15,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
+import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.badlogic.gdx.scenes.scene2d.actors.Image;
 
 public class BodyImageActor extends Image {
@@ -85,6 +87,21 @@ public class BodyImageActor extends Image {
 			return body.isActive();
 		}
 		return false;
+	}
+	
+	public void makeMouseJoint(BodyImageActor other, Vector2 vct) {
+		if (body != null) {
+			MouseJointDef def = new MouseJointDef();
+			def.bodyA = other.getBody();
+			def.bodyB = body;
+			//def.target = vct;
+			pworld.createJoint(def);
+			body.setAwake(true);
+		}		
+	}
+	
+	public Body getBody() {
+		return body;
 	}
 	
 	protected void draw(SpriteBatch batch, float parentAlpha) {

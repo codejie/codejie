@@ -18,8 +18,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.JointDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
+import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -136,8 +139,8 @@ public class ActorStage extends Stage {
 			ele.name = "actor" + i;
 			ele.width = 32;
 			ele.height = 32;
-			ele.x = 100;//MathUtils.random(ele.width, GLOBAL.SCREEN_WIDTH - ele.width);
-			ele.y = GLOBAL.GROUND_Y + 32;// + i * 64;
+			ele.x = 100 + i * 100;//MathUtils.random(ele.width, GLOBAL.SCREEN_WIDTH - ele.width);
+			ele.y = 100 + i * 100;//GLOBAL.GROUND_Y + 32;// + i * 64;
 			ele.type = ActorType.Dynamic;
 			ele.shape = ActorShape.Box;
 			ele.texture = RESOURCE.colorTexture;
@@ -165,6 +168,7 @@ public class ActorStage extends Stage {
 			
 			addBodyImageActor(actorVector.get(1));
 			addBodyImageActor(actorVector.get(0));
+
 			
 			count = 0.0f;
 /*			
@@ -181,6 +185,7 @@ public class ActorStage extends Stage {
 			done = true;
 		
 		}
+/*		
 		if (count > 2.0f && done2 == false) {
 			BodyImageActor actor = (BodyImageActor)actorGroup.findActor("actor0");
 			//applyForce(actor, new Vector2(0, 1f * actor.getBodyMass()), new Vector2(0, 0));
@@ -192,7 +197,7 @@ public class ActorStage extends Stage {
 			}
 			done2 = true;
 		}
-		
+*/		
 		{
 			count += delta;
 		}
@@ -208,9 +213,13 @@ public class ActorStage extends Stage {
 		actorEventManager.applyForce(actor, force, point);
 	}
 	
+	public void makeMouseJoint(BodyImageActor actor, Vector2 vct) {
+		actor.makeMouseJoint((BodyImageActor)frameGroup.findActor("bottom"), vct);	
+	}
+	
 	public void onActorContact(BodyImageActor a, BodyImageActor b) {
 		Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
-		
+/*		
 		if(a.name.startsWith("actor1") && b.name.startsWith("top")) {
 			Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
 			actorEventManager.clearForces(a);
@@ -219,23 +228,76 @@ public class ActorStage extends Stage {
 			Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
 			actorEventManager.clearForces(b);
 		}
-		
+*/		
 	}
+	
+	private MouseJoint mj = null;
 	
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		
 		boolean touch = super.touchDown(x, y, pointer, button);
+		if (touch) {
 		BodyImageActor actor = (BodyImageActor)this.getLastTouchedChild();
 		if (actor != null) {
+			Gdx.app.log("ActorStage: - Down - ", "x : " + x + " - y : " + y);
+			
+			Gdx.app.log("ActorStage: - Actor - ", "x : " + actor.x + " - y : " + actor.y);
+			Vector2 local = actor.getBody().getPosition();
+			Gdx.app.log("ActorStage: - Body local - ", "x : " + local.x + " - y : " + local.y);
+			Vector2 wo = actor.getBody().getWorldPoint(local);
+			Gdx.app.log("ActorStage: - Body world - ", "x : " + wo.x + " - y : " + wo.y);
+
+			
+			if (mj == null) {
+			Gdx.app.log("ActorStage: ", "x : " + x + " - y : " + y);
+			
+			MouseJointDef def = new MouseJointDef();
+			def.bodyB = actor.getBody();//((BodyImageActor)actorGroup.findActor("actor1")).getBody();
+			def.bodyA = ((BodyImageActor)frameGroup.findActor("bottom")).getBody();
+/*			
+			Vector2 local = def.bodyB.getPosition();
+			Gdx.app.log("ActorStage: - Body local - ", "x : " + local.x + " - y : " + local.y);
+			Vector2 wo = def.bodyB.getWorldPoint(local);
+			Gdx.app.log("ActorStage: - Body world - ", "x : " + wo.x + " - y : " + wo.y);
+*/
+			
+			def.target.set(x / GLOBAL.WORLD_SCALE, (GLOBAL.SCREEN_HEIGHT - y) / GLOBAL.WORLD_SCALE);
+			def.maxForce = 1.8f * def.bodyB.getMass();
+			//def.dampingRatio = 0.0f;
+			//def.frequencyHz = 5;
+			//def.bodyA.setAwake(true);
+			mj = (MouseJoint)world.createJoint(def);
+			//((BodyImageActor)actorGroup.findActor("actor1")).getBody().setAwake(true);
+			}
+			
+			
 			//actorEventManager.markToRemove(actor);
 			//MoveTo action = MoveTo.$(0.0f, 400.0f, 3.0f);
 			//actorEventManager.applyAction(actor, action);
 			
-			actor.setBodyActive(!actor.isBodyActive());
+			//actor.setBodyActive(!actor.isBodyActive());
+			//makeMouseJoint(actor, new Vector2(x / GLOBAL.WORLD_SCALE, y / GLOBAL.WORLD_SCALE));
 		}
-		
+		}
+		return touch;		
+	}
+	
+	public boolean touchUp(int x, int y, int pointer, int button) {
+		boolean touch = super.touchUp(x, y, pointer, button);
+		if (mj != null) {
+			world.destroyJoint(mj);
+			mj = null;
+		}
 		return touch;
-		
+	}
+	
+	public boolean touchDragged(int x, int y, int pointer) {
+		if (mj != null) {
+			Gdx.app.log("ActorStage: ", "x : " + x + " - y : " + y);
+			Gdx.app.log("ActorStage mj - ", "x : " + mj.getTarget().x + " - y : " + mj.getTarget().y); 
+			mj.setTarget(new Vector2(x / GLOBAL.WORLD_SCALE, (GLOBAL.SCREEN_HEIGHT - y) / GLOBAL.WORLD_SCALE));
+		}
+		return super.touchDragged(x, y, pointer);
 	}
 	
 }

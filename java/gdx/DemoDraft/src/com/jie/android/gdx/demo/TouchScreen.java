@@ -77,12 +77,14 @@ public class TouchScreen extends Screen implements InputProcessor {
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
 		// TODO Auto-generated method stub
+		actStage.touchUp(x, y, pointer, button);
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) {
 		// TODO Auto-generated method stub
+		actStage.touchDragged(x, y, pointer);
 		return false;
 	}
 

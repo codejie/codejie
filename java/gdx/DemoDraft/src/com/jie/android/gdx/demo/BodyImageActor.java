@@ -48,6 +48,11 @@ public class BodyImageActor extends Image {
 		}
 	}
 	
+	public void remove() {
+		destroyBody();
+		super.remove();
+	}
+	
 	public void applyForce(Vector2 force, Vector2 point) {
 		if (body != null) {
 			Vector2 f = body.getWorldVector(new Vector2(0.0f, 1f * body.getMass()));
@@ -69,6 +74,19 @@ public class BodyImageActor extends Image {
 		return ((body == null) ? true : false);
 	}
 	
+	public void setBodyActive(boolean active) {
+		if (body != null) {
+			body.setActive(active);
+		}
+	}
+	
+	public boolean isBodyActive() {
+		if (body != null) {
+			return body.isActive();
+		}
+		return false;
+	}
+	
 	protected void draw(SpriteBatch batch, float parentAlpha) {
 		if (body != null) {
 			this.x = body.getPosition().x * GLOBAL.WORLD_SCALE - this.width / 2;
@@ -76,7 +94,7 @@ public class BodyImageActor extends Image {
 		
 			this.rotation = MathUtils.radiansToDegrees * body.getAngle();
 		}
-		
+
 		if(GLOBAL.DEBUG == false) {
 			super.draw(batch, parentAlpha);
 		}

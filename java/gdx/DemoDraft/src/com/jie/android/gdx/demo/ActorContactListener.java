@@ -16,7 +16,12 @@ public class ActorContactListener implements ContactListener {
 	@Override
 	public void beginContact(Contact contact) {
 		// TODO Auto-generated method stub
-
+		Fixture fa = contact.getFixtureA();
+		Fixture fb = contact.getFixtureB();
+		
+		if(actorStage != null) {
+			actorStage.onActorContact((BodyImageActor)fa.getBody().getUserData(), (BodyImageActor)fb.getBody().getUserData());
+		}
 	}
 
 	@Override

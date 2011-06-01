@@ -18,6 +18,8 @@ public class TouchScreen extends Screen implements InputProcessor {
 		
 		bgStage = new BackgroundStage();
 		actStage = new ActorStage();
+		
+		Gdx.input.setInputProcessor(this);
 	}
 	
 	@Override
@@ -38,10 +40,10 @@ public class TouchScreen extends Screen implements InputProcessor {
 		
 		float timestep = Gdx.graphics.getDeltaTime();
 		
-		//bgStage.step(timestep);
+		bgStage.step(timestep);
 		actStage.step(timestep);
 		
-		//bgStage.draw();
+		bgStage.draw();
 		actStage.draw();
 	}	
 	
@@ -66,6 +68,9 @@ public class TouchScreen extends Screen implements InputProcessor {
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		// TODO Auto-generated method stub
+		
+		actStage.touchDown(x, y, pointer, button);
+		
 		return false;
 	}
 

@@ -24,22 +24,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 public class ActorEventManager {
 	
 	private class RemoveElement {
-		public boolean hasStageParent = true;
-		public Stage stage = null;
-		public Group group = null;
-		
+	
 		public void clean(BodyImageActor actor) {
 			
 		}
 		
 		public void exec(BodyImageActor actor) {
-			actor.destroyBody();
-			if (hasStageParent == true) {
-				stage.removeActor(actor);
-			}
-			else {
-				group.removeActor(actor);
-			}
+			actor.remove();
 		}
 	}
 	
@@ -107,7 +98,7 @@ public class ActorEventManager {
 	
 	//
 	
-	public void markToRemove(BodyImageActor actor, Stage stage) {
+	public void markToRemove(BodyImageActor actor) {
 		
 		EventElement ele = eventMap.get(actor);
 		if (ele != null) {
@@ -122,46 +113,14 @@ public class ActorEventManager {
 				}
 				
 				ele.removeElement = new RemoveElement();
-				ele.removeElement.hasStageParent = true;
-				ele.removeElement.stage = stage;
 			}
 		}
 		else {
 			ele = new EventElement();
 			ele.removeElement = new RemoveElement();
-			ele.removeElement.hasStageParent = true;
-			ele.removeElement.stage = stage;
 			
 			eventMap.put(actor, ele);
 		}		
-	}
-	
-	public void markToRemove(BodyImageActor actor, Group group) {
-		EventElement ele = eventMap.get(actor);
-		if (ele == null) {
-			ele = new EventElement();
-			ele.removeElement = new RemoveElement();
-			ele.removeElement.hasStageParent = false;
-			ele.removeElement.group = group;
-			
-			eventMap.put(actor, ele);
-		}
-		else {
-			if(ele.removeElement == null) {
-				if (ele.actionElement != null) {
-					ele.actionElement.clean(actor);
-					ele.actionElement = null;
-				}
-				if (ele.forceElement != null) {
-					ele.forceElement.clean(actor);
-					ele.forceElement = null; 
-				}
-				
-				ele.removeElement = new RemoveElement();
-				ele.removeElement.hasStageParent = false;
-				ele.removeElement.group = group;
-			}
-		}
 	}
 	
 	public void applyForce(BodyImageActor actor, Vector2 force, Vector2 point) {
@@ -232,18 +191,17 @@ public class ActorEventManager {
 			Map.Entry<BodyImageActor, EventElement> ele = (Map.Entry<BodyImageActor, EventElement>)it.next();
 			
 			if (ele != null) {
-				if (ele.getValue().actionElement != null) {
+				if (ele.getValue().removeElement != null) {
+					ele.getValue().removeElement.exec(ele.getKey());
+					it.remove();
+				}
+				else if (ele.getValue().actionElement != null) {
 					ele.getValue().actionElement.exec(ele.getKey());
 					it.remove();
 					//eventMap.remove(ele.getKey());
 				}
 				else if (ele.getValue().forceElement != null) {
 					ele.getValue().forceElement.exec(ele.getKey());
-				}
-				else if (ele.getValue().removeElement != null) {
-					ele.getValue().removeElement.exec(ele.getKey());
-					it.remove();
-					//eventMap.remove(ele.getKey());
 				}
 			}
 		}	

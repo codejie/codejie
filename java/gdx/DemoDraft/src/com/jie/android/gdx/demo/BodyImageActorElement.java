@@ -12,8 +12,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class BodyImageActorElement {
@@ -91,16 +93,18 @@ public class BodyImageActorElement {
 		def.position.set(TOOLKIT.getWorldBoxCenter(TOOLKIT.Screen2World(x, y),TOOLKIT.Screen2World(width, height)));
 		def.angle = angle;
 		
-		PolygonShape pshape = new PolygonShape();
+		Shape pshape = null;
+
 		if(shape == ActorShape.Box) {
-			pshape.setAsBox(TOOLKIT.Screen2World(width) / 2, TOOLKIT.Screen2World(height) / 2);
+			pshape = new PolygonShape();
+			((PolygonShape)pshape).setAsBox(TOOLKIT.Screen2World(width) / 2, TOOLKIT.Screen2World(height) / 2);
 		}
 		else {
-			pshape.setRadius(TOOLKIT.Screen2World(width) / 2);
+			pshape = new CircleShape();
+			((CircleShape)pshape).setRadius(TOOLKIT.Screen2World(width) / 2);
 		}	
 		
 		BodyImageActor actor = new BodyImageActor(name, new TextureRegion(texture, tx, ty, (int)width, (int)height), world, def, pshape, 1.0f);		
-
 		
 		return actor;
 	}

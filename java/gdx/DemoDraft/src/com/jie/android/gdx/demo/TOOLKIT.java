@@ -26,4 +26,7 @@ public final class TOOLKIT {
 		return new Vector2(top.x + size.x / 2, top.y + size.y / 2);
 	}
 	
+	public static Vector2 Frame2Screen(final int x, final int y) {
+		return new Vector2(x, GLOBAL.SCREEN_HEIGHT - y);
+	}
 }

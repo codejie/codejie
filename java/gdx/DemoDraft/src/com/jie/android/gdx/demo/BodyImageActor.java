@@ -13,7 +13,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.MassData;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
@@ -21,17 +22,16 @@ import com.badlogic.gdx.scenes.scene2d.actors.Image;
 
 public class BodyImageActor extends Image {
 
-	private World pworld = null;
 	private Body body = null;
 	
-	public BodyImageActor(String name, TextureRegion texture, World world, BodyDef def, PolygonShape shape, float density) {
+	private MouseJoint mouseJoint = null;
+	
+	public BodyImageActor(String name, TextureRegion texture, World world, BodyDef def, Shape shape, float density) {
 		super(name, texture);
 		
 		body = world.createBody(def);
 		body.createFixture(shape, density);
 		body.setUserData(this);
-		
-		pworld = world; 
 	}
 	
 	public BodyImageActor(String name, TextureRegion texture, World world, BodyDef def, FixtureDef fixturedef) {
@@ -39,27 +39,29 @@ public class BodyImageActor extends Image {
 		
 		body = world.createBody(def);
 		body.createFixture(fixturedef);	
-		
-		pworld = world;
+		body.setUserData(this);
 	}
 	
 	public void destroyBody() {
-		if(pworld != null && body != null) {
-			pworld.destroyBody(body);
+		if (body != null) {
+			World world = body.getWorld();
+			world.destroyBody(body);
 			body = null;
 		}
 	}
 	
+	public Body getBody() {
+		return body;
+	}
+	
 	public void remove() {
-		destroyBody();
+		this.destroyBody();
 		super.remove();
 	}
 	
 	public void applyForce(Vector2 force, Vector2 point) {
 		if (body != null) {
-			Vector2 f = body.getWorldVector(new Vector2(0.0f, 1f * body.getMass()));
-			Vector2 p = body.getWorldPoint(new Vector2(0f,0f));
-			body.applyForce(f, p);
+			body.applyForce(force, point);//Bugs? should use World coordinate?
 		}
 	}
 	
@@ -89,19 +91,38 @@ public class BodyImageActor extends Image {
 		return false;
 	}
 	
-	public void makeMouseJoint(BodyImageActor other, Vector2 vct) {
+	public void makeMouseJoint(BodyImageActor other, Vector2 target) {
 		if (body != null) {
+			World world = body.getWorld();
+
+			if (mouseJoint != null) {
+				world.destroyJoint(mouseJoint);
+			}
 			MouseJointDef def = new MouseJointDef();
 			def.bodyA = other.getBody();
 			def.bodyB = body;
-			//def.target = vct;
-			pworld.createJoint(def);
-			body.setAwake(true);
+			def.target.set(target);
+			def.maxForce = 1000.0f * GLOBAL.WORLD_GRAVITY.y;
+			
+			mouseJoint = (MouseJoint)world.createJoint(def);
+			
+			body.setAwake(true);			
 		}		
 	}
 	
-	public Body getBody() {
-		return body;
+	public void clearMouseJoint() {
+		if (body != null) {
+			if (mouseJoint != null) {
+				body.getWorld().destroyJoint(mouseJoint);
+				mouseJoint = null;
+			}
+		}
+	}
+	
+	public void refreshMouseJoint(Vector2 target) {
+		if (mouseJoint != null) {
+			mouseJoint.setTarget(target);
+		}
 	}
 	
 	protected void draw(SpriteBatch batch, float parentAlpha) {
@@ -114,10 +135,6 @@ public class BodyImageActor extends Image {
 
 		if(GLOBAL.DEBUG == false) {
 			super.draw(batch, parentAlpha);
-		}
-		else {
-			DEBUG.renderBody(body);
-			//super.draw(batch, parentAlpha);
 		}
 	}
 	

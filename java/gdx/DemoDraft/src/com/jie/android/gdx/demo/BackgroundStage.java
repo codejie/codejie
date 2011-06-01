@@ -17,23 +17,27 @@ public class BackgroundStage extends Stage {
 	public BackgroundStage() {
 		super(GLOBAL.SCREEN_WIDTH, GLOBAL.SCREEN_HEIGHT, true);
 		
-		Image bgImage = new Image("bg", RESOURCE.bgTexture);
-		bgImage.x = 0;
-		bgImage.y = 0;
-		bgImage.width = GLOBAL.SCREEN_WIDTH;
-		bgImage.height = GLOBAL.SCREEN_HEIGHT;
-		if (GLOBAL.DEBUG == false)
+		if (GLOBAL.DEBUG == false) {
+			Image bgImage = new Image("bg", RESOURCE.bgTexture);
+			bgImage.x = 0;
+			bgImage.y = 0;
+			bgImage.width = GLOBAL.SCREEN_WIDTH;
+			bgImage.height = GLOBAL.SCREEN_HEIGHT;
 			this.addActor(bgImage);
-		
-		output = new Label("output", new BitmapFont());
-		output.x = 30;
-		output.y = GLOBAL.SCREEN_HEIGHT - 30;
-		
-		this.addActor(output);
+		}
+		else {
+			output = new Label("output", new BitmapFont());
+			output.x = 30;
+			output.y = GLOBAL.SCREEN_HEIGHT - 30;
+			
+			this.addActor(output);
+		}
 	}
 	
 	public void step(float delta) {
-		output.setText("fps: " + Gdx.graphics.getFramesPerSecond() + "fps" + " -- deltatime: " + delta);
+		if (GLOBAL.DEBUG == true) {
+			output.setText("fps: " + Gdx.graphics.getFramesPerSecond() + "fps" + " -- deltatime: " + delta);
+		}
 	}
 	
 }

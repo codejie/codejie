@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -39,6 +40,8 @@ public class ActorStage extends Stage {
 	private static int NUMBER_ACTOR		=	5;
 	
 	private World world;
+	private WorldDebugRenderer worldRenderer = null;
+	
 	private ActorContactListener actorContactListener;
 	
 	private ActorEventManager actorEventManager;
@@ -47,9 +50,13 @@ public class ActorStage extends Stage {
 	private Group actorGroup = new Group("actor");
 	
 	private Vector<BodyImageActorElement> actorVector = new Vector<BodyImageActorElement>();
+	private BodyImageActor hitActor = null;
 	
 	public ActorStage() {
 		super(GLOBAL.SCREEN_WIDTH, GLOBAL.SCREEN_HEIGHT, true);
+
+		if (GLOBAL.DEBUG == true)
+			worldRenderer = new WorldDebugRenderer();
 		
 		actorEventManager = new ActorEventManager();
 		
@@ -136,11 +143,11 @@ public class ActorStage extends Stage {
 		for(int i = 0; i < NUMBER_ACTOR; ++ i) {
 			BodyImageActorElement ele = new BodyImageActorElement();
 			
-			ele.name = "actor" + i;
-			ele.width = 32;
-			ele.height = 32;
-			ele.x = 100 + i * 100;//MathUtils.random(ele.width, GLOBAL.SCREEN_WIDTH - ele.width);
-			ele.y = 100 + i * 100;//GLOBAL.GROUND_Y + 32;// + i * 64;
+			ele.name = "box" + i;
+			ele.width = 64;
+			ele.height = 64;
+			ele.x = MathUtils.random(ele.width, GLOBAL.SCREEN_WIDTH - ele.width);
+			ele.y = GLOBAL.GROUND_Y + MathUtils.random(0, 128);
 			ele.type = ActorType.Dynamic;
 			ele.shape = ActorShape.Box;
 			ele.texture = RESOURCE.colorTexture;
@@ -149,6 +156,24 @@ public class ActorStage extends Stage {
 			
 			actorVector.add(ele);
 		}
+		
+		for (int i = 0; i < NUMBER_ACTOR; ++ i) {
+			BodyImageActorElement ele = new BodyImageActorElement();
+			
+			ele.name = "circle" + i;
+			ele.width = 64;
+			ele.height = 64;
+			ele.x = MathUtils.random(ele.width, GLOBAL.SCREEN_WIDTH - ele.width);
+			ele.y = GLOBAL.GROUND_Y + MathUtils.random(0, 128);
+			ele.type = ActorType.Dynamic;
+			ele.shape = ActorShape.Circle;
+			ele.texture = RESOURCE.colorTexture;
+			ele.tx = 0;
+			ele.ty = 65;
+			
+			actorVector.add(ele);
+		}
+		
 		
 		this.addActor(actorGroup);
 	}
@@ -161,13 +186,13 @@ public class ActorStage extends Stage {
 		actorEventManager.step(delta);
 		
 		world.step(delta, 3, 3);
-		
+		//worldRenderer.render(world);
 		this.act(delta);
 	
 		if(count > 1.0f && done == false) {
 			
 			addBodyImageActor(actorVector.get(1));
-			addBodyImageActor(actorVector.get(0));
+			addBodyImageActor(actorVector.get(6));
 
 			
 			count = 0.0f;
@@ -201,6 +226,13 @@ public class ActorStage extends Stage {
 		{
 			count += delta;
 		}
+	}
+	
+	public void draw() {
+		super.draw();
+
+		if (GLOBAL.DEBUG == true)
+			worldRenderer.render(world);
 	}
 	
 	public void addBodyImageActor(BodyImageActorElement ele) {
@@ -237,6 +269,15 @@ public class ActorStage extends Stage {
 		
 		boolean touch = super.touchDown(x, y, pointer, button);
 		if (touch) {
+			if (hitActor != null) {
+				hitActor.clearMouseJoint();
+			}
+			hitActor = (BodyImageActor)this.getLastTouchedChild();
+			if(hitActor != null){				
+				hitActor.makeMouseJoint((BodyImageActor)frameGroup.findActor("bottom"), TOOLKIT.Screen2World(TOOLKIT.Frame2Screen(x, y)));
+			}
+		}
+/*		
 		BodyImageActor actor = (BodyImageActor)this.getLastTouchedChild();
 		if (actor != null) {
 			Gdx.app.log("ActorStage: - Down - ", "x : " + x + " - y : " + y);
@@ -246,7 +287,6 @@ public class ActorStage extends Stage {
 			Gdx.app.log("ActorStage: - Body local - ", "x : " + local.x + " - y : " + local.y);
 			Vector2 wo = actor.getBody().getWorldPoint(local);
 			Gdx.app.log("ActorStage: - Body world - ", "x : " + wo.x + " - y : " + wo.y);
-
 			
 			if (mj == null) {
 			Gdx.app.log("ActorStage: ", "x : " + x + " - y : " + y);
@@ -254,16 +294,10 @@ public class ActorStage extends Stage {
 			MouseJointDef def = new MouseJointDef();
 			def.bodyB = actor.getBody();//((BodyImageActor)actorGroup.findActor("actor1")).getBody();
 			def.bodyA = ((BodyImageActor)frameGroup.findActor("bottom")).getBody();
-/*			
-			Vector2 local = def.bodyB.getPosition();
-			Gdx.app.log("ActorStage: - Body local - ", "x : " + local.x + " - y : " + local.y);
-			Vector2 wo = def.bodyB.getWorldPoint(local);
-			Gdx.app.log("ActorStage: - Body world - ", "x : " + wo.x + " - y : " + wo.y);
-*/
 			
 			def.target.set(x / GLOBAL.WORLD_SCALE, (GLOBAL.SCREEN_HEIGHT - y) / GLOBAL.WORLD_SCALE);
 			def.maxForce = 1.8f * def.bodyB.getMass();
-			//def.dampingRatio = 0.0f;
+			def.dampingRatio = 1.0f;
 			//def.frequencyHz = 5;
 			//def.bodyA.setAwake(true);
 			mj = (MouseJoint)world.createJoint(def);
@@ -279,24 +313,36 @@ public class ActorStage extends Stage {
 			//makeMouseJoint(actor, new Vector2(x / GLOBAL.WORLD_SCALE, y / GLOBAL.WORLD_SCALE));
 		}
 		}
+*/		
 		return touch;		
 	}
 	
 	public boolean touchUp(int x, int y, int pointer, int button) {
 		boolean touch = super.touchUp(x, y, pointer, button);
+		if (hitActor != null) {
+			hitActor.clearMouseJoint();
+			hitActor = null;
+		}
+/*		
 		if (mj != null) {
 			world.destroyJoint(mj);
 			mj = null;
 		}
+*/		
 		return touch;
 	}
 	
 	public boolean touchDragged(int x, int y, int pointer) {
+		if (hitActor != null) {
+			hitActor.refreshMouseJoint(TOOLKIT.Screen2World(TOOLKIT.Frame2Screen(x, y)));
+		}
+/*		
 		if (mj != null) {
 			Gdx.app.log("ActorStage: ", "x : " + x + " - y : " + y);
 			Gdx.app.log("ActorStage mj - ", "x : " + mj.getTarget().x + " - y : " + mj.getTarget().y); 
 			mj.setTarget(new Vector2(x / GLOBAL.WORLD_SCALE, (GLOBAL.SCREEN_HEIGHT - y) / GLOBAL.WORLD_SCALE));
 		}
+*/		
 		return super.touchDragged(x, y, pointer);
 	}
 	

@@ -40,10 +40,10 @@ public class TouchScreen extends Screen implements InputProcessor {
 		
 		float timestep = Gdx.graphics.getDeltaTime();
 		
-		//bgStage.step(timestep);
+		bgStage.step(timestep);
 		actStage.step(timestep);
 		
-		//bgStage.draw();
+		bgStage.draw();
 		actStage.draw();
 	}	
 	

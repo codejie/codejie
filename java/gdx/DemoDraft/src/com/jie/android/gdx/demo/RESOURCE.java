@@ -18,6 +18,7 @@ public final class RESOURCE {
 	public static Texture uiTexture;
 	public static Texture actorTexture;
 	public static Texture colorTexture;
+	public static Texture bubbleTexture1, bubbleTexture2;
 	
 	public static Music bgMusic;
 	public static Sound actorSound1;
@@ -26,11 +27,16 @@ public final class RESOURCE {
 		bgTexture = new Texture(Gdx.files.internal("data/stones.jpg"));
 		uiTexture = new Texture(Gdx.files.internal("data/ui.png"));
 		colorTexture = new Texture(Gdx.files.internal("data/Textures.png"));
+		bubbleTexture1 = new Texture(Gdx.files.internal("data/star.png"));
+		bubbleTexture2 = new Texture(Gdx.files.internal("data/ball.png"));
+		
 	}
 	
 	protected void finalize() {
 		bgTexture.dispose();
 		uiTexture.dispose();
 		colorTexture.dispose();
+		bubbleTexture1.dispose();
+		bubbleTexture2.dispose();
 	}
 }

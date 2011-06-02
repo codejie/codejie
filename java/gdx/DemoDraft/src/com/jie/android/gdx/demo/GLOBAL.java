@@ -10,7 +10,7 @@ public class GLOBAL {
 	public static final float WORLD_SCALE		=	100;
 	public static final Vector2 WORLD_GRAVITY	=	new Vector2(0f, 0.8f);
 	
-	public static boolean DEBUG					=	true;
+	public static boolean DEBUG					=	false;
 	
 	public static final float FRAME_BASE		=	10.0f;
 	public static final float GROUND_Y			=	32.0f;

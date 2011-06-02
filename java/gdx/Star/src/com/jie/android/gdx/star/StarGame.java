@@ -65,7 +65,7 @@ public class StarGame extends Game implements InputProcessor {
 	
 	private void addAction(final Image img) {
 		
-		int duration = MathUtils.random(3, 12);
+		int duration = MathUtils.random(3, 60);
 		MoveTo moveto = MoveTo.$(img.x, 800, duration);
 		moveto.setCompletionListener(new OnActionCompleted() {
 			public void completed(Action action) {

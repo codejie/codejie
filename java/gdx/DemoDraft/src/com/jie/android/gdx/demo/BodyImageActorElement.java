@@ -77,6 +77,8 @@ public class BodyImageActorElement {
 		fd.restitution = restitution;
 		fd.density = density;
 		fd.friction = friction;
+		fd.filter.categoryBits = 2;
+		fd.filter.maskBits = 2;
 		
 		return fd;
 	}

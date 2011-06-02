@@ -24,8 +24,10 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.OnActionCompleted;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveTo;
 import com.badlogic.gdx.scenes.scene2d.actors.Image;
@@ -37,7 +39,7 @@ public class ActorStage extends Stage {
 	
 	private int actorID = 0;
 	
-	private static int NUMBER_ACTOR		=	5;
+	private static int NUMBER_ACTOR		=	1;//5;
 	
 	private World world;
 	private WorldDebugRenderer worldRenderer = null;
@@ -55,7 +57,7 @@ public class ActorStage extends Stage {
 	public ActorStage() {
 		super(GLOBAL.SCREEN_WIDTH, GLOBAL.SCREEN_HEIGHT, true);
 
-		if (GLOBAL.DEBUG == true)
+		//if (GLOBAL.DEBUG == true)
 			worldRenderer = new WorldDebugRenderer();
 		
 		actorEventManager = new ActorEventManager();
@@ -150,7 +152,7 @@ public class ActorStage extends Stage {
 			ele.y = GLOBAL.GROUND_Y + MathUtils.random(0, 128);
 			ele.type = ActorType.Dynamic;
 			ele.shape = ActorShape.Box;
-			ele.texture = RESOURCE.colorTexture;
+			ele.texture = RESOURCE.boxTexture;
 			ele.tx = 0;
 			ele.ty = 0;
 			
@@ -167,15 +169,17 @@ public class ActorStage extends Stage {
 			ele.y = GLOBAL.GROUND_Y + MathUtils.random(0, 128);
 			ele.type = ActorType.Dynamic;
 			ele.shape = ActorShape.Circle;
-			ele.texture = RESOURCE.colorTexture;
+			ele.texture = RESOURCE.ballTexture;
 			ele.tx = 0;
-			ele.ty = 65;
+			ele.ty = 0;
 			
 			actorVector.add(ele);
 		}
 		
-		
 		this.addActor(actorGroup);
+		
+		addBodyImageActor(actorVector.get(1));
+		addBodyImageActor(actorVector.get(0));
 	}
 	
 	private float count = 0.0f;
@@ -188,7 +192,16 @@ public class ActorStage extends Stage {
 		world.step(delta, 3, 3);
 		//worldRenderer.render(world);
 		this.act(delta);
-	
+		
+		if (GLOBAL.ADDACTOR == true) {
+			
+			int index = ((int)(delta * 1000)) % (NUMBER_ACTOR * 2); 
+			addBodyImageActor(actorVector.get(index));
+			
+			GLOBAL.ADDACTOR = false;
+		}
+		
+/*	
 		if(count > 1.0f && done == false) {
 			
 			addBodyImageActor(actorVector.get(1));
@@ -196,7 +209,7 @@ public class ActorStage extends Stage {
 
 			
 			count = 0.0f;
-/*			
+			
 			if(done2 == false) {
 				if(actorID > 30) {
 					BodyImageActor actor = (BodyImageActor)actorGroup.findActor("actor10");
@@ -206,11 +219,11 @@ public class ActorStage extends Stage {
 					}
 				}
 			}
-*/			
+			
 			done = true;
 		
 		}
-/*		
+		
 		if (count > 2.0f && done2 == false) {
 			BodyImageActor actor = (BodyImageActor)actorGroup.findActor("actor0");
 			//applyForce(actor, new Vector2(0, 1f * actor.getBodyMass()), new Vector2(0, 0));
@@ -222,10 +235,10 @@ public class ActorStage extends Stage {
 			}
 			done2 = true;
 		}
-*/		
 		{
 			count += delta;
 		}
+*/		
 	}
 	
 	public void draw() {
@@ -249,8 +262,11 @@ public class ActorStage extends Stage {
 		actor.makeMouseJoint((BodyImageActor)frameGroup.findActor("bottom"), vct);	
 	}
 	
-	public void onActorContact(BodyImageActor a, BodyImageActor b) {
-		Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
+	public void onBeginActorContact(BodyImageActor a, BodyImageActor b) {
+		//Gdx.app.log("ActorStage: BEGIN - ", ("Contact: a - " + a.name + " b - " + b.name));
+		
+		//if ()
+		
 /*		
 		if(a.name.startsWith("actor1") && b.name.startsWith("top")) {
 			Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
@@ -260,10 +276,36 @@ public class ActorStage extends Stage {
 			Gdx.app.log("ActorStage: ", ("Contact: a - " + a.name + " b - " + b.name));
 			actorEventManager.clearForces(b);
 		}
-*/		
+*/
+		//GLOBAL.DEBUG = !GLOBAL.DEBUG;
 	}
 	
-	private MouseJoint mj = null;
+	public void onEndActorContact(BodyImageActor a, BodyImageActor b) {
+		//Gdx.app.log("ActorStage: END - ", ("Contact: a - " + a.name + " b - " + b.name));
+		
+		if (hitActor != null) {
+			if (a.name == "top" || a.name == "bottom" || a.name == "left" || a.name == "right")
+				return;
+			if (b.name == "top" || b.name == "bottom" || b.name == "left" || b.name == "right")
+				return;
+
+			if ((a == hitActor || b == hitActor)) {
+				if (GLOBAL.COLLISION == false) {
+					final Stage stage = this;
+					final Actor actor = hitActor;
+					actorEventManager.addAction(hitActor, 
+							MoveTo.$(GLOBAL.SCREEN_WIDTH - hitActor.width, GLOBAL.SCREEN_HEIGHT - hitActor.height, 2).setCompletionListener(new OnActionCompleted() {
+								public void completed(Action action) {
+									stage.removeActor(actor);
+								}
+							}
+						)
+					);
+					hitActor = null;
+				}
+			}
+		}
+	}
 	
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		

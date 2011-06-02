@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL10;
 public class TouchScreen extends Screen implements InputProcessor {
 
 	private BackgroundStage bgStage;
-	//private UIStage uiStage;
+	private UIStage uiStage;
 	private ActorStage actStage;
 	
 	@Override
@@ -17,6 +17,7 @@ public class TouchScreen extends Screen implements InputProcessor {
 		DEBUG.initalize();
 		
 		bgStage = new BackgroundStage();
+		uiStage = new UIStage();
 		actStage = new ActorStage();
 		
 		Gdx.input.setInputProcessor(this);
@@ -26,6 +27,7 @@ public class TouchScreen extends Screen implements InputProcessor {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		bgStage.dispose();
+		uiStage.dispose();
 		actStage.dispose();
 	}
 	
@@ -41,9 +43,11 @@ public class TouchScreen extends Screen implements InputProcessor {
 		float timestep = Gdx.graphics.getDeltaTime();
 		
 		bgStage.step(timestep);
+		uiStage.step(timestep);
 		actStage.step(timestep);
 		
 		bgStage.draw();
+		uiStage.draw();
 		actStage.draw();
 	}	
 	
@@ -69,6 +73,7 @@ public class TouchScreen extends Screen implements InputProcessor {
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		// TODO Auto-generated method stub
 		
+		uiStage.touchDown(x, y, pointer, button);
 		actStage.touchDown(x, y, pointer, button);
 		
 		return false;
@@ -77,6 +82,7 @@ public class TouchScreen extends Screen implements InputProcessor {
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
 		// TODO Auto-generated method stub
+		uiStage.touchUp(x, y, pointer, button);
 		actStage.touchUp(x, y, pointer, button);
 		return false;
 	}

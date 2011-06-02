@@ -20,7 +20,7 @@ public class ActorContactListener implements ContactListener {
 		Fixture fb = contact.getFixtureB();
 		
 		if(actorStage != null) {
-			actorStage.onActorContact((BodyImageActor)fa.getBody().getUserData(), (BodyImageActor)fb.getBody().getUserData());
+			actorStage.onBeginActorContact((BodyImageActor)fa.getBody().getUserData(), (BodyImageActor)fb.getBody().getUserData());
 		}
 	}
 
@@ -31,7 +31,7 @@ public class ActorContactListener implements ContactListener {
 		Fixture fb = contact.getFixtureB();
 		
 		if(actorStage != null) {
-			actorStage.onActorContact((BodyImageActor)fa.getBody().getUserData(), (BodyImageActor)fb.getBody().getUserData());
+			actorStage.onEndActorContact((BodyImageActor)fa.getBody().getUserData(), (BodyImageActor)fb.getBody().getUserData());
 		}
 	}
 

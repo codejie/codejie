@@ -153,7 +153,7 @@ public class ActorEventManager {
 		}		
 	}
 	
-	public void applyAction(BodyImageActor actor, Action action) {
+	public void addAction(BodyImageActor actor, Action action) {
 		EventElement ele = eventMap.get(actor);
 		if (ele == null) {
 			ele = new EventElement();

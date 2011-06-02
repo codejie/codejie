@@ -102,7 +102,7 @@ public class BodyImageActor extends Image {
 			def.bodyA = other.getBody();
 			def.bodyB = body;
 			def.target.set(target);
-			def.maxForce = 1000.0f * GLOBAL.WORLD_GRAVITY.y;
+			def.maxForce = 10.0f * GLOBAL.WORLD_GRAVITY.y;
 			
 			mouseJoint = (MouseJoint)world.createJoint(def);
 			

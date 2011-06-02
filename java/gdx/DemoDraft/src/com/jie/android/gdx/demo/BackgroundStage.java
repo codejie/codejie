@@ -31,30 +31,31 @@ public class BackgroundStage extends Stage {
 	public BackgroundStage() {
 		super(GLOBAL.SCREEN_WIDTH, GLOBAL.SCREEN_HEIGHT, true);
 		
-		if (GLOBAL.DEBUG == false) {
+		//if (GLOBAL.DEBUG == false) {
 			Image bgImage = new Image("bg", RESOURCE.bgTexture);
 			bgImage.x = 0;
 			bgImage.y = 0;
 			bgImage.width = GLOBAL.SCREEN_WIDTH;
 			bgImage.height = GLOBAL.SCREEN_HEIGHT;
+			
 			//this.addActor(bgImage);
 			
 			makeBubble();
-		}
-		else {
+		//}
+		//else {
 			output = new Label("output", new BitmapFont());
 			output.x = 30;
 			output.y = GLOBAL.SCREEN_HEIGHT - 30;
 			
 			this.addActor(output);
-		}
+		//}
 	}
 	
 	private void makeBubbleAction(final Actor actor) {
 		
 		final Stage stage = this;
 		
-		int duration = MathUtils.random(3, 7);
+		int duration = MathUtils.random(3, 8);
 		MoveTo moveto = MoveTo.$(actor.x, GLOBAL.SKY_Y - 64, duration);
 		moveto.setCompletionListener(new OnActionCompleted() {
 			public void completed(Action action) {
@@ -64,7 +65,7 @@ public class BackgroundStage extends Stage {
 		);
 		
 		int rotate = MathUtils.random(360);		
-		float scale = MathUtils.random(1.0f, 1.7f);
+		float scale = MathUtils.random(0.5f, 1.7f);
 		float fade = MathUtils.random(1.0f);
 		Action action = Parallel.$(
 				moveto,
@@ -102,7 +103,7 @@ public class BackgroundStage extends Stage {
 	private void createBubbles(float delta) {
 		int step = (int)(delta * 10000);
 		
-		if (step % 5 == 0 || step % 8 == 0 || step % 10 == 0 || step % 13 == 0 || step % 15 == 0) {
+		if (step % 15 == 0) {
 			makeBubble();
 		}	
 	}
@@ -115,6 +116,9 @@ public class BackgroundStage extends Stage {
 		
 		if (GLOBAL.DEBUG == true) {
 			output.setText("fps: " + Gdx.graphics.getFramesPerSecond() + "fps" + " -- deltatime: " + delta);
+		}
+		else {
+			output.setText("No Debug.");
 		}
 	}
 	

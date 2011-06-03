@@ -9,6 +9,6 @@ public class Star extends AndroidApplication {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.main);
-        initialize(new StarGame(), false);
+        initialize(new AllStarGame(), false);
     }
 }

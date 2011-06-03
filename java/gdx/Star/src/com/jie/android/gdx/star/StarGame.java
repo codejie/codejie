@@ -7,6 +7,8 @@ package com.jie.android.gdx.star;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
@@ -114,6 +116,15 @@ public class StarGame extends Game implements InputProcessor {
 	@Override
 	public boolean keyDown(int arg0) {
 		// TODO Auto-generated method stub
+		Gdx.input.getTextInput(new TextInputListener() {
+			public void input(String text) {
+				
+			}
+			public void cancled() {
+				
+			}
+		}, "title", "text");
+		
 		return false;
 	}
 
@@ -150,6 +161,14 @@ public class StarGame extends Game implements InputProcessor {
 	@Override
 	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
+		Gdx.input.getTextInput(new TextInputListener() {
+			public void input(String text) {
+				
+			}
+			public void cancled() {
+				
+			}
+		}, "title", "text");
 		return false;
 	}
 

@@ -14,7 +14,7 @@ public class StarDesktop {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new JoglApplication(new StarGame(), "Star !", 480, 800, false);
+		new JoglApplication(new AllStarGame(), "Star !", 480, 800, false);
 	}
 
 }

@@ -10,23 +10,23 @@
 #include "acex/ACEX.h"
 #include "acex/Ini_Configuration.h"
 
-#include "DataLoader.h"
-#include "TerminalManager.h"
+//#include "DataLoader.h"
+//#include "TerminalManager.h"
 
 #include "ConfigLoader.h"
 
 ConfigLoader theConfig;
 
 ConfigLoader::ConfigLoader()
-: _iDataLoadPeriod(60)
-, _iLogSize(102400)
+//: _iDataLoadPeriod(60)
+//, _iLogSize(102400)
 {
 }
 
 ConfigLoader::~ConfigLoader()
 {
 }
-
+/*
 int ConfigLoader::Load(const std::string& filename, DataLoader& loader, TerminalManager& manager)
 {
 	ACEX_Ini_Configuration ini;
@@ -109,9 +109,11 @@ int ConfigLoader::Load(const std::string& filename, DataLoader& loader, Terminal
 	
 	return 0;
 }
+*/
 
 void ConfigLoader::Show(std::ostream& os) const
 {
+/*
     os << "\n---- Config ----";
     os << "\nServiceID = " << _strServiceID;
     os << "\nServiceAddr = " << _strServiceAddr;
@@ -119,6 +121,7 @@ void ConfigLoader::Show(std::ostream& os) const
     os << "\nLogFile = " << _strLogFile;
     os << "\nLogSize = " << _iLogSize;
     os << "\nMMLAddr = " << _strMMLAddr;
+*/
 }
 
 

@@ -10,6 +10,8 @@
 
 #include <acef/App.h>
 
+#include "Options.h"
+
 class DataCollectServerApp: public ACEF_App {
 public:
 	DataCollectServerApp();

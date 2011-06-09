@@ -123,6 +123,7 @@ void CCmdShowVersion::help_verbose(std::ostream& os) const
 	os << "\n    Example:\n\t" << tag() << std::endl;
 }
 
+/*
 //////////////////////////////////////////////////////////////////////////
 CCmdShowTerminal* CCmdShowTerminal::clone() const
 {
@@ -243,3 +244,4 @@ void CCmdTest::help_verbose(std::ostream& os) const
 	os << "\n    Usage:\n\t" << tag();
 	os << "\n    Example:\n\t" << tag() << std::endl;
 }
+*/

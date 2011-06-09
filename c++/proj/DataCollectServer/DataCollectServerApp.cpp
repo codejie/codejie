@@ -127,13 +127,15 @@ int DataCollectServerApp::regist_command()
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowOptions().tag() + "' command failed.", __FILE__, __LINE__);
 	if(command_parser()->regist_command(CCmdShowVersion()) != 0)
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowVersion().tag() + "' command failed.", __FILE__, __LINE__);
+/*
+
 	if(command_parser()->regist_command(CCmdShowTerminal()) != 0)
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowTerminal().tag() + "' command failed.", __FILE__, __LINE__);
 	if(command_parser()->regist_command(CCmdShowDataLoader()) != 0)
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowDataLoader().tag() + "' command failed.", __FILE__, __LINE__);
 	if(command_parser()->regist_command(CCmdTest()) != 0)
 		throw ACEX_Runtime_Exception("Register '" + CCmdTest().tag() + "' command failed.", __FILE__, __LINE__);
-
+*/
 	return 0;
 }
 
@@ -169,11 +171,13 @@ int DataCollectServerApp::handle_msg(const ACEX_Message& msg)
 int DataCollectServerApp::InitConfig()
 {
 	ACEX_LOG_OS(LM_STARTUP, "Configuration init.." << std::endl);
-    if(theConfig.Load(_stOptions.ConfigureFile(), theDataLoader, theTerminalManager) != 0)
+/*
+	if(theConfig.Load(_stOptions.ConfigureFile(), theDataLoader, theTerminalManager) != 0)
     {
 		ACEX_LOG_OS(LM_STARTUP, std::setw(40) << "[FAIL]" << std::endl);
         return -1;
     }
+*/
     ACEX_LOG_OS(LM_STARTUP, std::setw(40) << "[OK]" << std::endl);
 	return 0;
 }
@@ -181,6 +185,7 @@ int DataCollectServerApp::InitConfig()
 
 int DataCollectServerApp::StartTasks()
 {
+/*
 	try
 	{
 		//ACEX_LOG_OS(LM_STARTUP, "Configuration init.." << std::endl);
@@ -229,12 +234,13 @@ int DataCollectServerApp::StartTasks()
 		Shutdown();
         return -1;
 	}
-
+*/
 	return 0;
 }
 
 void DataCollectServerApp::StopTasks()
 {
+/*
 	if(!_stOptions.DaemonOpt())
 	{
 		ACEX_LOG_OS(LM_SHUTDOWN, "\nStandard input task shutdown.." << std::endl);
@@ -265,6 +271,8 @@ void DataCollectServerApp::StopTasks()
     theTerminalManager.Final();
 	ACEX_LOG_OS(LM_SHUTDOWN, std::setw(40) << "[OK]" << std::endl);
 	//	wait();
+
+*/
 }
 
 void DataCollectServerApp::ShowVersion(std::ostream& os) const
@@ -286,7 +294,7 @@ int DataCollectServerApp::Shutdown()
 {
 	ACEX_Message msg(TASK_APP, FPARAM_SHUTDOWN, 0);
 
-    theMainTask.put_msg(msg);
+    //theMainTask.put_msg(msg);
 
 	this->put_msg(msg);
 

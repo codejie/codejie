@@ -2,7 +2,7 @@
 #define __DEFINES_H__
 
 
-#define APP_TITLE   "MonitorDataPostServer"
+#define APP_TITLE   "DataCollectServer"
 #define APP_VERSION "1.0.0"
 
 const int TASK_APP      =   1;

@@ -46,7 +46,7 @@ public:
 	virtual void help(std::ostream& os) const;
 	virtual void help_verbose(std::ostream& os) const;
 };
-
+/*
 class CCmdShowTerminal : public ACEX_Command
 {
 public:
@@ -80,5 +80,5 @@ public:
 	virtual void help_verbose(std::ostream& os) const;
 };
 
-
+*/
 #endif

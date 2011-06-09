@@ -72,7 +72,7 @@ int DataCollectServerApp::init(int argc, char* argv[])
 	output_proxy()->priority_mask(_stOptions.LevelOpt());
 	output_proxy()->verbose(_stOptions.VerboseOpt());
 
-	command_executor()->command_prompt("PostServer>");
+	command_executor()->command_prompt(SYS_PROMPT);
 	if(InitConfig() != 0)
         return -1;
 	if(StartTasks() != 0)

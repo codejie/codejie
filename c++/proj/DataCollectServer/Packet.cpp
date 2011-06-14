@@ -60,3 +60,8 @@ int Packet::Analyse(const std::string& packet)
 
 	return CPAnalyse(packet.substr(begin));
 }
+
+int Packet::CPAnalyse(const std::string& packet)
+{
+	return -1;
+}

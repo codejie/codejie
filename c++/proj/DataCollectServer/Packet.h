@@ -35,6 +35,8 @@ public:
 	void Show(std::ostream& os) const;
 protected:
 	int CPAnalyse(const std::string& packet);
+	int CPDataAnalyse(const std::string& data);
+	int CPItemAnalyse(const std::string& item);
 
 public:
 	std::string QN;

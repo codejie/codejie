@@ -4,6 +4,8 @@
 //#include "DataLoader.h"
 //#include "MainTask.h"
 
+#include "Packet.h"
+
 #include "DataCollectServerApp.h"
 
 #include "Commands.h"
@@ -137,7 +139,16 @@ ACEX_Command_Tag CCmdTest::tag() const
 
 int CCmdTest::execute(std::ostream& os)
 {
-	os << "test" << std::endl;
+	os << "test111" << std::endl;
+
+	Packet packet;
+
+	std::string str = "ST=32;CN=2051;QN=20040516010101001;PW=123456;MN=88888880000001;PNO=1;PNUM=1;CP=&&DataTime=20040516021000;B01-Cou=200;101-Cou=2.5,101-Min=1.1,101-Avg=1.1,101-Max=1.1;102-Cou=2.5,102-Min=2.1,102-Avg=2.1,102-Max=2.1&&";
+
+	packet.Analyse(str);
+	packet.Show(os);
+
+
 	return 1;
 }
 

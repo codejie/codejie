@@ -9,13 +9,12 @@
 
 Packet::Packet()
 {
-	// TODO Auto-generated constructor stub
 
 }
 
 Packet::~Packet()
 {
-	// TODO Auto-generated destructor stub
+
 }
 
 int Packet::Analyse(const std::string& packet)

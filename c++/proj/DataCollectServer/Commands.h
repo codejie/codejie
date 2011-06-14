@@ -46,11 +46,13 @@ public:
 	virtual void help(std::ostream& os) const;
 	virtual void help_verbose(std::ostream& os) const;
 };
-/*
-class CCmdShowTerminal : public ACEX_Command
+
+
+
+class CCmdTest : public ACEX_Command
 {
 public:
-	virtual CCmdShowTerminal* clone() const;
+	virtual CCmdTest* clone() const;
 
 	virtual ACEX_Command_Tag tag() const;
 	virtual int execute(std::ostream& os);
@@ -58,6 +60,7 @@ public:
 	virtual void help_verbose(std::ostream& os) const;
 };
 
+/*
 class CCmdShowDataLoader : public ACEX_Command
 {
 public:

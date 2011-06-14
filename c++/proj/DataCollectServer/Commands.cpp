@@ -123,39 +123,36 @@ void CCmdShowVersion::help_verbose(std::ostream& os) const
 	os << "\n    Example:\n\t" << tag() << std::endl;
 }
 
-/*
+
 //////////////////////////////////////////////////////////////////////////
-CCmdShowTerminal* CCmdShowTerminal::clone() const
+CCmdTest* CCmdTest::clone() const
 {
-	return new CCmdShowTerminal(*this);
+	return new CCmdTest(*this);
 }
 
-ACEX_Command_Tag CCmdShowTerminal::tag() const
+ACEX_Command_Tag CCmdTest::tag() const
 {
-	return "showterminal";
+	return "test";
 }
 
-int CCmdShowTerminal::execute(std::ostream& os)
+int CCmdTest::execute(std::ostream& os)
 {
-    if(args_.count() > 0 && args_[0] == "cache")
-        theTerminalManager.ShowCache(os);
-    else
-        theTerminalManager.Show(os);
+	os << "test" << std::endl;
 	return 1;
 }
 
-void CCmdShowTerminal::help(std::ostream& os) const
+void CCmdTest::help(std::ostream& os) const
 {
 	os << "    Show terminal info.";
 }
 
-void CCmdShowTerminal::help_verbose(std::ostream& os) const
+void CCmdTest::help_verbose(std::ostream& os) const
 {
 	help(os);
 	os << "\n    Usage:\n\t" << tag() << "[,cache]";
 	os << "\n    Example:\n\t" << tag() << std::endl;
 }
-
+/*
 //////////////////////////////////////////////////////////////////////////
 CCmdShowDataLoader* CCmdShowDataLoader::clone() const
 {

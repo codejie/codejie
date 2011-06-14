@@ -11,8 +11,15 @@
 #include <string>
 #include <iostream>
 
-class PacketProcessor {
+class Packet;
 
+class PacketProcessorStatistic
+{
+
+};
+
+class PacketProcessor
+{
 protected:
 	static const std::string TAG_BEGIN;
 	static const std::string TAG_END;
@@ -22,14 +29,14 @@ public:
 
 	int Init();
 
-	int Analyse(std::string& packet) const;
-	int Make(std::string& packet) const;
+	int Analyse(std::string& stream, Packet& packet) const;
+	int Make(std::string& stream, const Packet& packet) const;
 
 	void Show(std::ostream& os) const;
 protected:
-	int Check(const std::string& packet, int& datasize) const;
+	int Check(const std::string& stream, int& datasize) const;
 	int DataCRCCheck(const std::string& data, const std::string& crc) const;
-	int DataAnalyse(const std::string& packet) const;
+	int DataAnalyse(const std::string& stream, Packet& packet) const;
 };
 
 #endif /* __PACKETANALYSER_H__ */

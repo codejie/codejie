@@ -22,7 +22,7 @@ int Packet::Analyse(const std::string& packet)
 	std::string::size_type pos = packet.find(";");
 	std::string::size_type begin = 0;
 	std::string::size_type tmp = std::string::npos;
-	//std::string tag;
+
 	while(pos != std::string::npos)
 	{
 		tmp = packet.find("=", begin);
@@ -45,8 +45,8 @@ int Packet::Analyse(const std::string& packet)
 		else if(packet.substr(begin, tmp - begin) == "Flag")
 			Flag = packet.substr(tmp + 1, pos - tmp - 1);
 		else if(packet.substr(begin, tmp - begin) == "CP")
-			if(CPAnalyse(packet.substr(tmp + 1, pos - tmp - 1)) != 0)
-				return 01;
+			if(CPAnalyse(packet.substr(tmp + 1)) != 0)
+				return 0;
 		else
 			return -1;
 
@@ -72,7 +72,7 @@ int Packet::CPAnalyse(const std::string& packet)
 
 	while(pos != std::string::npos)
 	{
-		if(CPDataAnalyse(packet.substr(begin, pos - begin - 1)) != 0)
+		if(CPDataAnalyse(packet.substr(begin, pos - begin)) != 0)
 			return -1;
 
 		begin = pos + 1;
@@ -97,7 +97,7 @@ int Packet::CPDataAnalyse(const std::string& data)
 		std::string::size_type b = 0;
 		while(p != std::string::npos)
 		{
-			if(CPItemAnalyse(data.substr(b, p - b -1)) != 0)
+			if(CPItemAnalyse(data.substr(b, p - b)) != 0)
 				return -1;
 			b = p + 1;
 			if(b == data.size())
@@ -122,14 +122,14 @@ int Packet::CPItemAnalyse(const std::string& item)
 
 	std::string::size_type t = item.find("-");
 
-	ItemMap::iterator it = CP.item.find(item.substr(0, t));
+	CPItemMap::iterator it = CP.item.find(item.substr(0, t));
 	if(it != CP.item.end())
 	{
 		return it->second.insert(std::make_pair(item.substr(t + 1, tmp - t - 1), item.substr(tmp + 1))).second ? 0 : -1;
 	}
 	else
 	{
-		ItemDataMap m;
+		CPItemDataMap m;
 		m.insert(std::make_pair(item.substr(t + 1, tmp - t - 1), item.substr(tmp + 1)));
 		return CP.item.insert(std::make_pair(item.substr(0, t), m)).second ? 0 : -1;
 	}
@@ -148,6 +148,28 @@ void Packet::Show(std::ostream& os) const
 
 	os << "\nCP Data = ";
 
-	//os << "\nCP = " << CP << std::endl;
+	for(CPDataMap::const_iterator it = CP.data.begin(); it != CP.data.end(); ++ it)
+	{
+		os << "\n  " << it->first << " = " << it->second;
+	}
+
+	os << "\nCP Item = ";
+	for(CPItemMap::const_iterator it = CP.item.begin(); it != CP.item.end(); ++ it)
+	{
+		os << "\n  " << it->first;
+		for(CPItemDataMap::const_iterator i = it->second.begin(); i != it->second.end(); ++ i)
+		{
+			os << "\n    " << i->first << " = " << i->second;
+		}
+	}
+
+	os << std::endl;
+}
+
+//////
+std::ostream& operator << (std::ostream& os, const Packet& packet)
+{
+	packet.Show(os);
+	return os;
 }
 

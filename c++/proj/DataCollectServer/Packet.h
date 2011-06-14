@@ -17,13 +17,13 @@ class Packet
 public:
 	typedef std::map<std::string, std::string> CPDataMap; //cp + data
 
-	typedef std::map<std::string, std::string> ItemDataMap; //item parameter + data
-	typedef std::map<std::string, ItemDataMap> ItemMap; //item + itemdata
+	typedef std::map<std::string, std::string> CPItemDataMap; //item parameter + data
+	typedef std::map<std::string, CPItemDataMap> CPItemMap; //item + itemdata
 
 	struct CPData
 	{
 		CPDataMap data;
-		ItemMap item;
+		CPItemMap item;
 	};
 public:
 	Packet();
@@ -50,6 +50,9 @@ public:
 
 	CPData CP;
 };
+
+/////
+extern std::ostream& operator << (std::ostream& os, const Packet& packet);
 
 
 #endif /* PACKET_H_ */

@@ -5,8 +5,11 @@
  *      Author: codejie
  */
 
+#include <sstream>
+
 #include "acex/ACEX.h"
 
+#include "Toolkit.h"
 #include "Packet.h"
 #include "PacketProcessor.h"
 
@@ -21,33 +24,25 @@ PacketProcessor::PacketProcessor() {
 PacketProcessor::~PacketProcessor() {
 }
 
-int PacketProcessor::Analyse(std::string& stream, Packet& packet) const
+int PacketProcessor::Analyse(const std::string& stream, Packet& packet)
 {
-	std::string::size_type pos = stream.find(TAG_END);
-	while(pos != std::string::npos)
+	int datasize = 0;
+	if(Check(stream, datasize) == 0)
 	{
-		std::string str = stream.substr(0, pos);
-		int datasize = 0;
-		if(Check(str, datasize) == 0)
+		if(DataAnalyse(stream.substr(6, datasize), packet) != 0)
 		{
-			if(DataAnalyse(str.substr(6, datasize), packet) != 0)
-			{
-				ACEX_LOG_OS(LM_WARNING, "<<PacketAnalyser::Process>Data analyse failed - " << str.substr(6, datasize) << std::endl);
-			}
+			ACEX_LOG_OS(LM_WARNING, "<<PacketAnalyser::Process>Data analyse failed - " << stream.substr(6, datasize) << std::endl);
 		}
-		else
-		{
-			ACEX_LOG_OS(LM_WARNING, "<PacketAnalyser::Process>Illegal packet - " << str << std::endl);
-		}
-
-		stream = stream.substr(pos + TAG_END.size());
-		if(!stream.empty())
-			pos = stream.find(TAG_END);
 	}
+	else
+	{
+		ACEX_LOG_OS(LM_WARNING, "<PacketAnalyser::Process>Illegal packet - " << stream << std::endl);
+	}
+
 	return 0;
 }
 
-int PacketProcessor::Check(const std::string& stream, int& datasize) const
+int PacketProcessor::Check(const std::string& stream, int& datasize)
 {
 	if(stream.substr(0, 2) != TAG_BEGIN)
 	{
@@ -64,12 +59,15 @@ int PacketProcessor::Check(const std::string& stream, int& datasize) const
 	return 0;
 }
 
-int PacketProcessor::DataCRCCheck(const std::string& data, const std::string& crc) const
+int PacketProcessor::DataCRCCheck(const std::string& data, const std::string& crc)
 {
-	return -1;
+	unsigned int check = Toolkit::CRC16((const unsigned char*)data.c_str(), data.size());
+	std::ostringstream ostr;
+	ostr << std::ios::hex << check;
+	return ostr.str() == crc ? 0 : -1;
 }
 
-int PacketProcessor::DataAnalyse(const std::string& stream, Packet& packet) const
+int PacketProcessor::DataAnalyse(const std::string& stream, Packet& packet)
 {
 	return packet.Analyse(stream);
 }

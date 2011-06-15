@@ -13,30 +13,23 @@
 
 class Packet;
 
-class PacketProcessorStatistic
-{
-
-};
-
 class PacketProcessor
 {
-protected:
+public:
+	static const size_t MIN_SIZE			=	8;
+	static const size_t MAX_SIZE			=	MIN_SIZE + 1024;
 	static const std::string TAG_BEGIN;
 	static const std::string TAG_END;
 public:
 	PacketProcessor();
 	virtual ~PacketProcessor();
 
-	int Init();
-
-	int Analyse(std::string& stream, Packet& packet) const;
-	int Make(std::string& stream, const Packet& packet) const;
-
-	void Show(std::ostream& os) const;
+	static int Analyse(const std::string& stream, Packet& packet);
+	static int Make(std::string& stream, const Packet& packet);
 protected:
-	int Check(const std::string& stream, int& datasize) const;
-	int DataCRCCheck(const std::string& data, const std::string& crc) const;
-	int DataAnalyse(const std::string& stream, Packet& packet) const;
+	static int Check(const std::string& stream, int& datasize);
+	static int DataCRCCheck(const std::string& data, const std::string& crc);
+	static int DataAnalyse(const std::string& stream, Packet& packet);
 };
 
 #endif /* __PACKETANALYSER_H__ */

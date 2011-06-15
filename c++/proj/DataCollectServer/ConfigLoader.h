@@ -16,7 +16,7 @@ public:
     ConfigLoader();
     virtual ~ConfigLoader();
 
-    //int Load(const std::string& filename, DataLoader& loader, TerminalManager& manager);
+    int Load(const std::string& filename);
 /*
     const std::string& GetServiceID() const { return _strServiceID; }
     const std::string& GetServiceAddr() const { return _strServiceAddr; }
@@ -29,6 +29,8 @@ public:
 */
     void Show(std::ostream& os) const;
 protected:
+
+
 /*
 
 	std::string _strServiceID;

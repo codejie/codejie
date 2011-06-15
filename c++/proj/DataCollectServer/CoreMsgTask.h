@@ -13,6 +13,7 @@
 #include "CollectServerTask.h"
 
 class Packet;
+class ConfigLoader;
 
 class CoreMsgTask: public ACEX_Message_Task
 {
@@ -20,7 +21,7 @@ public:
 	CoreMsgTask();
 	virtual ~CoreMsgTask();
 
-	int Init();
+	int Init(const ConfigLoader& config);
 protected:
 	void Final();
 

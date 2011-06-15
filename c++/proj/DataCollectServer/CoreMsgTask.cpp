@@ -9,6 +9,7 @@
 
 #include "Defines.h"
 #include "Packet.h"
+#include "ConfigLoader.h"
 #include "PacketProcessor.h"
 #include "CoreMsgTask.h"
 
@@ -21,7 +22,7 @@ CoreMsgTask::~CoreMsgTask()
 {
 }
 
-int CoreMsgTask::Init()
+int CoreMsgTask::Init(const ConfigLoader& config)
 {
 	return -1;
 }
@@ -101,5 +102,6 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 
 int CoreMsgTask::OnCollectPacket(const Packet& packet)
 {
-	return -1;
+	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnCollectPacket>Get Collect Packet - " << packet << std::endl);
+	return 0;
 }

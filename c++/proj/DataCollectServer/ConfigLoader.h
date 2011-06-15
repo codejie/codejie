@@ -4,12 +4,6 @@
 #include <string>
 #include <iostream>
 
-#include "acex/ACEX.h"
-#include "acex/Ini_Configuration.h"
-
-//class DataLoader;
-//class TerminalManager;
-
 class ConfigLoader
 {
 public:
@@ -17,31 +11,18 @@ public:
     virtual ~ConfigLoader();
 
     int Load(const std::string& filename);
-/*
-    const std::string& GetServiceID() const { return _strServiceID; }
-    const std::string& GetServiceAddr() const { return _strServiceAddr; }
-    unsigned int GetDataLoadPeriod() const { return _iDataLoadPeriod; }
-	
-	const std::string& GetLogFile() const { return _strLogFile; }
-	unsigned int GetLogSize() const { return _iLogSize; }
-	
-	const std::string& GetMMLAddr() const {  return _strMMLAddr; }
-*/
+
     void Show(std::ostream& os) const;
-protected:
+public:
+    std::string m_strLogFile;
+    unsigned int m_iLogSize;
+    std::string m_strMMLAddr;
+    std::string m_strCollectAddr;
+    std::string m_strCommandAddr;
 
-
-/*
-
-	std::string _strServiceID;
-    std::string _strServiceAddr;
-    unsigned int _iDataLoadPeriod;
-	std::string _strLogFile;
-	unsigned int _iLogSize;
-	std::string _strMMLAddr;
-*/
+    std::string m_strDBServer;
+    std::string m_strDBUser;
+    std::string m_strDBPasswd;
 };
-
-extern ConfigLoader theConfig;
 
 #endif

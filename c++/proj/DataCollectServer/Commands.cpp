@@ -22,7 +22,7 @@ ACEX_Command_Tag CCmdShowConfigure::tag() const
 
 int CCmdShowConfigure::execute(std::ostream& os)
 {
-	theConfig.Show(os);
+	//theConfig.Show(os);
 	return 1;
 }
 

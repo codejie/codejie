@@ -51,7 +51,7 @@ const unsigned int CRC_BASE	=	0xFFFF;
 
 unsigned int CRC16(const unsigned char* data, size_t size)
 {
-	unsigned char crc = CRC_BASE;
+	unsigned int crc = CRC_BASE;
 	while (size --)
 	{
 		crc = (crc >> 8) ^ CRC16_TABLE[(crc ^ (*data ++)) & 0xFF];

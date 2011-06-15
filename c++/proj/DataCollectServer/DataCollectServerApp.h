@@ -11,6 +11,8 @@
 #include <acef/App.h>
 
 #include "Options.h"
+#include "ConfigLoader.h"
+#include "CoreMsgTask.h"
 
 class DataCollectServerApp: public ACEF_App {
 public:
@@ -41,6 +43,8 @@ private:
 private:
 	time_t _tStartupTime;
 	COptions _stOptions;
+	ConfigLoader _stConfigLoader;
+	CoreMsgTask _taskCore;
 
 };
 

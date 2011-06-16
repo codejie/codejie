@@ -11,6 +11,7 @@
 #include "Packet.h"
 #include "ConfigLoader.h"
 #include "PacketProcessor.h"
+#include "CollectServerTask.h"
 #include "CoreMsgTask.h"
 
 CoreMsgTask::CoreMsgTask()
@@ -24,12 +25,22 @@ CoreMsgTask::~CoreMsgTask()
 
 int CoreMsgTask::Init(const ConfigLoader& config)
 {
+	_taskCollectServer.reset(new CollectServerTask(this));
+	if(_taskCollectServer->Open(config.m_strCollectAddr) != 0)
+	{
+		ACEX_LOG_OS(LM_ERROR, "<CoreMsgTask::Init>Collect Server open failed - addr : " << config.m_strCollectAddr << std::endl);
+		return -1;
+	}
 	return -1;
 }
 
 void CoreMsgTask::Final()
 {
-
+	if(_taskCollectServer.get() != NULL)
+	{
+		_taskCollectServer->deactivate();
+		_taskCollectServer.reset(NULL);
+	}
 }
 
 int CoreMsgTask::handle_msg(const ACEX_Message& msg)

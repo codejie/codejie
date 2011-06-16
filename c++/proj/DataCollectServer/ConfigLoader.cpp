@@ -68,15 +68,15 @@ int ConfigLoader::Load(const std::string& filename)
 
 void ConfigLoader::Show(std::ostream& os) const
 {
-/*
     os << "\n---- Config ----";
-    os << "\nServiceID = " << _strServiceID;
-    os << "\nServiceAddr = " << _strServiceAddr;
-    os << "\nDataLoadPeriod = " << _iDataLoadPeriod;
-    os << "\nLogFile = " << _strLogFile;
-    os << "\nLogSize = " << _iLogSize;
-    os << "\nMMLAddr = " << _strMMLAddr;
-*/
+    os << "\nLogFile = " << m_strLogFile;
+    os << "\nLogSize = " << m_iLogSize;
+    os << "\nMMLAddr = " << m_strMMLAddr;
+    os << "\nCollectAddr = " << m_strCollectAddr;
+    os << "\nCommandAddr = " << m_strCommandAddr;
+    os << "\nDBServer = " << m_strDBServer;
+    os << "\nDBUser = " << m_strDBUser;
+    os << "\nDBPasswd = " << m_strDBPasswd << std::endl;
 }
 
 

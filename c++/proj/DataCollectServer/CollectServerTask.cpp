@@ -11,7 +11,7 @@
 #include "PacketProcessor.h"
 #include "CollectServerTask.h"
 
-CollectServerTask::CollectServerTask(ACEX_Message_Task& msgtask)
+CollectServerTask::CollectServerTask(ACEX_Message_Task* msgtask)
 : _taskMsg(msgtask)
 {
 }
@@ -47,7 +47,7 @@ int CollectServerTask::handle_recv(int clientid, ACEX_TcpStream& client)
 			client.read(buf, pos);
 
 			ACEX_Message msg(TASK_COLLECT_SERVER, FPARAM_PACKET, pos, buf);
-			_taskMsg.put_msg(msg);
+			_taskMsg->put_msg(msg);
 		}
 		else if(pos > PacketProcessor::MAX_SIZE)
 		{

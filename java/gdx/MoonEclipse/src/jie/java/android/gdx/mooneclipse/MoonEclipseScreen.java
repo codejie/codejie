@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actors.Image;
 import com.badlogic.gdx.scenes.scene2d.actors.Label;
@@ -22,6 +23,9 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	private Game game = null;
 	
 	private MoonEclipseGroup moon = null;
+	
+	private boolean p0 = false,p1 = false;
+	private int x0 = 0, x1 = 0, y0 = 0, y1 = 0;
 	
 	public MoonEclipseScreen(Game game, float width, float height, boolean stretch) {
 		super(width, height, stretch);
@@ -96,6 +100,84 @@ public class MoonEclipseScreen extends Stage implements Screen {
 		this.moon.resume();
 	}
 
+	@Override
+	public boolean touchDragged(int x, int y, int pointer) {
+		// TODO Auto-generated method stub
+
+		if(p0 == true && p1 == true) {
+			if(pointer == 0) {
+				//Gdx.app.log("MoonEclipse", "p0 touchDrag : " + x + "," + y + "," + pointer);
+				if(x0 < x1) {
+					if(x < x0 && y > y0)
+						this.moon.zoomOut();
+					else if(x > x0 && y < y0)
+						this.moon.zoomIn();
+				}
+				else if(x0 > x1) {
+					if(x < x0 && y > y0)
+						this.moon.zoomIn();
+					else if(x > x0 && y < y0)
+						this.moon.zoomOut();					
+				}
+			}
+			else if(pointer == 1) {
+				//Gdx.app.log("MoonEclipse", "p1 touchDrag : " + x + "," + y + "," + pointer);
+				if(x0 < x1) {
+					if(x < x1 && y > y1)
+						this.moon.zoomIn();
+					else if(x > x1 && y < y1)
+						this.moon.zoomOut();
+				}
+				else if(x0 > x1) {
+					if(x < x1 && y > y1)
+						this.moon.zoomOut();
+					else if(x > x1 && y < y1)
+						this.moon.zoomIn();					
+				}
+			}
+		}
+		
+		return super.touchDragged(x, y, pointer);
+	} 
+
+	@Override
+	public boolean touchDown(int x, int y, int pointer, int button) {
+		// TODO Auto-generated method stub
+		
+		//Gdx.app.log("MoonEclipse", "touchDown : " + x + "," + y + "," + pointer + "," + button);
+		
+		if(pointer == 0)
+		{
+			x0 = x;
+			y0 = y;
+			p0 = true;
+		}
+		else if(pointer == 1) {
+			x1 = x;
+			y1 = y;
+			p1 = true;
+		}
+		
+		return super.touchDown(x, y, pointer, button);
+	}	
+	
+	@Override
+	public boolean touchUp(int x, int y, int pointer, int button) {
+		// TODO Auto-generated method stub
+		//Gdx.app.log("MoonEclipse", "touchUp : " + x + "," + y + "," + pointer + "," + button);
+		if(pointer == 0)
+		{
+			x0 = x;
+			y0 = y;
+			p0 = false;
+		}
+		else if(pointer == 1) {
+			x1 = x;
+			y1 = y;
+			p1 = false;
+		}
+		return super.touchDown(x, y, pointer, button);
+	}		
 	
 	
 }

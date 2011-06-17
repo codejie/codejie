@@ -29,8 +29,6 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	private float delta = 0.0f;
 	private float speed = 0.1f;
 	
-	private Label log = null;//new Label("log", new BitmapFont());
-	
 	private boolean isPause = false;
 	
 	public static MoonEclipseGroup MOON = null;
@@ -48,10 +46,9 @@ public class MoonEclipseGroup extends Group implements Disposable{
 		this.addActor(sky);
 		
 		moon = new Image("moon", new TextureRegion(textureMoon, 0, 0, frameWidth, frameHeight));//getCurrentFrame());
+		moon.scaleX = 1.2f;
+		moon.scaleY = 1.2f;
 		this.addActor(moon);
-		
-		log = new Label("log", new BitmapFont());
-		this.addActor(log);
 	}
 
 	@Override
@@ -67,9 +64,6 @@ public class MoonEclipseGroup extends Group implements Disposable{
 		
 		moon.x = width  / 2 - moon.width / 2;
 		moon.y = height / 2 - moon.height / 2;
-		
-		log.x = 30;
-		log.y = 30;
 	}
 	
 	public void delta(float delta) {
@@ -78,8 +72,6 @@ public class MoonEclipseGroup extends Group implements Disposable{
 			getCurrentFrame();
 			this.delta = 0.0f;
 		}
-		
-		log.setText(" delta : " + delta + " - width : " + this.width + " height : " + this.height);
 	}
 	
 	private void getCurrentFrame() {
@@ -107,6 +99,20 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	
 	public void resume() {
 		this.isPause = false;
+	}
+	
+	public void zoomOut() {
+		if(moon.scaleX < 3.0f) {
+			moon.scaleX += 0.03f;
+			moon.scaleY += 0.03f;			
+		}
+	}
+	
+	public void zoomIn() {
+		if(moon.scaleX > 0.5f) {
+			moon.scaleX -= 0.03f;
+			moon.scaleY -= 0.03f;
+		}
 	}
 	
 	public static void initResource() {

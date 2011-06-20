@@ -23,6 +23,7 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	private Game game = null;
 	
 	private MoonEclipseGroup moon = null;
+	private ControllerGroup controller = null;
 	
 	private boolean p0 = false,p1 = false;
 	private int x0 = 0, x1 = 0, y0 = 0, y1 = 0;
@@ -65,10 +66,15 @@ public class MoonEclipseScreen extends Stage implements Screen {
 		// TODO Auto-generated method stub
 		
 		this.moon = MoonEclipseGroup.MOON;
-		this.moon.resume();
+		this.controller = ControllerGroup.CONTROLLER;
 		
 		this.moon.setSize(width, height);		
-		this.addActor(moon);
+		this.addActor(this.moon);
+
+		this.controller.setSize(width, height);
+		this.addActor(this.controller);
+		
+		this.resume();
 		
 		Gdx.input.setInputProcessor(this);				
 	}

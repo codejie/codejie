@@ -67,6 +67,10 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	}
 	
 	public void delta(float delta) {
+		if(isPause == true) {
+			return;
+		}
+		
 		if((this.delta += delta) > speed)
 		{
 			getCurrentFrame();
@@ -75,9 +79,6 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	}
 	
 	private void getCurrentFrame() {
-		if(isPause == true)
-			return;
-		
 		currentFrame ++;
 		if(currentFrame > (13 * 9 - 1))
 			currentFrame = 0;

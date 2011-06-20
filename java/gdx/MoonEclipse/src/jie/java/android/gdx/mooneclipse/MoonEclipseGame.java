@@ -22,6 +22,7 @@ public class MoonEclipseGame extends Game {
 		float height = GLOBAL.PORTRAIT_SCREEN_HEIGHT;
 	
     	MoonEclipseGroup.initResource();
+    	ControllerGroup.initResource();
     	
 		this.screen = new MoonEclipseScreen(this, width, height, true);		
 		this.setScreen(screen);

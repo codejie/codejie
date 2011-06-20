@@ -14,23 +14,20 @@ public class MoonEclipseGame extends Game {
 	 * @see com.badlogic.gdx.ApplicationListener#create()
 	 */
 	
-	private Screen screen = null;	
-	
+	private Screen screen = null;
+
 	@Override
 	public void create() {
 		float width = GLOBAL.PORTRAIT_SCREEN_WIDTH;
 		float height = GLOBAL.PORTRAIT_SCREEN_HEIGHT;
 	
-    	MoonEclipseGroup.initResource();
-    	ControllerGroup.initResource();
-    	
-		this.screen = new MoonEclipseScreen(this, width, height, true);		
-		this.setScreen(screen);
+		this.setScreen(new MoonEclipseScreen(this, width, height, true));
 	}
 	
 	public void setScreen(Screen screen) {
 		if(this.screen != null && this.screen != screen)
 			this.screen.dispose();
+		this.screen = null;
 		this.screen = screen;
 		super.setScreen(this.screen);
 	}

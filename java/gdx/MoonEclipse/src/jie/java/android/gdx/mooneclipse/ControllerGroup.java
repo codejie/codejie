@@ -22,12 +22,6 @@ public class ControllerGroup extends Group implements Disposable {
 	private Image dockbar = null;
 	private Texture texture = null;
 	
-	private int tracePos = 0;
-	private boolean isPlay = true;
-	private boolean isMini = false;
-	
-	public static ControllerGroup CONTROLLER = null;
-	
 	public ControllerGroup() {
 		create();
 	}
@@ -88,11 +82,4 @@ public class ControllerGroup extends Group implements Disposable {
 		
 		help.x = width - 16 - 32;		
 	}
-
-	public static void initResource() {
-		if(ControllerGroup.CONTROLLER == null) {
-			ControllerGroup.CONTROLLER = new ControllerGroup();
-		}
-	}
-	
 }

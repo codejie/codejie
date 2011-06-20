@@ -13,6 +13,7 @@ public class MoonEclipseDesktop {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+    	
 		new JoglApplication(new MoonEclipseGame(), "Moon Eclipse on June 16, 2011 !", GLOBAL.PORTRAIT_SCREEN_WIDTH, GLOBAL.PORTRAIT_SCREEN_HEIGHT, false);
 	}
 

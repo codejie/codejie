@@ -22,8 +22,8 @@ public class MoonEclipseScreen extends Stage implements Screen {
 
 	private Game game = null;
 	
-	private MoonEclipseGroup moon = null;
-	private ControllerGroup controller = null;
+	private MoonEclipseGroup moon = new MoonEclipseGroup();
+	private ControllerGroup controller = new ControllerGroup();
 	
 	private boolean p0 = false,p1 = false;
 	private int x0 = 0, x1 = 0, y0 = 0, y1 = 0;
@@ -33,12 +33,21 @@ public class MoonEclipseScreen extends Stage implements Screen {
 		this.game = game;
 	}
 
+	public void dispose() {
+		this.moon = null;
+		this.controller = null;
+		
+		super.dispose();
+	}
 	/* (non-Javadoc)
 	 * @see com.badlogic.gdx.Screen#render(float)
 	 */
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
+		if(this.moon == null || this.controller == null)
+			this.show();
+		
 		Gdx.gl.glClearColor(0,0,0,0);
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 	
@@ -53,9 +62,11 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
+			
 		this.setViewport(width, height, true);	
 		
 		this.moon.setSize(width, height);
+		this.controller.setSize(width, height);
 	}
 
 	/* (non-Javadoc)
@@ -64,9 +75,6 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		
-		this.moon = MoonEclipseGroup.MOON;
-		this.controller = ControllerGroup.CONTROLLER;
 		
 		this.moon.setSize(width, height);		
 		this.addActor(this.moon);

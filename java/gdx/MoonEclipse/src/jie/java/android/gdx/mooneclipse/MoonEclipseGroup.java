@@ -21,17 +21,9 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	
 	private int frameWidth = 112;
 	private int frameHeight = 112;
-	private int currentFrame = 0;
 	
 	private Image sky = null;
 	private Image moon = null;
-	
-	private float delta = 0.0f;
-	private float speed = 0.1f;
-	
-	private boolean isPause = false;
-	
-	public static MoonEclipseGroup MOON = null;
 	
 	public MoonEclipseGroup() {
 		create();
@@ -46,9 +38,11 @@ public class MoonEclipseGroup extends Group implements Disposable{
 		this.addActor(sky);
 		
 		moon = new Image("moon", new TextureRegion(textureMoon, 0, 0, frameWidth, frameHeight));//getCurrentFrame());
-		moon.scaleX = 1.2f;
-		moon.scaleY = 1.2f;
+		moon.scaleX = GLOBAL.scale;
+		moon.scaleY = GLOBAL.scale;
 		this.addActor(moon);
+		
+		getCurrentFrame();
 	}
 
 	@Override
@@ -67,57 +61,55 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	}
 	
 	public void delta(float delta) {
-		if(isPause == true) {
+		if(GLOBAL.isPause == true) {
 			return;
 		}
 		
-		if((this.delta += delta) > speed)
+		if((GLOBAL.delta += delta) > GLOBAL.speed)
 		{
 			getCurrentFrame();
-			this.delta = 0.0f;
+			GLOBAL.delta = 0.0f;
 		}
 	}
 	
 	private void getCurrentFrame() {
-		currentFrame ++;
-		if(currentFrame > (13 * 9 - 1))
-			currentFrame = 0;
-		if(currentTexture != (currentFrame / 9))
+		GLOBAL.currentFrame ++;
+		if(GLOBAL.currentFrame > (13 * 9 - 1))
+			GLOBAL.currentFrame = 0;
+		if(currentTexture != (GLOBAL.currentFrame / 9))
 		{
 			if(textureMoon != null)
 				textureMoon.dispose();
-			currentTexture = currentFrame / 9;
+			currentTexture = GLOBAL.currentFrame / 9;
 			textureMoon = new Texture(Gdx.files.internal("data/m" + currentTexture + ".jpg"));
 		}
 		
-		sky.region = new TextureRegion(textureMoon, (currentFrame - (currentFrame / 9) * 9)  * frameWidth, 0, 12, 12);
-		moon.region = new TextureRegion(textureMoon, (currentFrame - (currentFrame / 9) * 9)  * frameWidth, 0, frameWidth, frameHeight);
+		sky.region = new TextureRegion(textureMoon, (GLOBAL.currentFrame - (GLOBAL.currentFrame / 9) * 9)  * frameWidth, 0, 12, 12);
+		moon.region = new TextureRegion(textureMoon, (GLOBAL.currentFrame - (GLOBAL.currentFrame / 9) * 9)  * frameWidth, 0, frameWidth, frameHeight);
 	}
 	
 	public void pause() {
-		this.isPause = true;
+		GLOBAL.isPause = true;
 	}
 	
 	public void resume() {
-		this.isPause = false;
+		GLOBAL.isPause = false;
 	}
 	
 	public void zoomOut() {
-		if(moon.scaleX < 3.0f) {
-			moon.scaleX += 0.03f;
-			moon.scaleY += 0.03f;			
+		if(GLOBAL.scale < 3.0f) {
+			GLOBAL.scale += 0.2f;
+			moon.scaleX = GLOBAL.scale;
+			moon.scaleY = GLOBAL.scale;				
 		}
 	}
 	
 	public void zoomIn() {
-		if(moon.scaleX > 0.5f) {
-			moon.scaleX -= 0.03f;
-			moon.scaleY -= 0.03f;
+		if(GLOBAL.scale > 0.4f) {
+			GLOBAL.scale -= 0.2f;
+			
+			moon.scaleX = GLOBAL.scale;
+			moon.scaleY = GLOBAL.scale;					
 		}
-	}
-	
-	public static void initResource() {
-		if(MoonEclipseGroup.MOON == null)
-			MoonEclipseGroup.MOON = new MoonEclipseGroup();
 	}
 }

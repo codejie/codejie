@@ -15,7 +15,7 @@ public class GLOBAL {
 
 	public static int currentFrame = 0;
 	public static float delta = 0.0f;
-	public static float speed = 0.2f;
+	public static float speed = 0.1f;
 	public static float scale = 1.2f;
 	public static boolean isPause = false;
 	

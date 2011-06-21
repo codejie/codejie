@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actors.Image;
 import com.badlogic.gdx.scenes.scene2d.actors.Label;
@@ -45,13 +47,14 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		if(this.moon == null || this.controller == null)
-			this.show();
-		
+
 		Gdx.gl.glClearColor(0,0,0,0);
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 	
-		this.moon.delta(delta);
+		//this.moon.delta(delta);
+		//this.controller.delta(delta);
+		
+		this.act(delta);
 		
 		this.draw();
 	}
@@ -74,11 +77,10 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	 */
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 		this.moon.setSize(width, height);		
 		this.addActor(this.moon);
-
+		
 		this.controller.setSize(width, height);
 		this.addActor(this.controller);
 		
@@ -117,7 +119,8 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) {
 		// TODO Auto-generated method stub
-
+		
+		//we can process zoom event in global, but not just in moon group
 		if(p0 == true && p1 == true) {
 			if(pointer == 0) {
 				//Gdx.app.log("MoonEclipse", "p0 touchDrag : " + x + "," + y + "," + pointer);
@@ -159,7 +162,6 @@ public class MoonEclipseScreen extends Stage implements Screen {
 		// TODO Auto-generated method stub
 		
 		//Gdx.app.log("MoonEclipse", "touchDown : " + x + "," + y + "," + pointer + "," + button);
-		
 		if(pointer == 0)
 		{
 			x0 = x;
@@ -171,7 +173,6 @@ public class MoonEclipseScreen extends Stage implements Screen {
 			y1 = y;
 			p1 = true;
 		}
-		
 		return super.touchDown(x, y, pointer, button);
 	}	
 	
@@ -181,16 +182,12 @@ public class MoonEclipseScreen extends Stage implements Screen {
 		//Gdx.app.log("MoonEclipse", "touchUp : " + x + "," + y + "," + pointer + "," + button);
 		if(pointer == 0)
 		{
-			x0 = x;
-			y0 = y;
 			p0 = false;
 		}
 		else if(pointer == 1) {
-			x1 = x;
-			y1 = y;
 			p1 = false;
 		}
-		return super.touchDown(x, y, pointer, button);
+		return super.touchUp(x, y, pointer, button);
 	}		
 	
 	

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.FadeIn;
 import com.badlogic.gdx.scenes.scene2d.actions.FadeOut;
@@ -33,6 +34,9 @@ public class ControllerGroup extends Group implements Disposable {
 	private int readyMini = 0;//0: none; 1: ready; 2: go
 	private float miniY = 0.0f;
 	
+	private float trackPos = 0.0f;
+	private int trackFrame = GLOBAL.currentFrame;
+	
 	public ControllerGroup() {
 		super("controller");
 		create();
@@ -53,7 +57,7 @@ public class ControllerGroup extends Group implements Disposable {
 		line = new Image("line", new TextureRegion(texture, 2, 2, 1, 1));
 		line.height = 6;
 		
-		track = new Image("track", new TextureRegion(texture, 20, 20, 1, 1)) {
+		track = new Image("track", new TextureRegion(texture, 20, 20, 1, 1));/* {
 			protected boolean touchDragged(float x, float y, int pointer) {
 				if(this.hit(x, y) == this) {
 					((ControllerGroup)(this.parent)).dragTrack(x, y);
@@ -61,6 +65,7 @@ public class ControllerGroup extends Group implements Disposable {
 				return super.touchDragged(x, y, pointer);
 			}
 		};
+		*/
 		track.height = 14;
 		track.width = 48;
 		
@@ -199,6 +204,14 @@ public class ControllerGroup extends Group implements Disposable {
 		
 		boolean touch = super.touchDown(x, y, pointer);
 		if(touch == true) {
+			Actor hitActor = this.hit(x, y);
+			if(hitActor != null) {
+				if(hitActor == track) {
+					trackPos = x;
+					trackFrame = GLOBAL.currentFrame;
+				}
+			}			
+			
 			Gdx.app.log("controller touchDown : ", "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
 		}
 		else {
@@ -213,24 +226,52 @@ public class ControllerGroup extends Group implements Disposable {
 	
 	protected boolean touchUp(float x, float y, int pointer) {
 		boolean touch = super.touchUp(x, y, pointer);
-
-		if(readyMini != 0) {
-			removeDockbar();
-		}
+		
+		//if(touch == true) {
+			//Actor hitActor = this.hit(x, y);
+			//if(hitActor != null && hitActor == track) {
+			if(trackPos != 0)
+				trackPos = 0;
+			//}			
+		//}
+		//else {
+			if(readyMini != 0) {
+				removeDockbar();
+			}
+		//}
 
 		return touch;
 	}
 	
 	protected boolean touchDragged(float x, float y, int pointer) {
 		
-		if(readyMini == 2) {
-			if((miniY - y) > 32.0f) {
-				miniDockbar();
-				Gdx.app.log("controller touchDragged : ", "Actor - x : " + x + " y : " + y + " MINI!");				
+		boolean touch = super.touchDragged(x, y, pointer);
+		//if(touch == true) {
+			//Actor hitActor = this.hit(x, y);
+			//if(hitActor != null && hitActor == track) {
+			if(trackPos != 0) {
+				int step = (int)((x - trackPos) * 13 * 9 / (line.width));
+				Gdx.app.log("controller touchDragged : ", "trackPos : " + trackPos + " x : " + x + "width : " + track.width + " Step : " + step);
+				GLOBAL.currentFrame = (trackFrame + step);
+				
+				if(GLOBAL.currentFrame < 0) {
+					GLOBAL.currentFrame = 0;
+				}
+				else if(GLOBAL.currentFrame > (13 * 9 - 1)) {
+					GLOBAL.currentFrame = (13 * 9 - 1);
+				}
 			}
-		}
+		//}
+		//else {
+			if(readyMini == 2) {
+				if((miniY - y) > 32.0f) {
+					miniDockbar();
+					Gdx.app.log("controller touchDragged : ", "Actor - x : " + x + " y : " + y + " MINI!");				
+				}
+			}
+	//	}
 		
-		return super.touchDragged(x, y, pointer);
+		return touch;
 	}
 	
 	protected void onPlayButton() {
@@ -257,8 +298,7 @@ public class ControllerGroup extends Group implements Disposable {
 	}
 	
 	protected void dragTrack(float x, float y) {
-		Gdx.app.log("controller dragTrack : ", "x : " + x + " y : " + y);
-		GLOBAL.currentFrame ++;
+		//Gdx.app.log("controller dragTrack : ", "x : " + x + " y : " + y);
 		//if(track.x )
 		//track.x = x *10;
 	}

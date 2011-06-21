@@ -84,7 +84,7 @@ public class MoonEclipseScreen extends Stage implements Screen {
 		this.controller.setSize(width, height);
 		this.addActor(this.controller);
 		
-		this.resume();
+		//this.resume();
 		
 		Gdx.input.setInputProcessor(this);				
 	}
@@ -104,7 +104,7 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		this.moon.pause();
+		//this.moon.pause();
 	}
 
 	/* (non-Javadoc)
@@ -113,7 +113,7 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		this.moon.resume();
+		//this.moon.resume();
 	}
 
 	@Override

@@ -5,6 +5,8 @@
  */
 package jie.java.android.gdx.mooneclipse;
 
+import java.util.Vector;
+
 public class GLOBAL {
 
 	public static int LANDSCAPE_SCREEN_WIDTH		=	800;
@@ -21,5 +23,14 @@ public class GLOBAL {
 	public static boolean isShift = false;
 	
 	public static boolean isMini = false;
+	
+	public static class StarData {
+		public boolean isStar = true;
+		public float x = 0.0f, y = 0.0f;
+		public float scale = 1.0f;
+		public float rotate = 0.0f;
+		public boolean needFall = false;
+	}
+	public static Vector<StarData> starList = new Vector<StarData>();
 	
 }

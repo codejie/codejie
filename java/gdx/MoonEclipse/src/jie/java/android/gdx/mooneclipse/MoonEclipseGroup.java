@@ -10,7 +10,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.OnActionCompleted;
+import com.badlogic.gdx.scenes.scene2d.actions.FadeTo;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveTo;
+import com.badlogic.gdx.scenes.scene2d.actions.Parallel;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateTo;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleTo;
 import com.badlogic.gdx.scenes.scene2d.actors.Image;
 import com.badlogic.gdx.scenes.scene2d.actors.Label;
 import com.badlogic.gdx.utils.Disposable;
@@ -26,9 +34,13 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	private Image sky = null;
 	private Image moon = null;
 	
-	private Group star = null;
+	private Group starGroup = new Group();
 	private Texture textureStar = null;
 	private Texture textureBall = null;
+	
+	private boolean p0 = false, p1 = false, p2 = false;
+	private float clickDelta = -1.0f;
+	private float clickInterval = 0.4f;
 	
 	public MoonEclipseGroup() {
 		super("moon");
@@ -42,6 +54,11 @@ public class MoonEclipseGroup extends Group implements Disposable{
 		sky.x = 0;
 		sky.y = 0;
 		this.addActor(sky);
+		
+		for(GLOBAL.StarData it:GLOBAL.starList) {
+			makeStar(it);
+		}
+		this.addActor(starGroup);		
 		
 		moon = new Image("moon", new TextureRegion(textureMoon, 0, 0, frameWidth, frameHeight));//getCurrentFrame());
 		moon.scaleX = GLOBAL.scale;
@@ -77,6 +94,11 @@ public class MoonEclipseGroup extends Group implements Disposable{
 		{
 			getCurrentFrame();
 			GLOBAL.delta = 0.0f;
+		}
+		if(clickDelta >= 0.0f) {
+			clickDelta += delta;
+			if(clickDelta >= clickInterval)
+				clickDelta = -1.0f;
 		}
 	}
 	
@@ -128,20 +150,132 @@ public class MoonEclipseGroup extends Group implements Disposable{
 		}
 	}
 	
+	protected void makeStar(float x, float y) {		
+		
+		//makeStar(MathUtils.randomBoolean(), MathUtils.random(0, 480), MathUtils.random(0, 64), MathUtils.random(10, 64));	
+		
+		GLOBAL.StarData data = new GLOBAL.StarData();
+				
+		if(MathUtils.randomBoolean() == true) {		
+			data.isStar = true;
+			data.x = x - 32;
+			data.y = y - 32;
+			data.scale = MathUtils.random(0.3f, 0.8f);
+			data.rotate = MathUtils.random(360.0f);
+		}
+		else  {
+			data.isStar = false;
+			data.x = x - 16;
+			data.y = y - 16;
+			data.scale = MathUtils.random(0.6f, 0.8f);
+			data.rotate = 0.0f;
+		}
+		
+		data.needFall = (MathUtils.random(100) < 30);
+		
+		makeStar(data);
+		
+		if(data.needFall == false)
+			GLOBAL.starList.add(data);
+	}
+	
+	protected void makeStar(final GLOBAL.StarData data) {		
+		Image star = null;
+		
+		if(data.isStar == true) {
+			if(textureStar == null) {
+				textureStar = new Texture(Gdx.files.internal("data/star.png"));			
+			}
+			star = new Image("star", textureStar);
+		}
+		else  {
+			if(textureBall == null) {
+				textureBall = new Texture(Gdx.files.internal("data/ball.png"));			
+			}
+			star = new Image("ball", textureBall);
+		}
+		star.x = data.x;
+		star.y = data.y;
+		star.scaleX = data.scale;
+		star.scaleY = data.scale;
+		star.rotation = data.rotate;
+	
+		starGroup.addActor(star);
+		
+		if(data.needFall == true) {
+			final Image a = star;
+			
+			int rotate = MathUtils.random(360);		
+			float scale = MathUtils.random(0.2f, 1.0f);
+			float fade = MathUtils.random(1.0f);
+			float duration = star.y / 1000.0f + MathUtils.random(0.2f);
+			Action action = Parallel.$(
+					MoveTo.$(star.x, 0, duration),
+					ScaleTo.$(scale, scale, duration),
+					RotateTo.$(rotate, duration),
+					FadeTo.$(fade, duration)
+					).setCompletionListener(
+							new OnActionCompleted() {
+								@Override
+								public void completed(Action action) {
+									starGroup.removeActor(a);
+								}
+							});			
+			
+			star.action(action);
+		}
+	}
+	
+	protected void removeStars() {
+		starGroup.clear();
+		GLOBAL.starList.clear();
+	}
+	
 	protected boolean touchDown(float x, float y, int pointer) {
 		boolean touch = super.touchDown(x, y, pointer);
 		if(touch == true) {
 			Gdx.app.log("moon touchDown : ", "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
+			if(hit(x, y) == sky) {
+				if(clickDelta == -1.0f) {
+					clickDelta = 0.0f;
+				}
+				else if(clickDelta > 0.0f) {
+					clickDelta = -1.0f;
+					makeStar(x, y);
+				}
+			}
+			if(pointer == 0)
+				p0 = true;
+			else if(pointer == 1)
+				p1 = true;
+			else if(pointer == 2)
+				p2 = true;
 		}
 		return touch;
 	}	
 	
 	protected boolean touchUp(float x, float y, int pointer) {
+		if(pointer == 0)
+			p0 = false;
+		else if(pointer == 1)
+			p1 = false;
+		else if(pointer == 2)
+			p2 = false;
+		
 		return super.touchUp(x, y, pointer);
 	}
 	
 	protected boolean touchDragged(float x, float y, int pointer) {
-		return super.touchDragged(x, y, pointer);
+		boolean touch = super.touchDragged(x, y, pointer);
+		
+		//if(touch == true) {
+			//Gdx.app.log("moon touchDragged : ", "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
+			if(p0 && p1 && p2) {
+				removeStars();
+			}
+		//}
+		
+		return touch;
 	}
 	
 }

@@ -108,7 +108,7 @@ public class ControllerGroup extends Group implements Disposable {
 			if(miniCount > miniTimeout) {
 				drawDockbar();
 			
-				Gdx.app.log("controller touchDragged : ", "Actor - x : " + x + " y : " + y + " ready : " + readyMini);		
+				//Gdx.app.log("controller touchDragged : ", "Actor - x : " + x + " y : " + y + " ready : " + readyMini);		
 			}
 		}
 	}
@@ -220,10 +220,10 @@ public class ControllerGroup extends Group implements Disposable {
 				}
 			}			
 			
-			Gdx.app.log("controller touchDown : ", "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
+			//Gdx.app.log("controller touchDown : ", "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
 		}
 		else {
-			Gdx.app.log("controller touchDown : ", "Actor - x : " + x + " y : " + y + " hit : NULL");
+			//Gdx.app.log("controller touchDown : ", "Actor - x : " + x + " y : " + y + " hit : NULL");
 			if(GLOBAL.isPause == false && y < 110.0f && readyMini == 0) {
 				readyMini = 1;
 				miniY = y;
@@ -259,7 +259,7 @@ public class ControllerGroup extends Group implements Disposable {
 			//if(hitActor != null && hitActor == track) {
 			if(trackPos != 0) {
 				int step = (int)((x - trackPos) * 13 * 9 / (line.width));
-				Gdx.app.log("controller touchDragged : ", "trackPos : " + trackPos + " x : " + x + "width : " + track.width + " Step : " + step);
+				//Gdx.app.log("controller touchDragged : ", "trackPos : " + trackPos + " x : " + x + "width : " + track.width + " Step : " + step);
 				GLOBAL.currentFrame = (trackFrame + step);
 				
 				if(GLOBAL.currentFrame < 0) {
@@ -274,7 +274,7 @@ public class ControllerGroup extends Group implements Disposable {
 			if(readyMini == 2) {
 				if((miniY - y) > 32.0f) {
 					miniDockbar();
-					Gdx.app.log("controller touchDragged : ", "Actor - x : " + x + " y : " + y + " MINI!");				
+					//Gdx.app.log("controller touchDragged : ", "Actor - x : " + x + " y : " + y + " MINI!");				
 				}
 			}
 	//	}

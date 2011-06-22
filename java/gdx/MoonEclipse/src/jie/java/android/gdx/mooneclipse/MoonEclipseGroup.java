@@ -38,7 +38,9 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	private Texture textureStar = null;
 	private Texture textureBall = null;
 	
-	private boolean p0 = false, p1 = false, p2 = false;
+	private boolean p0 = false, p1 = false;
+	private boolean t0 = false, t1 = false;
+	private float x0, y0, x1, y1;
 	private float clickDelta = -1.0f;
 	private float clickInterval = 0.4f;
 	
@@ -171,7 +173,7 @@ public class MoonEclipseGroup extends Group implements Disposable{
 			data.rotate = 0.0f;
 		}
 		
-		data.needFall = (MathUtils.random(100) < 30);
+		data.needFall = (MathUtils.random(100) < 20);
 		
 		makeStar(data);
 		
@@ -234,33 +236,37 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	protected boolean touchDown(float x, float y, int pointer) {
 		boolean touch = super.touchDown(x, y, pointer);
 		if(touch == true) {
-			Gdx.app.log("moon touchDown : ", "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
+			//Gdx.app.log("moon touchDown : ", "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
 			if(hit(x, y) == sky) {
 				if(clickDelta == -1.0f) {
 					clickDelta = 0.0f;
 				}
-				else if(clickDelta > 0.0f) {
+				else if(clickDelta > 0.1f) {
 					clickDelta = -1.0f;
 					makeStar(x, y);
 				}
-			}
-			if(pointer == 0)
+			} 
+			if(pointer == 0) {
+				x0 = x;
 				p0 = true;
-			else if(pointer == 1)
+			}
+			else if(pointer == 1) {
+				x1 = x;
 				p1 = true;
-			else if(pointer == 2)
-				p2 = true;
+			}
 		}
 		return touch;
 	}	
 	
 	protected boolean touchUp(float x, float y, int pointer) {
-		if(pointer == 0)
+		if(pointer == 0) {
 			p0 = false;
-		else if(pointer == 1)
+			t0 = false;
+		}
+		else if(pointer == 1) {
 			p1 = false;
-		else if(pointer == 2)
-			p2 = false;
+			t1 = false;
+		}
 		
 		return super.touchUp(x, y, pointer);
 	}
@@ -269,9 +275,19 @@ public class MoonEclipseGroup extends Group implements Disposable{
 		boolean touch = super.touchDragged(x, y, pointer);
 		
 		//if(touch == true) {
-			//Gdx.app.log("moon touchDragged : ", "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
-			if(p0 && p1 && p2) {
-				removeStars();
+			Gdx.app.log("moon touchDragged : " + pointer, "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
+			if(p0 && p1 && (Math.abs(x0 - x1) < 128)) {
+				if(t0 && t1) {
+					removeStars();
+				}
+				if(pointer == 0) {
+					if((x - x0) > 32)
+						t0 = true;
+				}
+				else if(pointer == 1) {
+					if((x - x1) > 32)
+						t1 = true;
+				}
 			}
 		//}
 		

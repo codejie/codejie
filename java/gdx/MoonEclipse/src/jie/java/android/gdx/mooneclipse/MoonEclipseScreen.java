@@ -163,7 +163,7 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		// TODO Auto-generated method stub
 		
-		Gdx.app.log("MoonEclipse", "touchDown : " + x + "," + y + "," + pointer + "," + button);
+		//Gdx.app.log("MoonEclipse", "touchDown : " + x + "," + y + "," + pointer + "," + button);
 		if(pointer == 0)
 		{
 			x0 = x;

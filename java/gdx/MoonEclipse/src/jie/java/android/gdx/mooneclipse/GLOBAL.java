@@ -18,6 +18,7 @@ public class GLOBAL {
 	public static float speed = 0.1f;
 	public static float scale = 1.2f;
 	public static boolean isPause = false;
+	public static boolean isShift = false;
 	
 	public static boolean isMini = false;
 	

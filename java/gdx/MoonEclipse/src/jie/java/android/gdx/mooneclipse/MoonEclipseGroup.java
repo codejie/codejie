@@ -26,6 +26,10 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	private Image sky = null;
 	private Image moon = null;
 	
+	private Group star = null;
+	private Texture textureStar = null;
+	private Texture textureBall = null;
+	
 	public MoonEclipseGroup() {
 		super("moon");
 		create();
@@ -50,6 +54,10 @@ public class MoonEclipseGroup extends Group implements Disposable{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		if(textureStar != null)
+			textureStar.dispose();
+		if(textureBall != null)
+			textureBall.dispose();
 		if(textureMoon != null)
 			textureMoon.dispose();
 	}

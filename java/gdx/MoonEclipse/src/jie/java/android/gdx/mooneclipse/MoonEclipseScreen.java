@@ -48,11 +48,11 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	public void render(float delta) {
 		// TODO Auto-generated method stub
 
+		if(GLOBAL.isShift == true)
+			return;
+		
 		Gdx.gl.glClearColor(0,0,0,0);
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
-	
-		//this.moon.delta(delta);
-		//this.controller.delta(delta);
 		
 		this.act(delta);
 		
@@ -84,7 +84,7 @@ public class MoonEclipseScreen extends Stage implements Screen {
 		this.controller.setSize(width, height);
 		this.addActor(this.controller);
 		
-		this.resume();
+		GLOBAL.isShift = false;
 		
 		Gdx.input.setInputProcessor(this);				
 	}
@@ -104,7 +104,8 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		this.moon.pause();
+		//this.moon.pause();
+		GLOBAL.isShift = true;
 	}
 
 	/* (non-Javadoc)
@@ -113,7 +114,8 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		this.moon.resume();
+		//this.moon.resume();
+		GLOBAL.isShift = false;
 	}
 
 	@Override

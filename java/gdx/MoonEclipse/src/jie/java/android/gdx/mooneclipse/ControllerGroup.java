@@ -88,12 +88,7 @@ public class ControllerGroup extends Group implements Disposable {
 		};
 		
 		this.addActor(play);
-//		this.addActor(line);
-//		this.addActor(track);
 		this.addActor(help);
-		//this.addActor(dockbar);
-		
-		//this.height = 32 + 64 * 32;	
 	}
 	/* (non-Javadoc)
 	 * @see com.badlogic.gdx.utils.Disposable#dispose()
@@ -126,18 +121,10 @@ public class ControllerGroup extends Group implements Disposable {
 		delta(Gdx.graphics.getDeltaTime());
 		super.draw(batch, parentAlpha);
 	}
-
-	public void zoomIn() {
-		
-	}
-	
-	public void zoomOut() {
-		
-	}
 	
 	public void setSize(float width, float height) {
 		play.x = (width - 64) / 2;
-		play.y = 28;
+		play.y = 24;
 		
 		line.x = 32;
 		line.y = 32 + 64 + 16;
@@ -150,8 +137,29 @@ public class ControllerGroup extends Group implements Disposable {
 		
 		dockbar.width = width;
 		
-		//this.width = width;
+		this.removeActor(line);
+		this.removeActor(track);		
+		
+		drawActors();
 	}
+	
+	protected void drawActors() {
+		if(GLOBAL.isPause == true) {
+			this.addActor(line);
+			this.addActor(track);			
+			
+			play.unpressedRegion = new TextureRegion(texture, 1, 0, 63, 63);
+			play.pressedRegion = new TextureRegion(texture, 1, 0, 63, 63);
+		}
+		else {			
+			this.removeActor(line);
+			this.removeActor(track);
+			
+			play.unpressedRegion = new TextureRegion(texture, 1, 63, 63, 63);
+			play.pressedRegion = new TextureRegion(texture, 1, 63, 63, 63);
+		}		
+	}
+	
 	
 	protected void drawDockbar() {
 		
@@ -277,20 +285,7 @@ public class ControllerGroup extends Group implements Disposable {
 	protected void onPlayButton() {
 		GLOBAL.isPause = !GLOBAL.isPause;
 		
-		if(GLOBAL.isPause == true) {
-			this.addActor(line);
-			this.addActor(track);			
-			
-			play.unpressedRegion = new TextureRegion(texture, 1, 0, 63, 63);
-			play.pressedRegion = new TextureRegion(texture, 1, 0, 63, 63);
-		}
-		else {			
-			this.removeActor(line);
-			this.removeActor(track);
-			
-			play.unpressedRegion = new TextureRegion(texture, 1, 63, 63, 63);
-			play.pressedRegion = new TextureRegion(texture, 1, 63, 63, 63);
-		}
+		drawActors();
 	}
 	
 	protected void onHelpButton() {

@@ -275,7 +275,7 @@ public class MoonEclipseGroup extends Group implements Disposable{
 		boolean touch = super.touchDragged(x, y, pointer);
 		
 		//if(touch == true) {
-			Gdx.app.log("moon touchDragged : " + pointer, "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
+			//Gdx.app.log("moon touchDragged : " + pointer, "Actor - x : " + x + " y : " + y + " hit : " + hit(x, y).name);
 			if(p0 && p1 && (Math.abs(x0 - x1) < 128)) {
 				if(t0 && t1) {
 					removeStars();

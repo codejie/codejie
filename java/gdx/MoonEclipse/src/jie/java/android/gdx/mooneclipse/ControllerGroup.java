@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.FadeIn;
 import com.badlogic.gdx.scenes.scene2d.actions.FadeOut;
+import com.badlogic.gdx.scenes.scene2d.actions.FadeTo;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveTo;
 import com.badlogic.gdx.scenes.scene2d.OnActionCompleted;
 import com.badlogic.gdx.scenes.scene2d.actors.Button;
@@ -28,6 +29,7 @@ public class ControllerGroup extends Group implements Disposable {
 	private Image line = null;
 	private Image dockbar = null;
 	private Texture texture = null;
+	//private Image about = null;
 	
 	private float miniCount = 0.0f;
 	private float miniTimeout = 1.5f;
@@ -136,6 +138,9 @@ public class ControllerGroup extends Group implements Disposable {
 		help.x = width - 16 - 32;
 		
 		dockbar.width = width;
+		
+		this.width = width;
+		this.height = height;
 		
 		this.removeActor(line);
 		this.removeActor(track);		
@@ -289,12 +294,30 @@ public class ControllerGroup extends Group implements Disposable {
 	}
 	
 	protected void onHelpButton() {
+		final ControllerGroup g = this;
+
+		Image about = new Image("about", new Texture(Gdx.files.internal("data/about.jpg"))) {
+			protected boolean touchDown(float x, float y, int pointer) {
+				if(this.hit(x, y) == this) {
+					final Image a = this;
+					Action act = FadeTo.$(0.0f, 1.0f).setCompletionListener( new OnActionCompleted() {
+						@Override
+						public void completed(Action action) {
+							// TODO Auto-generated method stub
+							g.removeActor(a);
+						}});
+					this.action(act);
+				}
+				return super.touchDown(x, y, pointer);
+			}
+		};
+		about.x = (this.width - about.width) / 2;
+		about.y = (this.height - about.height) / 2;
 		
+		this.addActor(about);
 	}
 	
 	protected void dragTrack(float x, float y) {
 		//Gdx.app.log("controller dragTrack : ", "x : " + x + " y : " + y);
-		//if(track.x )
-		//track.x = x *10;
 	}
 }

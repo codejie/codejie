@@ -12,10 +12,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.Delay;
 import com.badlogic.gdx.scenes.scene2d.actions.FadeIn;
 import com.badlogic.gdx.scenes.scene2d.actions.FadeOut;
 import com.badlogic.gdx.scenes.scene2d.actions.FadeTo;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveTo;
+import com.badlogic.gdx.scenes.scene2d.actions.Remove;
+import com.badlogic.gdx.scenes.scene2d.actions.Sequence;
 import com.badlogic.gdx.scenes.scene2d.OnActionCompleted;
 import com.badlogic.gdx.scenes.scene2d.actors.Button;
 import com.badlogic.gdx.scenes.scene2d.actors.Image;
@@ -306,19 +309,13 @@ public class ControllerGroup extends Group implements Disposable {
 	}
 	
 	protected void onHelpButton() {
-		final ControllerGroup g = this;
-
+		final Action act = Sequence.$(FadeTo.$(0.0f, 1.0f), Remove.$());		
+		
 		Image about = new Image("about", new Texture(Gdx.files.internal("data/about.jpg"))) {
+			final Action a = act;
 			protected boolean touchDown(float x, float y, int pointer) {
 				if(this.hit(x, y) == this) {
-					final Image a = this;
-					Action act = FadeTo.$(0.0f, 1.0f).setCompletionListener( new OnActionCompleted() {
-						@Override
-						public void completed(Action action) {
-							// TODO Auto-generated method stub
-							g.removeActor(a);
-						}});
-					this.action(act);
+					this.action(a);
 				}
 				return super.touchDown(x, y, pointer);
 			}
@@ -327,6 +324,8 @@ public class ControllerGroup extends Group implements Disposable {
 		about.y = (this.height - about.height) / 2;
 		
 		this.addActor(about);
+		
+		about.action(Delay.$(act, 2.0f));
 	}
 	
 	protected void onCloseButton() {

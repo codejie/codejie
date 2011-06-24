@@ -19,6 +19,7 @@ public:
 
 	int Open(const std::string& local);
 
+	void Final();
 protected:
 	virtual int handle_connect(int clientid, ACEX_TcpStream& client);
 	virtual int handle_close(int clientid, ACEX_TcpStream& client);

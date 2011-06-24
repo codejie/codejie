@@ -253,6 +253,11 @@ void DataCollectServerApp::ShowOptions(std::ostream& os) const
 	_stOptions.Show(os);
 }
 
+void DataCollectServerApp::ShowConfig(std::ostream& os) const
+{
+	_stConfigLoader.Show(os);
+}
+
 int DataCollectServerApp::Shutdown()
 {
 	ACEX_Message msg(TASK_APP, FPARAM_SHUTDOWN, 0);

@@ -20,6 +20,21 @@ CollectServerTask::~CollectServerTask()
 {
 }
 
+int CollectServerTask::Open(const std::string& local)
+{
+	ACE_INET_Addr addr(local.c_str());
+	if(open(addr) != 0)
+	{
+		return -1;
+	}
+	return 0;
+}
+
+void CollectServerTask::Final()
+{
+	this->deactivate();
+}
+
 int CollectServerTask::handle_connect(int clientid, ACEX_TcpStream& client)
 {
 	ACEX_LOG_OS(LM_INFO, "<CollectServerTask::handle_connect>Client connect - clientid : " << clientid << std::endl);

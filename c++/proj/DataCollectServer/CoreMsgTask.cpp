@@ -31,14 +31,14 @@ int CoreMsgTask::Init(const ConfigLoader& config)
 		ACEX_LOG_OS(LM_ERROR, "<CoreMsgTask::Init>Collect Server open failed - addr : " << config.m_strCollectAddr << std::endl);
 		return -1;
 	}
-	return -1;
+	return 0;
 }
 
 void CoreMsgTask::Final()
 {
 	if(_taskCollectServer.get() != NULL)
 	{
-		_taskCollectServer->deactivate();
+		_taskCollectServer->Final();
 		_taskCollectServer.reset(NULL);
 	}
 }

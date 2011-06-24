@@ -47,6 +47,13 @@ int ConfigLoader::Load(const std::string& filename)
 		return -1;
 	m_strMMLAddr = tmp.c_str();
 	
+	if(ini.get_string_value(key, "CollectAddr", tmp) != 0)
+		return -1;
+	m_strCollectAddr = tmp.c_str();
+	if(ini.get_string_value(key, "CommandAddr", tmp) != 0)
+		return -1;
+	m_strCommandAddr = tmp.c_str();
+
 	if(ini.open_section(root, "Database", 0, key) != 0)
 		return -1;
 	

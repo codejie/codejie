@@ -25,6 +25,7 @@ public class ControllerGroup extends Group implements Disposable {
 
 	private Button play = null;
 	private Button help = null;
+	private Button close = null;
 	private Image track = null;
 	private Image line = null;
 	private Image dockbar = null;
@@ -80,6 +81,16 @@ public class ControllerGroup extends Group implements Disposable {
 		};
 		help.y = 16;
 		
+		close = new Button("close", new Texture(Gdx.files.internal("data/close.png"))) {
+			protected boolean touchUp(float x, float y, int pointer) {
+				if(this.hit(x, y) == this)
+					((ControllerGroup)(this.parent)).onCloseButton();
+				return super.touchUp(x, y, pointer);
+			}
+		};
+		close.y = 16;
+		close.x = 16;
+		
 		dockbar = new Image("dockbar", new TextureRegion(texture, 2, 2, 1, 1)) {
 			protected boolean touchDown(float x, float y, int pointer) {
 				if(this.hit(x, y) == this) {
@@ -91,6 +102,7 @@ public class ControllerGroup extends Group implements Disposable {
 		
 		this.addActor(play);
 		this.addActor(help);
+		this.addActor(close);
 	}
 	/* (non-Javadoc)
 	 * @see com.badlogic.gdx.utils.Disposable#dispose()
@@ -315,6 +327,11 @@ public class ControllerGroup extends Group implements Disposable {
 		about.y = (this.height - about.height) / 2;
 		
 		this.addActor(about);
+	}
+	
+	protected void onCloseButton() {
+		//Gdx.app.exit();
+		System.exit(0);
 	}
 	
 	protected void dragTrack(float x, float y) {

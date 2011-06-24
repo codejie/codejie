@@ -121,37 +121,77 @@ public class MoonEclipseScreen extends Stage implements Screen {
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) {
 		// TODO Auto-generated method stub
-		
+		int step = 15;
 		//we can process zoom event in global, but not just in moon group
 		if(p0 == true && p1 == true) {
 			if(pointer == 0) {
 				//Gdx.app.log("MoonEclipse", "p0 touchDrag : " + x + "," + y + "," + pointer);
 				if(x0 < x1) {
-					if(x < x0 && y > y0)
-						this.moon.zoomOut();
-					else if(x > x0 && y < y0)
-						this.moon.zoomIn();
+					if(x < x0 && y > y0) {
+						if(x0 - x > step || y - y0 > step) {
+							this.moon.zoomOut();
+							x0 = x;
+							y0 = y;
+						}
+					}
+					else if(x > x0 && y < y0) {
+						if(x - x0 > step || y0 - y > step) {
+							this.moon.zoomIn();
+							x0 = x;
+							y0 = y;							
+						}
+					}
 				}
 				else if(x0 > x1) {
-					if(x < x0 && y > y0)
-						this.moon.zoomIn();
-					else if(x > x0 && y < y0)
-						this.moon.zoomOut();					
+					if(x < x0 && y > y0) {
+						if(x0 - x > step || y - y0 > step) {
+							this.moon.zoomIn();
+							x0 = x;
+							y0 = y;
+						}
+					}
+					else if(x > x0 && y < y0) {
+						if(x - x0 > step || y0 - y > step) {
+							this.moon.zoomOut();
+							x0 = x;
+							y0 = y;
+						}
+					}
 				}
 			}
 			else if(pointer == 1) {
 				//Gdx.app.log("MoonEclipse", "p1 touchDrag : " + x + "," + y + "," + pointer);
 				if(x0 < x1) {
-					if(x < x1 && y > y1)
-						this.moon.zoomIn();
-					else if(x > x1 && y < y1)
-						this.moon.zoomOut();
+					if(x < x1 && y > y1) {
+						if(x1 - x > step || y - y1 > step) {
+							this.moon.zoomIn();
+							x1 = x;
+							y1 = y;
+						}
+					}
+					else if(x > x1 && y < y1) {
+						if(x - x1 > step || y1 - y > step) {
+							this.moon.zoomOut();
+							x1 = x;
+							y1 = y;
+						}
+					}
 				}
 				else if(x0 > x1) {
-					if(x < x1 && y > y1)
-						this.moon.zoomOut();
-					else if(x > x1 && y < y1)
-						this.moon.zoomIn();					
+					if(x < x1 && y > y1) {
+						if(x1 - x > step || y - y1 > step) {
+							this.moon.zoomOut();
+							x1 = x;
+							y1 = y;
+						}
+					}
+					else if(x > x1 && y < y1) {
+						if(x - x1 > step || y1 - y > step) {
+							this.moon.zoomIn();
+							x1 = x;
+							y1 = y;
+						}
+					}
 				}
 			}
 		}

@@ -145,6 +145,53 @@ int DataAccess::LoadDefColumnFromConfig()
     }
 
     ACE_Configuration_Section_Key key;
+    ACE_TString tmp, st, inf, col;
+    int index = 0;
+    //Station
+    if(ini.open_section(ini.root_section(), "Station", 0, key) != 0)
+    	return -1;
+
+    index = 0;
+    while(ini.enumerate_sections(key, index, tmp) != 0)
+    {
+    	ACE_Configuration_Section_Key k;
+    	if(ini.open_section(key, tmp.c_str(), 0, k) != 0)
+    		return -1;
+
+       	if(ini.get_string_value(k, "Station", st) != 0)
+        		return -1;
+       	if(ini.get_string_value(k, "Infectant", inf) != 0)
+    		return -1;
+    	if(ini.get_string_value(k, "Column", col) != 0)
+    		return -1;
+
+    	if(!_mapStationInfectant.insert(std::make_pair(std::make_pair(st.c_str(), inf.c_str()), col.c_str())).second)
+    		return -1;
+
+    	++ index;
+    }
+    //Infectant
+    if(ini.open_section(ini.root_section(), "Infectant", 0, key) != 0)
+    	return -1;
+
+    index = 0;
+    while(ini.enumerate_sections(key, index, tmp) != 0)
+    {
+    	ACE_Configuration_Section_Key k;
+    	if(ini.open_section(key, tmp.c_str(), 0, k) != 0)
+    		return -1;
+
+    	if(ini.get_string_value(k, "Infectant", inf) != 0)
+    		return -1;
+    	if(ini.get_string_value(k, "Column", col) != 0)
+    		return -1;
+
+    	if(!_mapInfectant.insert(std::make_pair(inf.c_str(), col.c_str())).second)
+    		return -1;
+
+    	++ index;
+    }
+
 
     
     return 0;

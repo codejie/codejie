@@ -6,8 +6,12 @@
  */
 
 #include "acex/ACEX.h"
+#include "acex/Ini_Configuration.h"
 
 #include "DataAccess.h"
+
+
+const std::string DataAccess::DEF_INFECTANTCOLUMN_CONFIGFILE    =   "InfectantColumn.ini";
 
 DataAccess::DataAccess()
 : _env(NULL)
@@ -34,10 +38,16 @@ int DataAccess::Init(const std::string& server, const std::string& user, const s
 	}
 	catch(oracle::occi::SQLException& e)
 	{
-        ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Database environment init failed - " << e.what() << std::endl);
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Database environment init exception - " << e.what() << std::endl);
 		return -1;
 	}
-	return 0;
+
+    if(Connect() != 0)
+    {
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Connect Database server failed." << std::endl);
+        return -1;
+    }
+    return LoadDefColumn();
 }
 
 void DataAccess::Final()
@@ -88,12 +98,61 @@ void DataAccess::Disconnect()
 
 int DataAccess::LoadDefColumn()
 {
-	return -1;
+    if(LoadDefColumnFromDB() != 0)
+        return -1;
+    if(LoadDefColumnFromConfig() != 0)
+        return -1;
+    return 0;
 }
 
-int DataAccess::searchColumn(const std::string& station, const std::string& infectant, std::string& column) const
+int DataAccess::LoadDefColumnFromDB()
 {
-	TStationInfectantMap::const_iterator it = _mapStationInfectant.find(std::make_pair(station infectant));
+    if(_isconnected != true)
+        return -1;
+
+    try
+    {
+        const std::string sql = "select station_id, infectant_id, infectant_column from t_cfg_monitor_param";
+
+        oracle::occi::Statement *stmt = _conn->createStatement(sql);
+        oracle::occi::ResultSet *rset = stmt->executeQuery();
+
+        while(rset->next())
+        {
+            if(!_mapStationInfectant.insert(std::make_pair(std::make_pair(rset->getString(1), rset->getString(2)), rset->getString(3))).second)
+            {
+                ACEX_LOG_OS(LM_ERROR, "<LoadDefColumnFromDB>Load Infectant column failed - Station:" << rset->getString(1) << " Infectant:" << rset->getString(2) << std::endl);
+                return -1;
+            }
+        }
+    }
+    catch(oracle::occi::SQLException& e)
+    {
+        ACEX_LOG_OS(LM_ERROR, "<LoadDefColumnFromDB>Load Infectant column exception - " << e.what() << std::endl);
+        return -1;
+    }
+
+	return 0;
+}
+
+int DataAccess::LoadDefColumnFromConfig()
+{
+    ACEX_Ini_Configuration ini;
+    if(ini.open(DEF_INFECTANTCOLUMN_CONFIGFILE) != 0)
+    {
+        ACEX_LOG_OS(LM_INFO, "<>Default Infectant configuration file does not find or opens failed." << std::endl);
+        return 0;
+    }
+
+    ACE_Configuration_Section_Key key;
+
+    
+    return 0;
+}
+
+int DataAccess::SearchColumn(const std::string& station, const std::string& infectant, std::string& column) const
+{
+	TStationInfectantMap::const_iterator it = _mapStationInfectant.find(std::make_pair(station, infectant));
 	if(it != _mapStationInfectant.end())
 	{
 		column = it->second;
@@ -101,7 +160,7 @@ int DataAccess::searchColumn(const std::string& station, const std::string& infe
 	}
 
 	TInfectantMap::const_iterator i = _mapInfectant.find(infectant);
-	if(it != _mapInfectant.end())
+	if(i != _mapInfectant.end())
 	{
 		column = i->second;
 		return 0;

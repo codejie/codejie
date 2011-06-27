@@ -17,8 +17,10 @@
 class DataAccess
 {
 protected:
+    static const std::string DEF_INFECTANTCOLUMN_CONFIGFILE;
+
 	typedef std::pair<const std::string, const std::string> TStationInfectantPair;
-	typedef std::map<const StationInfectantPair, const std::string> TStationInfectantMap;//station+infectantid + column
+	typedef std::map<const TStationInfectantPair, const std::string> TStationInfectantMap;//station+infectantid + column
 	typedef std::map<const std::string, const std::string> TInfectantMap;//infectantid + column
 
 public:
@@ -34,6 +36,8 @@ private:
 	void Disconnect();
 
 	int LoadDefColumn();
+    int LoadDefColumnFromDB();
+    int LoadDefColumnFromConfig();
 
 	int SearchColumn(const std::string& station, const std::string& infectant, std::string& column) const;
 private:
@@ -43,7 +47,7 @@ private:
 private:
     oracle::occi::Environment* _env;
     oracle::occi::Connection* _conn;
-    boolean _isconnected;
+    bool _isconnected;
 private:
     TStationInfectantMap _mapStationInfectant;
     TInfectantMap _mapInfectant;

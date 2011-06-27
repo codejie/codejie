@@ -10,11 +10,17 @@
 
 #include <iostream>
 #include <string>
+#include <map>
 
 #include "occi.h"
 
 class DataAccess
 {
+protected:
+	typedef std::pair<const std::string, const std::string> TStationInfectantPair;
+	typedef std::map<const StationInfectantPair, const std::string> TStationInfectantMap;//station+infectantid + column
+	typedef std::map<const std::string, const std::string> TInfectantMap;//infectantid + column
+
 public:
 	DataAccess();
 	virtual ~DataAccess();
@@ -29,6 +35,7 @@ private:
 
 	int LoadDefColumn();
 
+	int SearchColumn(const std::string& station, const std::string& infectant, std::string& column) const;
 private:
     std::string _strServer;
     std::string _strUser;
@@ -37,6 +44,9 @@ private:
     oracle::occi::Environment* _env;
     oracle::occi::Connection* _conn;
     boolean _isconnected;
+private:
+    TStationInfectantMap _mapStationInfectant;
+    TInfectantMap _mapInfectant;
 };
 
 #endif /* __DATAACCESS_H__ */

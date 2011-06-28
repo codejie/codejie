@@ -15,7 +15,8 @@
 #include "CoreMsgTask.h"
 
 CoreMsgTask::CoreMsgTask()
-: _taskCollectServer(NULL)
+: _objDataAccess(NULL)
+, _taskCollectServer(NULL)
 {
 }
 
@@ -25,6 +26,13 @@ CoreMsgTask::~CoreMsgTask()
 
 int CoreMsgTask::Init(const ConfigLoader& config)
 {
+    _objDataAccess.reset(new DataAccess());
+    if(_objDataAccess->Init(config.m_strDBServer, config.m_strDBUser, config.m_strDBPasswd) != 0)
+    {
+        ACEX_LOG_OS(LM_ERROR, "<CoreMsgTask::Init>DataAccesss init failed - " << config.m_strDBUser << ":" << config.m_strDBPasswd << "@" << config.m_strDBServer << std::endl);
+        return -1;
+    }
+
 	_taskCollectServer.reset(new CollectServerTask(this));
 	if(_taskCollectServer->Open(config.m_strCollectAddr) != 0)
 	{
@@ -41,6 +49,12 @@ void CoreMsgTask::Final()
 		_taskCollectServer->Final();
 		_taskCollectServer.reset(NULL);
 	}
+
+    if(_objDataAccess.get() != NULL)
+    {
+        _objDataAccess->Final();
+        _objDataAccess.reset(NULL);
+    }
 }
 
 int CoreMsgTask::handle_msg(const ACEX_Message& msg)
@@ -114,5 +128,8 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 int CoreMsgTask::OnCollectPacket(const Packet& packet)
 {
 	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnCollectPacket>Get Collect Packet - " << packet << std::endl);
+
+    _objDataAccess->OnData(packet);
+
 	return 0;
 }

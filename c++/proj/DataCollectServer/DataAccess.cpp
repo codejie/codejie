@@ -8,8 +8,8 @@
 #include "acex/ACEX.h"
 #include "acex/Ini_Configuration.h"
 
+#include "Packet.h"
 #include "DataAccess.h"
-
 
 const std::string DataAccess::DEF_INFECTANTCOLUMN_CONFIGFILE    =   "InfectantColumn.ini";
 
@@ -47,7 +47,12 @@ int DataAccess::Init(const std::string& server, const std::string& user, const s
         ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Connect Database server failed." << std::endl);
         return -1;
     }
-    return LoadDefColumn();
+    if(LoadDefColumn() != 0)
+    {
+        ACEX_LOG_OS(LM_ERROR, "<>Load Infectant Column configration failed." << std::endl);
+        return -1;
+    }
+    return 0;
 }
 
 void DataAccess::Final()
@@ -170,6 +175,7 @@ int DataAccess::LoadDefColumnFromConfig()
 
     	++ index;
     }
+
     //Infectant
     if(ini.open_section(ini.root_section(), "Infectant", 0, key) != 0)
     	return -1;
@@ -191,8 +197,6 @@ int DataAccess::LoadDefColumnFromConfig()
 
     	++ index;
     }
-
-
     
     return 0;
 }
@@ -215,5 +219,44 @@ int DataAccess::SearchColumn(const std::string& station, const std::string& infe
 	return -1;
 }
 
+void  DataAccess::ShowColumn(std::ostream &os) const
+{
+    os << "\n[Station-Infectant]";
+    for(TStationInfectantMap::const_iterator it = _mapStationInfectant.begin(); it != _mapStationInfectant.end(); ++ it)
+    {
+        os << "\n  " << it->first.first << ":" << it->first.second << " - " << it->second;
+    }
+    os << "\n\n[Infectant]";
+    for(TInfectantMap::const_iterator it = _mapInfectant.begin(); it != _mapInfectant.end(); ++ it)
+    {
+        os << "\n  " << it->first << " - " << it->second;
+    }
+    os << std::endl;
+}
+
+int DataAccess::OnData(const Packet &packet)
+{
+    if(packet.CN == "2031")
+    {
+        return OnDailyData(packet);
+    }
+    else if(packet.CN == "2051")
+    {
+        return OnMinutelyData(packet);
+    }
+    else if(packet.CN == "2061")
+    {
+        return OnHourlyData(packet);
+    }
+    else if(packet.CN == "2011")
+    {
+        return OnRuntimeData(packet);
+    }
+    else
+    {
+        return OnUnknownData(packet);
+    }
+    return -1;
+}
 
 

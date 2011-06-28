@@ -14,6 +14,8 @@
 
 #include "occi.h"
 
+class Packet;
+
 class DataAccess
 {
 protected:
@@ -30,6 +32,9 @@ public:
 	int Init(const std::string& server, const std::string& user, const std::string& passwd);
 	void Final();
 
+    int OnData(const Packet& packet);
+
+    void ShowColumn(std::ostream &os) const;
 	void Show(std::ostream& os) const;
 private:
 	int Connect();
@@ -40,6 +45,12 @@ private:
     int LoadDefColumnFromConfig();
 
 	int SearchColumn(const std::string& station, const std::string& infectant, std::string& column) const;
+private:
+    int OnDailyData(const Packet& packet);
+    int OnMinutelyData(const Packet& packet);
+    int OnHourlyData(const Packet& packet);
+    int OnRuntimeData(const Packet& packet);
+    int OnUnknownData(const Packet& packet);
 private:
     std::string _strServer;
     std::string _strUser;

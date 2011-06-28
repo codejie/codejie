@@ -10,6 +10,7 @@
 
 #include "acex/Task.h"
 
+#include "DataAccess.h"
 #include "CollectServerTask.h"
 
 class Packet;
@@ -33,6 +34,7 @@ protected:
 private:
     int OnCollectPacket(const Packet& packet);
 private:
+    std::auto_ptr<DataAccess> _objDataAccess;
     std::auto_ptr<CollectServerTask> _taskCollectServer;
 };
 

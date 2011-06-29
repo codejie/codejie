@@ -73,9 +73,13 @@ int DataCollectServerApp::init(int argc, char* argv[])
 
 	command_executor()->command_prompt(SYS_PROMPT);
 	if(InitConfig() != 0)
-        return -1;
+    {
+        exit(0);
+    }
 	if(StartTasks() != 0)
-        return -1;
+    {
+        exit(0);
+    }
 
 	if(!_stOptions.DaemonOpt() && !_stOptions.PopStart())
 	{

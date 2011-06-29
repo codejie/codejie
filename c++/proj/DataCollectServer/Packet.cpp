@@ -7,9 +7,26 @@
 
 #include "Packet.h"
 
+const std::string Packet::PD_TAG_QN                 =   "QN";
+const std::string Packet::PD_TAG_PNUM               =   "PNUM";
+const std::string Packet::PD_TAG_PNO                =   "PNO";
+const std::string Packet::PD_TAG_ST                 =   "ST";
+const std::string Packet::PD_TAG_CN                 =   "CN";
+const std::string Packet::PD_TAG_PW                 =   "PW";
+const std::string Packet::PD_TAG_MN                 =   "MN";
+const std::string Packet::PD_TAG_FLAG               =   "Flag";
+const std::string Packet::PD_TAG_CP                 =   "CP";
+
+
+const std::string Packet::PD_CN_RUNTIMEDATA         =   "2011";
+const std::string Packet::PD_CN_DAILYDATA           =   "2031";
+const std::string Packet::PD_CN_MINUTELYDATA        =   "2051";
+const std::string Packet::PD_CN_HOURLYDATA          =   "2061";
+
+const std::string Packet::PD_CP_TAG_DATETIME =   "DateTime";
+
 Packet::Packet()
 {
-
 }
 
 Packet::~Packet()
@@ -28,23 +45,23 @@ int Packet::Analyse(const std::string& packet)
 		tmp = packet.find("=", begin);
 		if(tmp == std::string::npos)
 			return -1;
-		if(packet.substr(begin, tmp - begin) == "QN")
+		if(packet.substr(begin, tmp - begin) == PD_TAG_QN)
 			QN = packet.substr(tmp + 1, pos - tmp - 1);
-		else if(packet.substr(begin, tmp - begin) == "PNUM")
+		else if(packet.substr(begin, tmp - begin) == PD_TAG_PNUM)
 			PNUM = packet.substr(tmp + 1, pos - tmp - 1);
-		else if(packet.substr(begin, tmp - begin) == "PNO")
+		else if(packet.substr(begin, tmp - begin) == PD_TAG_PNO)
 			PNO = packet.substr(tmp + 1, pos - tmp - 1);
-		else if(packet.substr(begin, tmp - begin) == "ST")
+		else if(packet.substr(begin, tmp - begin) == PD_TAG_ST)
 			ST = packet.substr(tmp + 1, pos - tmp - 1);
-		else if(packet.substr(begin, tmp - begin) == "CN")
+		else if(packet.substr(begin, tmp - begin) == PD_TAG_CN)
 			CN = packet.substr(tmp + 1, pos - tmp - 1);
-		else if(packet.substr(begin, tmp - begin) == "PW")
+		else if(packet.substr(begin, tmp - begin) == PD_TAG_PW)
 			PW = packet.substr(tmp + 1, pos - tmp - 1);
-		else if(packet.substr(begin, tmp - begin) == "MN")
+		else if(packet.substr(begin, tmp - begin) == PD_TAG_MN)
 			MN = packet.substr(tmp + 1, pos - tmp - 1);
-		else if(packet.substr(begin, tmp - begin) == "Flag")
+		else if(packet.substr(begin, tmp - begin) == PD_TAG_FLAG)
 			Flag = packet.substr(tmp + 1, pos - tmp - 1);
-		else if(packet.substr(begin, tmp - begin) == "CP")
+		else if(packet.substr(begin, tmp - begin) == PD_TAG_CP)
 			if(CPAnalyse(packet.substr(tmp + 1)) != 0)
 				return 0;
 		else
@@ -122,14 +139,14 @@ int Packet::CPItemAnalyse(const std::string& item)
 
 	std::string::size_type t = item.find("-");
 
-	CPItemMap::iterator it = CP.item.find(item.substr(0, t));
+	TCPItemMap::iterator it = CP.item.find(item.substr(0, t));
 	if(it != CP.item.end())
 	{
 		return it->second.insert(std::make_pair(item.substr(t + 1, tmp - t - 1), item.substr(tmp + 1))).second ? 0 : -1;
 	}
 	else
 	{
-		CPItemDataMap m;
+		TCPItemDataMap m;
 		m.insert(std::make_pair(item.substr(t + 1, tmp - t - 1), item.substr(tmp + 1)));
 		return CP.item.insert(std::make_pair(item.substr(0, t), m)).second ? 0 : -1;
 	}
@@ -148,16 +165,16 @@ void Packet::Show(std::ostream& os) const
 
 	os << "\nCP Data = ";
 
-	for(CPDataMap::const_iterator it = CP.data.begin(); it != CP.data.end(); ++ it)
+	for(TCPDataMap::const_iterator it = CP.data.begin(); it != CP.data.end(); ++ it)
 	{
 		os << "\n  " << it->first << " = " << it->second;
 	}
 
 	os << "\nCP Item = ";
-	for(CPItemMap::const_iterator it = CP.item.begin(); it != CP.item.end(); ++ it)
+	for(TCPItemMap::const_iterator it = CP.item.begin(); it != CP.item.end(); ++ it)
 	{
 		os << "\n  " << it->first;
-		for(CPItemDataMap::const_iterator i = it->second.begin(); i != it->second.end(); ++ i)
+		for(TCPItemDataMap::const_iterator i = it->second.begin(); i != it->second.end(); ++ i)
 		{
 			os << "\n    " << i->first << " = " << i->second;
 		}
@@ -167,9 +184,22 @@ void Packet::Show(std::ostream& os) const
 }
 
 //////
+void PacketException::Show(std::ostream& os) const
+{
+    os << "\nException - " << _msg;
+    os << "\nPacket - \n" << _packet;
+}
+
+//////
 std::ostream& operator << (std::ostream& os, const Packet& packet)
 {
 	packet.Show(os);
 	return os;
+}
+
+std::ostream& operator << (std::ostream& os, const PacketException& exception)
+{
+    exception.Show(os);
+    return os;
 }
 

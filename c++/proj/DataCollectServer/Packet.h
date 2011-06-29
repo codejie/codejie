@@ -15,15 +15,33 @@
 class Packet
 {
 public:
-	typedef std::map<std::string, std::string> CPDataMap; //cp + data
+    static const std::string PD_TAG_QN;
+    static const std::string PD_TAG_PNUM;
+    static const std::string PD_TAG_PNO;
+    static const std::string PD_TAG_ST;
+    static const std::string PD_TAG_CN;
+    static const std::string PD_TAG_PW;
+    static const std::string PD_TAG_MN;
+    static const std::string PD_TAG_FLAG;
+    static const std::string PD_TAG_CP;
 
-	typedef std::map<std::string, std::string> CPItemDataMap; //item parameter + data
-	typedef std::map<std::string, CPItemDataMap> CPItemMap; //item + itemdata
+    static const std::string PD_CN_RUNTIMEDATA;
+    static const std::string PD_CN_DAILYDATA;
+    static const std::string PD_CN_MINUTELYDATA;
+    static const std::string PD_CN_HOURLYDATA;
+
+    static const std::string PD_CP_TAG_DATETIME;
+
+public:
+	typedef std::map<std::string, std::string> TCPDataMap; //cp + data
+
+	typedef std::map<std::string, std::string> TCPItemDataMap; //item parameter + data
+	typedef std::map<std::string, TCPItemDataMap> TCPItemMap; //item + itemdata
 
 	struct CPData
 	{
-		CPDataMap data;
-		CPItemMap item;
+		TCPDataMap data;
+		TCPItemMap item;
 	};
 public:
 	Packet();
@@ -51,8 +69,22 @@ public:
 	CPData CP;
 };
 
+class PacketException
+{
+public:
+    PacketException(const std::string& msg, const Packet& packet)
+        : _msg(msg), _packet(packet)
+    {
+    }
+    void Show(std::ostream& os) const;
+protected:
+    std::string _msg;
+    const Packet& _packet;
+
+};
+
 /////
 extern std::ostream& operator << (std::ostream& os, const Packet& packet);
-
+extern std::ostream& operator << (std::ostream& os, const PacketException& exception);
 
 #endif /* PACKET_H_ */

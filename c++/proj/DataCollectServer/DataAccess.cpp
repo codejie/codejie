@@ -8,7 +8,6 @@
 #include "acex/ACEX.h"
 #include "acex/Ini_Configuration.h"
 
-#include "Packet.h"
 #include "DataAccess.h"
 
 const std::string DataAccess::DEF_INFECTANTCOLUMN_CONFIGFILE    =   "InfectantColumn.ini";
@@ -36,9 +35,9 @@ int DataAccess::Init(const std::string& server, const std::string& user, const s
 		_strUser = user;
 		_strPasswd = passwd;
 	}
-	catch(oracle::occi::SQLException& e)
+	catch(const oracle::occi::SQLException& e)
 	{
-        ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Database environment init exception - " << e.what() << std::endl);
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Database environment init exception - " << e.getMessage() << std::endl);
 		return -1;
 	}
 
@@ -83,9 +82,9 @@ int DataAccess::Connect()
 			return -1;
 		_isconnected = true;
 	}
-	catch(oracle::occi::SQLException& e)
+	catch(const oracle::occi::SQLException& e)
 	{
-		ACEX_LOG_OS(LM_ERROR, "<>Database init connection failed." << std::endl);
+        ACEX_LOG_OS(LM_ERROR, "<>Database init connection exception - " << e.getMessage() << std::endl);
 		return -1;
 	}
 	return 0;
@@ -133,7 +132,7 @@ int DataAccess::LoadDefColumnFromDB()
     }
     catch(oracle::occi::SQLException& e)
     {
-        ACEX_LOG_OS(LM_ERROR, "<LoadDefColumnFromDB>Load Infectant column exception - " << e.what() << std::endl);
+        ACEX_LOG_OS(LM_ERROR, "<LoadDefColumnFromDB>Load Infectant column exception - " << e.getMessage() << std::endl);
         return -1;
     }
 
@@ -236,19 +235,19 @@ void  DataAccess::ShowColumn(std::ostream &os) const
 
 int DataAccess::OnData(const Packet &packet)
 {
-    if(packet.CN == "2031")
+    if(packet.CN == Packet::PD_CN_DAILYDATA)
     {
         return OnDailyData(packet);
     }
-    else if(packet.CN == "2051")
+    else if(packet.CN == Packet::PD_CN_MINUTELYDATA)
     {
         return OnMinutelyData(packet);
     }
-    else if(packet.CN == "2061")
+    else if(packet.CN == Packet::PD_CN_HOURLYDATA)
     {
         return OnHourlyData(packet);
     }
-    else if(packet.CN == "2011")
+    else if(packet.CN == Packet::PD_CN_RUNTIMEDATA)
     {
         return OnRuntimeData(packet);
     }
@@ -259,4 +258,181 @@ int DataAccess::OnData(const Packet &packet)
     return -1;
 }
 
+int DataAccess::OnUnknownData(const Packet &packet)
+{
+    ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnUnknownData>Recv UNKNOWN data - \n" << packet << std::endl);
+    return 0;
+}
 
+int DataAccess::OnRuntimeData(const Packet &packet)
+{
+    ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnRuntimeData>Recv RUNTIME data - \n" << packet << std::endl);
+    return 0;
+}
+
+int DataAccess::OnDailyData(const Packet &packet)
+{
+    if(_isconnected != true)
+        return -1;
+    try
+    {
+        if(packet.MN.empty())
+            throw PacketException("MN is empty.", packet);
+
+        const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATETIME);
+
+        for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
+        {
+            std::string col = "";
+            if(SearchColumn(packet.MN, it->first, col) != 0)
+                throw PacketException("can not find infectant column.", packet);
+
+            const std::string val = GetPacketCPItemDayValue(packet, it->first, it->second);
+            const std::string sql = "insert into T_MONITOR_REAL_DAY (STATION_ID, M_TIME, " + col + ") values(:1,:2,:3)";
+            oracle::occi::Statement *smst = _conn->createStatement(sql);
+        
+            smst->setString(1, packet.MN);
+            smst->setString(2, mtime);
+            smst->setString(3, val);
+
+            smst->executeUpdate();
+        }
+    }
+    catch(const PacketException& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnDailyData>Process Packet exception - " << e << std::endl);
+        return -1;
+    }
+    catch(const oracle::occi::SQLException& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnDailyData>Process Data exception - " << e.getMessage() << std::endl);
+        return -1;
+    }
+    return 0;
+}
+
+int DataAccess::OnMinutelyData(const Packet &packet)
+{
+    if(_isconnected != true)
+        return -1;
+    try
+    {
+        if(packet.MN.empty())
+            throw PacketException("MN is empty.", packet);
+
+        const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATETIME);
+
+        for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
+        {
+            const std::string val = GetPacketCPItemMinuteValue(packet, it->first, it->second);
+            const std::string sql = "insert into T_MONITOR_REAL_MINUTE (STATION_ID, INFECTANT_ID, M_TIME, M_VALUE) values(:1,:2,:3,:4)";
+            oracle::occi::Statement *smst = _conn->createStatement(sql);
+        
+            smst->setString(1, packet.MN);
+            smst->setString(2, it->first);
+            smst->setString(3, mtime);
+            smst->setString(4, val);
+
+            smst->executeUpdate();
+        }
+    }
+    catch(const PacketException& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnMinutelyData>Process Packet exception - " << e << std::endl);
+        return -1;
+    }
+    catch(const oracle::occi::SQLException& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnMinutelyData>Process Data exception - " << e.getMessage() << std::endl);
+        return -1;
+    }
+    return 0;
+}
+
+int DataAccess::OnHourlyData(const Packet &packet)
+{
+    if(_isconnected != true)
+        return -1;
+    try
+    {
+        if(packet.MN.empty())
+            throw PacketException("MN is empty.", packet);
+
+        const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATETIME);
+
+        for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
+        {
+            std::string col = "";
+            if(SearchColumn(packet.MN, it->first, col) != 0)
+                throw PacketException("can not find infectant column.", packet);
+
+            const std::string val = GetPacketCPItemHourValue(packet, it->first, it->second);
+            const std::string sql = "insert into T_MONITOR_REAL_HOUR (STATION_ID, M_TIME, " + col + ") values(:1,:2,:3)";
+            oracle::occi::Statement *smst = _conn->createStatement(sql);
+        
+            smst->setString(1, packet.MN);
+            smst->setString(2, mtime);
+            smst->setString(3, val);
+
+            smst->executeUpdate();
+        }
+    }
+    catch(const PacketException& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnHourlyData>Process Packet exception - " << e << std::endl);
+        return -1;
+    }
+    catch(const oracle::occi::SQLException& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnHourlyData>Process Data exception - " << e.getMessage() << std::endl);
+        return -1;
+    }
+    return 0;
+}
+
+/////
+const std::string& DataAccess::GetPacketCPDataValue(const Packet& packet, const std::string &tag) const
+{
+    Packet::TCPDataMap::const_iterator it = packet.CP.data.find(tag);
+    if(it == packet.CP.data.end())
+        throw PacketException("can not find cp tag : " + tag, packet);
+
+    return it->second;
+}
+
+const std::string DataAccess::GetPacketCPItemMinuteValue(const Packet &packet, const std::string &item, const Packet::TCPItemDataMap &data) const
+{
+    //cou + min + avg + max
+    std::string ret = "";
+    Packet::TCPItemDataMap::const_iterator it = data.find("Cou");
+    if(it == data.end())
+        throw PacketException("can not find Cou value : " + item, packet);
+    ret += it->second;
+
+    it = data.find("Min");
+    if(it == data.end())
+        throw PacketException("can not find Min value : " + item, packet);
+    ret += ("," + it->second);
+
+    it = data.find("Avg");
+    if(it == data.end())
+        throw PacketException("can not find Avg value : " + item, packet);
+    ret += ("," + it->second);
+
+    it = data.find("Max");
+    if(it == data.end())
+        throw PacketException("can not find Max value : " + item, packet);
+    ret += ("," + it->second);
+
+    return ret;
+}
+
+const std::string DataAccess::GetPacketCPItemHourValue(const Packet &packet, const std::string &item, const Packet::TCPItemDataMap &data) const
+{
+    return GetPacketCPItemMinuteValue(packet, item, data);
+}
+
+const std::string DataAccess::GetPacketCPItemDayValue(const Packet &packet, const std::string &item, const Packet::TCPItemDataMap &data) const
+{
+    return GetPacketCPItemMinuteValue(packet, item, data);
+}

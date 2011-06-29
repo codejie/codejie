@@ -14,7 +14,7 @@
 
 #include "occi.h"
 
-class Packet;
+#include "Packet.h"
 
 class DataAccess
 {
@@ -51,6 +51,11 @@ private:
     int OnHourlyData(const Packet& packet);
     int OnRuntimeData(const Packet& packet);
     int OnUnknownData(const Packet& packet);
+private:
+    const std::string& GetPacketCPDataValue(const Packet& packet, const std::string& tag) const;
+    const std::string GetPacketCPItemMinuteValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;
+    const std::string GetPacketCPItemHourValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;
+        const std::string GetPacketCPItemDayValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;
 private:
     std::string _strServer;
     std::string _strUser;

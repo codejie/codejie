@@ -270,6 +270,11 @@ void DataCollectServerApp::ShowData(bool stat, std::ostream& os) const
     _taskCore.ShowData(stat, os);
 }
 
+void DataCollectServerApp::ShowPacket(std::ostream& os) const
+{
+    _taskCore.ShowPacket(os);
+}
+
 int DataCollectServerApp::Shutdown()
 {
 	ACEX_Message msg(TASK_APP, FPARAM_SHUTDOWN, 0);

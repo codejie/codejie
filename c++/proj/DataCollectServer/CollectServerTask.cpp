@@ -13,6 +13,7 @@
 
 CollectServerTask::CollectServerTask(ACEX_Message_Task* msgtask)
 : _taskMsg(msgtask)
+, _count(0)
 {
 }
 
@@ -63,6 +64,8 @@ int CollectServerTask::handle_recv(int clientid, ACEX_TcpStream& client)
 
 			ACEX_Message msg(TASK_COLLECT_SERVER, FPARAM_PACKET, pos, buf);
 			_taskMsg->put_msg(msg);
+
+            ++ _count;
 		}
 		else if(pos > PacketProcessor::MAX_SIZE)
 		{
@@ -79,4 +82,9 @@ int CollectServerTask::handle_lost(int error, int clientid, const char* packet, 
 	ACEX_LOG_OS(LM_ERROR, "<CollectServerTask::handle_lost>Packet lost - error : " << error << " clientid : " << clientid << " size : " << packet_size << std::endl);
 
 	return 0;
+}
+
+void CollectServerTask::Show(std::ostream &os) const
+{
+    os << "\nPacket = " << _count << std::endl;
 }

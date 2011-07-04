@@ -39,6 +39,7 @@ public:
 	void ShowOptions(std::ostream& os) const;
 	void ShowConfig(std::ostream& os) const;
     void ShowData(bool stat, std::ostream& os) const;
+    void ShowPacket(std::ostream& os) const;
 
 	int Shutdown();
 private:

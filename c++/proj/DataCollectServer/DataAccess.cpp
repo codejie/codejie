@@ -82,7 +82,6 @@ DataAccess::~DataAccess()
 
 int DataAccess::Init(const std::string& server, const std::string& user, const std::string& passwd)
 {
-
 	try
 	{
 		_env = oracle::occi::Environment::createEnvironment();

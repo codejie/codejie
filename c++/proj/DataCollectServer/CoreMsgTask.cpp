@@ -142,3 +142,7 @@ void CoreMsgTask::ShowData(bool stat, std::ostream& os) const
         _objDataAccess->ShowColumn(os);
 }
 
+void CoreMsgTask::ShowPacket(std::ostream &os) const
+{
+    _taskCollectServer->Show(os);
+}

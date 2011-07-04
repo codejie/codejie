@@ -16,6 +16,25 @@
 
 #include "Packet.h"
 
+class DataStatistic
+{
+public:
+    enum DataType { DT_MINUTE = 0, DT_HOUR, DT_DAY };
+protected:
+    typedef std::map<std::string, size_t> TInfectantDataMap;
+    typedef std::map<DataType, TInfectantDataMap> TDataMap;
+
+public:
+    DataStatistic() {}
+    virtual ~DataStatistic() {}
+
+    void Update(DataType type, const std::string& inf);
+
+    void Show(std::ostream& os) const;
+protected:
+    TDataMap _mapData;
+};
+
 class DataAccess
 {
 protected:
@@ -67,6 +86,8 @@ private:
 private:
     TStationInfectantMap _mapStationInfectant;
     TInfectantMap _mapInfectant;
+
+    DataStatistic _dataStatistic;
 };
 
 #endif /* __DATAACCESS_H__ */

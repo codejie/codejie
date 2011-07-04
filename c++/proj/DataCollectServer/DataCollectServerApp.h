@@ -38,6 +38,8 @@ public:
 	void ShowVersion(std::ostream& os) const;
 	void ShowOptions(std::ostream& os) const;
 	void ShowConfig(std::ostream& os) const;
+    void ShowData(bool stat, std::ostream& os) const;
+
 	int Shutdown();
 private:
     const std::string TimeToString(const time_t& tTime) const;

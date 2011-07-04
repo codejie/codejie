@@ -23,6 +23,8 @@ public:
 	virtual ~CoreMsgTask();
 
 	int Init(const ConfigLoader& config);
+
+    void ShowData(bool stat, std::ostream& os) const;
 protected:
 	void Final();
 

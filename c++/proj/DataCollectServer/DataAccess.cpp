@@ -10,6 +10,62 @@
 
 #include "DataAccess.h"
 
+
+void DataStatistic::Update(DataStatistic::DataType type, const std::string &inf)
+{
+    TDataMap::iterator it = _mapData.find(type);
+    if(it == _mapData.end())
+    {
+        TInfectantDataMap m;
+        m.insert(std::make_pair(inf, 1));
+        _mapData.insert(std::make_pair(type, m));
+    }
+    else
+    {
+        TInfectantDataMap::iterator i = it->second.find(inf);
+        if(i != it->second.end())
+        {
+            ++ i->second;
+        }
+        else
+        {
+            it->second.insert(std::make_pair(inf, 1));
+        }
+    }
+}
+
+void DataStatistic::Show(std::ostream &os) const
+{
+    for(TDataMap::const_iterator it = _mapData.begin(); it != _mapData.end(); ++ it)
+    {
+        if(it->second.size() == 0)
+            continue;
+        
+        switch(it->first)
+        {
+        case DT_MINUTE:
+            os << "\nMinute - ";
+            break;
+        case DT_HOUR:
+            os << "\nHour - ";
+            break;
+        case DT_DAY:
+            os << "\nDay - ";
+            break;
+        default:
+            os << "\nUnknown - ";
+        }
+        for(TInfectantDataMap::const_iterator i = it->second.begin(); i != it->second.end(); ++ i)
+        {
+            os << "\n    " << i->first << " = " << i->second;
+        }
+    }
+    os << std::endl;
+}
+
+
+////////////////////////////////////
+
 const std::string DataAccess::DEF_INFECTANTCOLUMN_CONFIGFILE    =   "InfectantColumn.ini";
 
 DataAccess::DataAccess()
@@ -26,6 +82,7 @@ DataAccess::~DataAccess()
 
 int DataAccess::Init(const std::string& server, const std::string& user, const std::string& passwd)
 {
+
 	try
 	{
 		_env = oracle::occi::Environment::createEnvironment();
@@ -46,6 +103,7 @@ int DataAccess::Init(const std::string& server, const std::string& user, const s
         ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Connect Database server failed." << std::endl);
         return -1;
     }
+
     if(LoadDefColumn() != 0)
     {
         ACEX_LOG_OS(LM_ERROR, "<>Load Infectant Column configration failed." << std::endl);
@@ -102,8 +160,10 @@ void DataAccess::Disconnect()
 
 int DataAccess::LoadDefColumn()
 {
+
     if(LoadDefColumnFromDB() != 0)
         return -1;
+
     if(LoadDefColumnFromConfig() != 0)
         return -1;
     return 0;
@@ -144,7 +204,7 @@ int DataAccess::LoadDefColumnFromConfig()
     ACEX_Ini_Configuration ini;
     if(ini.open(DEF_INFECTANTCOLUMN_CONFIGFILE) != 0)
     {
-        ACEX_LOG_OS(LM_INFO, "<>Default Infectant configuration file does not find or opens failed." << std::endl);
+        ACEX_LOG_OS(LM_INFO, "<LoadDefColumnFromConfig>Default Infectant configuration file does not find or opens failed." << std::endl);
         return 0;
     }
 
@@ -156,7 +216,7 @@ int DataAccess::LoadDefColumnFromConfig()
     	return -1;
 
     index = 0;
-    while(ini.enumerate_sections(key, index, tmp) != 0)
+    while(ini.enumerate_sections(key, index, tmp) == 0)
     {
     	ACE_Configuration_Section_Key k;
     	if(ini.open_section(key, tmp.c_str(), 0, k) != 0)
@@ -180,7 +240,7 @@ int DataAccess::LoadDefColumnFromConfig()
     	return -1;
 
     index = 0;
-    while(ini.enumerate_sections(key, index, tmp) != 0)
+    while(ini.enumerate_sections(key, index, tmp) == 0)
     {
     	ACE_Configuration_Section_Key k;
     	if(ini.open_section(key, tmp.c_str(), 0, k) != 0)
@@ -231,6 +291,11 @@ void  DataAccess::ShowColumn(std::ostream &os) const
         os << "\n  " << it->first << " - " << it->second;
     }
     os << std::endl;
+}
+
+void DataAccess::Show(std::ostream& os) const
+{
+    _dataStatistic.Show(os);
 }
 
 int DataAccess::OnData(const Packet &packet)
@@ -296,6 +361,8 @@ int DataAccess::OnDailyData(const Packet &packet)
             smst->setString(3, val);
 
             smst->executeUpdate();
+
+            _dataStatistic.Update(DataStatistic::DT_DAY, it->first);
         }
     }
     catch(const PacketException& e)
@@ -308,6 +375,7 @@ int DataAccess::OnDailyData(const Packet &packet)
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnDailyData>Process Data exception - " << e.getMessage() << std::endl);
         return -1;
     }
+
     return 0;
 }
 
@@ -334,6 +402,8 @@ int DataAccess::OnMinutelyData(const Packet &packet)
             smst->setString(4, val);
 
             smst->executeUpdate();
+            
+            _dataStatistic.Update(DataStatistic::DT_MINUTE, it->first);
         }
     }
     catch(const PacketException& e)
@@ -346,6 +416,7 @@ int DataAccess::OnMinutelyData(const Packet &packet)
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnMinutelyData>Process Data exception - " << e.getMessage() << std::endl);
         return -1;
     }
+
     return 0;
 }
 
@@ -375,6 +446,8 @@ int DataAccess::OnHourlyData(const Packet &packet)
             smst->setString(3, val);
 
             smst->executeUpdate();
+
+            _dataStatistic.Update(DataStatistic::DT_HOUR, it->first);
         }
     }
     catch(const PacketException& e)
@@ -387,6 +460,7 @@ int DataAccess::OnHourlyData(const Packet &packet)
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnHourlyData>Process Data exception - " << e.getMessage() << std::endl);
         return -1;
     }
+
     return 0;
 }
 
@@ -436,3 +510,4 @@ const std::string DataAccess::GetPacketCPItemDayValue(const Packet &packet, cons
 {
     return GetPacketCPItemMinuteValue(packet, item, data);
 }
+

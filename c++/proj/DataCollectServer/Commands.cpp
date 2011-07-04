@@ -124,7 +124,44 @@ void CCmdShowVersion::help_verbose(std::ostream& os) const
 	os << "\n    Usage:\n\t" << tag();
 	os << "\n    Example:\n\t" << tag() << std::endl;
 }
+////////////////////////////////////////////////////////////////////
+CCmdShowDataAccess* CCmdShowDataAccess::clone() const
+{
+	return new CCmdShowDataAccess(*this);
+}
 
+ACEX_Command_Tag CCmdShowDataAccess::tag() const
+{
+	return "showdata";
+}
+
+int CCmdShowDataAccess::execute(std::ostream& os)
+{
+    if(this->args_.count() > 0)
+    {
+        if(this->args_[0] == "col" || this->args_[0] == "column")
+            theApp.ShowData(false, os);
+        else
+            this->help_verbose(os);
+    }
+    else
+    {
+        theApp.ShowData(true, os);
+    }
+	return 1;
+}
+
+void CCmdShowDataAccess::help(std::ostream& os) const
+{
+	os << "    Show data info.";
+}
+
+void CCmdShowDataAccess::help_verbose(std::ostream& os) const
+{
+	help(os);
+	os << "\n    Usage:\n\t" << tag() << "[,col(umn)]";
+	os << "\n    Example:\n\t" << tag() << std::endl;
+}
 
 //////////////////////////////////////////////////////////////////////////
 CCmdTest* CCmdTest::clone() const

@@ -133,3 +133,12 @@ int CoreMsgTask::OnCollectPacket(const Packet& packet)
 
 	return 0;
 }
+
+void CoreMsgTask::ShowData(bool stat, std::ostream& os) const
+{
+    if(stat == true)
+        _objDataAccess->Show(os);
+    else
+        _objDataAccess->ShowColumn(os);
+}
+

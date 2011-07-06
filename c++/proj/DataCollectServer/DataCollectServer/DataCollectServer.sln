@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataCollectServer", "DataCollectServer.vcproj", "{C31BDE9C-F60C-47EC-8B6C-04258B1A5780}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OCIPP", "..\OCIPP\OCIPP.vcproj", "{AD7A5BBD-FF93-44ED-B107-5ADF0C58602B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{C31BDE9C-F60C-47EC-8B6C-04258B1A5780}.Debug|Win32.Build.0 = Debug|Win32
 		{C31BDE9C-F60C-47EC-8B6C-04258B1A5780}.Release|Win32.ActiveCfg = Release|Win32
 		{C31BDE9C-F60C-47EC-8B6C-04258B1A5780}.Release|Win32.Build.0 = Release|Win32
+		{AD7A5BBD-FF93-44ED-B107-5ADF0C58602B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AD7A5BBD-FF93-44ED-B107-5ADF0C58602B}.Debug|Win32.Build.0 = Debug|Win32
+		{AD7A5BBD-FF93-44ED-B107-5ADF0C58602B}.Release|Win32.ActiveCfg = Release|Win32
+		{AD7A5BBD-FF93-44ED-B107-5ADF0C58602B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

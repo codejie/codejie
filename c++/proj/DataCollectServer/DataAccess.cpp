@@ -84,7 +84,7 @@ int DataAccess::Init(const std::string& server, const std::string& user, const s
 {
 	try
 	{
-		_env = oracle::occi::Environment::createEnvironment();
+        _env = oracle::occi::Environment::createEnvironment(oracle::occi::Environment::DEFAULT);
 		if(_env == NULL)
 			return -1;
 		_strServer = server;
@@ -134,7 +134,7 @@ int DataAccess::Connect()
 		Disconnect();
 	try
 	{
-		_conn = _env->createConnection(_strUser, _strPasswd, _strServer);
+        _conn = _env->createConnection(_strUser, _strPasswd, _strServer);
 		if(_conn == NULL)
 			return -1;
 		_isconnected = true;

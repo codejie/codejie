@@ -352,7 +352,7 @@ int DataAccess::OnDailyData(const Packet &packet)
                 throw PacketException("can not find infectant column.", packet);
 
             const std::string val = GetPacketCPItemDayValue(packet, it->first, it->second);
-            const std::string sql = "insert into T_MONITOR_REAL_DAY (STATION_ID, M_TIME, " + col + ") values(:1,:2,:3)";
+            const std::string sql = "insert into T_MONITOR_REAL_DAY (STATION_ID, M_TIME, " + col + ") values (:1,:2,:3)";
             oracle::occi::Statement *smst = _conn->createStatement(sql);
         
             smst->setString(1, packet.MN);
@@ -392,7 +392,7 @@ int DataAccess::OnMinutelyData(const Packet &packet)
         for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
         {
             const std::string val = GetPacketCPItemMinuteValue(packet, it->first, it->second);
-            const std::string sql = "insert into T_MONITOR_REAL_MINUTE (STATION_ID, INFECTANT_ID, M_TIME, M_VALUE) values(:1,:2,:3,:4)";
+            const std::string sql = "insert into T_MONITOR_REAL_MINUTE (STATION_ID, INFECTANT_ID, M_TIME, M_VALUE) values (:1,:2,:3,:4)";
             oracle::occi::Statement *smst = _conn->createStatement(sql);
         
             smst->setString(1, packet.MN);
@@ -437,7 +437,7 @@ int DataAccess::OnHourlyData(const Packet &packet)
                 throw PacketException("can not find infectant column.", packet);
 
             const std::string val = GetPacketCPItemHourValue(packet, it->first, it->second);
-            const std::string sql = "insert into T_MONITOR_REAL_HOUR (STATION_ID, M_TIME, " + col + ") values(:1,:2,:3)";
+            const std::string sql = "insert into T_MONITOR_REAL_HOUR (STATION_ID, M_TIME, " + col + ") values (:1,:2,:3)";
             oracle::occi::Statement *smst = _conn->createStatement(sql);
         
             smst->setString(1, packet.MN);

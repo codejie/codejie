@@ -54,7 +54,7 @@ void Exception::getError(int code)
 void Exception::getError(int code, OCIError *err)
 {
     getError(code);
-    if(code == OCI_ERROR)
+    //if(code == OCI_ERROR)
     {
         char buf[512];
         OCIErrorGet((void*)err, 1, NULL, &code, (OraText*)buf, sizeof(buf), OCI_HTYPE_ERROR);
@@ -207,7 +207,8 @@ Statement* Connection::makeStatement(const std::string &sql)
 }
 
 void Connection::destroyStatement(ocipp::Statement *stmt)
-{ 
+{
+	stmt->freeDefVector();
     OCIHandleFree(stmt->_stmt, OCI_HTYPE_STMT);
     delete stmt, stmt = NULL;
 }
@@ -222,7 +223,7 @@ Statement::Statement(ocipp::Connection *conn)
 int Statement::bindString(unsigned int pos, const std::string &val)
 {
     OCIBind* bd = NULL;
-    int ret = OCIBindByPos(_stmt, &bd, _conn->getEnvironment()->getError(), pos, (void*)val.c_str(), val.size(), SQLT_STR, NULL, NULL, NULL, 0, NULL, OCI_DEFAULT);
+    int ret = OCIBindByPos(_stmt, &bd, _conn->getEnvironment()->getError(), pos, (void*)val.c_str(), val.size() + 1/* very dangerous */, SQLT_STR, NULL, NULL, NULL, 0, NULL, OCI_DEFAULT);
     if(ret != OCI_SUCCESS)
     {
         throw Exception(ret, _conn->getEnvironment()->getError(), "bind String failed.");
@@ -231,18 +232,16 @@ int Statement::bindString(unsigned int pos, const std::string &val)
     return 0;
 }
 
-int Statement::defineString(unsigned int pos, std::string &val)
+int Statement::defineString(unsigned int pos, std::string& val)
 {
+	TDefData data(val);
     OCIDefine* def = NULL;
-    char buf[256];
-    memset(buf, 0, 256);
-    int ret = OCIDefineByPos(_stmt, &def, _conn->getEnvironment()->getError(), pos, (void*)buf, sizeof(buf), SQLT_STR, NULL, NULL, NULL, OCI_DEFAULT);
+    int ret = OCIDefineByPos(_stmt, &def, _conn->getEnvironment()->getError(), pos, (void*)data.buf, BUF_SIZE, SQLT_STR, NULL, NULL, NULL, OCI_DEFAULT);
     if(ret != OCI_SUCCESS)
     {
         throw Exception(ret, _conn->getEnvironment()->getError(), "define String failed.");
     }
-
-    val.assign(buf, strlen(buf));
+	_vctDef.push_back(data);
 
     return 0;
 }
@@ -261,6 +260,13 @@ int Statement::execute()
     {
         throw Exception(ret, _conn->getEnvironment()->getError(), "execute Stmt failed.");
     }
+
+	//unsigned int rc = 0;
+	//ret = OCIAttrGet((const void*)_stmt, OCI_HTYPE_STMT, &rc, (ub4*)sizeof(rc), OCI_ATTR_ROW_COUNT, _conn->getEnvironment()->getError());
+ //   if(ret != OCI_SUCCESS)
+ //   {
+ //       throw Exception(ret, _conn->getEnvironment()->getError(), "get Stmt row_count failed.");
+ //   }
     return 0;
 }
 
@@ -273,8 +279,29 @@ int Statement::getNext()
     {
         throw Exception(ret, _conn->getEnvironment()->getError(), "fetch Stmt failed.");
     }
+
+	syncDefVector();
+
     return 0;
 }
+
+void Statement::syncDefVector()
+{
+	for(TDefVector::iterator it = _vctDef.begin(); it != _vctDef.end(); ++ it)
+	{
+		it->str->assign(it->buf, strlen(it->buf));
+	}
+}
+
+void Statement::freeDefVector()
+{
+	for(TDefVector::iterator it = _vctDef.begin(); it != _vctDef.end(); ++ it)
+	{
+		delete [] it->buf;
+	}
+	_vctDef.clear();
+}
+
 
 }
 

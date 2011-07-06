@@ -1,6 +1,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 #include "oci.h"
 
@@ -69,18 +70,37 @@ class Statement
 {
     friend class Connection;
 protected:
+	static const size_t BUF_SIZE = 256;
+	struct TDefData
+	{
+		TDefData(std::string& val)
+			: str(&val), buf(NULL)
+		{
+			buf = new char[BUF_SIZE];
+		}
+
+		std::string* str;
+		char* buf;
+	};
+	typedef std::vector<TDefData> TDefVector;
+protected:
     Statement(Connection* conn);
-    virtual ~Statement() {}
+	virtual ~Statement() {}
+
+	void syncDefVector();
+	void freeDefVector();
 public:
     int bindString(unsigned int pos, const std::string& val);
-    int defineString(unsigned int pos, std::string& val);
+	int defineString(unsigned int pos, std::string& val);
 
     int execute();
     int getNext();
 private:
     Connection *_conn;
 protected:
-    OCIStmt *_stmt;    
+    OCIStmt *_stmt;
+
+	TDefVector _vctDef;
 };
 
 }

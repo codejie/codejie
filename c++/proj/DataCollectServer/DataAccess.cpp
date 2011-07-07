@@ -84,7 +84,7 @@ int DataAccess::Init(const std::string& server, const std::string& user, const s
 {
 	try
 	{
-        _env = oracle::occi::Environment::createEnvironment(oracle::occi::Environment::DEFAULT);
+        _env = new ocipp::Environment();
 		if(_env == NULL)
 			return -1;
 		_strServer = server;
@@ -116,8 +116,7 @@ void DataAccess::Final()
     if(_env != NULL && _conn != NULL)
     {
     	Disconnect();
-        oracle::occi::Environment::terminateEnvironment(_env);
-        _env = NULL;
+        delete _env, _env = NULL;
     }
 }
 
@@ -134,7 +133,7 @@ int DataAccess::Connect()
 		Disconnect();
 	try
 	{
-        _conn = _env->createConnection(_strUser, _strPasswd, _strServer);
+        _conn = _env->makeConnection(_strUser, _strPasswd, _strServer);
 		if(_conn == NULL)
 			return -1;
 		_isconnected = true;
@@ -151,7 +150,7 @@ void DataAccess::Disconnect()
 {
 	if(_env != NULL && _conn != NULL)
 	{
-		_env->terminateConnection(_conn);
+		_env->destroyConnection(_conn);
 		_conn = NULL;
 		_isconnected = false;
 	}
@@ -177,7 +176,7 @@ int DataAccess::LoadDefColumnFromDB()
     {
         const std::string sql = "select station_id, infectant_id, infectant_column from t_cfg_monitor_param";
 
-        oracle::occi::Statement *stmt = _conn->createStatement(sql);
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
         oracle::occi::ResultSet *rset = stmt->executeQuery();
 
         while(rset->next())

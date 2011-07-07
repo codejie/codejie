@@ -198,6 +198,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ocipp.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\Options.cpp"
 				>
 			</File>
@@ -241,10 +245,6 @@
 			</File>
 			<File
 				RelativePath="..\Defines.h"
-				>
-			</File>
-			<File
-				RelativePath="..\ocipp.cpp"
 				>
 			</File>
 			<File

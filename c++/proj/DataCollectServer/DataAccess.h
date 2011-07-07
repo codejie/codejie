@@ -12,7 +12,8 @@
 #include <string>
 #include <map>
 
-#include "occi.h"
+//#include "occi.h"
+#include "ocipp.h"
 
 #include "Packet.h"
 
@@ -80,8 +81,8 @@ private:
     std::string _strUser;
     std::string _strPasswd;
 private:
-    oracle::occi::Environment* _env;
-    oracle::occi::Connection* _conn;
+    ocipp::Environment* _env;
+    ocipp::Connection* _conn;
     bool _isconnected;
 private:
     TStationInfectantMap _mapStationInfectant;

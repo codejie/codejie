@@ -39,6 +39,8 @@ protected:
 class DataAccess
 {
 protected:
+	typedef std::map<const std::string, const std::string> TStationIDMap;//stationno + stationid
+
     static const std::string DEF_INFECTANTCOLUMN_CONFIGFILE;
 
 	typedef std::pair<const std::string, const std::string> TStationInfectantPair;
@@ -60,10 +62,12 @@ private:
 	int Connect();
 	void Disconnect();
 
+	int LoadStationID();
 	int LoadDefColumn();
     int LoadDefColumnFromDB();
     int LoadDefColumnFromConfig();
 
+	int SearchStationID(const std::string& ano, std::string& station) const;
 	int SearchColumn(const std::string& station, const std::string& infectant, std::string& column) const;
 private:
     int OnDailyData(const Packet& packet);
@@ -85,6 +89,7 @@ private:
     ocipp::Connection* _conn;
     bool _isconnected;
 private:
+	TStationIDMap _mapStationID;
     TStationInfectantMap _mapStationInfectant;
     TInfectantMap _mapInfectant;
 

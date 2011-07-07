@@ -91,9 +91,9 @@ int DataAccess::Init(const std::string& server, const std::string& user, const s
 		_strUser = user;
 		_strPasswd = passwd;
 	}
-	catch(const oracle::occi::SQLException& e)
+	catch(const ocipp::Exception& e)
 	{
-        ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Database environment init exception - " << e.getMessage() << std::endl);
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Database environment init exception - " << e << std::endl);
 		return -1;
 	}
 
@@ -103,9 +103,15 @@ int DataAccess::Init(const std::string& server, const std::string& user, const s
         return -1;
     }
 
+	if(LoadStationID() != 0)
+	{
+		ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Load Station ID configration failed." << std::endl);
+        return -1;
+	}
+
     if(LoadDefColumn() != 0)
     {
-        ACEX_LOG_OS(LM_ERROR, "<>Load Infectant Column configration failed." << std::endl);
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Load Infectant Column configration failed." << std::endl);
         return -1;
     }
     return 0;
@@ -138,9 +144,9 @@ int DataAccess::Connect()
 			return -1;
 		_isconnected = true;
 	}
-	catch(const oracle::occi::SQLException& e)
+	catch(const ocipp::Exception& e)
 	{
-        ACEX_LOG_OS(LM_ERROR, "<>Database init connection exception - " << e.getMessage() << std::endl);
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::Connect>Database init connection exception - " << e << std::endl);
 		return -1;
 	}
 	return 0;
@@ -154,6 +160,44 @@ void DataAccess::Disconnect()
 		_conn = NULL;
 		_isconnected = false;
 	}
+}
+
+int DataAccess::LoadStationID()
+{
+    if(_isconnected != true)
+        return -1;
+
+	try
+	{
+		const std::string sql = "select station_id, absoluteno from t_cfg_station_info";
+
+		ocipp::Statement *stmt = _conn->makeStatement(sql);
+
+		std::string sid, ano;
+		stmt->defineString(1, sid);
+		stmt->defineString(2, ano);
+
+		stmt->execute();
+
+		while(stmt->getNext())
+		{
+			if(!_mapStationID.insert(std::make_pair(ano, sid)).second)
+			{
+				ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadStationID>Load Station ID failed." << std::endl);
+                return -1;
+			}
+		}
+
+		_conn->destroyStatement(stmt);
+
+	}
+	catch (const ocipp::Exception& e)
+	{
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadStationID>Load Station ID exception - " << e << std::endl);
+        return -1;
+	}
+
+	return -1;
 }
 
 int DataAccess::LoadDefColumn()
@@ -177,20 +221,28 @@ int DataAccess::LoadDefColumnFromDB()
         const std::string sql = "select station_id, infectant_id, infectant_column from t_cfg_monitor_param";
 
         ocipp::Statement *stmt = _conn->makeStatement(sql);
-        oracle::occi::ResultSet *rset = stmt->executeQuery();
+		
+		std::string sid, iid, infcol;
+		stmt->defineString(1, sid);
+		stmt->defineString(2, iid);
+		stmt->defineString(3, infcol);
 
-        while(rset->next())
+		stmt->execute();
+
+		while(stmt->getNext())
         {
-            if(!_mapStationInfectant.insert(std::make_pair(std::make_pair(rset->getString(1), rset->getString(2)), rset->getString(3))).second)
+            if(!_mapStationInfectant.insert(std::make_pair(std::make_pair(sid, iid), infcol)).second)
             {
-                ACEX_LOG_OS(LM_ERROR, "<LoadDefColumnFromDB>Load Infectant column failed - Station:" << rset->getString(1) << " Infectant:" << rset->getString(2) << std::endl);
+                ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadDefColumnFromDB>Load Infectant column failed - Station:" << sid << " Infectant:" << iid << std::endl);
                 return -1;
             }
         }
+
+		_conn->destroyStatement(stmt);
     }
-    catch(oracle::occi::SQLException& e)
+    catch(ocipp::Exception& e)
     {
-        ACEX_LOG_OS(LM_ERROR, "<LoadDefColumnFromDB>Load Infectant column exception - " << e.getMessage() << std::endl);
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadDefColumnFromDB>Load Infectant column exception - " << e << std::endl);
         return -1;
     }
 
@@ -202,7 +254,7 @@ int DataAccess::LoadDefColumnFromConfig()
     ACEX_Ini_Configuration ini;
     if(ini.open(DEF_INFECTANTCOLUMN_CONFIGFILE) != 0)
     {
-        ACEX_LOG_OS(LM_INFO, "<LoadDefColumnFromConfig>Default Infectant configuration file does not find or opens failed." << std::endl);
+        ACEX_LOG_OS(LM_INFO, "<DataAccess::LoadDefColumnFromConfig>Default Infectant configuration file does not find or opens failed." << std::endl);
         return 0;
     }
 
@@ -256,6 +308,15 @@ int DataAccess::LoadDefColumnFromConfig()
     }
     
     return 0;
+}
+
+int DataAccess::SearchStationID(const std::string& ano, std::string &station) const
+{
+	TStationIDMap::const_iterator it = _mapStationID.find(ano);
+	if(it == _mapStationID.end())
+		return -1;
+	station = it->second;
+	return 0;
 }
 
 int DataAccess::SearchColumn(const std::string& station, const std::string& infectant, std::string& column) const
@@ -342,25 +403,31 @@ int DataAccess::OnDailyData(const Packet &packet)
         if(packet.MN.empty())
             throw PacketException("MN is empty.", packet);
 
+		std::string sid;
+		if(SearchStationID(packet.MN, sid) != 0)
+			throw PacketException("MN is undefined.", packet);
+
         const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATETIME);
 
         for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
         {
             std::string col = "";
-            if(SearchColumn(packet.MN, it->first, col) != 0)
+            if(SearchColumn(sid, it->first, col) != 0)
                 throw PacketException("can not find infectant column.", packet);
 
             const std::string val = GetPacketCPItemDayValue(packet, it->first, it->second);
             const std::string sql = "insert into T_MONITOR_REAL_DAY (STATION_ID, M_TIME, " + col + ") values (:1,:2,:3)";
-            oracle::occi::Statement *smst = _conn->createStatement(sql);
+            ocipp::Statement *stmt = _conn->makeStatement(sql);
         
-            smst->setString(1, packet.MN);
-            smst->setString(2, mtime);
-            smst->setString(3, val);
+            stmt->bindString(1, sid);
+            stmt->bindString(2, mtime);
+            stmt->bindString(3, val);
 
-            smst->executeUpdate();
+            stmt->execute();
 
             _dataStatistic.Update(DataStatistic::DT_DAY, it->first);
+
+			_conn->destroyStatement(stmt);
         }
     }
     catch(const PacketException& e)
@@ -368,9 +435,9 @@ int DataAccess::OnDailyData(const Packet &packet)
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnDailyData>Process Packet exception - " << e << std::endl);
         return -1;
     }
-    catch(const oracle::occi::SQLException& e)
+    catch(const ocipp::Exception& e)
     {
-        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnDailyData>Process Data exception - " << e.getMessage() << std::endl);
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnDailyData>Process Data exception - " << e << std::endl);
         return -1;
     }
 
@@ -386,22 +453,28 @@ int DataAccess::OnMinutelyData(const Packet &packet)
         if(packet.MN.empty())
             throw PacketException("MN is empty.", packet);
 
+		std::string sid;
+		if(SearchStationID(packet.MN, sid) != 0)
+			throw PacketException("MN is undefined.", packet);
+
         const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATETIME);
 
         for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
         {
             const std::string val = GetPacketCPItemMinuteValue(packet, it->first, it->second);
             const std::string sql = "insert into T_MONITOR_REAL_MINUTE (STATION_ID, INFECTANT_ID, M_TIME, M_VALUE) values (:1,:2,:3,:4)";
-            oracle::occi::Statement *smst = _conn->createStatement(sql);
+            ocipp::Statement *stmt = _conn->makeStatement(sql);
         
-            smst->setString(1, packet.MN);
-            smst->setString(2, it->first);
-            smst->setString(3, mtime);
-            smst->setString(4, val);
+            stmt->bindString(1, sid);
+            stmt->bindString(2, it->first);
+            stmt->bindString(3, mtime);
+            stmt->bindString(4, val);
 
-            smst->executeUpdate();
+            stmt->execute();
             
             _dataStatistic.Update(DataStatistic::DT_MINUTE, it->first);
+
+			_conn->destroyStatement(stmt);
         }
     }
     catch(const PacketException& e)
@@ -409,9 +482,9 @@ int DataAccess::OnMinutelyData(const Packet &packet)
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnMinutelyData>Process Packet exception - " << e << std::endl);
         return -1;
     }
-    catch(const oracle::occi::SQLException& e)
+    catch(const ocipp::Exception& e)
     {
-        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnMinutelyData>Process Data exception - " << e.getMessage() << std::endl);
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnMinutelyData>Process Data exception - " << e << std::endl);
         return -1;
     }
 
@@ -427,25 +500,31 @@ int DataAccess::OnHourlyData(const Packet &packet)
         if(packet.MN.empty())
             throw PacketException("MN is empty.", packet);
 
+		std::string sid;
+		if(SearchStationID(packet.MN, sid) != 0)
+			throw PacketException("MN is undefined.", packet);
+
         const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATETIME);
 
         for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
         {
             std::string col = "";
-            if(SearchColumn(packet.MN, it->first, col) != 0)
+            if(SearchColumn(sid, it->first, col) != 0)
                 throw PacketException("can not find infectant column.", packet);
 
             const std::string val = GetPacketCPItemHourValue(packet, it->first, it->second);
             const std::string sql = "insert into T_MONITOR_REAL_HOUR (STATION_ID, M_TIME, " + col + ") values (:1,:2,:3)";
-            oracle::occi::Statement *smst = _conn->createStatement(sql);
+            ocipp::Statement *stmt = _conn->makeStatement(sql);
         
-            smst->setString(1, packet.MN);
-            smst->setString(2, mtime);
-            smst->setString(3, val);
+            stmt->bindString(1, sid);
+            stmt->bindString(2, mtime);
+            stmt->bindString(3, val);
 
-            smst->executeUpdate();
+            stmt->execute();
 
             _dataStatistic.Update(DataStatistic::DT_HOUR, it->first);
+
+			_conn->destroyStatement(stmt);
         }
     }
     catch(const PacketException& e)
@@ -453,9 +532,9 @@ int DataAccess::OnHourlyData(const Packet &packet)
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnHourlyData>Process Packet exception - " << e << std::endl);
         return -1;
     }
-    catch(const oracle::occi::SQLException& e)
+    catch(const ocipp::Exception& e)
     {
-        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnHourlyData>Process Data exception - " << e.getMessage() << std::endl);
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnHourlyData>Process Data exception - " << e << std::endl);
         return -1;
     }
 

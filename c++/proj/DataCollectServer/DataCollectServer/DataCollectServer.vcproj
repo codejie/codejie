@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="acefd.lib acexd.lib ACEsd.lib oraocci11.lib"
+				AdditionalDependencies="acefd.lib acexd.lib ACEsd.lib oci.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ACEX_ROOT)\lib&quot;;&quot;$(ACE_ROOT)\lib&quot;;&quot;$(ORA_SDK_ROOT)\lib\msvc&quot;"
 				GenerateDebugInformation="true"
@@ -241,6 +241,14 @@
 			</File>
 			<File
 				RelativePath="..\Defines.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ocipp.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ocipp.h"
 				>
 			</File>
 			<File

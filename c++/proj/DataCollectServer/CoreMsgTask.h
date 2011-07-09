@@ -37,7 +37,8 @@ public:
 
     void ShowData(bool stat, std::ostream& os) const;
     void ShowPacket(std::ostream& os) const;
-	void ShowStationID(std::ostream& os, const std::string& ) const;
+	void ShowStationID(std::ostream& os, const std::string& ano) const;
+	void ShowInfectantID(std::ostream& os, const std::string& nid) const;
 	void ShowClient(std::ostream& os) const;
 protected:
 	void Final();

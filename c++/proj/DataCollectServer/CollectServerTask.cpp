@@ -67,7 +67,7 @@ int CollectServerTask::handle_recv(int clientid, ACEX_TcpStream& client)
 	while(in >= PacketProcessor::MIN_SIZE)
 	{
 		std::string recv(client.gptr(), in);
-		std::string::size_type pos = recv.find(PacketProcessor::TAG_END);
+		std::string::size_type pos = recv.find(PacketProcessor::TAG_END) + PacketProcessor::TAG_END.size();
 		if(pos != std::string::npos && pos <= PacketProcessor::MAX_SIZE)
 		{
 			char* buf = new char[pos];

@@ -23,7 +23,7 @@ const std::string Packet::PD_CN_DAILYDATA           =   "2031";
 const std::string Packet::PD_CN_MINUTELYDATA        =   "2051";
 const std::string Packet::PD_CN_HOURLYDATA          =   "2061";
 
-const std::string Packet::PD_CP_TAG_DATETIME =   "DateTime";
+const std::string Packet::PD_CP_TAG_DATATIME =   "DataTime";
 
 Packet::Packet()
 {
@@ -62,10 +62,7 @@ int Packet::Analyse(const std::string& packet)
 		else if(packet.substr(begin, tmp - begin) == PD_TAG_FLAG)
 			Flag = packet.substr(tmp + 1, pos - tmp - 1);
 		else if(packet.substr(begin, tmp - begin) == PD_TAG_CP)
-			if(CPAnalyse(packet.substr(tmp + 1)) != 0)
-				return 0;
-		else
-			return -1;
+			return CPAnalyse(packet.substr(tmp + 1));
 
 		begin = pos + 1;
 		if(begin == packet.size())

@@ -109,6 +109,12 @@ int DataAccess::Init(const std::string& server, const std::string& user, const s
         return -1;
 	}
 
+	if(LoadInfectantID() != 0)
+	{
+		ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Load Infectant ID configration failed." << std::endl);
+        return -1;
+	}
+
     if(LoadDefColumn() != 0)
     {
         ACEX_LOG_OS(LM_ERROR, "<DataAccess::Init>Load Infectant Column configration failed." << std::endl);
@@ -194,6 +200,44 @@ int DataAccess::LoadStationID()
 	catch (const ocipp::Exception& e)
 	{
         ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadStationID>Load Station ID exception - " << e << std::endl);
+        return -1;
+	}
+
+	return 0;
+}
+
+int DataAccess::LoadInfectantID()
+{
+    if(_isconnected != true)
+        return -1;
+
+	try
+	{
+		const std::string sql = "select infectant_id, infectant_std03 from t_cfg_infectant_base where infectant_std03 is not NULL";
+
+		ocipp::Statement *stmt = _conn->makeStatement(sql);
+
+		std::string iid, sid;
+		stmt->defineString(1, iid);
+		stmt->defineString(2, sid);
+
+		stmt->execute();
+
+		while(stmt->getNext() == 0)
+		{
+			if(!_mapInfectantID.insert(std::make_pair(sid, iid)).second)
+			{
+				ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadInfectantID>Load Infectant ID failed." << std::endl);
+                return -1;
+			}
+		}
+
+		_conn->destroyStatement(stmt);
+
+	}
+	catch (const ocipp::Exception& e)
+	{
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadInfectantID>Load Infectant ID exception - " << e << std::endl);
         return -1;
 	}
 
@@ -319,6 +363,15 @@ int DataAccess::SearchStationID(const std::string& ano, std::string &station) co
 	return 0;
 }
 
+const std::string& DataAccess::SearchInfectantID(const std::string& nid) const
+{
+	TInfectantMap::const_iterator it = _mapInfectantID.find(nid);
+	if(it != _mapInfectantID.end())
+		return it->second;
+	else
+		return nid;
+}
+
 int DataAccess::SearchColumn(const std::string& station, const std::string& infectant, std::string& column) const
 {
 	TStationInfectantMap::const_iterator it = _mapStationInfectant.find(std::make_pair(station, infectant));
@@ -365,6 +418,11 @@ void DataAccess::ShowStationID(std::ostream& os,const std::string& ano) const
 	}
 }
 
+void DataAccess::ShowInfectantID(std::ostream& os,const std::string& nid) const
+{
+	os << "\nStandardID = " << nid << " - InfectantID = " << SearchInfectantID(nid) << std::endl;
+}
+
 void DataAccess::Show(std::ostream& os) const
 {
     _dataStatistic.Show(os);
@@ -403,14 +461,18 @@ int DataAccess::OnUnknownData(const Packet &packet)
 
 int DataAccess::OnRuntimeData(const Packet &packet)
 {
-    ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnRuntimeData>Recv RUNTIME data - \n" << packet << std::endl);
+    ACEX_LOG_OS(LM_INFO, "<DataAccess::OnRuntimeData>Recv RUNTIME data - \n" << packet << std::endl);
+
     return 0;
 }
 
 int DataAccess::OnDailyData(const Packet &packet)
 {
+    ACEX_LOG_OS(LM_DEBUG, "<DataAccess::OnDailyData>Recv Daily data - \n" << packet << std::endl);
+
     if(_isconnected != true)
         return -1;
+
     try
     {
         if(packet.MN.empty())
@@ -420,7 +482,7 @@ int DataAccess::OnDailyData(const Packet &packet)
 		if(SearchStationID(packet.MN, sid) != 0)
 			throw PacketException("MN is undefined.", packet);
 
-        const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATETIME);
+        const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
 
         for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
         {
@@ -429,7 +491,7 @@ int DataAccess::OnDailyData(const Packet &packet)
                 throw PacketException("can not find infectant column.", packet);
 
             const std::string val = GetPacketCPItemDayValue(packet, it->first, it->second);
-            const std::string sql = "insert into T_MONITOR_REAL_DAY (STATION_ID, M_TIME, " + col + ") values (:1,:2,:3)";
+			const std::string sql = "insert into T_MONITOR_REAL_DAY (STATION_ID, M_TIME, " + col + ") values (:1,TO_DATE(:2,'yyyymmddhh24miss'),:3)";
             ocipp::Statement *stmt = _conn->makeStatement(sql);
         
             stmt->bindString(1, sid);
@@ -459,6 +521,8 @@ int DataAccess::OnDailyData(const Packet &packet)
 
 int DataAccess::OnMinutelyData(const Packet &packet)
 {
+    ACEX_LOG_OS(LM_DEBUG, "<DataAccess::OnMinutelyData>Recv Minutely data - \n" << packet << std::endl);
+
     if(_isconnected != true)
         return -1;
     try
@@ -470,16 +534,16 @@ int DataAccess::OnMinutelyData(const Packet &packet)
 		if(SearchStationID(packet.MN, sid) != 0)
 			throw PacketException("MN is undefined.", packet);
 
-        const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATETIME);
+        const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
 
         for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
         {
             const std::string val = GetPacketCPItemMinuteValue(packet, it->first, it->second);
-            const std::string sql = "insert into T_MONITOR_REAL_MINUTE (STATION_ID, INFECTANT_ID, M_TIME, M_VALUE) values (:1,:2,:3,:4)";
+			const std::string sql = "insert into T_MONITOR_REAL_MINUTE (STATION_ID, INFECTANT_ID, M_TIME, M_VALUE) values (:1,:2,TO_DATE(:3,'yyyymmddhh24miss'),:4)";
             ocipp::Statement *stmt = _conn->makeStatement(sql);
         
             stmt->bindString(1, sid);
-            stmt->bindString(2, it->first);
+            stmt->bindString(2, SearchInfectantID(it->first));
             stmt->bindString(3, mtime);
             stmt->bindString(4, val);
 
@@ -506,6 +570,8 @@ int DataAccess::OnMinutelyData(const Packet &packet)
 
 int DataAccess::OnHourlyData(const Packet &packet)
 {
+    ACEX_LOG_OS(LM_DEBUG, "<DataAccess::OnHourlyData>Recv Hourly data - \n" << packet << std::endl);
+
     if(_isconnected != true)
         return -1;
     try
@@ -517,7 +583,7 @@ int DataAccess::OnHourlyData(const Packet &packet)
 		if(SearchStationID(packet.MN, sid) != 0)
 			throw PacketException("MN is undefined.", packet);
 
-        const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATETIME);
+        const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
 
         for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
         {
@@ -526,7 +592,7 @@ int DataAccess::OnHourlyData(const Packet &packet)
                 throw PacketException("can not find infectant column.", packet);
 
             const std::string val = GetPacketCPItemHourValue(packet, it->first, it->second);
-            const std::string sql = "insert into T_MONITOR_REAL_HOUR (STATION_ID, M_TIME, " + col + ") values (:1,:2,:3)";
+			const std::string sql = "insert into T_MONITOR_REAL_HOUR (STATION_ID, M_TIME, " + col + ") values (:1,TO_DATE(:2,'yyyymmddhh24miss'),:3)";
             ocipp::Statement *stmt = _conn->makeStatement(sql);
         
             stmt->bindString(1, sid);
@@ -601,3 +667,10 @@ const std::string DataAccess::GetPacketCPItemDayValue(const Packet &packet, cons
     return GetPacketCPItemMinuteValue(packet, item, data);
 }
 
+const std::string DataAccess::GetPacketCPItemRuntimeValue(const Packet &packet, const std::string &item, const Packet::TCPItemDataMap &data) const
+{
+    Packet::TCPItemDataMap::const_iterator it = data.find("Rtd");
+    if(it == data.end())
+        throw PacketException("can not find Rtd value : " + item, packet);
+	return it->second;
+}

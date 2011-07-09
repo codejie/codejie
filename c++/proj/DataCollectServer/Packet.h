@@ -30,7 +30,7 @@ public:
     static const std::string PD_CN_MINUTELYDATA;
     static const std::string PD_CN_HOURLYDATA;
 
-    static const std::string PD_CP_TAG_DATETIME;
+    static const std::string PD_CP_TAG_DATATIME;
 
 public:
 	typedef std::map<std::string, std::string> TCPDataMap; //cp + data

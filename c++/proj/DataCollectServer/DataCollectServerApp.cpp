@@ -181,13 +181,15 @@ int DataCollectServerApp::InitConfig()
     }
 
     ACEX_LOG_OS(LM_STARTUP, std::setw(40) << "[OK]" << std::endl);
+
+	ACEX_OUTPUT_PROXY->priority_mask(LM_WARNING | LM_ERROR | LM_SHUTDOWN | LM_STARTUP);
+
 	return 0;
 }
 
 
 int DataCollectServerApp::StartTasks()
 {
-
 	try
 	{
 		ACEX_LOG_OS(LM_STARTUP, "Log file init.." << std::endl);
@@ -280,6 +282,11 @@ void DataCollectServerApp::ShowPacket(std::ostream& os) const
 void DataCollectServerApp::ShowStationID(std::ostream& os, const std::string& ano) const
 {
     _taskCore.ShowStationID(os, ano);
+}
+
+void DataCollectServerApp::ShowInfectantID(std::ostream& os, const std::string& nid) const
+{
+    _taskCore.ShowInfectantID(os, nid);
 }
 
 void DataCollectServerApp::ShowTerminal(std::ostream& os) const

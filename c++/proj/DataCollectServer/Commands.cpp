@@ -158,6 +158,17 @@ int CCmdShowDataAccess::execute(std::ostream& os)
 				this->help_verbose(os);
 			}
 		}
+		else if(this->args_[0] == "inf" || this->args_[0] == "infectant")
+		{
+			if(this->args_.count() > 1)
+			{
+				theApp.ShowInfectantID(os, this->args_[1]);
+			}
+			else
+			{
+				this->help_verbose(os);
+			}
+		}
         else
             this->help_verbose(os);
     }
@@ -176,7 +187,7 @@ void CCmdShowDataAccess::help(std::ostream& os) const
 void CCmdShowDataAccess::help_verbose(std::ostream& os) const
 {
 	help(os);
-	os << "\n    Usage:\n\t" << tag() << "[,col(umn)/(station)id,absoluteno]";
+	os << "\n    Usage:\n\t" << tag() << "[,col(umn)/(station)id,absoluteno/inf(ectant),stdid]";
 	os << "\n    Example:\n\t" << tag() << std::endl;
 }
 

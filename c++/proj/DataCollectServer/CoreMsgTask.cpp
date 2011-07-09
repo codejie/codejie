@@ -192,6 +192,10 @@ void CoreMsgTask::ShowStationID(std::ostream& os, const std::string& ano) const
 {
     _objDataAccess->ShowStationID(os, ano);
 }
+void CoreMsgTask::ShowInfectantID(std::ostream& os, const std::string& nid) const
+{
+    _objDataAccess->ShowInfectantID(os, nid);
+}
 
 void CoreMsgTask::ShowClient(std::ostream &os) const
 {

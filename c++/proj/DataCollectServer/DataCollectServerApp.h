@@ -41,6 +41,7 @@ public:
     void ShowData(bool stat, std::ostream& os) const;
     void ShowPacket(std::ostream& os) const;
 	void ShowStationID(std::ostream& os, const std::string& ano) const;
+	void ShowInfectantID(std::ostream& os, const std::string& nid) const;
 	void ShowTerminal(std::ostream& os) const;
 
 	int Shutdown();

@@ -41,6 +41,8 @@ class DataAccess
 protected:
 	typedef std::map<const std::string, const std::string> TStationIDMap;//stationno + stationid
 
+	typedef std::map<const std::string, const std::string> TInfectantIDMap;//nationalid + localid
+
     static const std::string DEF_INFECTANTCOLUMN_CONFIGFILE;
 
 	typedef std::pair<const std::string, const std::string> TStationInfectantPair;
@@ -58,17 +60,20 @@ public:
 
     void ShowColumn(std::ostream &os) const;
 	void ShowStationID(std::ostream &os, const std::string& ano) const;
+	void ShowInfectantID(std::ostream& os, const std::string& nid) const;
 	void Show(std::ostream& os) const;
 private:
 	int Connect();
 	void Disconnect();
 
 	int LoadStationID();
+	int LoadInfectantID();
 	int LoadDefColumn();
     int LoadDefColumnFromDB();
     int LoadDefColumnFromConfig();
 
 	int SearchStationID(const std::string& ano, std::string& station) const;
+	const std::string& SearchInfectantID(const std::string& nid) const;
 	int SearchColumn(const std::string& station, const std::string& infectant, std::string& column) const;
 private:
     int OnDailyData(const Packet& packet);
@@ -80,7 +85,8 @@ private:
     const std::string& GetPacketCPDataValue(const Packet& packet, const std::string& tag) const;
     const std::string GetPacketCPItemMinuteValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;
     const std::string GetPacketCPItemHourValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;
-        const std::string GetPacketCPItemDayValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;
+    const std::string GetPacketCPItemDayValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;
+	const std::string GetPacketCPItemRuntimeValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;
 private:
     std::string _strServer;
     std::string _strUser;
@@ -91,6 +97,7 @@ private:
     bool _isconnected;
 private:
 	TStationIDMap _mapStationID;
+	TInfectantIDMap _mapInfectantID;
     TStationInfectantMap _mapStationInfectant;
     TInfectantMap _mapInfectant;
 

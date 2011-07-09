@@ -18,6 +18,17 @@ class ConfigLoader;
 
 class CoreMsgTask: public ACEX_Message_Task
 {
+protected:
+	struct ClientData_t
+	{
+		std::string ip;
+		unsigned int port;
+		time_t update;
+
+		size_t count;
+	};
+
+	typedef std::map<int, ClientData_t> TClientMap; 
 public:
 	CoreMsgTask();
 	virtual ~CoreMsgTask();
@@ -26,9 +37,11 @@ public:
 
     void ShowData(bool stat, std::ostream& os) const;
     void ShowPacket(std::ostream& os) const;
+	void ShowStationID(std::ostream& os, const std::string& ) const;
+	void ShowClient(std::ostream& os) const;
 protected:
 	void Final();
-
+	int UpdateClientCount(int clientid);
 protected:
 	virtual int handle_msg(const ACEX_Message& msg);
     int OnTimerMsgProc(const ACEX_Message& msg);
@@ -36,9 +49,13 @@ protected:
     int OnCollectServerMsgProc(const ACEX_Message& msg);
 private:
     int OnCollectPacket(const Packet& packet);
+	int OnCollectConnect(int clientid, const std::string& ip, unsigned int port);
+	int OnCollectDisconnect(int clientid);
 private:
     std::auto_ptr<DataAccess> _objDataAccess;
     std::auto_ptr<CollectServerTask> _taskCollectServer;
+private:
+	TClientMap _mapClient;
 };
 
 #endif /* __COREMSGTASK_H__ */

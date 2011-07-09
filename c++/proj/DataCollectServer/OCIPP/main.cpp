@@ -10,13 +10,13 @@ int test()
     {
         ocipp::Environment env;
     
-        ocipp::Connection* conn = env.makeConnection("scott", "tiger", "QA");
-		ocipp::Statement *stmt = conn->makeStatement("select TNAME, TABTYPE from tab where TNAME=:1");
+        ocipp::Connection* conn = env.makeConnection("newemos", "newemos", "QA");
+		ocipp::Statement *stmt = conn->makeStatement("select TNAME, TABTYPE from tab");
         std::string name, type;
         stmt->defineString(1, name);
 		stmt->defineString(2, type);
 		std::string bind = "EMP";
-		stmt->bindString(1, bind);
+		//stmt->bindString(1, bind);
         stmt->execute();
         while(stmt->getNext() == 0)
         {
@@ -89,7 +89,7 @@ int test1()
 
 int main()
 {
-	//test();
-    test1();
+	test();
+    //test1();
     return 0;
 }

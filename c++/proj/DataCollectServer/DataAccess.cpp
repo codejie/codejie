@@ -179,7 +179,7 @@ int DataAccess::LoadStationID()
 
 		stmt->execute();
 
-		while(stmt->getNext())
+		while(stmt->getNext() == 0)
 		{
 			if(!_mapStationID.insert(std::make_pair(ano, sid)).second)
 			{
@@ -197,7 +197,7 @@ int DataAccess::LoadStationID()
         return -1;
 	}
 
-	return -1;
+	return 0;
 }
 
 int DataAccess::LoadDefColumn()
@@ -350,6 +350,19 @@ void  DataAccess::ShowColumn(std::ostream &os) const
         os << "\n  " << it->first << " - " << it->second;
     }
     os << std::endl;
+}
+
+void DataAccess::ShowStationID(std::ostream& os,const std::string& ano) const
+{
+	std::string id = "";
+	if(SearchStationID(ano, id) == 0)
+	{
+		os << "\nabsoluteNo = " << ano << " - stationID = " << id << std::endl;
+	}
+	else
+	{
+		os << "\nabsoluteNo = " << ano << " - Undefined." << std::endl;
+	}
 }
 
 void DataAccess::Show(std::ostream& os) const

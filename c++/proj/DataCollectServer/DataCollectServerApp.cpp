@@ -132,6 +132,8 @@ int DataCollectServerApp::regist_command()
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowVersion().tag() + "' command failed.", __FILE__, __LINE__);
 	if(command_parser()->regist_command(CCmdShowDataAccess()) != 0)
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowDataAccess().tag() + "' command failed.", __FILE__, __LINE__);
+	if(command_parser()->regist_command(CCmdShowTerminal()) != 0)
+		throw ACEX_Runtime_Exception("Register '" + CCmdShowTerminal().tag() + "' command failed.", __FILE__, __LINE__);
 
 	if(command_parser()->regist_command(CCmdTest()) != 0)
 		throw ACEX_Runtime_Exception("Register '" + CCmdTest().tag() + "' command failed.", __FILE__, __LINE__);
@@ -273,6 +275,16 @@ void DataCollectServerApp::ShowData(bool stat, std::ostream& os) const
 void DataCollectServerApp::ShowPacket(std::ostream& os) const
 {
     _taskCore.ShowPacket(os);
+}
+
+void DataCollectServerApp::ShowStationID(std::ostream& os, const std::string& ano) const
+{
+    _taskCore.ShowStationID(os, ano);
+}
+
+void DataCollectServerApp::ShowTerminal(std::ostream& os) const
+{
+	_taskCore.ShowClient(os);
 }
 
 int DataCollectServerApp::Shutdown()

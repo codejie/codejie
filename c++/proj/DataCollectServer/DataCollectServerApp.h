@@ -40,6 +40,8 @@ public:
 	void ShowConfig(std::ostream& os) const;
     void ShowData(bool stat, std::ostream& os) const;
     void ShowPacket(std::ostream& os) const;
+	void ShowStationID(std::ostream& os, const std::string& ano) const;
+	void ShowTerminal(std::ostream& os) const;
 
 	int Shutdown();
 private:

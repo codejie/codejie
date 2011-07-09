@@ -28,6 +28,7 @@ int CollectServerTask::Open(const std::string& local)
 	{
 		return -1;
 	}
+	this->activate();
 	return 0;
 }
 
@@ -38,13 +39,23 @@ void CollectServerTask::Final()
 
 int CollectServerTask::handle_connect(int clientid, ACEX_TcpStream& client)
 {
-	ACEX_LOG_OS(LM_INFO, "<CollectServerTask::handle_connect>Client connect - clientid : " << clientid << std::endl);
+	ACE_INET_Addr* addr = new ACE_INET_Addr();
+	client.get_remote_addr(*addr);
+
+	ACEX_LOG_OS(LM_INFO, "<CollectServerTask::handle_connect>Client connect - clientid : [" << clientid << "] " << addr->get_host_addr() << ":" << addr->get_port_number() << std::endl);
+
+	ACEX_Message msg(TASK_COLLECT_SERVER, FPARAM_SOCKET_CONNECT, clientid, addr);
+	_taskMsg->put_msg(msg);
+
 	return 0;
 }
 
 int CollectServerTask::handle_close(int clientid, ACEX_TcpStream& client)
 {
 	ACEX_LOG_OS(LM_INFO, "<CollectServerTask::handle_close>Client disconnect - clientid : " << clientid << std::endl);
+
+	ACEX_Message msg(TASK_COLLECT_SERVER, FPARAM_SOCKET_DISCONNECT, clientid);
+	_taskMsg->put_msg(msg);
 
 	return 0;
 }
@@ -62,7 +73,7 @@ int CollectServerTask::handle_recv(int clientid, ACEX_TcpStream& client)
 			char* buf = new char[pos];
 			client.read(buf, pos);
 
-			ACEX_Message msg(TASK_COLLECT_SERVER, FPARAM_PACKET, pos, buf);
+			ACEX_Message msg(TASK_COLLECT_SERVER, FPARAM_PACKET, ((clientid << 16) | pos), buf);
 			_taskMsg->put_msg(msg);
 
             ++ _count;
@@ -86,5 +97,5 @@ int CollectServerTask::handle_lost(int error, int clientid, const char* packet, 
 
 void CollectServerTask::Show(std::ostream &os) const
 {
-    os << "\nPacket = " << _count << std::endl;
+    os << "\nTotal Packet = " << _count << std::endl;
 }

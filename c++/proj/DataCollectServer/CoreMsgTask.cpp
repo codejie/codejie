@@ -102,12 +102,13 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 {
 	if(msg.fparam() == FPARAM_PACKET)
 	{
-		size_t size = (size_t)msg.sparam();
+		size_t size = (size_t)(msg.sparam() & 0x0000FFFF);
 		const char* buf = (const char*)msg.data();
 
 		Packet packet;
 		if(PacketProcessor::Analyse(std::string(buf, size), packet) == 0)
 		{
+			UpdateClientCount(msg.sparam() >> 16);
 			OnCollectPacket(packet);
 		}
 		else
@@ -116,6 +117,16 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 		}
 
 		delete [] buf;
+	}
+	else if(msg.fparam() == FPARAM_SOCKET_CONNECT)
+	{
+		ACE_INET_Addr* addr =  reinterpret_cast<ACE_INET_Addr*>(msg.data());
+		OnCollectConnect(msg.sparam(), addr->get_host_addr(), addr->get_port_number());
+		delete addr;
+	}
+	else if(msg.fparam() == FPARAM_SOCKET_DISCONNECT)
+	{
+		OnCollectDisconnect(msg.sparam());
 	}
 	else
 	{
@@ -134,6 +145,36 @@ int CoreMsgTask::OnCollectPacket(const Packet& packet)
 	return 0;
 }
 
+int CoreMsgTask::OnCollectConnect(int clientid, const std::string& ip, unsigned int port)
+{
+	ClientData_t data;
+	data.ip = ip;
+	data.port = port;
+	data.update = ACE_OS::time(NULL);
+	data.count = 0;
+
+	_mapClient.insert(std::make_pair(clientid, data));
+
+	return 0;
+}
+
+int CoreMsgTask::OnCollectDisconnect(int clientid)
+{
+	_mapClient.erase(clientid);
+
+	return 0;
+}
+
+int CoreMsgTask::UpdateClientCount(int clientid)
+{
+	TClientMap::iterator it = _mapClient.find(clientid);
+	if(it == _mapClient.end())
+		return -1;
+	++ it->second.count;
+
+	return 0;
+}
+
 void CoreMsgTask::ShowData(bool stat, std::ostream& os) const
 {
     if(stat == true)
@@ -145,4 +186,18 @@ void CoreMsgTask::ShowData(bool stat, std::ostream& os) const
 void CoreMsgTask::ShowPacket(std::ostream &os) const
 {
     _taskCollectServer->Show(os);
+}
+
+void CoreMsgTask::ShowStationID(std::ostream& os, const std::string& ano) const
+{
+    _objDataAccess->ShowStationID(os, ano);
+}
+
+void CoreMsgTask::ShowClient(std::ostream &os) const
+{
+	for(TClientMap::const_iterator it = _mapClient.begin(); it != _mapClient.end(); ++ it)
+	{
+		os << "\n Terminal : [" << it->first << "] - " << it->second.count << "\n\t " << it->second.ip << ":" << it->second.port << " - " << it->second.update; 
+	}
+	os << std::endl;
 }

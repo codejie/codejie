@@ -140,9 +140,24 @@ int CCmdShowDataAccess::execute(std::ostream& os)
     if(this->args_.count() > 0)
     {
         if(this->args_[0] == "col" || this->args_[0] == "column")
+		{
             theApp.ShowData(false, os);
+		}
         else if(this->args_[0] == "pac" || this->args_[0] == "packet")
+		{
             theApp.ShowPacket(os);
+		}
+		else if(this->args_[0] == "id" || this->args_[0] == "stationid")
+		{
+			if(this->args_.count() > 1)
+			{
+				theApp.ShowStationID(os, this->args_[1]);
+			}
+			else
+			{
+				this->help_verbose(os);
+			}
+		}
         else
             this->help_verbose(os);
     }
@@ -161,10 +176,52 @@ void CCmdShowDataAccess::help(std::ostream& os) const
 void CCmdShowDataAccess::help_verbose(std::ostream& os) const
 {
 	help(os);
-	os << "\n    Usage:\n\t" << tag() << "[,col(umn)/pac(ket)]";
+	os << "\n    Usage:\n\t" << tag() << "[,col(umn)/(station)id,absoluteno]";
 	os << "\n    Example:\n\t" << tag() << std::endl;
 }
 
+////////////////////////////////////////////////////////////////////
+CCmdShowTerminal* CCmdShowTerminal::clone() const
+{
+	return new CCmdShowTerminal(*this);
+}
+
+ACEX_Command_Tag CCmdShowTerminal::tag() const
+{
+	return "showterminal";
+}
+
+int CCmdShowTerminal::execute(std::ostream& os)
+{
+	if(this->args_.count() > 0)
+	{
+        if(this->args_[0] == "pac" || this->args_[0] == "packet")
+		{
+            theApp.ShowPacket(os);
+		}
+		else
+		{
+			this->help_verbose(os);
+		}
+	}
+	else
+	{
+		theApp.ShowTerminal(os);
+	}
+	return 1;
+}
+
+void CCmdShowTerminal::help(std::ostream& os) const
+{
+	os << "    Show terminal info.";
+}
+
+void CCmdShowTerminal::help_verbose(std::ostream& os) const
+{
+	help(os);
+	os << "\n    Usage:\n\t" << tag() << "[,pac(ket)]";
+	os << "\n    Example:\n\t" << tag() << std::endl;
+}
 //////////////////////////////////////////////////////////////////////////
 CCmdTest* CCmdTest::clone() const
 {

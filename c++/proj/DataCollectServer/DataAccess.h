@@ -57,6 +57,7 @@ public:
     int OnData(const Packet& packet);
 
     void ShowColumn(std::ostream &os) const;
+	void ShowStationID(std::ostream &os, const std::string& ano) const;
 	void Show(std::ostream& os) const;
 private:
 	int Connect();

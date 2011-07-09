@@ -11,8 +11,10 @@ const int TASK_TIMER    		=   2;
 const int TASK_COLLECT_SERVER   =   3;
 
 
-const int FPARAM_SHUTDOWN   =   0;
-const int FPARAM_PACKET     =   1;
-const int FPARAM_DATALOADER =   2;
+const int FPARAM_SHUTDOWN			=   0;
+const int FPARAM_PACKET				=   1;
+const int FPARAM_DATALOADER			=   2;
+const int FPARAM_SOCKET_CONNECT		=	3;
+const int FPARAM_SOCKET_DISCONNECT	=	4;
 
 #endif

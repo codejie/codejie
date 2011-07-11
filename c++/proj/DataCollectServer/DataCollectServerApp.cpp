@@ -135,8 +135,8 @@ int DataCollectServerApp::regist_command()
 	if(command_parser()->regist_command(CCmdShowTerminal()) != 0)
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowTerminal().tag() + "' command failed.", __FILE__, __LINE__);
 
-	if(command_parser()->regist_command(CCmdTest()) != 0)
-		throw ACEX_Runtime_Exception("Register '" + CCmdTest().tag() + "' command failed.", __FILE__, __LINE__);
+//	if(command_parser()->regist_command(CCmdTest()) != 0)
+//		throw ACEX_Runtime_Exception("Register '" + CCmdTest().tag() + "' command failed.", __FILE__, __LINE__);
 
 	return 0;
 }

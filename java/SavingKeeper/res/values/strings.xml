@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello World, SavingKeeper!</string>
     <string name="app_name">SavingKeeper</string>
+    <string name="title_displayactivity">Display List Activity</string>
 </resources>

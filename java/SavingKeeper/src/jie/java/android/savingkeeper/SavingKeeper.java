@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class SavingKeeper extends Activity {
     /** Called when the activity is first created. */
@@ -30,8 +31,12 @@ public class SavingKeeper extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				//Test.startActivity(SavingKeeper.this);
-				Test.insertData();
+				//Test.insertData();
+				Toast.makeText(v.getContext(), "hello", 2).show();
+				//Test.queryData();
+				Test.startActivity(SavingKeeper.this);
+				//Test.queryData();
+				//Test.insertData();
 /*				
 				AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 				builder.setMessage("alert...........");

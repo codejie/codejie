@@ -7,6 +7,9 @@ package jie.java.android.savingkeeper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.util.Log;
+import android.widget.Toast;
 
 public final class Test {
 	public static void startActivity(Activity act) {
@@ -20,5 +23,15 @@ public final class Test {
 		data.str = "mystring";
 		data.value = 113;
 		GLOBAL.DBACCESS.insert(data);
+	}
+	
+	public static void queryData() {
+		Cursor cursor = GLOBAL.DBACCESS.query();
+		//cursor.moveToFirst();
+		int i = cursor.getCount();
+		while(cursor.moveToNext()) {
+			Log.d(GLOBAL.APP_TAG, cursor.getString(0));
+			Log.d(GLOBAL.APP_TAG, ""+cursor.getInt(1));
+		};
 	}
 }

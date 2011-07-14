@@ -6,6 +6,7 @@
 package jie.java.android.savingkeeper;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
@@ -26,9 +27,9 @@ public class DBAccess {
 	public static final String TABLE_COLUMN_NOTE		= "Note";	
 
 	public static final String TABLE_NAME_TEST			= "Test";
-	public static final String TABLE_COLUMN_ID			= "_ID";
-	public static final String TABLE_COLUMN_STRING		= "String";
-	public static final String TABLE_COLUMN_INTEGER		= "Value";
+	public static final String TABLE_COLUMN_ID			= "_id";
+	public static final String TABLE_COLUMN_STRING		= "string";
+	public static final String TABLE_COLUMN_INTEGER		= "value";
 	
 	public static class TestData {
 		public String str;
@@ -78,7 +79,7 @@ public class DBAccess {
 		}
 	}
 	
-	protected int insert(final TestData data) {
+	public int insert(final TestData data) {
 		
 		ContentValues values = new ContentValues();
 		
@@ -91,6 +92,13 @@ public class DBAccess {
 		}
 		
 		return 0;
+	}
+	
+	public Cursor query(){
+		String col[] = new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_STRING, TABLE_COLUMN_INTEGER }; 
+		Cursor  cursor = db.query(TABLE_NAME_TEST, col, null, null, null, null, null, null);//"", new String[] {}, "", "", "", "");
+		cursor.moveToFirst();
+		return cursor;
 	}
 	
 	

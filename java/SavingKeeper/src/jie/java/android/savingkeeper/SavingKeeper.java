@@ -24,16 +24,28 @@ public class SavingKeeper extends Activity {
         setContentView(R.layout.main);
         
         GLOBAL.Init();    	
-    
+/*
+        try {
+			Thread.sleep(500);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+ */       
+		Test.startActivity(SavingKeeper.this);
 
         btn = (Button)this.findViewById(R.id.button1);
         btn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Test.insertData();
-				Toast.makeText(v.getContext(), "hello", 2).show();
+				//Test.insertData();
+				//Toast.makeText(v.getContext(), "hello", 2).show();
 				//Test.queryData();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				Test.startActivity(SavingKeeper.this);
 				//Test.queryData();
 				//Test.insertData();

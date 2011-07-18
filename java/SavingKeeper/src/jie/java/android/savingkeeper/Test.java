@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public final class Test {
 	public static void startActivity(Activity act) {
-		Intent intent = new Intent(act, DisplayActivity.class);
+		Intent intent = new Intent(act, SavingListActivity.class);
 		act.startActivity(intent);
 //		act.finish();
 	}

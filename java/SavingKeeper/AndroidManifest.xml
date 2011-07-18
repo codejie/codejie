@@ -14,6 +14,7 @@
             </intent-filter>
         </activity>
         <activity android:name="DisplayActivity" android:label="@string/title_displayactivity"></activity>
+        <activity android:name="SavingListActivity" android:label="@string/title_savinglistactivity"></activity>
 
     </application>
 </manifest>

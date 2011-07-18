@@ -9,6 +9,10 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
@@ -89,5 +93,21 @@ public class SavingListActivity extends ListActivity {
     	((SavingListView)v).setExpanded();
        //((SpeechListAdapter)getListAdapter()).toggle(position);
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.menu_savinglist, menu);
+    	return true;    	
+    }
 	
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+
+      MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.menu_savinglist_context, menu);
+      
+      super.onCreateContextMenu(menu, v, menuInfo);
+    }
+    
 }

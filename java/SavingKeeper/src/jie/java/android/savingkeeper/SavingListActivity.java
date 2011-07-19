@@ -30,16 +30,7 @@ public class SavingListActivity extends ListActivity {
 		public DataCursorAdapter(Context context, Cursor c) {
 			super(context, c);
 		}
-/*		
-		@Override
-		public void setViewText(TextView v, String text) {
-			if(v.getId() == 100)
-				text += "this is view1";
-			else
-				text += "unknown";
-			super.setViewText(v, text);
-		}
-*/		
+	
 		public View newView(Context context, Cursor cursor, ViewGroup parent) {
 			SavingListView view = new SavingListView(context);
 			
@@ -56,10 +47,28 @@ public class SavingListActivity extends ListActivity {
 		private TextView viewText;
 		private TextView viewText2;
 		
+		private TextView textTitle;
+		private TextView textAmount;
+		private TextView textEnd;
+		private TextView textNow;
+		
+		private TextView textBank;
+		private TextView textType;
+		private TextView textRate;
+		private TextView textNote;
+		
 		public SavingListView(Context context) {
 			super(context);	
 			
 			this.setOrientation(VERTICAL);
+			
+			LinearLayout lLayout2 = new LinearLayout(context);
+			textTitle = new TextView(context);
+			textTitle.setTextSize(22);
+			textTitle.setLayoutWeight() .setLayoutParams(LayoutParams)
+			lLayout2.addView(lLayout2, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			
+			
 			
 			viewText = new TextView(context);
 			viewText.setId(100);

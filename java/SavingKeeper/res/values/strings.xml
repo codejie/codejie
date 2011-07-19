@@ -5,4 +5,8 @@
     <string name="title_displayactivity">Display List Activity</string>
     <string name="test_long_text">test_long_text</string>
     <string name="title_savinglistactivity">SavingList</string>
+    <string name="str_bank">Bank</string>
+    <string name="str_type">Type</string>
+    <string name="str_rate">Rate</string>
+    <string name="str_note">Note</string>
 </resources>

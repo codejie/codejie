@@ -8,7 +8,13 @@ public final class GLOBAL {
 
 	public static DBAccess DBACCESS = null;
 	
-	public static void Init() {
+	public static void init() {
 		DBACCESS = new DBAccess(DATABASE_NAME);
+	}
+	
+	public static void close() {
+		if(DBACCESS != null) {
+			DBACCESS.close();
+		}
 	}
 }

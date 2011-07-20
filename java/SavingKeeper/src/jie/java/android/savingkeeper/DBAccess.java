@@ -94,11 +94,11 @@ public class DBAccess {
 		db.execSQL(sql);		
 	}
 	
-	protected void finalize (){
-/*		if(db != null) {
+	public void close (){
+		if(db != null) {
 			db.close();
 		}
-*/		
+		
 	}
 	
 	public int insert(final TestData data) {

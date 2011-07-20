@@ -23,7 +23,7 @@ public class SavingKeeper extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        GLOBAL.Init();    	
+        GLOBAL.init();    	
 /*
         try {
 			Thread.sleep(500);
@@ -69,6 +69,9 @@ public class SavingKeeper extends Activity {
 			}
         	
         });
-        
+    }
+    
+    protected void finalize() {
+    	GLOBAL.close();
     }
 }

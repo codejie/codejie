@@ -38,7 +38,7 @@ public class SavingKeeper extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				//Test.insertData();
+				Test.insertData();
 				//Toast.makeText(v.getContext(), "hello", 2).show();
 				//Test.queryData();
 				try {

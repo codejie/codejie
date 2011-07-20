@@ -15,7 +15,9 @@ public class DBAccess {
 	
 	private static final int DATABASE_VERSION			= 1;
 	
-	public static final String TABLE_NAME_BANKBOOK		= "BankBook";
+	public static final String TABLE_NAME_BANK			= "Bank";
+	public static final String TABLE_NAME_RATE			= "Rate";
+	public static final String TABLE_NAME_SAVING		= "Saving";
 	
 	public static final String TABLE_COLUMN_NO			= "No";
 	public static final String TABLE_COLUMN_TITLE		= "Title";
@@ -25,6 +27,8 @@ public class DBAccess {
 	public static final String TABLE_COLUMN_RATE		= "Rate";
 	public static final String TABLE_COLUMN_BANK		= "Bank";
 	public static final String TABLE_COLUMN_NOTE		= "Note";	
+	public static final String TABLE_COLUMN_START		= "Start";
+	public static final String TABLE_COLUMN_END			= "End";	
 
 	public static final String TABLE_NAME_TEST			= "Test";
 	public static final String TABLE_COLUMN_ID			= "_id";
@@ -51,18 +55,35 @@ public class DBAccess {
 		}
 		db.setVersion(DATABASE_VERSION);
 		
-		String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_BANKBOOK + " ("
+		String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_SAVING + " ("
 		+ TABLE_COLUMN_NO + " INTEGER PRIMARY KEY,"
 		+ TABLE_COLUMN_TITLE + " TEXT,"
 		+ TABLE_COLUMN_AMOUNT + " REAL,"
 		+ TABLE_COLUMN_CHECKIN + " INTEGER,"
 		+ TABLE_COLUMN_TYPE + " INTEGER,"
-		+ TABLE_COLUMN_RATE + " REAL,"
 		+ TABLE_COLUMN_BANK + " INTEGER,"
 		+ TABLE_COLUMN_NOTE + " TEXT"
 		+ ");";
 		
 		db.execSQL(sql);
+		
+		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_BANK + " ("
+		+ TABLE_COLUMN_NO + " INTEGER PRIMARY KEY,"
+		+ TABLE_COLUMN_TITLE + " TEXT"
+		+ ");";
+		
+		db.execSQL(sql);
+
+		 sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_RATE + " ("
+		+ TABLE_COLUMN_NO + " INTEGER PRIMARY KEY,"
+		+ TABLE_COLUMN_TYPE + " INTEGER, "
+		+ TABLE_COLUMN_START + " DATE,"
+		+ TABLE_COLUMN_END + " DATE,"
+		+ TABLE_COLUMN_RATE + " REAL"
+		+ ");";
+		
+		db.execSQL(sql);
+		
 		
 		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_TEST + " ("
 		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
@@ -74,9 +95,10 @@ public class DBAccess {
 	}
 	
 	protected void finalize (){
-		if(db != null) {
+/*		if(db != null) {
 			db.close();
 		}
+*/		
 	}
 	
 	public int insert(final TestData data) {

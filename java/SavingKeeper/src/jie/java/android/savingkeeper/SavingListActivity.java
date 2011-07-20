@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +21,8 @@ import android.widget.CursorAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,7 @@ public class SavingListActivity extends ListActivity {
 	
 		public View newView(Context context, Cursor cursor, ViewGroup parent) {
 			SavingListView view = new SavingListView(context);
+			view.setId(cursor.getPosition());
 			
 			return view;
 		}
@@ -52,7 +56,10 @@ public class SavingListActivity extends ListActivity {
 		private TextView textEnd;
 		private TextView textNow;
 		
+		private LinearLayout tlayout;
+		
 		private TextView textBank;
+		private TextView textCheckin;
 		private TextView textType;
 		private TextView textRate;
 		private TextView textNote;
@@ -61,34 +68,155 @@ public class SavingListActivity extends ListActivity {
 			super(context);	
 			
 			this.setOrientation(VERTICAL);
+			this.setPadding(10, 0, 10, 0);
 			
-			LinearLayout lLayout2 = new LinearLayout(context);
-			textTitle = new TextView(context);
-			textTitle.setTextSize(22);
-			textTitle.setLayoutWeight() .setLayoutParams(LayoutParams)
-			lLayout2.addView(lLayout2, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			//Layout2 - according to display_activity_row.xml
+			LinearLayout layout = new LinearLayout(context);
+			layout.setOrientation(HORIZONTAL);			
 			
-			
-			
+			LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);					
 			viewText = new TextView(context);
-			viewText.setId(100);
-			addView(viewText, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+			viewText.setTextSize(32);
+			params.weight = 1.0f;
+			params.gravity = Gravity.LEFT;
+			layout.addView(viewText, params);
+			
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			viewText2 = new TextView(context);
-			viewText2.setId(101);
-			addView(viewText2, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-			viewText2.setVisibility(GONE);
+			viewText2.setTextSize(20);
+			//viewText2.setVisibility(GONE);
+			params.weight = 0.0f;
+			params.gravity = Gravity.RIGHT;
+			layout.addView(viewText2, params);
+			
+			this.addView(layout);
+		
+			//layout1
+			layout = new LinearLayout(context);
+			layout.setOrientation(HORIZONTAL);
+
+			textAmount = new TextView(context);
+			textAmount.setTextSize(20);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;
+			params.gravity = Gravity.LEFT | Gravity.BOTTOM;
+			layout.addView(textAmount, params);
+			
+			textNow = new TextView(context);
+			textNow.setTextSize(24);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 0.0f;
+			params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+			layout.addView(textNow, params);
+			
+			this.addView(layout);
+			
+			//TableLayout
+			tlayout = new LinearLayout(context);
+			tlayout.setOrientation(VERTICAL);
+			tlayout.setPadding(40, 10, 0, 10);
+			tlayout.setVisibility(GONE);
+
+			//row
+			layout = new LinearLayout(context);
+			layout.setOrientation(HORIZONTAL);
+			
+			TextView tv = new TextView(context);
+			tv.setText(R.string.str_bank);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;			
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(tv, params);
+			
+			textBank = new TextView(context);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(textBank, params);			
+			
+			tlayout.addView(layout);
+			
+			//row
+			layout = new LinearLayout(context);
+			layout.setOrientation(HORIZONTAL);
+			
+			tv = new TextView(context);
+			tv.setText(R.string.str_checkin);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;			
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(tv, params);
+			
+			textCheckin = new TextView(context);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(textCheckin, params);			
+			
+			tlayout.addView(layout);
+			
+			//row
+			layout = new LinearLayout(context);
+			layout.setOrientation(HORIZONTAL);
+			
+			tv = new TextView(context);
+			tv.setText(R.string.str_type);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;			
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(tv, params);
+			
+			textType = new TextView(context);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(textType, params);			
+			
+			tlayout.addView(layout);
+			
+			//row
+			layout = new LinearLayout(context);
+			layout.setOrientation(HORIZONTAL);
+			
+			tv = new TextView(context);
+			tv.setText(R.string.str_rate);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;			
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(tv, params);
+			
+			textRate = new TextView(context);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(textRate, params);			
+			
+			tlayout.addView(layout);
+			
+			tv = new TextView(context);
+			tv.setText(R.string.str_note);
+			tlayout.addView(tv, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			
+			textNote = new TextView(context);
+			textNote.setPadding(20, 0, 0, 0);
+			tlayout.addView(textNote, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			
+		
+			this.addView(tlayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		}
 		
 		public void setTitle(String title, String value) {
 			viewText.setText(title);
 			viewText2.setText(value);
+			textBank.setText(value);
+			textNote.setText(title);
 		}
 		
 		public void setExpanded() {
-			if(viewText2.getVisibility() == VISIBLE)
-				viewText2.setVisibility(GONE);
+			if(tlayout.getVisibility() == VISIBLE)
+				tlayout.setVisibility(GONE);
 			else
-				viewText2.setVisibility(VISIBLE);
+				tlayout.setVisibility(VISIBLE);
 		}
 	}
 	
@@ -105,6 +233,7 @@ public class SavingListActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) 
     {    
     	((SavingListView)v).setExpanded();
+    	Toast.makeText(this, "view : " + v.getId() + " position : " + position + " id : " + id, 0).show();
        //((SpeechListAdapter)getListAdapter()).toggle(position);
     }
     

@@ -32,6 +32,7 @@ public class SavingKeeper extends Activity {
 		}
  */       
 		Test.startActivity(SavingKeeper.this);
+		this.finish();
 
         btn = (Button)this.findViewById(R.id.button1);
         btn.setOnClickListener(new OnClickListener() {

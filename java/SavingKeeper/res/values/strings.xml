@@ -10,4 +10,9 @@
     <string name="str_rate">Rate</string>
     <string name="str_note">Note</string>
     <string name="str_checkin">Checkin</string>
+    <string name="str_menu_banklist">BankList</string>
+    <string name="str_menu_exit">Exit</string>
+    <string name="title_banklist">Bank List</string>
+    <string name="str_menu_addbank">Add Bank</string>
+    <string name="str_menu_removebank">Remove Bank</string>
 </resources>

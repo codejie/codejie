@@ -7,6 +7,7 @@ package jie.java.android.savingkeeper;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -219,7 +220,8 @@ public class SavingListActivity extends ListActivity {
 				tlayout.setVisibility(VISIBLE);
 		}
 	}
-	
+
+	//
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
@@ -240,19 +242,31 @@ public class SavingListActivity extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	MenuInflater inflater = getMenuInflater();
-    	inflater.inflate(R.menu.menu_savinglist, menu);
+    	inflater.inflate(R.menu.savinglist, menu);
     	return true;    	
     }
 	
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
+        //super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_savinglist_context, menu);
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+    	
+    	switch(item.getItemId()) {
+    	case R.id.menu_banklist:
+    		onMenuBankList();
+    		break;
+    	case R.id.menu_exit:
+    		onMenuExit();
+    		break;
+    	default:
+    		return false;
+    	}
+    	
     	Toast.makeText(this, "" + item.getTitle().toString(), 1).show();// item.getTitle()item.toString();
     	return true;
     	
@@ -263,5 +277,15 @@ public class SavingListActivity extends ListActivity {
     public boolean onContextItemSelected(MenuItem item) {
     	Toast.makeText(this, "" + item.getTitle().toString(),Toast.LENGTH_SHORT).show();
     	return true;
+    }
+    
+    ////////////
+    protected void onMenuBankList() {
+		Intent intent = new Intent(this, BankListActivity.class);
+		this.startActivity(intent);
+    }
+    
+    protected void onMenuExit() {
+    	System.exit(0);
     }
 }

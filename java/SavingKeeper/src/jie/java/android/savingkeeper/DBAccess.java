@@ -74,7 +74,7 @@ public class DBAccess {
 		
 		db.execSQL(sql);
 
-		 sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_RATE + " ("
+		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_RATE + " ("
 		+ TABLE_COLUMN_NO + " INTEGER PRIMARY KEY,"
 		+ TABLE_COLUMN_TYPE + " INTEGER, "
 		+ TABLE_COLUMN_START + " DATE,"
@@ -98,7 +98,28 @@ public class DBAccess {
 		if(db != null) {
 			db.close();
 		}
+	}
+	
+	public int insertBank(final String title) {		
+		ContentValues values = new ContentValues();
+		//values.put(TABLE_COLUMN_NO, no);
+		values.put(TABLE_COLUMN_TITLE, title);
 		
+		return db.insert(TABLE_NAME_BANK, null, values) != -1 ? 0 : -1;
+	}
+	
+	public final String getBank(int no) {
+		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_TITLE }, TABLE_COLUMN_NO + "=" + no, null, null, null, null);
+		if(cursor.getCount() == 0)
+			return "Unknown";
+		cursor.moveToFirst();
+		return cursor.getString(0);
+	}
+	
+	public Cursor queryBank() {
+		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_NO, TABLE_COLUMN_TITLE }, null, null, null, null, null);
+		cursor.moveToFirst();
+		return cursor;
 	}
 	
 	public int insert(final TestData data) {

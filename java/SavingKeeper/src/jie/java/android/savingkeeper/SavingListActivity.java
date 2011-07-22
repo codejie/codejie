@@ -226,6 +226,7 @@ public class SavingListActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		
 		Cursor cursor = GLOBAL.DBACCESS.query();
+		this.startManagingCursor(cursor);
 		ListAdapter adapter = new DataCursorAdapter(this, cursor);		
 		this.setListAdapter(adapter);
 		

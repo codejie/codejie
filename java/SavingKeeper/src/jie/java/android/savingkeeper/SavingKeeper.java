@@ -30,9 +30,11 @@ public class SavingKeeper extends Activity {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
- */       
-		Test.startActivity(SavingKeeper.this);
-		this.finish();
+ */      
+		Intent intent = new Intent(this, SavingListActivity.class);
+		this.startActivity(intent);
+		//Test.startActivity(BankListActivity.this);
+		//this.finish();
 
         btn = (Button)this.findViewById(R.id.button1);
         btn.setOnClickListener(new OnClickListener() {

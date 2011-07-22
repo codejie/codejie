@@ -19,7 +19,7 @@ public class DBAccess {
 	public static final String TABLE_NAME_RATE			= "Rate";
 	public static final String TABLE_NAME_SAVING		= "Saving";
 	
-	public static final String TABLE_COLUMN_NO			= "No";
+	public static final String TABLE_COLUMN_ID			= "_id";
 	public static final String TABLE_COLUMN_TITLE		= "Title";
 	public static final String TABLE_COLUMN_AMOUNT		= "Amount";
 	public static final String TABLE_COLUMN_CHECKIN		= "CheckIn";
@@ -31,7 +31,7 @@ public class DBAccess {
 	public static final String TABLE_COLUMN_END			= "End";	
 
 	public static final String TABLE_NAME_TEST			= "Test";
-	public static final String TABLE_COLUMN_ID			= "_id";
+
 	public static final String TABLE_COLUMN_STRING		= "string";
 	public static final String TABLE_COLUMN_INTEGER		= "value";
 	
@@ -56,7 +56,7 @@ public class DBAccess {
 		db.setVersion(DATABASE_VERSION);
 		
 		String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_SAVING + " ("
-		+ TABLE_COLUMN_NO + " INTEGER PRIMARY KEY,"
+		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
 		+ TABLE_COLUMN_TITLE + " TEXT,"
 		+ TABLE_COLUMN_AMOUNT + " REAL,"
 		+ TABLE_COLUMN_CHECKIN + " INTEGER,"
@@ -68,14 +68,14 @@ public class DBAccess {
 		db.execSQL(sql);
 		
 		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_BANK + " ("
-		+ TABLE_COLUMN_NO + " INTEGER PRIMARY KEY,"
+		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
 		+ TABLE_COLUMN_TITLE + " TEXT"
 		+ ");";
 		
 		db.execSQL(sql);
 
 		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_RATE + " ("
-		+ TABLE_COLUMN_NO + " INTEGER PRIMARY KEY,"
+		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
 		+ TABLE_COLUMN_TYPE + " INTEGER, "
 		+ TABLE_COLUMN_START + " DATE,"
 		+ TABLE_COLUMN_END + " DATE,"
@@ -105,11 +105,14 @@ public class DBAccess {
 		//values.put(TABLE_COLUMN_NO, no);
 		values.put(TABLE_COLUMN_TITLE, title);
 		
-		return db.insert(TABLE_NAME_BANK, null, values) != -1 ? 0 : -1;
+		if(db.insert(TABLE_NAME_BANK, null, values) == -1) {
+			Log.w(GLOBAL.APP_TAG, "insert bank failed.");
+		}
+		return 0;
 	}
 	
-	public final String getBank(int no) {
-		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_TITLE }, TABLE_COLUMN_NO + "=" + no, null, null, null, null);
+	public final String getBank(int id) {
+		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_TITLE }, TABLE_COLUMN_ID + "=" + id, null, null, null, null);
 		if(cursor.getCount() == 0)
 			return "Unknown";
 		cursor.moveToFirst();
@@ -117,7 +120,7 @@ public class DBAccess {
 	}
 	
 	public Cursor queryBank() {
-		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_NO, TABLE_COLUMN_TITLE }, null, null, null, null, null);
+		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_TITLE }, null, null, null, null, null, null);
 		cursor.moveToFirst();
 		return cursor;
 	}

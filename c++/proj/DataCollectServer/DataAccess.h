@@ -22,18 +22,21 @@ class DataStatistic
 public:
     enum DataType { DT_MINUTE = 0, DT_HOUR, DT_DAY };
 protected:
-    typedef std::map<std::string, size_t> TInfectantDataMap;
-    typedef std::map<DataType, TInfectantDataMap> TDataMap;
+    typedef std::map<std::string, size_t> TDataMap;
+    typedef std::map<DataType, TDataMap> TInfectantDataMap;
+	typedef std::map<DataType, TDataMap> TStationDataMap;
 
 public:
     DataStatistic() {}
     virtual ~DataStatistic() {}
 
-    void Update(DataType type, const std::string& inf);
+    void UpdateInfectantData(DataType type, const std::string& inf);
+	void UpdateStationData(DataType type, const std::string& station);
 
     void Show(std::ostream& os) const;
 protected:
-    TDataMap _mapData;
+    TInfectantDataMap _mapInfectantData;
+	TStationDataMap _mapStationData;
 };
 
 class DataAccess

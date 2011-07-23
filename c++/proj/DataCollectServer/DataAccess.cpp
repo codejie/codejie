@@ -11,18 +11,18 @@
 #include "DataAccess.h"
 
 
-void DataStatistic::Update(DataStatistic::DataType type, const std::string &inf)
+void DataStatistic::UpdateInfectantData(DataStatistic::DataType type, const std::string &inf)
 {
-    TDataMap::iterator it = _mapData.find(type);
-    if(it == _mapData.end())
+    TInfectantDataMap::iterator it = _mapInfectantData.find(type);
+    if(it == _mapInfectantData.end())
     {
-        TInfectantDataMap m;
+        TDataMap m;
         m.insert(std::make_pair(inf, 1));
-        _mapData.insert(std::make_pair(type, m));
+        _mapInfectantData.insert(std::make_pair(type, m));
     }
     else
     {
-        TInfectantDataMap::iterator i = it->second.find(inf);
+        TDataMap::iterator i = it->second.find(inf);
         if(i != it->second.end())
         {
             ++ i->second;
@@ -34,9 +34,33 @@ void DataStatistic::Update(DataStatistic::DataType type, const std::string &inf)
     }
 }
 
+void DataStatistic::UpdateStationData(DataStatistic::DataType type, const std::string &station)
+{
+    TStationDataMap::iterator it = _mapStationData.find(type);
+    if(it == _mapStationData.end())
+    {
+        TDataMap m;
+        m.insert(std::make_pair(station, 1));
+        _mapStationData.insert(std::make_pair(type, m));
+    }
+    else
+    {
+        TDataMap::iterator i = it->second.find(station);
+        if(i != it->second.end())
+        {
+            ++ i->second;
+        }
+        else
+        {
+            it->second.insert(std::make_pair(station, 1));
+        }
+    }
+}
+
 void DataStatistic::Show(std::ostream &os) const
 {
-    for(TDataMap::const_iterator it = _mapData.begin(); it != _mapData.end(); ++ it)
+	os << "\n---- Infectant Data Statistic ----";
+    for(TInfectantDataMap::const_iterator it = _mapInfectantData.begin(); it != _mapInfectantData.end(); ++ it)
     {
         if(it->second.size() == 0)
             continue;
@@ -55,7 +79,32 @@ void DataStatistic::Show(std::ostream &os) const
         default:
             os << "\nUnknown - ";
         }
-        for(TInfectantDataMap::const_iterator i = it->second.begin(); i != it->second.end(); ++ i)
+        for(TDataMap::const_iterator i = it->second.begin(); i != it->second.end(); ++ i)
+        {
+            os << "\n    " << i->first << " = " << i->second;
+        }
+    }
+	os << "\n---- Station Data Statistic ----";
+    for(TStationDataMap::const_iterator it = _mapStationData.begin(); it != _mapStationData.end(); ++ it)
+    {
+        if(it->second.size() == 0)
+            continue;
+        
+        switch(it->first)
+        {
+        case DT_MINUTE:
+            os << "\nMinute - ";
+            break;
+        case DT_HOUR:
+            os << "\nHour - ";
+            break;
+        case DT_DAY:
+            os << "\nDay - ";
+            break;
+        default:
+            os << "\nUnknown - ";
+        }
+        for(TDataMap::const_iterator i = it->second.begin(); i != it->second.end(); ++ i)
         {
             os << "\n    " << i->first << " = " << i->second;
         }
@@ -273,7 +322,7 @@ int DataAccess::LoadDefColumnFromDB()
 
 		stmt->execute();
 
-		while(stmt->getNext())
+		while(stmt->getNext() == 0)
         {
             if(!_mapStationInfectant.insert(std::make_pair(std::make_pair(sid, iid), infcol)).second)
             {
@@ -436,6 +485,8 @@ int DataAccess::OnData(const Packet &packet)
     }
     else if(packet.CN == Packet::PD_CN_MINUTELYDATA)
     {
+		//OnDailyData(packet);
+		//OnHourlyData(packet);
         return OnMinutelyData(packet);
     }
     else if(packet.CN == Packet::PD_CN_HOURLYDATA)
@@ -484,26 +535,42 @@ int DataAccess::OnDailyData(const Packet &packet)
 
         const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
 
-        for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
-        {
+		std::string sql = "insert into T_MONITOR_REAL_DAY (STATION_ID,M_TIME";
+		std::ostringstream ostr;
+		ostr << ") values (:1,TO_DATE(:2,'yyyymmddhh24miss')";
+		std::vector<std::string> vctval;
+		int index = 0;
+        for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it, ++ index)
+		{
             std::string col = "";
-            if(SearchColumn(sid, it->first, col) != 0)
+            if(SearchColumn(sid, SearchInfectantID(it->first), col) != 0)
                 throw PacketException("can not find infectant column.", packet);
+			sql += ("," + col);
+			ostr << ",:" << (index + 3);
+			vctval.push_back(GetPacketCPItemHourValue(packet, it->first, it->second));
 
-            const std::string val = GetPacketCPItemDayValue(packet, it->first, it->second);
-			const std::string sql = "insert into T_MONITOR_REAL_DAY (STATION_ID, M_TIME, " + col + ") values (:1,TO_DATE(:2,'yyyymmddhh24miss'),:3)";
-            ocipp::Statement *stmt = _conn->makeStatement(sql);
-        
-            stmt->bindString(1, sid);
-            stmt->bindString(2, mtime);
-            stmt->bindString(3, val);
+			_dataStatistic.UpdateInfectantData(DataStatistic::DT_DAY, it->first);
+		}
+		ostr << ")";
+		sql += ostr.str();
 
-            stmt->execute();
+		ACEX_LOG_OS(LM_DEBUG, "<DataAccess::OnDailyData>SQL: " << sql << std::endl);
 
-            _dataStatistic.Update(DataStatistic::DT_DAY, it->first);
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
+    
+        stmt->bindString(1, sid);
+        stmt->bindString(2, mtime);
+		
+		index = 0;
+		for(std::vector<std::string>::const_iterator it = vctval.begin(); it != vctval.end(); ++ it, ++ index)
+		{
+			stmt->bindString(index + 3, *it);
+		}
+        stmt->execute();
 
-			_conn->destroyStatement(stmt);
-        }
+		_conn->destroyStatement(stmt);
+
+		_dataStatistic.UpdateStationData(DataStatistic::DT_DAY, sid);
     }
     catch(const PacketException& e)
     {
@@ -549,10 +616,12 @@ int DataAccess::OnMinutelyData(const Packet &packet)
 
             stmt->execute();
             
-            _dataStatistic.Update(DataStatistic::DT_MINUTE, it->first);
+            _dataStatistic.UpdateInfectantData(DataStatistic::DT_MINUTE, it->first);
 
 			_conn->destroyStatement(stmt);
         }
+
+		_dataStatistic.UpdateStationData(DataStatistic::DT_MINUTE, sid);
     }
     catch(const PacketException& e)
     {
@@ -584,27 +653,43 @@ int DataAccess::OnHourlyData(const Packet &packet)
 			throw PacketException("MN is undefined.", packet);
 
         const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
-
-        for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it)
-        {
+		
+		std::string sql = "insert into T_MONITOR_REAL_HOUR (STATION_ID,M_TIME";
+		std::ostringstream ostr;
+		ostr << ") values (:1,TO_DATE(:2,'yyyymmddhh24miss')";
+		std::vector<std::string> vctval;
+		int index = 0;
+        for(Packet::TCPItemMap::const_iterator it = packet.CP.item.begin(); it != packet.CP.item.end(); ++ it, ++ index)
+		{
             std::string col = "";
-            if(SearchColumn(sid, it->first, col) != 0)
+            if(SearchColumn(sid, SearchInfectantID(it->first), col) != 0)
                 throw PacketException("can not find infectant column.", packet);
+			sql += ("," + col);
+			ostr << ",:" << (index + 3);
+			vctval.push_back(GetPacketCPItemHourValue(packet, it->first, it->second));
 
-            const std::string val = GetPacketCPItemHourValue(packet, it->first, it->second);
-			const std::string sql = "insert into T_MONITOR_REAL_HOUR (STATION_ID, M_TIME, " + col + ") values (:1,TO_DATE(:2,'yyyymmddhh24miss'),:3)";
-            ocipp::Statement *stmt = _conn->makeStatement(sql);
-        
-            stmt->bindString(1, sid);
-            stmt->bindString(2, mtime);
-            stmt->bindString(3, val);
+			_dataStatistic.UpdateInfectantData(DataStatistic::DT_HOUR, it->first);
+		}
+		ostr << ")";
+		sql += ostr.str();
 
-            stmt->execute();
+		ACEX_LOG_OS(LM_DEBUG, "<DataAccess::OnHourlyData>SQL: " << sql << std::endl);
 
-            _dataStatistic.Update(DataStatistic::DT_HOUR, it->first);
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
+    
+        stmt->bindString(1, sid);
+        stmt->bindString(2, mtime);
+		
+		index = 0;
+		for(std::vector<std::string>::const_iterator it = vctval.begin(); it != vctval.end(); ++ it, ++ index)
+		{
+			stmt->bindString(index + 3, *it);
+		}
+        stmt->execute();
 
-			_conn->destroyStatement(stmt);
-        }
+		_conn->destroyStatement(stmt);		
+
+        _dataStatistic.UpdateStationData(DataStatistic::DT_HOUR, sid);
     }
     catch(const PacketException& e)
     {

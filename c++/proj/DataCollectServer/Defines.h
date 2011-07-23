@@ -3,7 +3,7 @@
 
 
 #define APP_TITLE   "DataCollectServer"
-#define APP_VERSION "1.0.0"
+#define APP_VERSION "1.7.23"
 #define SYS_PROMPT	"DCServer>"
 
 const int TASK_APP     			=   1;

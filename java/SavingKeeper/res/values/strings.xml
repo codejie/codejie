@@ -15,4 +15,7 @@
     <string name="title_banklist">Bank List</string>
     <string name="str_menu_addbank">Add Bank</string>
     <string name="str_menu_removebank">Remove Bank</string>
+    <string name="title_add_bank">Input  bank title</string>
+    <string name="title_remove_bank">Remove this bank ?</string>
+    <string name="error_remove_bank">This bank is used, can not be removed now.</string>
 </resources>

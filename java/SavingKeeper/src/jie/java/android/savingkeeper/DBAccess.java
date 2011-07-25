@@ -111,7 +111,7 @@ public class DBAccess {
 		return 0;
 	}
 	
-	public final String getBank(int id) {
+	public final String getBank(long id) {
 		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_TITLE }, TABLE_COLUMN_ID + "=" + id, null, null, null, null);
 		if(cursor.getCount() == 0)
 			return "Unknown";
@@ -123,6 +123,18 @@ public class DBAccess {
 		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_TITLE }, null, null, null, null, null, null);
 		cursor.moveToFirst();
 		return cursor;
+	}
+	
+	public int removeBank(long id) {
+		if(checkBankUsed(id) > 0)
+			return -1;
+		return db.delete(TABLE_NAME_BANK, TABLE_COLUMN_ID + " = " + id, null);
+	}
+	
+	public int checkBankUsed(long id) {
+		Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_SAVING + " WHERE " + TABLE_NAME_BANK + " = " + id, null);
+		cursor.moveToFirst();
+		return cursor.getInt(0);
 	}
 	
 	public int insert(final TestData data) {

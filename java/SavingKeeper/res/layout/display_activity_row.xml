@@ -25,7 +25,7 @@
             <TextView android:id="@+id/textView8" android:text="TextView" android:layout_weight="1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
         </LinearLayout>
         <LinearLayout android:id="@+id/tableRow3" android:layout_height="wrap_content" android:layout_width="fill_parent">
-            <TextView android:id="@+id/textView9" android:layout_weight="1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_rate"></TextView>
+            <TextView android:id="@+id/textView9" android:layout_weight="1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_currency"></TextView>
             <TextView android:id="@+id/textView10" android:text="TextView" android:layout_weight="1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
         </LinearLayout>
         <TextView android:id="@+id/textView11" android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="@string/str_note"></TextView>

@@ -22,6 +22,7 @@ public class DBAccess {
 	public static final String TABLE_COLUMN_ID			= "_id";
 	public static final String TABLE_COLUMN_TITLE		= "Title";
 	public static final String TABLE_COLUMN_AMOUNT		= "Amount";
+	public static final String TABLE_COLUMN_CURRENCY	= "Currency";
 	public static final String TABLE_COLUMN_CHECKIN		= "CheckIn";
 	public static final String TABLE_COLUMN_TYPE		= "Type";
 	public static final String TABLE_COLUMN_RATE		= "Rate";
@@ -34,6 +35,18 @@ public class DBAccess {
 
 	public static final String TABLE_COLUMN_STRING		= "string";
 	public static final String TABLE_COLUMN_INTEGER		= "value";
+	
+	public static final int SAVING_TYPE_CURRENT			= 1;
+	public static final int SAVING_TYPE_FIXED_3_MONTH	= 2;
+	public static final int SAVING_TYPE_FIXED_6_MONTH	= 3;
+	public static final int SAVING_TYPE_FIXED_1_YEAR	= 4;
+	public static final int SAVING_TYPE_FIXED_2_YEAR	= 5;
+	public static final int SAVING_TYPE_FIXED_3_YEAR	= 6;
+	public static final int SAVING_TYPE_FIXED_5_YEAR	= 7;
+	
+	public static final int CURRENCY_TYPE_RMB			= 0;
+	public static final int CURRENCY_TYPE_US			= 1;
+	public static final int CURRENCY_TYPE_EU			= 2;
 	
 	public static class TestData {
 		public String str;
@@ -59,7 +72,8 @@ public class DBAccess {
 		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
 		+ TABLE_COLUMN_TITLE + " TEXT,"
 		+ TABLE_COLUMN_AMOUNT + " REAL,"
-		+ TABLE_COLUMN_CHECKIN + " INTEGER,"
+		+ TABLE_COLUMN_CURRENCY + " INTEGER,"
+		+ TABLE_COLUMN_CHECKIN + " TEXT,"
 		+ TABLE_COLUMN_TYPE + " INTEGER,"
 		+ TABLE_COLUMN_BANK + " INTEGER,"
 		+ TABLE_COLUMN_NOTE + " TEXT"
@@ -77,8 +91,8 @@ public class DBAccess {
 		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_RATE + " ("
 		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
 		+ TABLE_COLUMN_TYPE + " INTEGER, "
-		+ TABLE_COLUMN_START + " DATE,"
-		+ TABLE_COLUMN_END + " DATE,"
+		+ TABLE_COLUMN_START + " TEXT,"
+		+ TABLE_COLUMN_END + " TEXT,"
 		+ TABLE_COLUMN_RATE + " REAL"
 		+ ");";
 		
@@ -106,7 +120,7 @@ public class DBAccess {
 		values.put(TABLE_COLUMN_TITLE, title);
 		
 		if(db.insert(TABLE_NAME_BANK, null, values) == -1) {
-			Log.w(GLOBAL.APP_TAG, "insert bank failed.");
+			return -1;
 		}
 		return 0;
 	}
@@ -137,6 +151,23 @@ public class DBAccess {
 		return cursor.getInt(0);
 	}
 	
+	//
+	public int insertSaving(final String title, float amount, int currency, final String checkin, int type, int bank, final String note) {
+		ContentValues values = new ContentValues();
+		values.put(TABLE_COLUMN_TITLE, title);
+		values.put(TABLE_COLUMN_AMOUNT, amount);
+		values.put(TABLE_COLUMN_CURRENCY, currency);
+		values.put(TABLE_COLUMN_CHECKIN, checkin);
+		values.put(TABLE_COLUMN_TYPE, type);
+		values.put(TABLE_COLUMN_BANK, bank);
+		values.put(TABLE_COLUMN_NOTE, note);
+		
+		if(db.insert(TABLE_NAME_SAVING, null, values) == -1)
+			return -1;
+		return 0;
+	}
+
+	//
 	public int insert(final TestData data) {
 		
 		ContentValues values = new ContentValues();

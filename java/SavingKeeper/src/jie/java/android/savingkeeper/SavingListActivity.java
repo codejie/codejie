@@ -62,7 +62,7 @@ public class SavingListActivity extends ListActivity {
 		private TextView textBank;
 		private TextView textCheckin;
 		private TextView textType;
-		private TextView textRate;
+		private TextView textCurrency;
 		private TextView textNote;
 		
 		public SavingListView(Context context) {
@@ -76,19 +76,19 @@ public class SavingListActivity extends ListActivity {
 			layout.setOrientation(HORIZONTAL);			
 			
 			LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);					
-			viewText = new TextView(context);
-			viewText.setTextSize(32);
+			textTitle = new TextView(context);
+			textTitle.setTextSize(32);
 			params.weight = 1.0f;
 			params.gravity = Gravity.LEFT;
-			layout.addView(viewText, params);
+			layout.addView(textTitle, params);
 			
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			viewText2 = new TextView(context);
-			viewText2.setTextSize(20);
+			textEnd = new TextView(context);
+			textEnd.setTextSize(20);
 			//viewText2.setVisibility(GONE);
 			params.weight = 0.0f;
 			params.gravity = Gravity.RIGHT;
-			layout.addView(viewText2, params);
+			layout.addView(textEnd, params);
 			
 			this.addView(layout);
 		
@@ -112,51 +112,34 @@ public class SavingListActivity extends ListActivity {
 			
 			this.addView(layout);
 			
+			TextView tv = null;
+			
 			//TableLayout
 			tlayout = new LinearLayout(context);
 			tlayout.setOrientation(VERTICAL);
 			tlayout.setPadding(40, 10, 0, 10);
 			tlayout.setVisibility(GONE);
-
-			//row
-			layout = new LinearLayout(context);
-			layout.setOrientation(HORIZONTAL);
 			
-			TextView tv = new TextView(context);
-			tv.setText(R.string.str_bank);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.weight = 1.0f;			
-			//params.gravity = Gravity.RIGHT;
-			layout.addView(tv, params);
-			
-			textBank = new TextView(context);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.weight = 1.0f;
-			//params.gravity = Gravity.RIGHT;
-			layout.addView(textBank, params);			
-			
-			tlayout.addView(layout);
-			
-			//row
+			//currency
 			layout = new LinearLayout(context);
 			layout.setOrientation(HORIZONTAL);
 			
 			tv = new TextView(context);
-			tv.setText(R.string.str_checkin);
+			tv.setText(R.string.str_currency);
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;			
 			//params.gravity = Gravity.RIGHT;
 			layout.addView(tv, params);
 			
-			textCheckin = new TextView(context);
+			textCurrency = new TextView(context);
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;
 			//params.gravity = Gravity.RIGHT;
-			layout.addView(textCheckin, params);			
+			layout.addView(textCurrency, params);			
 			
 			tlayout.addView(layout);
 			
-			//row
+			//type
 			layout = new LinearLayout(context);
 			layout.setOrientation(HORIZONTAL);
 			
@@ -175,25 +158,45 @@ public class SavingListActivity extends ListActivity {
 			
 			tlayout.addView(layout);
 			
-			//row
+			//checkin
 			layout = new LinearLayout(context);
 			layout.setOrientation(HORIZONTAL);
 			
 			tv = new TextView(context);
-			tv.setText(R.string.str_rate);
+			tv.setText(R.string.str_checkin);
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;			
 			//params.gravity = Gravity.RIGHT;
 			layout.addView(tv, params);
 			
-			textRate = new TextView(context);
+			textCheckin = new TextView(context);
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;
 			//params.gravity = Gravity.RIGHT;
-			layout.addView(textRate, params);			
+			layout.addView(textCheckin, params);			
 			
 			tlayout.addView(layout);
 			
+			//bank
+			layout = new LinearLayout(context);
+			layout.setOrientation(HORIZONTAL);
+			
+			tv = new TextView(context);
+			tv.setText(R.string.str_bank);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;			
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(tv, params);
+			
+			textBank = new TextView(context);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(textBank, params);			
+			
+			tlayout.addView(layout);			
+			
+			//note
 			tv = new TextView(context);
 			tv.setText(R.string.str_note);
 			tlayout.addView(tv, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -207,8 +210,8 @@ public class SavingListActivity extends ListActivity {
 		}
 		
 		public void setTitle(String title, String value) {
-			viewText.setText(title);
-			viewText2.setText(value);
+			textTitle.setText(title);
+			textEnd.setText(value);
 			textBank.setText(value);
 			textNote.setText(title);
 		}
@@ -222,6 +225,7 @@ public class SavingListActivity extends ListActivity {
 	}
 
 	//
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
@@ -230,7 +234,7 @@ public class SavingListActivity extends ListActivity {
 		ListAdapter adapter = new DataCursorAdapter(this, cursor);		
 		this.setListAdapter(adapter);
 		
-		this.registerForContextMenu(this.getListView());
+		//this.registerForContextMenu(this.getListView());
 	}
 	
     protected void onListItemClick(ListView l, View v, int position, long id) 
@@ -246,18 +250,21 @@ public class SavingListActivity extends ListActivity {
     	inflater.inflate(R.menu.savinglist, menu);
     	return true;    	
     }
-	
+/*	
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         //super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_savinglist_context, menu);
     }
-    
+ */   
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	
     	switch(item.getItemId()) {
+    	case R.id.menu_add_saving:
+    		onMenuAddSaving();
+    		break;
     	case R.id.menu_banklist:
     		onMenuBankList();
     		break;
@@ -273,14 +280,19 @@ public class SavingListActivity extends ListActivity {
     	
     	//return super.onOptionsItemSelected(item);
     }
-    
+/*    
     @Override
     public boolean onContextItemSelected(MenuItem item) {
     	Toast.makeText(this, "" + item.getTitle().toString(),Toast.LENGTH_SHORT).show();
     	return true;
     }
-    
+*/    
     ////////////
+    protected void onMenuAddSaving() {
+		Intent intent = new Intent(this, AddSavingActivity.class);
+		this.startActivity(intent);
+    }
+    
     protected void onMenuBankList() {
 		Intent intent = new Intent(this, BankListActivity.class);
 		this.startActivity(intent);

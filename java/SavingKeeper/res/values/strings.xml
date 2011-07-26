@@ -7,15 +7,20 @@
     <string name="title_savinglistactivity">SavingList</string>
     <string name="str_bank">Bank</string>
     <string name="str_type">Type</string>
-    <string name="str_rate">Rate</string>
     <string name="str_note">Note</string>
     <string name="str_checkin">Checkin</string>
-    <string name="str_menu_banklist">BankList</string>
-    <string name="str_menu_exit">Exit</string>
+    <string name="menu_banklist">Bank List</string>
+    <string name="menu_exit">Exit</string>
     <string name="title_banklist">Bank List</string>
-    <string name="str_menu_addbank">Add Bank</string>
-    <string name="str_menu_removebank">Remove Bank</string>
+    <string name="menu_addbank">Add Bank</string>
+    <string name="menu_removebank">Remove Bank</string>
     <string name="title_add_bank">Input  bank title</string>
     <string name="title_remove_bank">Remove this bank ?</string>
     <string name="error_remove_bank">This bank is used, can not be removed now.</string>
+    <string name="menu_addsaving">Add Saving</string>
+    <string name="str_currency">Currency</string>
+    <string name="title_add_saving">Add Saving</string>
+    <string name="str_title">Title</string>
+    <string name="str_amount">Amount</string>
+    <string name="str_rate">Rate</string>
 </resources>

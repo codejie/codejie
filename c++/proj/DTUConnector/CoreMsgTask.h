@@ -1,0 +1,31 @@
+/*
+ * CoreMsgTask.h
+ *
+ *  Created on: Jun 15, 2011
+ *      Author: codejie
+ */
+
+#ifndef __COREMSGTASK_H__
+#define __COREMSGTASK_H__
+
+#include "acex/Task.h"
+
+class ConfigLoader;
+
+class CoreMsgTask: public ACEX_Message_Task
+{
+public:
+	CoreMsgTask();
+	virtual ~CoreMsgTask();
+
+	int Init(const ConfigLoader& config);
+protected:
+	void Final();
+
+protected:
+	virtual int handle_msg(const ACEX_Message& msg);
+    int OnTimerMsgProc(const ACEX_Message& msg);
+    int OnAppTaskMsgProc(const ACEX_Message& msg);
+};
+
+#endif /* __COREMSGTASK_H__ */

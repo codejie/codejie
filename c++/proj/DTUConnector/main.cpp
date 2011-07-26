@@ -27,7 +27,7 @@ int main()
 	{
 		ADODB::_CommandPtr _ptrCmd("ADODB.Command");
 		_ptrCmd->ActiveConnection = _ptrConn;
-		//_ptrCmd->CommandText = sql;1
+		//_ptrCmd->CommandText = sql;
 		//_ptrCmd->Execute(NULL, NULL, ADODB::adCmdText);
 
 		_ptrCmd->CommandText = "INSERT INTO T_TEST VALUES(1, 'one')";
@@ -47,6 +47,10 @@ int main()
 			_ptrRS->MoveNext();
 		}
 		//_ptrConn->Execute(sql, &ra, ADODB::adCmdText);
+
+		sql = "SELECT * FROM T_TEST WHERE ID=?";
+		_ptrCmd->CommandText = sql;
+		_ptrCmd->app
 	}
 	catch(_com_error &e)
 	{

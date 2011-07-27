@@ -289,7 +289,8 @@ public class SavingListActivity extends ListActivity {
 */    
     ////////////
     protected void onMenuAddSaving() {
-		Intent intent = new Intent(this, AddSavingActivity.class);
+    	SavingDetailActivity act = new SavingDetailActivity(SavingDetailActivity.ACTION_ADD);
+		Intent intent = new Intent(this, act.getClass());
 		this.startActivity(intent);
     }
     

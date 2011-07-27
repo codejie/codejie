@@ -1,0 +1,828 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+
+  <title>MPQ Archives - StormLib</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <script type="text/javascript" language="JavaScript" src="stormlib_files/scripts.js"></script>
+  <link rel="stylesheet" type="text/css" href="stormlib_files/main.css">
+  <!-- base -->
+</head><body>
+
+<!-- Title -->
+<p class="title">MPQ Archives</p>
+<p class="subtitle">The StormLib library</p>
+<hr><br>
+
+<!-- Page content -->
+<h3>History</h3>
+<p>When I began to deal with MPQ archives, I hardly played the game of Diablo and looked for
+a way how to extract a music from the game. In that time was possible to use the <a href="http://www.zezula.net/en/mpq/stormdll.html">Storm.dll</a>
+library for file extraction without any restrictions. Later, StarCraft was released and
+no one knew how to extract files from its archives. The DLL from Diablo didn'd work with
+StarCraft archives and no one was able to use Storm.dll from StarCraft.</p>
+<p>Later on, <a href="mailto:tomamigo@apexmail.com">Tom Amigo</a> as the first on the world decrypted
+the MPQ file format and on <a href="http://www.angelfire.com/sc/mpq/" target="_top">his pages</a>
+published a MPQ Editor, which worked without Storm.dll. He refused requests for sending
+sources with the reason of violating copyrights of Blizzard Entertainment.
+(Publishing MPQ editor was obviously not a problem). Opposing him, I started to dissassemble
+of Storm.dll, to obtain source codes of functions which work with MPQ archives.
+Later Tom Amigo released some parts of his sources, but the StormLib library was already
+written.</p>
+
+<h3>The StormLib library</h3>
+<p>The StormLib library is a pack of modules, written in C++, which are able to read and also to write
+files from/to the MPQ archives. The original version was written for the Win32 platform, but
+<a href="mailto:marko.friedemann@informatik.tu-chemnitz.de">Marko Friedemann</a> has ported it
+also to Linux. It's free library, you can download it from the <a href="http://www.zezula.net/en/mpq/download.html#StormLib">Downloads</a>
+section. When you make any bug fixes or improvements, please, send me the fixed version.</p>
+
+<h3>StormLib or Storm.dll ?</h3>
+<p>When writing an own application, working with MPQ archves, it's necessary to decide,
+whether to use StormLib library or to link the Storm.dll. The following table briefly shows
+(dis)advantages of both libraries</p>
+
+<center>
+<table summary="" border="1" cellpadding="2" cellspacing="1" width="90%">
+<tbody><tr>
+  <th width="20%">&nbsp;</th>
+  <th width="40%">StormLib</th>
+  <th width="40%">Storm.dll</th>
+</tr>
+<tr>
+  <td><center>Using</center></td>
+  <td valign="top">
+    The StormLib is very small and it's possible to link it to the application.
+	It's not necessary to deploy any additional DLLs.
+  </td>
+  <td valign="top">
+    When using Storm.dll, you have to deploy Storm.dll with your app.
+  </td>
+</tr>
+<tr>
+  <td><center>Stability</center></td>
+  <td valign="top">
+    During work on the last version, I made stress tests of StormLib. The code is very stable.
+  </td>
+  <td valign="top">
+    Stability of Storm.dll is good, when you don't try to use older versions to new archives.
+  </td>
+</tr>
+<tr>
+  <td><center>Compatibility</center></td>
+  <td valign="top">
+    StormLib is compatible with all currently released Blizzard games (up to World of Warcraft - The Burning Crusade).
+  </td>
+  <td valign="top">
+    Since World of Warcraft, There is no standalone Storm.dll. 
+  </td>
+</tr>
+<tr>
+  <td><center>File opening</center></td>
+  <td valign="top">
+    StormLib can use both file names and file ordinal numbers to open them.
+  </td>
+  <td valign="top">
+    Storm.dll requires file name for opening an archived file.
+  </td>
+</tr>
+<tr>
+  <td><center>Function set</center></td>
+  <td valign="top">
+    Archive opening and creating<br>
+	File searching, opening, reading, adding, renaming, deleting.
+  </td>
+  <td valign="top">
+    Archive opening<br>
+	File opening and reading.
+  </td>
+</tr>
+<tr>
+  <td><center>Portability</center></td>
+  <td valign="top">
+    StormLib is written in C++, so it's easy portable to other platforms. Currently, also Linux version exist.
+  </td>
+  <td valign="top">
+    Storm.dll is available only on Windows and on Linux with WINE.
+  </td>
+</tr>
+</tbody></table>
+</center>
+<br>
+
+<a name="functions"></a>
+<h3>StormLib funtions</h3>
+<p>Function prototypes correspond with the prototypes used in the Storm.dll library.
+When it is necessary to rewrite a program to use StormLib instead of Storm.dll (and vice versa),
+it't usually not a great problem.</p>
+<hr>
+
+<!-- SFileSetLocale -->
+<a name="SFileSetLocale"></a>
+<h3>SFileSetLocale</h3>
+Ordinal number for Diablo 1.00 :<br>
+Ordinal number for StarCraft   : 272 (0x110)<br>
+
+<p>Function <b>SFileSetLocale</b> sets preferred language version of files that will be opened. 
+From the moment of call, all atempts to open a file from archives will try the language version
+first. If required version will not be found, open function uses languale neutral function.</p>
+
+<pre><b>LCID WINAPI SFileSetLocale(</b>
+  <b>LCID</b><i> lcLocale</i>           // Required locale version
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>lcLocale</i></dt>
+    <dd>[in] Identifier of language version. Function does not test validity of the parameter.</dd>
+</dl>
+
+<b>Return value</b>
+<p>Function always succeeds and returns <i>lcLocale</i>.</p>
+<hr>
+
+<!-- SFileGetLocale -->
+<a name="SFileGetLocale"></a>
+<h3>SFileGetLocale</h3>
+Ordinal number for Diablo 1.00 :<br>
+Ordinal number for StarCraft   : N/A<br>
+
+<p>Function <b>SFileGetLocale</b> simply returns the currently selected locale ID.</p>
+
+<pre><b>LCID WINAPI SFileGetLocale();</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dd>None.</dd>
+</dl>
+
+<b>Return value</b>
+<p>Function always succeeds and returns the currently selected locale ID.</p>
+<hr>
+
+<!-- SFileOpenArchive -->
+<a name="SFileOpenArchive"></a>
+<h3>SFileOpenArchive</h3>
+Ordinal number for Diablo 1.00 :  77 (0x04D)<br>
+Ordinal number for StarCraft   : 266 (0x10A)<br>
+
+<p>Function <b>SFileOpenArchive</b> opens a MPQ archive for reading.</p>
+
+<pre><b>BOOL WINAPI SFileOpenArchive(</b>
+  <b>const char *</b><i> szMpqName</i>, // Archive file name
+  <b>DWORD</b><i> dwPriority</i>,       // Archive priority
+  <b>DWORD</b><i> dwFlags</i>,          // Open flags
+  <b>HANDLE *</b><i> phMPQ</i>          // Pointer to result HANDLE
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>szMpqName</i></dt>
+    <dd>[in] Archive file name to open.</dd>
+  <dt><i>dwPriority</i></dt>
+    <dd>[in] Priority of the archive for later search. StormLib does not use this parameter, set it to zero</dd>
+  <dt><i>dwFlags</i></dt>
+    <dd>[in] Flags that specify conditions for opening the archive. They can have these values:
+	  <ul>
+	    <li>SFILE_OPEN_HARD_DISK_FILE
+- This value is used by Starcraft but does not seem to do anything
+different than any other values. If this is used, the function will
+open the archive without regard to the drive type it resides on.</li>
+		  <li>SFILE_OPEN_CD_ROM_FILE - This causes the function to only open the archive only if it is on a CD-ROM.</li>
+    </ul>
+	  StormLib does not use this parameter, set it to zero.</dd>
+  <dt><i>phMPQ</i></dt>
+    <dd>[out] Pointer to a variable of HANDLE type, where the opened archive handle will be stored.</dd>
+</dl>
+
+<b>Return value</b>
+<p>When the function succeeds, it returns nonzero and phMPQ contains
+the handle of the opened archive.
+When the archive cannot be open, function returns FALSE. More
+informations about the error can be obtained from return value of
+GetLastError().</p>
+<hr>
+
+<!-- SFileCloseArchive -->
+<a name="SFileCloseArchive"></a>
+<h3>SFileCloseArchive</h3>
+Ordinal number for Diablo 1.00 :  63 (0x03F)<br>
+Ordinal number for StarCraft   : 252 (0x0FC)<br>
+
+<p>Function <b>SFileCloseArchive</b> closes an open archive.</p>
+
+<pre><b>BOOL WINAPI SFileOpenArchive(</b>
+  <b>HANDLE</b><i> hMPQ</i>           // Handle of open archive
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hMPQ</i></dt>
+    <dd>[in] Handle of open archive. Must be a handle obtained by a call of <a href="#SFileOpenArchive"><i>SFileOpenArchive</i></a> or <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a>.</dd>
+</dl>
+
+<b>Return value</b>
+<p>When the function succeeds, it returns nonzero and the arhive is closed.
+If fails, function returns FALSE. More informations about the error can be obtained from return value of GetLastError().</p>
+
+<b>Remarks</b>
+<p>If the archive was modified since it was open, the function implemented in StormLib
+also updates the MPQ header, hash table and block table.</p>
+<hr>
+
+<!-- SFileOpenFileEx -->
+<a name="SFileOpenFileEx"></a>
+<h3>SFileOpenFileEx</h3>
+Ordinal number for Diablo 1.00 :  79 (0x04F)<br>
+Ordinal number for StarCraft   : 268 (0x10C)<br>
+
+<p>Function <b>SFileOpenFileEx</b> opens a file from within an archive.</p>
+
+<pre><b>BOOL WINAPI SFileOpenFileEx(</b>
+  <b>HANDLE</b><i> hMPQ</i>,             // Handle of open archive
+  <b>const char *</b><i> szFileName</i>, // Name of a file to open.
+  <b>DWORD</b><i> dwSearchScope</i>,     // Search scope for the file.
+  <b>HANDLE</b><i> phFile</i>            // Pointer to result HANDLE.
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hMPQ</i></dt>
+    <dd>[in] Handle of open archive. Must be a handle obtained by a call of <a href="#SFileOpenArchive"><i>SFileOpenArchive</i></a> or <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a>.</dd>
+  <dt><i>szFileName</i></dt>
+    <dd>[in] Name of a file, which has to be open. The version implemented by StormLib supports also
+	   opening a file by its ordinal number (so its not possible to know the file name).</dd>
+  <dt><i>dwSearchScope</i></dt>
+    <dd>[in] Tells the search scope for the file. Can be these values:
+	  <ul>
+	    <li>0 - Search the file only in the MPQ archive given by hMPQ</li>
+		  <li>1 - Search the file also in other open archives (ignored by StormLib).</li>
+		  <li>-1 - Open local hard disk file</li>
+    </ul>  
+	</dd>
+  <dt><i>phFile</i></dt>
+    <dd>[in] A pointer to a HANDLE variable, which receives the handle of the open file.</dd>
+</dl>
+
+<b>Return value</b>
+<p>When the function succeeds, it returns nonzero and phFile contains handle of open file.
+If fails, function returns FALSE. More informations about the error can be obtained from return value of GetLastError().</p>
+<hr>
+
+<!-- SFileCloseFile -->
+<a name="SFileCloseFile"></a>
+<h3>SFileCloseFile</h3>
+Ordinal number for Diablo 1.00 :  64 (0x040)<br>
+Ordinal number for StarCraft   : 253 (0x0FD)<br>
+
+<p>Function <b>SFileCloseFile</b> closes an archived file.</p>
+
+<pre><b>BOOL WINAPI SFileCloseFile(</b>
+  <b>HANDLE</b><i> hFile</i>             // Handle of open file
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hFile</i></dt>
+    <dd>[in] Handle of an open file. Must be a handle obtained by a call of <a href="#SFileOpenFileEx"><i>SFileOpenFileEx</i></a></dd>
+</dl>
+
+<b>Return value</b>
+<p>When the function succeeds, it returns nonzero and the file is closed.
+If fails, function returns FALSE. More informations about the error can be obtained from return value of GetLastError().</p>
+<hr>
+
+<!-- SFileGetFileSize -->
+<a name="SFileGetFileSize"></a>
+<h3>SFileGetFileSize</h3>
+Ordinal number for Diablo 1.00 :  76 (0x04C)<br>
+Ordinal number for StarCraft   : 265 (0x109)<br>
+
+<p>Function <b>SFileGetFileSize</b> returns the size of an open file.</p>
+
+<pre><b>DWORD WINAPI SFileGetFileSize(</b>
+  <b>HANDLE</b><i> hFile</i>,            // Handle of open file
+  <b>DWORD *</b><i> pdwFileSizeHigh</i>  // For storing upper 32 bitsof the file size
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hFile</i></dt>
+    <dd>[in] Handle of open file. Must be a handle obtained by a call of <a href="#SFileOpenFileEx"><i>SFileOpenFileEx</i></a></dd>
+  <dt><i>pdwFileSizeHigh</i></dt>
+    <dd>[out] Pointer to a variable of DWORD type, which receives upper 32 bits of thefile size. Can be NULL.</dd>
+</dl>
+
+<b>Return value</b>
+<p>When the function succeeds, it returns the file size. If fails, return value is 0xFFFFFFFF.
+More informations about the error can be obtained from return value of GetLastError().</p>
+
+<b>Remarks</b>
+<p>Upper 32 bits (the <i>pdwFileSizeHigh</i> parametr) isnot used by both Storm.dll and StormLib.
+When the pointer is valid, the function fills the variable with zero.</p>
+<hr>
+
+<!-- SFileSetFilePointer -->
+<a name="SFileSetFilePointer"></a>
+<h3>SFileSetFilePointer</h3>
+Ordinal number for Diablo 1.00 :  82 (0x052)<br>
+Ordinal number for StarCraft   : 271 (0x10F)<br>
+
+<p>Function <b>SFileSetFilePointer</b> sets a new position of file pointer.</p>
+
+<pre><b>LONG WINAPI SFileSetFilePointer(</b>
+  <b>HANDLE</b><i> hFile</i>,         // Handle of open file
+  <b>LONG</b><i> lFilePos</i>         // New file position
+  <b>LONG *</b><i> plFilePosHigh</i>  // Upper 32 bits of file position
+  <b>DWORD</b><i> dwMethod</i>        // File position on which the move is relative to
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hFile</i></dt>
+    <dd>[in] Handle of open file. Must be a handle obtained by a call of <a href="#SFileOpenFileEx"><i>SFileOpenFileEx</i></a></dd>
+  <dt><i>lFilePos</i></dt>
+    <dd>[in] The new file position.</dd>
+  <dt><i>plFilePosHigh</i></dt>
+    <dd>[in, out] Pointer to a LONG value, which receives upper 32 bits of movement offset.</dd>
+  <dt><i>dwMethod</i></dt>
+    <dd>[in] Relative point, which the movement is relative to. Can have the following values
+	<ul>
+	  <li>FILE_BEGIN - The movement will be relative to the file begin</li>
+	  <li>FILE_CURRENT - The movement will be relative to current file position</li>
+	  <li>FILE_END - The movement will be relative to the file ends</li>
+	</ul>
+	</dd>
+</dl>
+
+<b>Return value</b>
+<p>When the function succeeds, it returns the new file position. If fails, it returns 0xFFFFFFFF.
+More informations about the error can be obtained from return value of GetLastError().</p>
+<hr>
+
+<!-- SFileReadFile -->
+<a name="SFileReadFile"></a>
+<h3>SFileReadFile</h3>
+Ordinal number for Diablo 1.00 :  80 (0x050)<br>
+Ordinal number for StarCraft   : 269 (0x10D)<br>
+
+<p>Function <b>SFileReadFile</b> reads data from an open archived file.</p>
+
+<pre><b>BOOL WINAPI SFileReadFile(</b>
+  <b>HANDLE</b><i> hFile</i>,              // Handle of open file
+  <b>void *</b><i> pBuffer</i>,            // Buffer for storing read data
+  <b>DWORD</b><i> dwToRead</i>,            // Number of bytes to read
+  <b>DWORD *</b><i> pdwRead</i>,           // Number of bytes read
+  <b>LPOVERLAPPED</b><i> lpOverlapped</i>  // Pointer to OVERLAPPED structure
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hFile</i></dt>
+    <dd>[in] Handle of open file. Must be a handle obtained by a call of <a href="#SFileOpenFileEx"><i>SFileOpenFileEx</i></a></dd>
+  <dt><i>pBuffer</i></dt>
+    <dd>[in] Pointer to a buffer which receives the read data.</dd>
+  <dt><i>dwToRead</i></dt>
+    <dd>[in] Number of bytes which shall be read from the file.</dd>
+  <dt><i>pdwRead</i></dt>
+    <dd>[out] When not NULL, the function stores number of bytes actually read to the variable pointed by this parameter.</dd>
+  <dt><i>lpOverlapped</i></dt>
+    <dd>[out]
+Use this parameter for asynchronous file reading (NT systems only).
+StormLib ignores this parameter when reads data from an archived file.</dd>
+</dl>
+
+<b>Return value</b>
+<p>When the function succeeds, it returns nonzero. Buffer pointed by pBuffer contains
+the read bytes and pdwRead contains number of bytes read. If fails, function returns
+FALSE. More informations about the error can be obtained from return value of GetLastError().</p>
+
+<b>Remarks</b>
+<ul>
+<li>If the file contains enough data to satisfy the request, function
+returns TRUE and variable pointed by pdwRead is filled by number of
+data read from the file. Return value of GetLastError() is undefined.</li>
+<li>If there is not enough data in the file, function returns FALSE,
+GetLastError() returns ERROR_HANDLE_EOF and and variable pointed by
+pdwRead is filled by number of bytes read.</li>
+<li>If the file has zero size, function returns FALSE, GetLastError()
+returns ERROR_HANDLE_EOF and and variable pointed by pdwRead is filled
+by zero.</li>
+<li>If there is read failure, function returns FALSE, GetLastError()
+returns error code and variable pointed by pdwRead is set to zero.</li>
+</ul>
+<hr>
+
+<a name="non-storm-functions"></a>
+<h3>Functions not exported by Storm.dll</h3>
+<p>The following functions are implemented only in StormLib. Storm.dll does not support
+these functions.</p>
+<hr>
+
+<!-- SFileExtractFile -->
+<a name="SFileExtractFile"></a>
+<h3>SFileExtractFile</h3>
+Ordinal number for Diablo 1.00 : N/A<br>
+Ordinal number for StarCraft   : N/A<br>
+
+<p>Function <b>SFileExtractFile</b> extract complete file from an archive. It is a "helper",
+useful in nearly each application working with MPQs.</p>
+
+<pre><b>BOOL WINAPI SFileExtractFile(</b>
+  <b>HANDLE</b><i> hMpq</i>,                 // Archive handle
+  <b>const char *</b><i> szToExtract</i>,    // Name of file to extract
+  <b>const char *</b><i> szExtracted</i>     // Name of local (disk) file
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hMpq</i></dt>
+    <dd>[in] Handle of open archive. Must be a handle obtained by a call of <a href="#SFileOpenArchive"><i>SFileOpenArchive</i></a> or <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a></dd>
+  <dt><i>szToExtract</i></dt>
+    <dd>[in] Pointer to name of archived file which is to be extracted.</dd>
+  <dt><i>szExtracted</i></dt>
+    <dd>[in]
+Pointer to name of local file, into which will be the content of the
+file written. If the file already exists, it will be overwritten.</dd>
+</dl>
+
+<b>Return value</b>                                                                            
+<p>When the function succeeds, it returns nonzero. In this case, the file has been successfully
+created and its content successfully written. If an error, function returns
+FALSE. More informations about the error can be obtained from return value of GetLastError().</p>
+<hr>
+
+<!-- SFileCreateArchiveEx -->
+<a name="SFileCreateArchiveEx"></a>
+<h3>SFileCreateArchiveEx</h3>
+Ordinal number for Diablo 1.00 : N/A<br>
+Ordinal number for StarCraft   : N/A<br>
+
+<p>Function <b>SFileCreateArchiveEx</b> opens or creates an archive file. It can also convert
+an existing file to MPQ archive. After the archive is open/created, it is accessible for reading
+and writing.</p>
+
+<pre><b>BOOL WINAPI SFileCreateArchiveEx(</b>
+  <b>const char *</b><i> szMpqName</i>,      // Archive file name
+  <b>DWORD</b><i> dwCreationDisposition</i>, // Open or create
+  <b>DWORD</b><i> dwHashTableSize</i>,       // Size of hash table
+  <b>HANDLE *</b><i> phMPQ</i>               // Pointer to result HANDLE
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>szMpqName</i></dt>
+    <dd>[in] Name of an archive, which is to be open.</dd>
+  <dt><i>dwCreationDisposition</i></dt>
+    <dd>[in] Specifies, what the function should exactly do. The following table specifies the parameter values
+	  <center>
+	  <table summary="" border="1" cellpadding="2" cellspacing="1" width="90%">
+	  <tbody><tr>
+		<th width="20%">Value</th>
+		<th width="40%">When the archive does not exist</th>
+		<th width="40%">When an archive already exists</th>
+      </tr>
+	  <tr>
+	    <td>CREATE_NEW</td>
+	    <td>Creates new MPQ archive</td>
+	    <td>Returns error</td>
+      </tr>
+	  <tr>
+	    <td>CREATE_ALWAYS</td>
+	    <td>Creates new MPQ archive</td>
+	    <td>Existing file will be overwritten and function creates a new MPQ archive.</td>
+      </tr>
+	  <tr>
+	    <td>OPEN_EXISTING</td>
+	    <td>Returns error</td>
+	    <td>Opens the archive</td>
+      </tr>
+	  <tr>
+	    <td>OPEN_ALWAYS</td>
+	    <td>Opens archive or converts the file to MPQ archive</td>
+	    <td>Opens the archive</td>
+      </tr>
+      </tbody></table>
+	  </center>
+	  <br>
+	</dd>
+  <dt><i>dwHashTableSize</i></dt>
+    <dd>[in] When a new archive will be created, this parameter contains hash table size for the new archive.
+	Value of this parameter is corrected to be the nearest greater power of two in the range &lt;0x2; 0x40000&gt;.
+	When opening existing archive, the parameter is ignored.</dd>
+  <dt><i>phMPQ</i></dt>
+    <dd>[out] A pointer to a HANDLE variable, where the handle of created/open archive will be stored.</dd>
+</dl>
+
+<b>Return value</b>
+<p>When the function succeeds, it returns nonzero and phMPQ contains the handle of open archive.
+When the archive cannot be open/created, function returns FALSE. More informations about the error
+can be obtained from return value of GetLastError().</p>
+<hr>
+
+<!-- SFileAddFile -->
+<a name="SFileAddFile"></a>
+<h3>SFileAddFile</h3>
+Ordinal number for Diablo 1.00 : N/A<br>
+Ordinal number for StarCraft   : N/A<br>
+
+<p>Function <b>SFileAddFile</b> adds a file into the archive. The archive must be open for writing
+by <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a>.</p>
+
+<pre><b>BOOL WINAPI SFileAddFile(</b>
+  <b>HANDLE</b><i> hMPQ</i>,                 // Handle of open archive
+  <b>const char *</b><i> szFileName</i>,     // Name of a file to add
+  <b>const char *</b><i> szArchivedName</i>, // Archived file name
+  <b>DWORD</b><i> dwFlags</i>                // A way of file storing in the archive
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hMPQ</i></dt>
+    <dd>[in] Handle of open archive. Must be a handle obtained by a call of <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a></dd>
+  <dt><i>szFileName</i></dt>
+    <dd>[in] Name of a file which is to be added into the archive.</dd>
+  <dt><i>szArchivedName</i></dt>
+    <dd>[in] Name under which the file will be stored in the archive.</dd>
+  <dt><i>dwFlags</i></dt>
+    <dd>[in] Bit mask, which controls the way of storing file in the archive
+    <ul type="circle">
+      <li>MPQ_FILE_IMPLODE - The file will be compressed with PKWARE Data Compression Library.</li>
+      <li>MPQ_FILE_COMPRESS - The file will be compressed with the multiple compressions.</li>
+      <li>MPQ_FILE_ENCRYPTED - The file will be encrypted.</li>
+      <li>MPQ_FILE_FIXSEED - File encryption key will be fixed according to file name and file position in the archive.</li>
+	    <li>MPQ_FILE_REPLACEEXISTING - If the file already exists in the archive, it will be replaced.</li>
+    </ul>
+	</dd>
+</dl>
+
+<b>Return value</b>
+<p>Function returns nonzero, when the file was successfully added into the archive.
+On error, functions return FALSE. More informations about the error could be returned by GetLastError().</p>
+
+<b>Remarks</b>
+<p>It is not possible to combine flags MPQ_FILE_COMPRESS_PKWARE and MPQ_FILE_COMPRESS_MULTI. If
+the function is called with both flags, returns error.</p>
+<p>Locale ID of the file will be set to value recently set using <a href="#SFileSetLocale"><i>SFileSetLocale</i>.</a></p>
+<hr>
+
+<!-- SFileAddWave -->
+<a name="SFileAddWave"></a>
+<h3>SFileAddWave</h3>
+Ordinal number for Diablo 1.00 : N/A<br>
+Ordinal number for StarCraft   : N/A<br>
+
+<p>Function <b>SFileAddWave</b> adds a WAVE file into the archive. The archive must be open for
+writing by <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a>. Unlike <a href="#SFileAddFile"><i>SFileAddFile</i></a>,
+function optimizes the compression for pattern of WAVE files, doing better compression than
+if they were added using <a href="#SFileAddFile"><i>SFileAddFile</i></a>.</p>
+
+<pre><b>BOOL WINAPI SFileAddWave(</b>
+  <b>HANDLE</b><i> hMPQ</i>,                 // Handle of open archive
+  <b>const char *</b><i> szFileName</i>,     // Name of a file to add
+  <b>const char *</b><i> szArchivedName</i>, // Archived file name
+  <b>DWORD</b><i> dwFlags</i>                // A way of file storing in the archive
+  <b>DWORD</b><i> dwQuality</i>              // Required quality
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hMPQ</i></dt>
+    <dd>[in] Handle of open archive. Must be a handle obtained by a call of <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a></dd>
+  <dt><i>szFileName</i></dt>
+    <dd>[in] Name of a file which is to be added into the archive.</dd>
+  <dt><i>szArchivedName</i></dt>
+    <dd>[in] Name under which the file will be stored in the archive.</dd>
+  <dt><i>dwFlags</i></dt>
+    <dd>[in] Bit mask, which controls the way of storing file in the archive
+    <ul type="circle">
+      <li>MPQ_FILE_COMPRESS_PKWARE - If set, the wave will be stored using this compression. The <i>dwQuality</i> parameter is ignored.</li>
+      <li>MPQ_FILE_COMPRESS_MULTI - If set, <i>dwQuality</i> controls the quality of stored wave in the archive.</li>
+      <li>MPQ_FILE_ENCRYPTED - The file will be encrypted.</li>
+      <li>MPQ_FILE_FIXSEED - File encryption key will be fixed according to file name and file position in the archive.</li>
+	    <li>MPQ_FILE_REPLACEEXISTING - If the file already exists in the archive, it will be replaced.</li>
+    </ul>
+	</dd>
+  <dt><i>dwQuality</i></dt>
+    <dd>[in] Bit mask, which controls the quality of stored file in the archive
+    <ul type="circle">
+      <li>MPQ_WAVE_QUALITY_HIGH - The file will be stored with the best quality (but will occupy the largest space)</li>
+      <li>MPQ_WAVE_QUALITY_MEDIUM - Medium quality, medium compression</li>
+      <li>MPQ_WAVE_QUALITY_LOW - Low quality, the best compression.</li>
+    </ul>
+	</dd>
+</dl>
+
+<b>Return value</b>
+<p>Function returns nonzero, when the file was successfully added into the archive.
+On error, functions return FALSE. More informations about the error could be returned by GetLastError().</p>
+
+<b>Remarks</b>
+<p>It is not possible to combine flags MPQ_FILE_COMPRESS_PKWARE and MPQ_FILE_COMPRESS_MULTI. If
+the function is called with both flags, returns error.</p>
+<p>Locale ID of the file will be set to value recently set using <a href="#SFileSetLocale"><i>SFileSetLocale</i>.</a></p>
+<hr>
+
+<!-- SFileRemoveFile -->
+<a name="SFileRemoveFile"></a>
+<h3>SFileRemoveFile</h3>
+Ordinal number for Diablo 1.00 : N/A<br>
+Ordinal number for StarCraft   : N/A<br>
+
+<p>Function <b>SFileRemoveFile</b> removes a file from the archive. The archive must be open for
+writing using <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a>.</p>
+
+<pre><b>BOOL WINAPI SFileRemoveFile(</b>
+  <b>HANDLE</b><i> hMPQ</i>,              // Handle of open archive
+  <b>const char *</b><i> szFileName</i>   // Name of file to remove
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hMPQ</i></dt>
+    <dd>[in] Handle of open archive. Must be a handle obtained by a call of <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a></dd>
+  <dt><i>szFileName</i></dt>
+    <dd>[in] Name of the file which has to be removed from the archive.</dd>
+</dl>
+
+<b>Return value</b>
+<p>Function returns nonzero, if the file was successfully removed from the archive.
+On error returns FALSE. More informations about the error returns the GetLastError() function.</p>
+<hr>
+
+<!-- SFileRenameFile -->
+<a name="SFileRenameFile"></a>
+<h3>SFileRenameFile</h3>
+Ordinal number for Diablo 1.00 : N/A<br>
+Ordinal number for StarCraft   : N/A<br>
+
+<p>Function <b>SFileRenameFile</b> renames a file within MPQ archive. The archive must be open for
+writing using <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a>.</p>
+
+<pre><b>BOOL WINAPI SFileRenameFile(</b>
+  <b>HANDLE</b><i> hMPQ</i>,                // Handle of open archive
+  <b>const char *</b><i> szOldFileName</i>, // Original name of the file
+  <b>const char *</b><i> szNewFileName</i>, // New name of the file
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hMPQ</i></dt>
+    <dd>[in] Handle of open archive. Must be a handle obtained by a call of <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a>.</dd>
+  <dt><i>szOldFileName</i></dt>
+    <dd>[in] Name of an existing file within the archive.</dd>
+  <dt><i>szNewFileName</i></dt>
+    <dd>[in] New name of that file. The file can have another directory name (since directories are virtual in MPQ archives).</dd>
+</dl>
+
+<b>Return value</b>
+<p>Function returns nonzero, if the file was successfully renamed.
+On error returns FALSE. More informations about the error returns the GetLastError() function.</p>
+<hr>
+
+<!-- SFileFindFirstFile and SFileFindFirstFileEx -->
+<a name="SFileFindFirstFile"></a>
+<a name="SFileFindFirstFileEx"></a>
+<h3>SFileFindFirstFile(Ex)</h3>
+Ordinal number for Diablo 1.00 : N/A<br>
+Ordinal number for StarCraft   : N/A<br>
+
+<p>Functions <b>SFileFindFirstFile</b> and <b>SFileFindFirstFileEx</b> search files in
+MPQ archive. Because MPQ archives do not contain file names, these functions need file list
+for successfull search.</p>
+
+<pre><b>BOOL WINAPI SFileFindFirstFileEx(</b>
+  <b>HANDLE</b><i> hMPQ</i>,                      // Handle of open archive
+  <b>const char *</b><i> szMask</i>,              // Wildcard mask
+  <b>SFILE_FIND_DATA *</b><i> lpFindFileData</i>, // Struct with search result
+  <b>const char *</b><i> szFileList</i>,          // File list name
+  <b>BOOL</b><i> bCheckIfExist</i>                // Check if the file exists
+<b>);</b>
+
+<b>BOOL WINAPI SFileFindFirstFile(</b>
+  <b>HANDLE</b><i> hMPQ</i>,                      // Handle of open archive
+  <b>const char *</b><i> szMask</i>,              // Wildcard mask
+  <b>SFILE_FIND_DATA *</b><i> lpFindFileData</i>, // Struct with search result
+  <b>const char *</b><i> szFileList</i>           // File list name
+<b>);</b>
+</pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hMPQ</i></dt>
+    <dd>[in] Handle of open archive. Must be a handle obtained by a call of
+	  <a href="#SFileOpenArchive"><i>SFileOpenArchive</i></a>
+	  or <a href="#SFileCreateArchiveEx"><i>SFileCreateArchiveEx</i></a>.
+	  Can be NULL, if the <i>bCheckIfExist</i> is set to FALSE.</dd>
+  <dt><i>szMask</i></dt>
+    <dd>[in] Search mask for the files. Example: "*.wav".</dd>
+  <dt><i>lpFindFileData</i></dt>
+    <dd>[out] Pointer to the SFILE_FIND_DATA structure which receives information about found file.</dd>
+  <dt><i>szFileList</i></dt>
+    <dd>[in] Name of a text file with file list. This file must contain file names with their full paths,
+	  one file per line. If this parameter is NULL, the function searches the internal listfile stored
+	  in the MPQ archive. <i>hMPQ</i> may not be NULL if <i>szListFile</i> is also NULL.</dd>
+  <dt><i>bCheckIfExist</i></dt>
+    <dd>[in] If set to FALSE, the search functions do not test if the file really exists in
+	the archive. The function simply returns the file name from the next line in the filelist.
+	Use if you need to make your custom testing, if the file exists in the archive.</dd>
+</dl>
+
+<b>The SFILE_FIND_DATA structure</b>
+<pre>struct <b>SFILE_FIND_DATA</b>
+{
+    char   cFileName[MAX_PATH];         // Full name of the found file
+    char * szPlainName;                 // Pointer to file part
+    LCID   lcLocale;                    // Locale version
+    DWORD  dwFileSize;                  // File size in bytes
+    DWORD  dwFileFlags;                 // File flags (compressed or encrypted)
+};</pre>
+
+<b>Return value</b>
+<p>Function returns a search handle, if a match file was found in the archive. This search handle
+must be freed by calling <a href="#SFileFindClose"><i>SFileFindClose</i></a>.
+On error returns NULL. More informations about the error returns the GetLastError() function.</p>
+
+<b>Remarks</b>
+<p>If there are more language versions of the same file, file search will return one entry for
+each language version as successfull search result.</p>
+<p>An application should correctly test if a file was not returned multiple times. Depending
+on the given file list, the function may not return all files in the archive and also can return
+one file multiple times.</p>
+<p>An application may not modify the structure during search.</p>
+<hr>
+
+<!-- SFileFindNextFile -->
+<a name="SFileFindNextFile"></a>
+<h3>SFileFindNextFile</h3>
+Ordinal number for Diablo 1.00 : N/A<br>
+Ordinal number for StarCraft   : N/A<br>
+
+<p>Function <b>SFileFindNextFile</b> continues search began by <a href="#SFileFindFirstFileEx"><i>SFileFindFirstFile(Ex)</i></a>.</p>
+
+<pre><b>BOOL WINAPI SFileFindNextFile(</b>
+  <b>HANDLE</b><i> hFind</i>,                    // Search handle
+  <b>SFILE_FIND_DATA *</b><i> lpFindFileData</i> // Struct with search result
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hFind</i></dt>
+    <dd>[in] Handle of search. Must be a handle obtained by a call of <a href="#SFileFindFirstFile"><i>SFileFindFirstFile(Ex)</i></a>.</dd>
+  <dt><i>lpFindFileData</i></dt>
+    <dd>[out] Pointer to the SFILE_FIND_DATA structure which receives information about found file.</dd>
+</dl>
+
+<b>Return value</b>
+<p>Function returns nonzero, if a matching file was successfully found in the archive.
+On error returns FALSE. More informations about the error returns the GetLastError() function.</p>
+<hr>
+<br>
+
+<!-- SFileFindClose -->
+<a name="SFileFindClose"></a>
+<h3>SFileFindClose</h3>
+Ordinal number for Diablo 1.00 : N/A<br>
+Ordinal number for StarCraft   : N/A<br>
+
+<p>Function <b>SFileFindClose</b> ends the search started by <a href="#SFileFindFirstFileEx"><i>SFileFindFirstFile(Ex)</i></a>.
+Must be used when the search is done.</p>
+
+<pre><b>BOOL WINAPI SFileFindClose(</b>
+  <b>HANDLE</b><i> hFind</i>                    // Search handle
+<b>);</b></pre>
+
+
+<b>Parameters</b>
+<dl>
+  <dt><i>hFind</i></dt>
+    <dd>[in] Handle of search. Must be a handle obtained by a call of <a href="#SFileFindFirstFile"><i>SFileFindFirstFile(Ex)</i></a>.</dd>
+</dl>
+
+<b>Return value</b>
+<p>Function returns nonzero, if a matching file was successfully found in the archive.
+On error returns FALSE. More informations about the error returns the GetLastError() function.</p>
+<hr>
+<br>
+
+<!-- Page footer -->
+<center><small>Copyright (c) Ladislav Zezula 2003 - 2006</small></center>
+<br>
+</body></html>

@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OutputAgentLibrary", "OutputAgentLibrary.vcproj", "{D5F06EAF-F536-44FD-A036-CDA086D241C2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test-Output", "Test-Output\Test-Output.vcproj", "{697AE924-DAD1-4BC9-8DC0-D032E4E4A0E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D5F06EAF-F536-44FD-A036-CDA086D241C2} = {D5F06EAF-F536-44FD-A036-CDA086D241C2}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D5F06EAF-F536-44FD-A036-CDA086D241C2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D5F06EAF-F536-44FD-A036-CDA086D241C2}.Debug|Win32.Build.0 = Debug|Win32
+		{D5F06EAF-F536-44FD-A036-CDA086D241C2}.Release|Win32.ActiveCfg = Release|Win32
+		{D5F06EAF-F536-44FD-A036-CDA086D241C2}.Release|Win32.Build.0 = Release|Win32
+		{697AE924-DAD1-4BC9-8DC0-D032E4E4A0E1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{697AE924-DAD1-4BC9-8DC0-D032E4E4A0E1}.Debug|Win32.Build.0 = Debug|Win32
+		{697AE924-DAD1-4BC9-8DC0-D032E4E4A0E1}.Release|Win32.ActiveCfg = Release|Win32
+		{697AE924-DAD1-4BC9-8DC0-D032E4E4A0E1}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

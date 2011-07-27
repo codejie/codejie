@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DSoundLibrary", "DSoundLibrary.vcproj", "{2BE3A2AA-CF66-4170-B7FA-00022F802BFD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_DSound", "Test_DSound\Test_DSound.vcproj", "{951B8EAE-2D87-4614-BB37-1CD71AB00B76}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2BE3A2AA-CF66-4170-B7FA-00022F802BFD} = {2BE3A2AA-CF66-4170-B7FA-00022F802BFD}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BE3A2AA-CF66-4170-B7FA-00022F802BFD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2BE3A2AA-CF66-4170-B7FA-00022F802BFD}.Debug|Win32.Build.0 = Debug|Win32
+		{2BE3A2AA-CF66-4170-B7FA-00022F802BFD}.Release|Win32.ActiveCfg = Release|Win32
+		{2BE3A2AA-CF66-4170-B7FA-00022F802BFD}.Release|Win32.Build.0 = Release|Win32
+		{951B8EAE-2D87-4614-BB37-1CD71AB00B76}.Debug|Win32.ActiveCfg = Debug|Win32
+		{951B8EAE-2D87-4614-BB37-1CD71AB00B76}.Debug|Win32.Build.0 = Debug|Win32
+		{951B8EAE-2D87-4614-BB37-1CD71AB00B76}.Release|Win32.ActiveCfg = Release|Win32
+		{951B8EAE-2D87-4614-BB37-1CD71AB00B76}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

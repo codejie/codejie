@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WDBFile version="1.0">
+  <File name="itemtextcache.wdb" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemTextCache.wdb</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">TextSize</Field>
+      <Field position="2" type="cstring" size="0">Text</Field>
+    </Fields>
+  </File>
+
+  <File name="itemnamecache.wdb" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemNameCache.wdb</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">EntrySize</Field>
+      <Field position="2" type="cstring" size="0">Text</Field>
+      <Field position="3" type="integer" size="4">Slot</Field>
+    </Fields>
+  </File>
+<!--
+  <File name="itemcache.wdb" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemCache.wdb</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">EntrySize</Field>
+      <Field position="2" type="integer" size="4">ClassID</Field>
+      <Field position="3" type="integer" size="4">SubClassID</Field>
+      <Field position="4" type="integer" size="4"></Field>
+      <Field position="5" type="cstring" size="0">Name</Field>
+      <Field position="6" type="cstring" size="0">Name</Field>
+      <Field position="7" type="cstring" size="0">Name</Field>
+      <Field position="8" type="cstring" size="0">Name</Field>
+      <Field position="9" type="integer" size="4">DisplayID</Field>
+      <Field position="10" type="integer" size="4">QualityID</Field>
+      <Field position="11" type="integer" size="4">TypeFlag</Field>
+      <Field position="12" type="integer" size="4">BuyPrice</Field>
+      <Field position="13" type="integer" size="4">SellPrice</Field>
+      <Field position="14" type="integer" size="4">SlotID</Field>
+      <Field position="15" type="integer" size="4">ClassFlag</Field>
+      <Field position="16" type="integer" size="4">RaceFlag</Field>
+      <Field position="17" type="integer" size="4">Level</Field>
+      <Field position="18" type="integer" size="4">RequiredLevel</Field>
+      <Field position="19" type="integer" size="4">RequiredSkillID</Field>
+      <Field position="20" type="integer" size="4">RequiredSkillLevel</Field>
+      <Field position="21" type="integer" size="4">RequiredSpellID</Field>
+      <Field position="22" type="integer" size="4">RequiredRankID</Field>
+      <Field position="23" type="integer" size="4">RequiredUnknRank</Field>
+      <Field position="24" type="integer" size="4">RequiredFactionID</Field>
+      <Field position="25" type="integer" size="4">RequiredFactionLevel</Field>
+      <Field position="26" type="integer" size="4">StackUnique</Field>
+      <Field position="27" type="integer" size="4">StackAmount</Field>
+      <Field position="28" type="integer" size="4">ContainerSlot</Field>
+      <Field position="29" type="integer" size="4">Stat1ID</Field>
+      <Field position="30" type="integer" size="4">Stat1Value</Field>
+      <Field position="31" type="integer" size="4">Stat2ID</Field>
+      <Field position="32" type="integer" size="4">Stat2Value</Field>
+      <Field position="33" type="integer" size="4">Stat3ID</Field>
+      <Field position="34" type="integer" size="4">Stat3Value</Field>
+      <Field position="35" type="integer" size="4">Stat4ID</Field>
+      <Field position="36" type="integer" size="4">Stat4Value</Field>
+      <Field position="37" type="integer" size="4">Stat5ID</Field>
+      <Field position="38" type="integer" size="4">Stat51Value</Field>
+      <Field position="39" type="integer" size="4">Stat6ID</Field>
+      <Field position="40" type="integer" size="4">Stat6Value</Field>
+      <Field position="41" type="integer" size="4">Stat7ID</Field>
+      <Field position="42" type="integer" size="4">Stat7Value</Field>
+      <Field position="43" type="integer" size="4">Stat8ID</Field>
+      <Field position="44" type="integer" size="4">Stat8Value</Field>
+      <Field position="45" type="integer" size="4">Stat9ID</Field>
+      <Field position="46" type="integer" size="4">Stat9Value</Field>
+      <Field position="47" type="integer" size="4">Stat10ID</Field>
+      <Field position="48" type="integer" size="4">Stat10Value</Field>
+      <Field position="49" type="float" size="4">Damage1Min</Field>
+      <Field position="50" type="float" size="4">Damage1Max</Field>
+      <Field position="51" type="integer" size="4">Damage1TypeID</Field>
+      <Field position="52" type="float" size="4">Damage2Min</Field>
+      <Field position="53" type="float" size="4">Damage2Max</Field>
+      <Field position="54" type="integer" size="4">Damage2TypeID</Field>
+      <Field position="55" type="float" size="4">Damage3Min</Field>
+      <Field position="56" type="float" size="4">Damage3Max</Field>
+      <Field position="57" type="integer" size="4">Damage3TypeID</Field>
+      <Field position="58" type="float" size="4">Damage4Min</Field>
+      <Field position="59" type="float" size="4">Damage4Max</Field>
+      <Field position="60" type="integer" size="4">Damage4TypeID</Field>
+      <Field position="61" type="float" size="4">Damage5Min</Field>
+      <Field position="62" type="float" size="4">Damage5Max</Field>
+      <Field position="63" type="integer" size="4">Damage5TypeID</Field>
+      <Field position="64" type="integer" size="4">ResistPhysical</Field>
+      <Field position="65" type="integer" size="4">ResistHoly</Field>
+      <Field position="66" type="integer" size="4">ResistFire</Field>
+      <Field position="67" type="integer" size="4">ResistNature</Field>
+      <Field position="68" type="integer" size="4">ResistFrost</Field>
+      <Field position="69" type="integer" size="4">ResistShadow</Field>
+      <Field position="70" type="integer" size="4">ResistArcane</Field>
+      <Field position="71" type="integer" size="4">WeaponDelay</Field>
+      <Field position="72" type="integer" size="4">AmmoType</Field>
+      <Field position="73" type="float" size="4">RangeModifier</Field>
+      <Field position="74" type="integer" size="4">Spell1ID</Field>
+      <Field position="75" type="integer" size="4">Spell1TriggerID</Field>
+      <Field position="76" type="integer" size="4">Spell1Charges</Field>
+      <Field position="77" type="integer" size="4">Spell1Cooldown</Field>
+      <Field position="78" type="integer" size="4">Spell1CategoryID</Field>
+      <Field position="79" type="integer" size="4">Spell1CategoryCooldown</Field>
+      <Field position="80" type="integer" size="4">Spell2ID</Field>
+      <Field position="81" type="integer" size="4">Spell2TriggerID</Field>
+      <Field position="82" type="integer" size="4">Spell2Charges</Field>
+      <Field position="83" type="integer" size="4">Spell2Cooldown</Field>
+      <Field position="84" type="integer" size="4">Spell2CategoryID</Field>
+      <Field position="85" type="integer" size="4">Spell2CategoryCooldown</Field>
+      <Field position="86" type="integer" size="4">Spell31ID</Field>
+      <Field position="87" type="integer" size="4">Spell3TriggerID</Field>
+      <Field position="88" type="integer" size="4">Spell3Charges</Field>
+      <Field position="89" type="integer" size="4">Spell3Cooldown</Field>
+      <Field position="90" type="integer" size="4">Spell3CategoryID</Field>
+      <Field position="91" type="integer" size="4">Spell3CategoryCooldown</Field>
+      <Field position="92" type="integer" size="4">Spell4ID</Field>
+      <Field position="93" type="integer" size="4">Spell4TriggerID</Field>
+      <Field position="94" type="integer" size="4">Spell4Charges</Field>
+      <Field position="95" type="integer" size="4">Spell4Cooldown</Field>
+      <Field position="96" type="integer" size="4">Spell4CategoryID</Field>
+      <Field position="97" type="integer" size="4">Spell4CategoryCooldown</Field>
+      <Field position="98" type="integer" size="4">Spell5ID</Field>
+      <Field position="99" type="integer" size="4">Spell5TriggerID</Field>
+      <Field position="100" type="integer" size="4">Spell5Charges</Field>
+      <Field position="101" type="integer" size="4">Spell5Cooldown</Field>
+      <Field position="102" type="integer" size="4">Spell5CategoryID</Field>
+      <Field position="103" type="integer" size="4">Spell5CategoryCooldown</Field>
+      <Field position="104" type="integer" size="4">BondID</Field>
+      <Field position="105" type="cstring" size="0">Description</Field>
+      <Field position="106" type="integer" size="4">BookTextID</Field>
+      <Field position="107" type="integer" size="4">BookPages</Field>
+      <Field position="108" type="integer" size="4">BookStationaryID</Field>
+      <Field position="109" type="integer" size="4">BeginQuestID</Field>
+      <Field position="110" type="integer" size="4">LockPickTalent</Field>
+      <Field position="111" type="integer" size="4">MaterialID</Field>
+      <Field position="112" type="integer" size="4">SheathID</Field>
+      <Field position="113" type="integer" size="4">RandomPropertyID</Field>
+      <Field position="114" type="integer" size="4">RandomPropertyID2?</Field>
+      <Field position="115" type="integer" size="4">BlockValue</Field>
+      <Field position="116" type="integer" size="4">ItemSetID</Field>
+      <Field position="117" type="integer" size="4">DurabilityValue</Field>
+      <Field position="118" type="integer" size="4">AreaID</Field>
+      <Field position="119" type="integer" size="4">MapID</Field>
+      <Field position="120" type="integer" size="4">BagFamily</Field>
+      <Field position="121" type="integer" size="4">TotemCategory</Field>
+      <Field position="122" type="integer" size="4">SocketColor1</Field>
+      <Field position="123" type="integer" size="4">Unkn</Field>
+      <Field position="124" type="integer" size="4">SocketColor2</Field>
+      <Field position="125" type="integer" size="4">Unkn</Field>
+      <Field position="126" type="integer" size="4">SocketColor3</Field>
+      <Field position="127" type="integer" size="4">Unkn</Field>
+      <Field position="128" type="integer" size="4">SpellItemEnchantment</Field>
+      <Field position="129" type="integer" size="4">GemProperty</Field>
+      <Field position="130" type="integer" size="4">ExtendedCost</Field>
+      <Field position="131" type="integer" size="4">CondExtCost</Field>
+      <Field position="132" type="integer" size="4">DisenchantSkillLevel</Field>
+      <Field position="133" type="float" size="4">ArmorDemageModifier</Field>
+    </Fields>
+  </File>
+-->
+
+ <!--
+  <File name="itemcache.wdb" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/ItemCache.wdb</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">TextSize</Field>
+      <Field position="2" type="integer" size="4">ClassID</Field>
+      <Field position="3" type="integer" size="4">SubClassID</Field>
+      <Field position="4" type="integer" size="4"></Field>
+      <Field position="5" type="cstring" size="0">Name</Field>
+      <Field position="6" type="cstring" size="0">Name</Field>
+      <Field position="7" type="cstring" size="0">Name</Field>
+      <Field position="8" type="cstring" size="0">Name</Field>
+      <Field position="9" type="integer" size="4">DisplayID</Field>
+      <Field position="10" type="integer" size="4">QualityID</Field>
+      <Field position="11" type="integer" size="4">TypeFlag</Field>
+      <Field position="12" type="integer" size="4">BuyPrice</Field>
+      <Field position="13" type="integer" size="4">SellPrice</Field>
+      <Field position="14" type="integer" size="4">SlotID</Field>
+      <Field position="15" type="integer" size="4">ClassFlag</Field>
+      <Field position="16" type="integer" size="4">RaceFlag</Field>
+      <Field position="17" type="integer" size="4">Level</Field>
+      <Field position="18" type="integer" size="4">RequiredLevel</Field>
+      <Field position="19" type="integer" size="4">RequiredSkillID</Field>
+      <Field position="20" type="integer" size="4">RequiredSkillLevel</Field>
+      <Field position="21" type="integer" size="4">RequiredSpellID</Field>
+      <Field position="22" type="integer" size="4">RequiredRankID</Field>
+      <Field position="23" type="integer" size="4">RequiredUnknRank</Field>
+      <Field position="24" type="integer" size="4">RequiredFactionID</Field>
+      <Field position="25" type="integer" size="4">RequiredFactionLevel</Field>
+      <Field position="26" type="integer" size="4">StackUnique</Field>
+      <Field position="27" type="integer" size="4">StackAmount</Field>
+      <Field position="28" type="integer" size="4">ContainerSlot</Field>
+      <Field position="29" type="amount" size="4" skipbyte="8">NumberOfStat</Field>
+
+//      <Field position="30" type="integer" size="4">StatID</Field>
+//      <Field position="31" type="integer" size="4">StatValue</Field>
+ 
+      <Field position="30" type="float" size="4">Damage1Min</Field>
+      <Field position="31" type="float" size="4">Damage1Max</Field>
+      <Field position="32" type="integer" size="4">Damage1TypeID</Field>
+      <Field position="33" type="float" size="4">Damage2Min</Field>
+      <Field position="34" type="float" size="4">Damage2Max</Field>
+      <Field position="35" type="integer" size="4">Damage2TypeID</Field>
+
+      <Field position="36" type="integer" size="4">ResistPhysical</Field>
+      <Field position="37" type="integer" size="4">ResistHoly</Field>
+      <Field position="38" type="integer" size="4">ResistFire</Field>
+      <Field position="39" type="integer" size="4">ResistNature</Field>
+      <Field position="40" type="integer" size="4">ResistFrost</Field>
+      <Field position="41" type="integer" size="4">ResistShadow</Field>
+      <Field position="42" type="integer" size="4">ResistArcane</Field>
+      <Field position="43" type="integer" size="4">WeaponDelay</Field>
+      <Field position="44" type="integer" size="4">AmmoType</Field>
+      <Field position="45" type="float" size="4">RangeModifier</Field>
+      <Field position="46" type="integer" size="4">Spell1ID</Field>
+      <Field position="47" type="integer" size="4">Spell1TriggerID</Field>
+      <Field position="48" type="integer" size="4">Spell1Charges</Field>
+      <Field position="49" type="integer" size="4">Spell1Cooldown</Field>
+      <Field position="50" type="integer" size="4">Spell1CategoryID</Field>
+      <Field position="51" type="integer" size="4">Spell1CategoryCooldown</Field>
+      <Field position="52" type="integer" size="4">Spell2ID</Field>
+      <Field position="53" type="integer" size="4">Spell2TriggerID</Field>
+      <Field position="54" type="integer" size="4">Spell2Charges</Field>
+      <Field position="55" type="integer" size="4">Spell2Cooldown</Field>
+      <Field position="56" type="integer" size="4">Spell2CategoryID</Field>
+      <Field position="57" type="integer" size="4">Spell2CategoryCooldown</Field>
+      <Field position="58" type="integer" size="4">Spell31ID</Field>
+      <Field position="59" type="integer" size="4">Spell3TriggerID</Field>
+      <Field position="60" type="integer" size="4">Spell3Charges</Field>
+      <Field position="61" type="integer" size="4">Spell3Cooldown</Field>
+      <Field position="62" type="integer" size="4">Spell3CategoryID</Field>
+      <Field position="63" type="integer" size="4">Spell3CategoryCooldown</Field>
+      <Field position="64" type="integer" size="4">Spell4ID</Field>
+      <Field position="65" type="integer" size="4">Spell4TriggerID</Field>
+      <Field position="66" type="integer" size="4">Spell4Charges</Field>
+      <Field position="67" type="integer" size="4">Spell4Cooldown</Field>
+      <Field position="68" type="integer" size="4">Spell4CategoryID</Field>
+      <Field position="69" type="integer" size="4">Spell4CategoryCooldown</Field>
+      <Field position="70" type="integer" size="4">Spell5ID</Field>
+      <Field position="71" type="integer" size="4">Spell5TriggerID</Field>
+      <Field position="72" type="integer" size="4">Spell5Charges</Field>
+      <Field position="73" type="integer" size="4">Spell5Cooldown</Field>
+      <Field position="74" type="integer" size="4">Spell5CategoryID</Field>
+      <Field position="75" type="integer" size="4">Spell5CategoryCooldown</Field>
+      <Field position="76" type="integer" size="4">BondID</Field>
+      <Field position="77" type="cstring" size="0">Description</Field>
+      <Field position="78" type="integer" size="4">BookTextID</Field>
+      <Field position="79" type="integer" size="4">BookPages</Field>
+      <Field position="80" type="integer" size="4">BookStationaryID</Field>
+      <Field position="81" type="integer" size="4">BeginQuestID</Field>
+      <Field position="82" type="integer" size="4">LockPickTalent</Field>
+      <Field position="83" type="integer" size="4">MaterialID</Field>
+      <Field position="84" type="integer" size="4">SheathID</Field>
+      <Field position="85" type="integer" size="4">RandomPropertyID</Field>
+      <Field position="86" type="integer" size="4">RandomPropertyID2?</Field>
+      <Field position="87" type="integer" size="4">BlockValue</Field>
+      <Field position="88" type="integer" size="4">ItemSetID</Field>
+      <Field position="89" type="integer" size="4">DurabilityValue</Field>
+      <Field position="90" type="integer" size="4">AreaID</Field>
+      <Field position="91" type="integer" size="4">MapID</Field>
+      <Field position="92" type="integer" size="4">BagFamily</Field>
+      <Field position="93" type="integer" size="4">TotemCategory</Field>
+      <Field position="94" type="integer" size="4">SocketColor1</Field>
+      <Field position="95" type="integer" size="4">Unkn</Field>
+      <Field position="96" type="integer" size="4">SocketColor2</Field>
+      <Field position="97" type="integer" size="4">Unkn</Field>
+      <Field position="98" type="integer" size="4">SocketColor3</Field>
+      <Field position="99" type="integer" size="4">Unkn</Field>
+
+      <Field position="100" type="integer" size="4">GemProperty</Field>
+
+      <Field position="101" type="integer" size="4">DisenchantSkillLevel</Field>
+      <Field position="102" type="float" size="4">ArmorDemageModifier</Field>
+
+      <Field position="103" type="integer" size="4">ExistingDuration</Field>
+      <Field position="104" type="integer" size="4">Unkn</Field>
+
+
+    </Fields>
+  </File>
+  -->
+
+  <File name="itemcache.wdb" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/ItemCache.wdb</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">EntrySize</Field>
+      <Field position="2" type="integer" size="4">ClassID</Field>
+      <Field position="3" type="integer" size="4">SubClassID</Field>
+      <Field position="4" type="integer" size="4"></Field>
+      <Field position="5" type="cstring" size="0">Name</Field>
+      <Field position="6" type="cstring" size="0">Name</Field>
+      <Field position="7" type="cstring" size="0">Name</Field>
+      <Field position="8" type="cstring" size="0">Name</Field>
+      <Field position="9" type="integer" size="4">DisplayID</Field>
+      <Field position="10" type="integer" size="4">QualityID</Field>
+      <Field position="11" type="integer" size="4">TypeFlag</Field>
+      <Field position="12" type="integer" size="4">BuyPrice</Field>
+      <Field position="13" type="integer" size="4">SellPrice</Field>
+      <Field position="14" type="integer" size="4">SlotID</Field>
+      <Field position="15" type="integer" size="4">ClassFlag</Field>
+      <Field position="16" type="integer" size="4">RaceFlag</Field>
+      <Field position="17" type="integer" size="4">Level</Field>
+      <Field position="18" type="integer" size="4">RequiredLevel</Field>
+      <Field position="19" type="integer" size="4">RequiredSkillID</Field>
+      <Field position="20" type="integer" size="4">RequiredSkillLevel</Field>
+      <Field position="21" type="integer" size="4">RequiredSpellID</Field>
+      <Field position="22" type="integer" size="4">RequiredRankID</Field>
+      <Field position="23" type="integer" size="4">RequiredUnknRank</Field>
+      <Field position="24" type="integer" size="4">RequiredFactionID</Field>
+      <Field position="25" type="integer" size="4">RequiredFactionLevel</Field>
+      <Field position="26" type="integer" size="4">StackUnique</Field>
+      <Field position="27" type="integer" size="4">StackAmount</Field>
+      <Field position="28" type="integer" size="4">ContainerSlot</Field>
+      <Field position="29" type="amount" size="4" skipbyte="8">NumberOfStat</Field>
+
+      <Field position="30" type="float" size="4">Damage1Min</Field>
+      <Field position="31" type="float" size="4">Damage1Max</Field>
+      <Field position="32" type="integer" size="4">Damage1TypeID</Field>
+      <Field position="33" type="float" size="4">Damage2Min</Field>
+      <Field position="34" type="float" size="4">Damage2Max</Field>
+      <Field position="35" type="integer" size="4">Damage2TypeID</Field>
+      <Field position="36" type="float" size="4">Damage3Min</Field>
+      <Field position="37" type="float" size="4">Damage3Max</Field>
+      <Field position="38" type="integer" size="4">Damage3TypeID</Field>
+      <Field position="39" type="float" size="4">Damage4Min</Field>
+      <Field position="40" type="float" size="4">Damage4Max</Field>
+      <Field position="41" type="integer" size="4">Damage4TypeID</Field>
+      <Field position="42" type="float" size="4">Damage5Min</Field>
+      <Field position="43" type="float" size="4">Damage5Max</Field>
+      <Field position="44" type="integer" size="4">Damage5TypeID</Field>
+      
+      <Field position="45" type="integer" size="4">ResistPhysical</Field>
+      <Field position="46" type="integer" size="4">ResistHoly</Field>
+      <Field position="47" type="integer" size="4">ResistFire</Field>
+      <Field position="48" type="integer" size="4">ResistNature</Field>
+      <Field position="49" type="integer" size="4">ResistFrost</Field>
+      <Field position="50" type="integer" size="4">ResistShadow</Field>
+      <Field position="51" type="integer" size="4">ResistArcane</Field>
+      <Field position="52" type="integer" size="4">WeaponDelay</Field>
+      <Field position="53" type="integer" size="4">AmmoType</Field>
+      <Field position="54" type="float" size="4">RangeModifier</Field>
+      <Field position="55" type="integer" size="4">Spell1ID</Field>
+      <Field position="56" type="integer" size="4">Spell1TriggerID</Field>
+      <Field position="57" type="integer" size="4">Spell1Charges</Field>
+      <Field position="58" type="integer" size="4">Spell1Cooldown</Field>
+      <Field position="59" type="integer" size="4">Spell1CategoryID</Field>
+      <Field position="60" type="integer" size="4">Spell1CategoryCooldown</Field>
+      <Field position="61" type="integer" size="4">Spell2ID</Field>
+      <Field position="62" type="integer" size="4">Spell2TriggerID</Field>
+      <Field position="63" type="integer" size="4">Spell2Charges</Field>
+      <Field position="64" type="integer" size="4">Spell2Cooldown</Field>
+      <Field position="65" type="integer" size="4">Spell2CategoryID</Field>
+      <Field position="66" type="integer" size="4">Spell2CategoryCooldown</Field>
+      <Field position="67" type="integer" size="4">Spell31ID</Field>
+      <Field position="68" type="integer" size="4">Spell3TriggerID</Field>
+      <Field position="69" type="integer" size="4">Spell3Charges</Field>
+      <Field position="70" type="integer" size="4">Spell3Cooldown</Field>
+      <Field position="71" type="integer" size="4">Spell3CategoryID</Field>
+      <Field position="72" type="integer" size="4">Spell3CategoryCooldown</Field>
+      <Field position="73" type="integer" size="4">Spell4ID</Field>
+      <Field position="74" type="integer" size="4">Spell4TriggerID</Field>
+      <Field position="75" type="integer" size="4">Spell4Charges</Field>
+      <Field position="76" type="integer" size="4">Spell4Cooldown</Field>
+      <Field position="77" type="integer" size="4">Spell4CategoryID</Field>
+      <Field position="78" type="integer" size="4">Spell4CategoryCooldown</Field>
+      <Field position="79" type="integer" size="4">Spell5ID</Field>
+      <Field position="80" type="integer" size="4">Spell5TriggerID</Field>
+      <Field position="81" type="integer" size="4">Spell5Charges</Field>
+      <Field position="82" type="integer" size="4">Spell5Cooldown</Field>
+      <Field position="83" type="integer" size="4">Spell5CategoryID</Field>
+      <Field position="84" type="integer" size="4">Spell5CategoryCooldown</Field>  
+      
+      <Field position="85" type="integer" size="4">BondID</Field>
+      <Field position="86" type="cstring" size="0">Description</Field>
+      <Field position="87" type="integer" size="4">BookTextID</Field>
+      <Field position="88" type="integer" size="4">BookPages</Field>
+      <Field position="89" type="integer" size="4">BookStationaryID</Field>
+      <Field position="90" type="integer" size="4">BeginQuestID</Field>
+      <Field position="91" type="integer" size="4">LockPickTalent</Field>
+      <Field position="92" type="integer" size="4">MaterialID</Field>
+      <Field position="93" type="integer" size="4">SheathID</Field>
+      <Field position="94" type="integer" size="4">RandomPropertyID</Field>
+      <Field position="95" type="integer" size="4">RandomPropertyID2?</Field>
+      <Field position="96" type="integer" size="4">BlockValue</Field>
+      <Field position="97" type="integer" size="4">ItemSetID</Field>
+      <Field position="98" type="integer" size="4">DurabilityValue</Field>
+      <Field position="99" type="integer" size="4">AreaID</Field>
+      <Field position="100" type="integer" size="4">MapID</Field>
+      <Field position="101" type="integer" size="4">BagFamily</Field>
+      <Field position="102" type="integer" size="4">TotemCategory</Field>
+      <Field position="103" type="integer" size="4">SocketColor1</Field>
+      <Field position="104" type="integer" size="4">Unkn</Field>
+      <Field position="105" type="integer" size="4">SocketColor2</Field>
+      <Field position="106" type="integer" size="4">Unkn</Field>
+      <Field position="107" type="integer" size="4">SocketColor3</Field>
+      <Field position="108" type="integer" size="4">Unkn</Field>
+
+      <Field position="109" type="integer" size="4">GemProperty</Field>
+      <Field position="110" type="integer" size="4">Unkn</Field>
+      <Field position="111" type="integer" size="4">DisenchantSkillLevel</Field>
+      
+      <Field position="112" type="float" size="4">ArmorDemageModifier</Field>
+
+      <Field position="113" type="integer" size="4">ExistingDuration</Field>
+
+      <Field position="114" type="integer" size="4">Unkn</Field>
+
+    </Fields>
+  </File>
+
+  <File name="npccache.wdb" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/NPCCache.wdb</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">EntrySize</Field>
+      <Field position="2" type="float" size="4"></Field>
+      <Field position="3" type="cstring" size="0"></Field>
+      <Field position="4" type="cstring" size="0"></Field>
+      <Field position="5" type="integer" size="4"></Field>
+      <Field position="6" type="integer" size="4"></Field>
+      <Field position="7" type="integer" size="4"></Field>
+      <Field position="8" type="integer" size="4"></Field>
+      <Field position="9" type="integer" size="4"></Field>
+      <Field position="10" type="integer" size="4"></Field>
+      <Field position="11" type="integer" size="4"></Field>
+      <Field position="12" type="float" size="4"></Field>
+      <Field position="13" type="cstring" size="0"></Field>
+      <Field position="14" type="cstring" size="0"></Field>
+      <Field position="15" type="integer" size="4"></Field>
+      <Field position="16" type="integer" size="4"></Field>
+      <Field position="17" type="integer" size="4"></Field>
+      <Field position="18" type="integer" size="4"></Field>
+      <Field position="19" type="integer" size="4"></Field>
+      <Field position="20" type="integer" size="4"></Field>
+      <Field position="21" type="integer" size="4"></Field>
+      <Field position="22" type="float" size="4"></Field>
+      <Field position="23" type="cstring" size="0"></Field>
+      <Field position="24" type="cstring" size="0"></Field>
+      <Field position="25" type="integer" size="4"></Field>
+      <Field position="26" type="integer" size="4"></Field>
+      <Field position="27" type="integer" size="4"></Field>
+      <Field position="28" type="integer" size="4"></Field>
+      <Field position="29" type="integer" size="4"></Field>
+      <Field position="30" type="integer" size="4"></Field>
+      <Field position="31" type="integer" size="4"></Field>
+      <Field position="32" type="float" size="4"></Field>
+      <Field position="33" type="cstring" size="0"></Field>
+      <Field position="34" type="cstring" size="0"></Field>
+      <Field position="35" type="integer" size="4"></Field>
+      <Field position="36" type="integer" size="4"></Field>
+      <Field position="37" type="integer" size="4"></Field>
+      <Field position="38" type="integer" size="4"></Field>
+      <Field position="39" type="integer" size="4"></Field>
+      <Field position="40" type="integer" size="4"></Field>
+      <Field position="41" type="integer" size="4"></Field>
+      <Field position="42" type="float" size="4"></Field>
+      <Field position="43" type="cstring" size="0"></Field>
+      <Field position="44" type="cstring" size="0"></Field>
+      <Field position="45" type="integer" size="4"></Field>
+      <Field position="46" type="integer" size="4"></Field>
+      <Field position="47" type="integer" size="4"></Field>
+      <Field position="48" type="integer" size="4"></Field>
+      <Field position="49" type="integer" size="4"></Field>
+      <Field position="50" type="integer" size="4"></Field>
+      <Field position="51" type="integer" size="4"></Field>
+      <Field position="52" type="float" size="4"></Field>
+      <Field position="53" type="cstring" size="0"></Field>
+      <Field position="54" type="cstring" size="0"></Field>
+      <Field position="55" type="integer" size="4"></Field>
+      <Field position="56" type="integer" size="4"></Field>
+      <Field position="57" type="integer" size="4"></Field>
+      <Field position="58" type="integer" size="4"></Field>
+      <Field position="59" type="integer" size="4"></Field>
+      <Field position="60" type="integer" size="4"></Field>
+      <Field position="61" type="integer" size="4"></Field>
+      <Field position="62" type="float" size="4"></Field>
+      <Field position="63" type="cstring" size="0"></Field>
+      <Field position="64" type="cstring" size="0"></Field>
+      <Field position="65" type="integer" size="4"></Field>
+      <Field position="66" type="integer" size="4"></Field>
+      <Field position="67" type="integer" size="4"></Field>
+      <Field position="68" type="integer" size="4"></Field>
+      <Field position="69" type="integer" size="4"></Field>
+      <Field position="70" type="integer" size="4"></Field>
+      <Field position="71" type="integer" size="4"></Field>
+      <Field position="72" type="float" size="4"></Field>
+      <Field position="73" type="cstring" size="0"></Field>
+      <Field position="74" type="cstring" size="0"></Field>
+      <Field position="75" type="integer" size="4"></Field>
+      <Field position="76" type="integer" size="4"></Field>
+      <Field position="77" type="integer" size="4"></Field>
+      <Field position="78" type="integer" size="4"></Field>
+      <Field position="79" type="integer" size="4"></Field>
+      <Field position="80" type="integer" size="4"></Field>
+      <Field position="81" type="integer" size="4"></Field>
+    </Fields>
+  </File>
+
+  <File name="creaturecache.wdb" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/CreatureCache.wdb</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">EntrySize</Field>
+      <Field position="2" type="cstring" size="0">Name</Field>
+      <Field position="3" type="cstring" size="0">Name</Field>
+      <Field position="4" type="cstring" size="0">Name</Field>
+      <Field position="5" type="cstring" size="0">Name</Field>
+      <Field position="6" type="cstring" size="0">Description</Field>
+      <Field position="7" type="cstring" size="0"></Field>
+      <Field position="8" type="bit" size="4">Mask?</Field>
+      <Field position="9" type="integer" size="4">TypeID</Field>
+      <Field position="10" type="integer" size="4">FamilyID</Field>
+      <Field position="11" type="integer" size="4">FlagID</Field>
+      <Field position="12" type="integer" size="4">SpellID</Field>
+      <Field position="13" type="integer" size="4">DisplayID</Field>
+      <Field position="14" type="integer" size="4">DisplayID2</Field>
+      <Field position="15" type="integer" size="4">DisplayID3</Field>
+      <Field position="16" type="integer" size="4">DisplayID4</Field>
+      <Field position="17" type="float" size="4"></Field>
+      <Field position="18" type="float" size="4"></Field>
+      <Field position="19" type="byte" size="1"></Field>
+    </Fields>
+  </File>
+
+  <File name="questcache.wdb" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/QuestCache.wdb</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">EntrySize</Field>
+      <Field position="2" type="integer" size="4">DupID</Field>
+      <Field position="3" type="integer" size="4">Type</Field>
+      <Field position="4" type="integer" size="4">Level</Field>
+      <Field position="5" type="integer" size="4">AreaID/SortID</Field>
+      <Field position="6" type="integer" size="4">InfoID</Field>
+      <Field position="7" type="integer" size="4">Players</Field>
+      <Field position="8" type="integer" size="4">FactionID</Field>
+      <Field position="9" type="integer" size="4">FactionAmount</Field>
+      <Field position="10" type="integer" size="4"></Field>
+      <Field position="11" type="integer" size="4"></Field>
+      <Field position="12" type="integer" size="4">NextID</Field>
+      <Field position="13" type="integer" size="4">Coins</Field>
+      <Field position="14" type="integer" size="4">SubExp70</Field>
+      <Field position="15" type="integer" size="4">RewardSpellID</Field>
+      <Field position="16" type="integer" size="4">EffectOnPlayer</Field>
+      <Field position="17" type="integer" size="4"></Field>
+      <Field position="18" type="integer" size="4">StartItemID</Field>
+      <Field position="19" type="integer" size="4">Flags</Field>
+      <Field position="20" type="integer" size="4">CharTitled</Field>
+      <Field position="21" type="integer" size="4"></Field>
+      <Field position="22" type="integer" size="4"></Field>
+      <Field position="23" type="integer" size="4">GivenItemID1</Field>
+      <Field position="24" type="integer" size="4">GivenItemAmount1</Field>
+      <Field position="25" type="integer" size="4">GivenItemID2</Field>
+      <Field position="26" type="integer" size="4">GivenItemAmount2</Field>
+      <Field position="27" type="integer" size="4">GivenItemID3</Field>
+      <Field position="28" type="integer" size="4">GivenItemAmount3</Field>
+      <Field position="29" type="integer" size="4">GivenItemID4</Field>
+      <Field position="30" type="integer" size="4">GivenItemAmount4</Field>
+      <Field position="31" type="integer" size="4">ChoiceItemID1</Field>
+      <Field position="32" type="integer" size="4">ChoiceItemAmount1</Field>
+      <Field position="33" type="integer" size="4">ChoiceItemID2</Field>
+      <Field position="34" type="integer" size="4">ChoiceItemAmount2</Field>
+      <Field position="35" type="integer" size="4">ChoiceItemID3</Field>
+      <Field position="36" type="integer" size="4">ChoiceItemAmount3</Field>
+      <Field position="37" type="integer" size="4">ChoiceItemID4</Field>
+      <Field position="38" type="integer" size="4">ChoiceItemAmount4</Field>
+      <Field position="39" type="integer" size="4">ChoiceItemID5</Field>
+      <Field position="40" type="integer" size="4">ChoiceItemAmount5</Field>
+      <Field position="41" type="integer" size="4">ChoiceItemID6</Field>
+      <Field position="42" type="integer" size="4">ChoiceItemAmount6</Field>
+      <Field position="43" type="integer" size="4"></Field>
+      <Field position="44" type="integer" size="4"></Field>
+      <Field position="45" type="integer" size="4"></Field>
+      <Field position="46" type="integer" size="4"></Field>
+      
+      <Field position="47" type="cstring" size="0">Name</Field>
+      <Field position="48" type="cstring" size="0">Description</Field>
+      <Field position="49" type="cstring" size="0">Detail</Field>
+      <Field position="50" type="cstring" size="0">SubDescription</Field>
+      
+      <Field position="51" type="integer" size="4">TargetID1</Field>
+      <Field position="52" type="integer" size="4">TargetAmount1</Field>      
+      <Field position="53" type="integer" size="4">CollectItem1</Field>
+      <Field position="54" type="integer" size="4">CollectItemAmount1</Field>
+      <Field position="55" type="integer" size="4">Unkn1</Field>
+      
+      <Field position="56" type="integer" size="4">TargetID2</Field>
+      <Field position="57" type="integer" size="4">TargetAmount2</Field>
+      <Field position="58" type="integer" size="4">CollectItem2</Field>      
+      <Field position="59" type="integer" size="4">CollectItemAmount2</Field>
+      <Field position="60" type="integer" size="4">Unkn2</Field> 
+
+      <Field position="61" type="integer" size="4">TargetID3</Field>
+      <Field position="62" type="integer" size="4">TargetAmount3</Field>
+      <Field position="63" type="integer" size="4">CollectItem3</Field>      
+      <Field position="64" type="integer" size="4">CollectItemAmount3</Field>
+      <Field position="65" type="integer" size="4">Unkn3</Field>
+      
+      <Field position="66" type="integer" size="4">TargetID4</Field>
+      <Field position="67" type="integer" size="4">TargetAmount4</Field>
+      <Field position="68" type="integer" size="4">CollectItem4</Field>      
+      <Field position="69" type="integer" size="4">CollectItemAmount4</Field>
+      <Field position="70" type="integer" size="4">Unkn4</Field>
+
+      <Field position="71" type="cstring" size="0">Objective1</Field>
+      <Field position="72" type="cstring" size="0">Objective2</Field>
+      <Field position="73" type="cstring" size="0">Objective3</Field>
+      <Field position="74" type="cstring" size="0">Objective4</Field>      
+    </Fields>
+  </File>
+
+  <File name="pagetextcache.wdb" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/PageTextCache.wdb</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">EntrySize</Field>
+      <Field position="2" type="cstring" size="0">PageText</Field>
+      <Field position="3" type="integer" size="4">NextPageID</Field>
+    </Fields>
+  </File>
+
+  <File name="gameobjectcache.wdb" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/GameObjectCache.wdb</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">EntrySize</Field>
+      <Field position="2" type="integer" size="4">Type</Field>
+      <Field position="3" type="integer" size="4">DisplayID</Field>
+      <Field position="4" type="cstring" size="0">Name</Field>
+      <Field position="5" type="cstring" size="0">Name</Field>
+      <Field position="6" type="cstring" size="0">Name</Field>
+      <Field position="7" type="cstring" size="0">Name</Field>
+      <Field position="8" type="cstring" size="0"></Field>
+      <Field position="9" type="cstring" size="0">Description</Field>
+      <Field position="10" type="cstring" size="0"></Field>      
+      <Field position="11" type="integer" size="4"></Field>
+      <Field position="12" type="integer" size="4">Page/Lock</Field>
+      <Field position="13" type="integer" size="4">Sound5</Field>
+      <Field position="14" type="integer" size="4">Sound6</Field>
+      <Field position="15" type="integer" size="4">Sound7</Field>
+      <Field position="16" type="integer" size="4">Sound8</Field>
+      <Field position="17" type="integer" size="4"></Field>
+      <Field position="18" type="integer" size="4"></Field>
+      <Field position="19" type="integer" size="4"></Field>
+      <Field position="20" type="integer" size="4"></Field>
+      <Field position="21" type="integer" size="4"></Field>
+      <Field position="22" type="integer" size="4"></Field>
+      <Field position="23" type="integer" size="4"></Field>
+      <Field position="24" type="integer" size="4"></Field>
+      <Field position="25" type="integer" size="4"></Field>
+      <Field position="26" type="integer" size="4"></Field>
+      <Field position="27" type="integer" size="4"></Field>
+      <Field position="28" type="integer" size="4"></Field>
+      <Field position="29" type="integer" size="4"></Field>
+      <Field position="30" type="integer" size="4"></Field>
+      <Field position="31" type="integer" size="4"></Field>
+      <Field position="32" type="integer" size="4"></Field>
+      <Field position="33" type="integer" size="4"></Field>
+      <Field position="34" type="integer" size="4"></Field>
+      <Field position="35" type="float" size="4"></Field>
+    </Fields>
+  </File>  
+  
+</WDBFile>

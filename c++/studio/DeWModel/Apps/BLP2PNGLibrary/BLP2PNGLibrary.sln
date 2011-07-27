@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BLP2PNGLibrary", "BLP2PNGLibrary.vcproj", "{348697D6-59DF-46BA-AD80-52A5C725866B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcproj", "{9ACC03DE-CA7D-4F72-9509-5037DAC3380D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{348697D6-59DF-46BA-AD80-52A5C725866B} = {348697D6-59DF-46BA-AD80-52A5C725866B}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{348697D6-59DF-46BA-AD80-52A5C725866B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{348697D6-59DF-46BA-AD80-52A5C725866B}.Debug|Win32.Build.0 = Debug|Win32
+		{348697D6-59DF-46BA-AD80-52A5C725866B}.Release|Win32.ActiveCfg = Release|Win32
+		{348697D6-59DF-46BA-AD80-52A5C725866B}.Release|Win32.Build.0 = Release|Win32
+		{9ACC03DE-CA7D-4F72-9509-5037DAC3380D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9ACC03DE-CA7D-4F72-9509-5037DAC3380D}.Debug|Win32.Build.0 = Debug|Win32
+		{9ACC03DE-CA7D-4F72-9509-5037DAC3380D}.Release|Win32.ActiveCfg = Release|Win32
+		{9ACC03DE-CA7D-4F72-9509-5037DAC3380D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

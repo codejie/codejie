@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="LibTest">
+</Property><Property Name="Solution File" Value="D:\Studio\DeWModel\Resources\Version 0.01\DeMPQ\Test\LibTest\LibTest.sln">
+</Property><Property Name="Date" Value="Friday, February 20, 2009">
+</Property><Property Name="Time" Value="15:30">
+</Property></Properties><Event ErrorLevel="0" Project="LibTest" Source="LibTest.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="LibTest" Source="LibTest.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="LibTest" Source="LibTest.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="LibTest" Source="LibTest.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="LibTest.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="LibTest.sln" Description="Converted">
+</Event></UpgradeLog>

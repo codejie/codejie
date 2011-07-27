@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DBCFile version="1.0">
+	<File name="a.dbc" version="1.0">
+		<Note>this is a sample.</Note>
+		<Fields>
+			<Field position="0" type="string" size="0">FieldA</Field>
+			<Field position="1" type="integer" size="4">FieldB</Field>
+			<Field position="2" type="refid" size="4" refdbc="ref.dbc" reffield="0">FieldC</Field>
+			<Field position="3" type="array of integer" size="4" number="10">FieldD</Field>
+		</Fields>
+	</File>
+	<File name="b.dbc" version="1.0">
+		<Note>this is a sample.</Note>
+		<Fields>
+			<Field position="0" type="string" size="0">FieldA</Field>
+			<Field position="1" type="integer" size="4">FieldB</Field>
+			<Field position="2" type="refid" size="4" refdbc="ref.dbc" reffield="0">FieldC</Field>
+			<Field position="3" type="array of integer" size="4" number="10">FieldD</Field>
+		</Fields>
+	</File>
+</DBCFile>

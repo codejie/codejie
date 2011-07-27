@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DBCFile version="1.0">
+  <File name="sample.dbc" version="1.0">
+    <Note>this is a sample.</Note>
+    <Fields>
+      <Field position="0" type="string" size="4">FieldA</Field>
+      <Field position="1" type="integer" size="4">FieldB</Field>
+      <Field position="2" type="float" size="4">FieldC</Field>
+      <Field position="3" type="bit" size="4">FieldD</Field>
+      <Field position="4" type="byte" size="1">FieldD</Field>
+    </Fields>
+  </File>
+
+  <File name="GameTables.dbc" version="1.0">
+		<Note>GameTables</Note>
+		<Fields>
+			<Field position="0" type="string" size="4">FieldA</Field>
+			<Field position="1" type="integer" size="4">FieldB</Field>
+			<Field position="2" type="integer" size="4">FieldC</Field>
+		</Fields>
+	</File>
+
+  <File name="AnimationData.dbc" version="1.0">>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">Name</Field>
+      <Field position="2" type="integer" size="4">WeaponState</Field>
+      <Field position="3" type="integer" size="4">UnknownA</Field>
+      <Field position="4" type="integer" size="4">UnknownB</Field>
+      <Field position="5" type="integer" size="4">Preceding</Field>
+      <Field position="6" type="integer" size="4">RealID</Field>
+      <Field position="7" type="integer" size="4">GroupID</Field>
+    </Fields>
+  </File>
+
+<!-- Holiday -->  
+
+  <File name="HolidayNames.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=HolidayNames.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="5" type="string" size="4">zhCN</Field>
+    </Fields>
+  </File>
+
+  <File name="HolidayDescriptions.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=HolidayDescriptions.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="5" type="string" size="4">zhCN</Field>
+    </Fields>
+  </File>
+  
+<!-- Item -->  
+  
+  <File name="ItemDisplayInfo.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemDisplayInfo.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">LeftModel</Field>
+      <Field position="2" type="string" size="4">RightModel</Field>
+      <Field position="3" type="string" size="4">LeftTexture</Field>
+      <Field position="4" type="string" size="4">RightTexture</Field>
+      <Field position="5" type="string" size="4">Icon</Field>
+      <Field position="6" type="string" size="4">Texture</Field>
+      <Field position="7" type="integer" size="4">GloveFlag</Field>
+      <Field position="8" type="integer" size="4">BracerFlag</Field>
+      <Field position="9" type="integer" size="4">RobeFlag</Field>
+      <Field position="10" type="integer" size="4">BootsFlag</Field>
+      <Field position="11" type="integer" size="4">Unkn1</Field>
+      <Field position="12" type="integer" size="4">ItemSound</Field>
+      <Field position="13" type="integer" size="4">HelmetData</Field>
+      <Field position="14" type="integer" size="4">HelmetData2</Field>
+      <Field position="15" type="string" size="4">UpperArmTexture</Field>
+      <Field position="16" type="string" size="4">LowerArmTexture</Field>
+      <Field position="17" type="string" size="4">HandTexture</Field>
+      <Field position="18" type="string" size="4">UpperTorsoTexture</Field>
+      <Field position="19" type="string" size="4">LowerTorsoTexture</Field>
+      <Field position="20" type="string" size="4">UpperLegTexture</Field>
+      <Field position="21" type="string" size="4">LowerLegTexture</Field>
+      <Field position="22" type="string" size="4">FootTexture</Field>
+      <Field position="23" type="integer" size="4">Visual</Field>
+      <Field position="24" type="integer" size="4">Unkn</Field>
+    </Fields>
+  </File>
+
+  <File name="ItemPetFood.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemPetFood.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="5" type="string" size="4">zhCN</Field>
+    </Fields>
+  </File>
+
+  <File name="ItemBagFamily.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemBagFamily.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="5" type="string" size="4">zhCN</Field>
+    </Fields>
+  </File>
+
+  <File name="ItemSet.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemSet.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="5" type="string" size="4">zhCN</Field>
+    </Fields>
+  </File>
+
+  <File name="Item.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=Item.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">ClassID</Field>
+      <Field position="2" type="integer" size="4">SubClassID</Field>
+      <Field position="5" type="integer" size="4">DisplayID</Field>
+      <Field position="6" type="integer" size="4">SlotID</Field>
+    </Fields>
+  </File>
+
+  <File name="ItemClass.dbc" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/ItemClass.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">SubID?</Field>
+      <Field position="2" type="integer" size="4">Boolean?</Field>
+      <Field position="7" type="string" size="4">Name</Field>
+    </Fields>
+  </File>
+
+  <File name="ItemSubClass.dbc" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/ItemSubClass.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">SubID</Field>
+      <Field position="9" type="integer" size="4">HandNumber?</Field>
+      <Field position="14" type="string" size="4">Name</Field>
+      <Field position="31" type="string" size="4">Unique</Field>
+    </Fields>
+  </File>
+
+  <File name="ItemSubClassMask.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemSubClassMask.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">Mask</Field>
+      <Field position="6" type="string" size="4">Name</Field>
+    </Fields>
+  </File>
+  
+  <File name="ItemRandomSuffix.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemRandomSuffix.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="5" type="string" size="4">Suffix</Field>
+      <Field position="18" type="string" size="4">InternalName</Field>
+    </Fields>
+  </File>
+
+  <File name="ItemRandomProperties.dbc" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/ItemRandomProperties.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">InternalName</Field>
+      <Field position="11" type="string" size="4">Suffix</Field>
+    </Fields>
+  </File>
+
+  <File name="PaperDollItemFrame.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=PaperDollItemFrame.dbc</Note>
+    <Fields>
+      <Field position="0" type="string" size="4">Name</Field>
+      <Field position="1" type="string" size="4">RefPath</Field>
+      <Field position="2" type="integer" size="4">SlotID</Field>
+    </Fields>
+  </File>
+
+  <File name="ItemLimitCategory.dbc" version="1.0">
+    <Note>By Jie</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">Limit</Field>
+      <Field position="5" type="string" size="4">Name</Field>
+    </Fields>
+  </File>
+
+  <File name="ItemVisualEffects.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemVisualEffects.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">Effect</Field>
+    </Fields>
+  </File>
+  
+  <File name="ItemVisuals.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ItemVisuals.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">Effect1</Field>
+      <Field position="2" type="integer" size="4">Effect2</Field>
+      <Field position="3" type="integer" size="4">Effect3</Field>
+      <Field position="4" type="integer" size="4">Effect4</Field>
+      <Field position="5" type="integer" size="4">Effect5</Field>
+    </Fields>
+  </File>
+
+<!-- Character -->
+
+  <File name="CharBaseInfo.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=CharBaseInfo.dbc</Note>
+    <Fields>
+      <Field position="0" type="byte" size="1">RaceID</Field>
+      <Field position="1" type="byte" size="1">ClassID</Field>
+    </Fields>
+  </File>
+
+  <File name="CharStartOutfit.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=CharStartOutfit.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="byte" size="1">RaceID</Field>
+      <Field position="2" type="byte" size="1">ClassID</Field>
+      <Field position="3" type="byte" size="1">Gender</Field>
+      <Field position="4" type="byte" size="1">Unkn</Field>
+      <Field position="5" type="integer" size="4">Item1</Field>
+      <Field position="6" type="integer" size="4">Item2</Field>
+      <Field position="7" type="integer" size="4">Item3</Field>
+      <Field position="8" type="integer" size="4">Item4</Field>
+      <Field position="9" type="integer" size="4">Item5</Field>
+      <Field position="10" type="integer" size="4">Item6</Field>
+      <Field position="11" type="integer" size="4">Item7</Field>
+      <Field position="12" type="integer" size="4">Item8</Field>
+      <Field position="13" type="integer" size="4">Item9</Field>
+      <Field position="14" type="integer" size="4">Item10</Field>
+      <Field position="15" type="integer" size="4">Item11</Field>
+      <Field position="16" type="integer" size="4">Item12</Field>
+      <Field position="17" type="integer" size="4">Item13</Field>
+      <Field position="18" type="integer" size="4">Item14</Field>
+      <Field position="19" type="integer" size="4">Item15</Field>
+      <Field position="20" type="integer" size="4">Item16</Field>
+      <Field position="21" type="integer" size="4">Item17</Field>
+      <Field position="22" type="integer" size="4">Item18</Field>
+      <Field position="23" type="integer" size="4">Item19</Field>
+      <Field position="24" type="integer" size="4">Item20</Field>
+      <Field position="25" type="integer" size="4">Item21</Field>
+      <Field position="26" type="integer" size="4">Item22</Field>
+      <Field position="27" type="integer" size="4">Item23</Field>
+      <Field position="28" type="integer" size="4">Item24</Field>
+      <Field position="29" type="integer" size="4">Display1</Field>
+      <Field position="30" type="integer" size="4">Display2</Field>
+      <Field position="31" type="integer" size="4">Display3</Field>
+      <Field position="32" type="integer" size="4">Display4</Field>
+      <Field position="33" type="integer" size="4">Display5</Field>
+      <Field position="34" type="integer" size="4">Display6</Field>
+      <Field position="35" type="integer" size="4">Display7</Field>
+      <Field position="36" type="integer" size="4">Display8</Field>
+      <Field position="37" type="integer" size="4">Display9</Field>
+      <Field position="38" type="integer" size="4">Display10</Field>
+      <Field position="39" type="integer" size="4">Display11</Field>
+      <Field position="40" type="integer" size="4">Display12</Field>
+      <Field position="41" type="integer" size="4">Display13</Field>
+      <Field position="42" type="integer" size="4">Display14</Field>
+      <Field position="43" type="integer" size="4">Display15</Field>
+      <Field position="44" type="integer" size="4">Display16</Field>
+      <Field position="45" type="integer" size="4">Display17</Field>
+      <Field position="46" type="integer" size="4">Display18</Field>
+      <Field position="47" type="integer" size="4">Display19</Field>
+      <Field position="48" type="integer" size="4">Display20</Field>
+      <Field position="49" type="integer" size="4">Display21</Field>
+      <Field position="50" type="integer" size="4">Display22</Field>
+      <Field position="51" type="integer" size="4">Display23</Field>
+      <Field position="52" type="integer" size="4">Display24</Field>
+      <Field position="53" type="integer" size="4">Inventory1</Field>
+      <Field position="54" type="integer" size="4">Inventory2</Field>
+      <Field position="55" type="integer" size="4">Inventory3</Field>
+      <Field position="56" type="integer" size="4">Inventory4</Field>
+      <Field position="57" type="integer" size="4">Inventory5</Field>
+      <Field position="58" type="integer" size="4">Inventory6</Field>
+      <Field position="59" type="integer" size="4">Inventory7</Field>
+      <Field position="60" type="integer" size="4">Inventory8</Field>
+      <Field position="61" type="integer" size="4">Inventory9</Field>
+      <Field position="62" type="integer" size="4">Inventory10</Field>
+      <Field position="63" type="integer" size="4">Inventory11</Field>
+      <Field position="64" type="integer" size="4">Inventory12</Field>
+      <Field position="65" type="integer" size="4">Inventory13</Field>
+      <Field position="66" type="integer" size="4">Inventory14</Field>
+      <Field position="67" type="integer" size="4">Inventory15</Field>
+      <Field position="68" type="integer" size="4">Inventory16</Field>
+      <Field position="69" type="integer" size="4">Inventory17</Field>
+      <Field position="70" type="integer" size="4">Inventory18</Field>
+      <Field position="71" type="integer" size="4">Inventory19</Field>
+      <Field position="72" type="integer" size="4">Inventory20</Field>
+      <Field position="73" type="integer" size="4">Inventory21</Field>
+      <Field position="74" type="integer" size="4">Inventory22</Field>
+      <Field position="75" type="integer" size="4">Inventory23</Field>
+      <Field position="76" type="integer" size="4">Inventory24</Field>
+    </Fields>
+  </File>  
+  
+  <File name="CharTitles.dbc" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/CharTitles.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="6" type="string" size="4">MaleTitle</Field>
+      <Field position="23" type="string" size="4">FemaleTitle</Field>
+    </Fields>
+  </File>
+
+  <File name="ChrClasses.dbc" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/ChrClasses.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">Class</Field>
+      <Field position="2" type="integer" size="4">PowerType</Field>
+      <Field position="3" type="string" size="4">PetType</Field>
+      <Field position="8" type="string" size="4">MaleName</Field>
+      <Field position="25" type="string" size="4">FemalName</Field>
+      <Field position="42" type="string" size="4">NaturalName</Field>
+      <Field position="55" type="string" size="4">EnglishName</Field>
+      <Field position="56" type="integer" size="4">ID</Field>
+      <Field position="57" type="bit" size="4">Mask</Field>
+    </Fields>
+  </File>
+
+  <File name="CharSections.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=CharSections.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">RaceID</Field>
+      <Field position="2" type="integer" size="4">Gender</Field>
+      <Field position="3" type="integer" size="4">General</Field>
+      <Field position="4" type="string" size="4">Texture1</Field>
+      <Field position="5" type="string" size="4">Texture2</Field>
+      <Field position="6" type="string" size="4">Texture3</Field>
+      <Field position="7" type="integer" size="4">Section</Field>
+      <Field position="8" type="integer" size="4">Type</Field>
+      <Field position="9" type="integer" size="4">Variation</Field>
+    </Fields>
+  </File>
+
+  <File name="ChrRaces.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ChrRaces.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">Unkn</Field>
+      <Field position="2" type="integer" size="4">Order</Field>
+      <Field position="3" type="integer" size="4">Flag</Field>
+      <Field position="4" type="integer" size="4">MaleModel</Field>
+      <Field position="5" type="integer" size="4">FemaleModel</Field>
+      <Field position="6" type="string" size="4">Abbrev</Field>
+      <Field position="7" type="float" size="4">Unkn</Field>
+      <Field position="8" type="integer" size="4">Faction</Field>
+      <Field position="12" type="string" size="4">InternalName</Field>
+      <Field position="13" type="integer" size="4">Camera</Field>
+      <Field position="18" type="string" size="4">Name</Field>
+      <Field position="35" type="string" size="4">String1</Field>
+      <Field position="52" type="string" size="4">String2</Field>
+      <Field position="65" type="string" size="4">String3</Field>
+      <Field position="66" type="string" size="4">String4</Field>
+      <Field position="67" type="string" size="4">String5</Field>
+      <Field position="68" type="integer" size="4">IsBC</Field>
+      <!--
+      <Field position="30" type="bit" size="4">Mask</Field>
+      <Field position="47" type="bit" size="4">Mask</Field>
+      <Field position="64" type="bit" size="4">Mask</Field>      
+      -->
+    </Fields>
+  </File>
+
+  <File name="CharHairGeosets.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=CharHairGeosets.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">Race</Field>
+      <Field position="2" type="integer" size="4">Gender</Field>
+      <Field position="3" type="integer" size="4">UniqueID</Field>
+      <Field position="4" type="integer" size="4">Geoset</Field>
+      <Field position="5" type="integer" size="4">Bald</Field>
+    </Fields>
+  </File>
+
+  <File name="CharacterFacialHairStyles.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=CharacterFacialHairStyles.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">Race</Field>
+      <Field position="1" type="integer" size="4">Gender</Field>
+      <Field position="2" type="integer" size="4">UniqueID</Field>
+      <Field position="3" type="integer" size="4">FaceFlag1</Field>
+      <Field position="4" type="integer" size="4">FaceFlag2</Field>
+      <Field position="5" type="integer" size="4">FaceFlag3</Field>
+    </Fields>
+  </File>
+
+  <File name="HelmetGeosetVisData.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=HelmetGeosetVisData.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">HairFlag</Field>
+      <Field position="2" type="integer" size="4">FaceFlag1</Field>
+      <Field position="3" type="integer" size="4">FaceFlag2</Field>
+      <Field position="4" type="integer" size="4">FaceFlag3</Field>      
+      <Field position="5" type="integer" size="4">EarsFlag</Field>
+    </Fields>
+  </File>
+  
+<!-- Creature -->  
+  
+  <File name="CreatureType.dbc" version="1.0">
+    <Note>http://www.sourcepeek.com/wiki/CreatureType.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">Type</Field>
+      <Field position="5" type="string" size="4">Name</Field>
+      <Field position="18" type="integer" size="4">NoExp</Field>      
+    </Fields>
+  </File>
+
+<!--
+  <File name="CreatureModelData.dbc" version="1.0">
+    <Note></Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">UnknownA</Field>
+      <Field position="2" type="string" size="4">ModulePath</Field>
+      <Field position="3" type="integer" size="4">UnknownB</Field>
+      <Field position="4" type="integer" size="4">UnknownC</Field>
+      <Field position="5" type="float" size="4">AnimationSpeed</Field>
+      <Field position="6" type="integer" size="4">UnknownD</Field>
+      <Field position="7" type="integer" size="4">UnknownE</Field>
+      <Field position="8" type="float" size="4">UnknownF</Field>
+      <Field position="9" type="float" size="4">UnknownG</Field>
+      <Field position="10" type="float" size="4">Unknown?</Field>
+      <Field position="11" type="integer" size="4">UnknownH</Field>
+      <Field position="12" type="integer" size="4">UnknownI</Field>
+      <Field position="13" type="integer" size="4">Unknown?1</Field>
+      <Field position="14" type="integer" size="4">GroupID</Field>
+      <Field position="15" type="float" size="4">Collision</Field>
+      <Field position="16" type="float" size="4">UnknownK</Field>
+      <Field position="17" type="float" size="4">UnknownL</Field>
+      <Field position="18" type="float" size="4">UnknownM</Field>
+      <Field position="19" type="float" size="4">UnknownN</Field>
+      <Field position="20" type="float" size="4">UnknownO</Field>
+      <Field position="21" type="float" size="4">UnknownP</Field>
+      <Field position="22" type="float" size="4">UnknownQ</Field>
+      <Field position="23" type="float" size="4">UnknownR</Field>
+      <Field position="24" type="float" size="4">UnknownS</Field>
+      <Field position="25" type="float" size="4">UnknownT</Field>
+    </Fields>
+  </File>
+-->
+  <File name="CreatureModelData.dbc" version="1.0">
+    <Note>By Jie</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="2" type="string" size="4">Module</Field>
+      <Field position="5" type="float" size="4"></Field>
+      <Field position="8" type="float" size="4"></Field>
+      <Field position="9" type="float" size="4"></Field>
+      <Field position="10" type="float" size="4"></Field>
+      <Field position="15" type="float" size="4"></Field>
+      <Field position="16" type="float" size="4"></Field>
+      <Field position="17" type="float" size="4"></Field>
+      <Field position="18" type="float" size="4"></Field>
+      <Field position="19" type="float" size="4"></Field>
+      <Field position="20" type="float" size="4"></Field>
+      <Field position="21" type="float" size="4"></Field>
+      <Field position="22" type="float" size="4"></Field>
+      <Field position="23" type="float" size="4"></Field>
+      <Field position="24" type="float" size="4"></Field>
+      <Field position="25" type="float" size="4"></Field>
+    </Fields>
+  </File>
+  
+  
+  <File name="CreatureDisplayInfo.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=CreatureDisplayInfo.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">Model1</Field>
+      <Field position="2" type="integer" size="4">Model2</Field>
+      <Field position="3" type="integer" size="4">ExtraInfo</Field>
+      <Field position="4" type="float" size="4">Scale</Field>
+      <Field position="5" type="integer" size="4">Opacity</Field>
+      <Field position="6" type="string" size="4">Skin1</Field>
+      <Field position="7" type="string" size="4">Skin2</Field>
+      <Field position="8" type="string" size="4">Skin3</Field>
+      <Field position="9" type="string" size="4">Icon</Field>
+      <Field position="10" type="integer" size="4">Unkn1</Field>
+      <Field position="11" type="integer" size="4">Unkn2</Field>
+      <Field position="12" type="integer" size="4">NPCSound</Field>
+      <Field position="13" type="integer" size="4">Unkn3</Field>
+      <Field position="14" type="integer" size="4">Unkn4</Field>
+      <Field position="15" type="integer" size="4">Unkn5</Field>
+    </Fields>
+  </File>
+
+  <File name="CreatureDisplayInfoExtra.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=CreatureDisplayInfoExtra.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">RaceID</Field>
+      <Field position="2" type="integer" size="4">Gender</Field>
+      <Field position="3" type="integer" size="4">SkinColor</Field>
+      <Field position="4" type="integer" size="4">FaceType</Field>
+      <Field position="5" type="integer" size="4">HairType</Field>
+      <Field position="6" type="integer" size="4">HairStyle</Field>
+      <Field position="7" type="integer" size="4">BeardStyle</Field>
+      <Field position="8" type="integer" size="4">Helm</Field>
+      <Field position="9" type="integer" size="4">Shoulder</Field>
+      <Field position="10" type="integer" size="4">Shirt</Field>
+      <Field position="11" type="integer" size="4">Cuirass</Field>
+      <Field position="12" type="integer" size="4">Belt</Field>
+      <Field position="13" type="integer" size="4">Legs</Field>
+      <Field position="14" type="integer" size="4">Boots</Field>
+      <Field position="15" type="integer" size="4">Rings</Field>
+      <Field position="16" type="integer" size="4">Gloves</Field>
+      <Field position="17" type="integer" size="4">Wrist</Field>
+      <Field position="18" type="integer" size="4">Cape</Field>
+      <Field position="19" type="integer" size="4">Unkn</Field>
+      <Field position="20" type="string" size="4">Texture</Field>
+    </Fields>
+  </File>
+
+  <File name="CreatureFamily.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=CreatureFamily.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="float" size="4">Unkn</Field>
+      <Field position="2" type="integer" size="4">Pet</Field>
+      <Field position="3" type="float" size="4">Unkn</Field>
+      <Field position="4" type="integer" size="4">Unkn</Field>
+      <Field position="5" type="integer" size="4">SkillLine</Field>
+      <Field position="6" type="integer" size="4">Unkn</Field>
+      <Field position="7" type="bit" size="4">PetFood</Field>
+      <Field position="14" type="string" size="4">Name</Field>
+      <Field position="27" type="string" size="4">Path</Field>
+    </Fields>
+  </File>  
+  
+<!-- Achievement -->
+  <File name="Achievement.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=Achievement.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">Faction</Field>
+      <Field position="2" type="integer" size="4">MapID</Field>
+      <Field position="3" type="integer" size="4">Previous</Field>
+      <Field position="8" type="string" size="4">Name</Field>
+      <Field position="25" type="string" size="4">Description</Field>
+      <Field position="38" type="integer" size="4">CategoryID</Field>
+      <Field position="39" type="integer" size="4">Points</Field>
+      <Field position="42" type="integer" size="4">SpellID</Field>
+      <Field position="47" type="string" size="4">Reward</Field>
+      <Field position="60" type="integer" size="4">Demands</Field>
+    </Fields>
+  </File>
+
+  <File name="Achievement_Category.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=Achievement_Category.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">ParentID</Field>
+      <Field position="6" type="string" size="4">Name</Field>
+      <Field position="20" type="integer" size="4">GroupID</Field>
+    </Fields>
+  </File>
+  
+  <File name="Achievement_Criteria.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=Achievement_Criteria.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="integer" size="4">AchieveID</Field>
+      <Field position="3" type="integer" size="4">Group</Field>
+      <Field position="4" type="integer" size="4">Quantity</Field>
+      <Field position="5" type="integer" size="4">Category</Field>
+      <Field position="6" type="integer" size="4">MapID</Field>
+      <Field position="7" type="integer" size="4">Category2</Field>
+      <Field position="8" type="integer" size="4">MapID2</Field>
+      <Field position="13" type="string" size="4">Description</Field>
+      <Field position="29" type="integer" size="4">Value</Field>
+    </Fields>
+  </File>
+  
+<!-- Quest -->
+  <File name="QuestInfo.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=QuestInfo.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="5" type="string" size="4">Name</Field>
+    </Fields>
+  </File>
+
+  <File name="QuestSort.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=QuestSort.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="5" type="string" size="4">Name</Field>
+    </Fields>
+  </File>
+  
+<!-- Spell -->
+  <File name="SpellIcon.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=SpellIcon.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">Path</Field>
+    </Fields>
+  </File>
+
+  <File name="SpellVisualEffectName.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=SpellVisualEffectName.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">Name</Field>
+      <Field position="2" type="string" size="4">Model</Field>
+      <Field position="3" type="float" size="4"></Field>
+      <Field position="4" type="float" size="4"></Field>
+      <Field position="5" type="float" size="4"></Field>
+      <Field position="6" type="float" size="4"></Field>
+    </Fields>
+  </File>
+  
+  <!-- Name -->
+  <File name="NamesReserved.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=NamesReserved.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">Pattern</Field>
+      <Field position="2" type="Integer">Language</Field>
+    </Fields>
+  </File>
+
+  <File name="NameGen.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=NameGen.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">Pattern</Field>
+      <Field position="2" type="Integer">RaceID</Field>
+      <Field position="3" type="Integer">Gender</Field>
+    </Fields>
+  </File>
+
+  <File name="NamesProfanity.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=NamesProfanity.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">Pattern</Field>
+      <Field position="2" type="Integer">Language</Field>
+    </Fields>
+  </File>
+
+<!-- Chat -->
+  <File name="ChatChannels.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ChatChannels.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="7" type="string" size="4">Pattern</Field>
+      <Field position="24" type="string" size="4">Name</Field>
+    </Fields>
+  </File>
+
+  <File name="ChatProfanity.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=ChatProfanity.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">DirtyWord</Field>
+      <Field position="2" type="Integer">Language</Field>
+    </Fields>
+  </File>  
+<!-- Misc -->
+  
+  <File name="FileData.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=FileData.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">FileName</Field>
+    </Fields>
+  </File>
+
+  <File name="GameTips.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=GameTips.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="5" type="string" size="4">Name</Field>
+    </Fields>
+  </File>
+
+  <File name="Startup_Strings.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=Startup_Strings.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">Name</Field>
+      <Field position="6" type="string" size="4">Text</Field>      
+    </Fields>
+  </File>
+
+  <File name="StringLookups.dbc" version="1.0">
+    <Note>http://www.madx.dk/wowdev/wiki/index.php?title=StringLookups.dbc</Note>
+    <Fields>
+      <Field position="0" type="integer" size="4">ID</Field>
+      <Field position="1" type="string" size="4">Filename</Field>
+    </Fields>
+  </File>  
+
+</DBCFile>

@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ATI2N_Compress", "ATI2N_Compress.vcproj", "{4DE95E01-9DF9-454E-9684-54F52C5E1A18}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		DLL = DLL
+		MT = MT
+		MT_DLL = MT_DLL
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{4DE95E01-9DF9-454E-9684-54F52C5E1A18}.Debug.ActiveCfg = Debug|Win32
+		{4DE95E01-9DF9-454E-9684-54F52C5E1A18}.Debug.Build.0 = Debug|Win32
+		{4DE95E01-9DF9-454E-9684-54F52C5E1A18}.DLL.ActiveCfg = DLL|Win32
+		{4DE95E01-9DF9-454E-9684-54F52C5E1A18}.DLL.Build.0 = DLL|Win32
+		{4DE95E01-9DF9-454E-9684-54F52C5E1A18}.MT.ActiveCfg = MT|Win32
+		{4DE95E01-9DF9-454E-9684-54F52C5E1A18}.MT.Build.0 = MT|Win32
+		{4DE95E01-9DF9-454E-9684-54F52C5E1A18}.MT_DLL.ActiveCfg = MT_DLL|Win32
+		{4DE95E01-9DF9-454E-9684-54F52C5E1A18}.MT_DLL.Build.0 = MT_DLL|Win32
+		{4DE95E01-9DF9-454E-9684-54F52C5E1A18}.Release.ActiveCfg = Release|Win32
+		{4DE95E01-9DF9-454E-9684-54F52C5E1A18}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

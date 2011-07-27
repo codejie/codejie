@@ -1,0 +1,4 @@
+//#include "wx/msw/wx.rc"
+
+RC_BMP_TOOLBAR_OPEN BITMAP "rc/open.bmp"
+RC_BMP_TOOLBAR_RELOAD BITMAP "rc/reload.bmp"

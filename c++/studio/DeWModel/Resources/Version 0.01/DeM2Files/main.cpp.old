@@ -1,0 +1,127 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "FileBuffer.h"
+#include "M2Object.h"
+#include "XFileObject.h"
+
+
+int main()
+{
+	std::string indir = ".\\M2\\";
+	std::string outdir = ".\\Output\\";
+	std::string filename = "Helm_Robe_RaidWarlock_E_01_TrM.M2";
+
+	CFileBuffer fb;
+	if(fb.Attach(indir + filename) != 0)
+	{
+		std::cout << "\nattach failed." << std::endl;
+		return -1;
+	}
+
+	M2::CHeader header;
+	if(header.Read(fb) != 0)
+	{
+		std::cout << "\nHeader read failed." << std::endl;
+		return -1;
+	}
+
+	std::cout << "\n\n---- Header ----";
+	std::cout << header << std::endl;	
+
+	//Name
+	if(fb.Seek(header.m_stName.m_uiOffset) != 0)
+	{
+		std::cout << "\nSeek Name failed." << std::endl;
+		return -1;
+	}
+	M2::CName name;
+	if(name.Read(fb) != 0)
+	{
+		std::cout << "\nName read failed." << std::endl;
+		return -1;
+	}
+	if((name.m_strName.size() + 1) != header.m_stName.m_uiCount)
+	{
+		std::cout << "\nName Length is wrong." << std::endl;
+		return -1;
+	}
+
+	name.Show(std::cout);
+
+	//Vertex
+	std::cout << "\nVertex count : " << header.m_stVertex.m_uiCount << std::endl;
+
+	std::vector<M2::CVertex> vctVertex;
+	for(unsigned int i = 0; i < header.m_stVertex.m_uiCount; ++ i)
+	{
+		M2::CVertex v;
+
+		size_t sz = header.m_stVertex.m_uiOffset + i * v.BlockSize();
+		if(fb.Seek(sz) != 0)
+		{
+			std::cout << "\nSeek Vertex failed." << std::endl;
+			return -1;
+		}
+		std::cout << "\nVertor seek pos : " << sz << std::endl;
+
+		if(v.Read(fb) != 0)
+		{
+			std::cout << "\nVertex read failed." << std::endl;
+			return -1;
+		}
+
+		std::cout << "\n\nVextex(" << i << ") = ";
+		v.Show(std::cout);
+
+		vctVertex.push_back(v);
+	}
+
+	//View
+	std::cout << "\nView count : " << header.m_stView.m_uiCount << std::endl;
+	std::vector<M2::CView> vctView;
+	for(unsigned int i = 0; i < header.m_stView.m_uiCount; ++ i)
+	{
+		M2::CView v;
+
+		if(fb.Seek(header.m_stView.m_uiOffset + i * v.BlockSize()) != 0)
+		{
+			std::cout << "\nSeek View failed." << std::endl;
+			return -1;
+		}
+
+
+		if(v.Read(fb) != 0)
+		{
+			std::cout << "\nView read failed." << std::endl;
+			return -1;
+		}
+		std::cout << "\n\nView(" << i << ") = ";
+		v.Show(std::cout);
+		vctView.push_back(v);
+	}
+
+//XFile
+	CXFileObject xfile;
+
+	for(std::vector<M2::CVertex>::const_iterator it = vctVertex.begin(); it != vctVertex.end(); ++ it)
+	{
+		xfile.AddVertex(it->m_stPosition.m_fX, it->m_stPosition.m_fY, it->m_stPosition.m_fZ);
+	}
+	for(std::vector<M2::CView>::const_iterator it = vctView.begin(); it != vctView.end(); ++ it)
+	{
+		for(M2::CView::TTriangleVector::const_iterator i = it->m_vctTriangle.begin(); i != it->m_vctTriangle.end(); ++ i)
+		{
+			xfile.AddTriangle(it->m_vctIndex[i->m_usXIndex], it->m_vctIndex[i->m_usYIndex], it->m_vctIndex[i->m_usZIndex]);
+		}
+		break;//just do one
+	}
+	xfile.Output(outdir + filename + ".x");
+
+	char ch;
+	std::cin >> ch;
+
+
+	return 0;
+}

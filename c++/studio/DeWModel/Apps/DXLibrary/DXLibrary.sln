@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXLibrary", "DXLibrary.vcproj", "{948EB9A7-91FB-4668-9610-93ABE7A8317D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test-DX", "Test-DX\Test-DX.vcproj", "{8C471D98-BEF5-4D7F-802C-EFD9FC748ED4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{948EB9A7-91FB-4668-9610-93ABE7A8317D} = {948EB9A7-91FB-4668-9610-93ABE7A8317D}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{948EB9A7-91FB-4668-9610-93ABE7A8317D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{948EB9A7-91FB-4668-9610-93ABE7A8317D}.Debug|Win32.Build.0 = Debug|Win32
+		{948EB9A7-91FB-4668-9610-93ABE7A8317D}.Release|Win32.ActiveCfg = Release|Win32
+		{948EB9A7-91FB-4668-9610-93ABE7A8317D}.Release|Win32.Build.0 = Release|Win32
+		{8C471D98-BEF5-4D7F-802C-EFD9FC748ED4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8C471D98-BEF5-4D7F-802C-EFD9FC748ED4}.Debug|Win32.Build.0 = Debug|Win32
+		{8C471D98-BEF5-4D7F-802C-EFD9FC748ED4}.Release|Win32.ActiveCfg = Release|Win32
+		{8C471D98-BEF5-4D7F-802C-EFD9FC748ED4}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

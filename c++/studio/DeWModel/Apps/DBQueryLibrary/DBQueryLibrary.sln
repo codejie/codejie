@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBQueryLibrary", "DBQueryLibrary.vcproj", "{460EBED4-0083-4242-8766-9578D6CF779C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test-DBQuery", "test\test.vcproj", "{9F4C7809-711A-422C-B976-DFEFA8495E59}"
+	ProjectSection(ProjectDependencies) = postProject
+		{460EBED4-0083-4242-8766-9578D6CF779C} = {460EBED4-0083-4242-8766-9578D6CF779C}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{460EBED4-0083-4242-8766-9578D6CF779C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{460EBED4-0083-4242-8766-9578D6CF779C}.Debug|Win32.Build.0 = Debug|Win32
+		{460EBED4-0083-4242-8766-9578D6CF779C}.Release|Win32.ActiveCfg = Release|Win32
+		{460EBED4-0083-4242-8766-9578D6CF779C}.Release|Win32.Build.0 = Release|Win32
+		{9F4C7809-711A-422C-B976-DFEFA8495E59}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9F4C7809-711A-422C-B976-DFEFA8495E59}.Debug|Win32.Build.0 = Debug|Win32
+		{9F4C7809-711A-422C-B976-DFEFA8495E59}.Release|Win32.ActiveCfg = Release|Win32
+		{9F4C7809-711A-422C-B976-DFEFA8495E59}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

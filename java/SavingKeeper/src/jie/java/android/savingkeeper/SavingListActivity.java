@@ -275,7 +275,7 @@ public class SavingListActivity extends ListActivity {
     		return false;
     	}
     	
-    	Toast.makeText(this, "" + item.getTitle().toString(), 1).show();// item.getTitle()item.toString();
+ //   	Toast.makeText(this, "" + item.getTitle().toString(), 1).show();// item.getTitle()item.toString();
     	return true;
     	
     	//return super.onOptionsItemSelected(item);
@@ -289,8 +289,9 @@ public class SavingListActivity extends ListActivity {
 */    
     ////////////
     protected void onMenuAddSaving() {
-    	SavingDetailActivity act = new SavingDetailActivity(SavingDetailActivity.ACTION_ADD);
+    	SavingDetailActivity act = new SavingDetailActivity();
 		Intent intent = new Intent(this, act.getClass());
+		intent.putExtra("ACTION", SavingDetailActivity.ACTION_ADD);
 		this.startActivity(intent);
     }
     

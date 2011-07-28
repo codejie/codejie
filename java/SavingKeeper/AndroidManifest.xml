@@ -15,5 +15,7 @@
         </activity>
         <activity android:name="SavingListActivity" android:label="@string/title_savinglistactivity"></activity>
         <activity android:name="BankListActivity" android:label="@string/title_banklist"></activity>
+        <activity android:name="SavingDetailActivity" android:label="@string/menu_addsaving">
+        </activity>
     </application>
 </manifest>

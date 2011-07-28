@@ -150,6 +150,7 @@ public class DBAccess {
 		cursor.moveToFirst();
 		return cursor.getInt(0);
 	}
+	//
 	
 	//
 	public int insertSaving(final String title, float amount, int currency, final String checkin, int type, int bank, final String note) {

@@ -17,6 +17,7 @@ CoreMsgTask::CoreMsgTask()
 
 CoreMsgTask::~CoreMsgTask()
 {
+	Final();
 }
 
 int CoreMsgTask::Init(const ConfigLoader& config)
@@ -27,13 +28,16 @@ int CoreMsgTask::Init(const ConfigLoader& config)
 
 void CoreMsgTask::Final()
 {
-
+	this->clear_timer();
 }
 
 int CoreMsgTask::handle_msg(const ACEX_Message& msg)
 {
-
-    if(msg.msg_id() == TASK_TIMER)
+	if(msg.msg_id() == TASK_SERVER)
+	{
+		return OnServerMsgProc(msg);
+	}
+    else if(msg.msg_id() == TASK_TIMER)
     {
         return OnTimerMsgProc(msg);
     }
@@ -66,4 +70,71 @@ int CoreMsgTask::OnAppTaskMsgProc(const ACEX_Message &msg)
 int CoreMsgTask::OnTimerMsgProc(const ACEX_Message& msg)
 {
 	return 0;
+}
+
+int CoreMsgTask::OnServerMsgProc(const ACEX_Message &msg)
+{
+	if(msg.fparam() == FPARAM_PACKET)
+	{
+		std::auto_ptr<const Packet> packet(reinterpret_cast<const Packet*>(msg.data()));
+		OnServerPacket(msg.sparam(), *packet);
+	}
+	else if(msg.fparam() == FPARAM_SOCKET_CONNECT)
+	{
+		std::auto_ptr<const ACE_INET_Addr> addr(reinterpret_cast<const ACE_INET_Addr*>(msg.data()));
+		return OnServerSocketConnect(msg.sparam(), addr->get_host_name(), addr->get_port_number());
+	}
+	else if(msg.fparam() == FPARAM_SOCKET_DISCONNECT)
+	{
+		return OnServerSocketDisconnect(msg.sparam());
+	}
+	else
+	{
+		ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnServerMsgProc>Unknwon fparam - " << msg.fparam() << std::endl);
+	}
+	return 0;
+}
+
+int CoreMsgTask::OnServerPacket(int clientid, const Packet &packet)
+{
+	return -1;
+}
+
+int CoreMsgTask::OnServerSocketConnect(int clientid, const std::string &ip, unsigned int port)
+{
+	TDTUMap::const_iterator it = _mapDTU.find(clientid);
+	if(it != _mapDTU.end())
+	{
+		ACEX_LOG_OS(LM_WARNING, "<>Socket " << clientid << " always connects." << std::endl);
+		return -1;
+	}
+
+	DTUData data;
+	data.ip = ip;
+	data.port = port;
+	data.status = DS_WAITTEL;
+	data.update = ACE_OS::time(NULL);
+	data.count = 0;
+	data.timer = RegTimer(clientid, FPARAM_SOCKET_TIMEOUT, 30);
+
+	return _mapDTU.insert(std::make_pair(clientid, data)).second ? 0 : -1;
+}
+
+int CoreMsgTask::OnServerSocketDisconnect(int clientid)
+{
+	TDTUMap::iterator it = _mapDTU.find(clientid);
+	if(it != _mapDTU.end())
+		_mapDTU.erase(it);
+	return 0;
+}
+
+int CoreMsgTask::RegTimer(int clientid, int type, unsigned int timeout)
+{
+	ACEX_Message msg(TASK_TIMER, FPARAM_SOCKET_TIMEOUT, 0);
+	return this->regist_timer(msg, ACE_Time_Value(timeout));
+}
+
+void CoreMsgTask::UnregTimer(int timerid)
+{
+	this->remove_timer(timerid);
 }

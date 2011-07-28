@@ -192,13 +192,6 @@
 			<File
 				RelativePath=".\main.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\Options.cpp"
@@ -236,6 +229,10 @@
 			</File>
 			<File
 				RelativePath=".\Options.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Packet.h"
 				>
 			</File>
 			<File

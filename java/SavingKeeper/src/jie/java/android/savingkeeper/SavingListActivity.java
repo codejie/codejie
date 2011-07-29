@@ -139,25 +139,6 @@ public class SavingListActivity extends ListActivity {
 			
 			tlayout.addView(layout);
 			
-			//type
-			layout = new LinearLayout(context);
-			layout.setOrientation(HORIZONTAL);
-			
-			tv = new TextView(context);
-			tv.setText(R.string.str_type);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.weight = 1.0f;			
-			//params.gravity = Gravity.RIGHT;
-			layout.addView(tv, params);
-			
-			textType = new TextView(context);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.weight = 1.0f;
-			//params.gravity = Gravity.RIGHT;
-			layout.addView(textType, params);			
-			
-			tlayout.addView(layout);
-			
 			//checkin
 			layout = new LinearLayout(context);
 			layout.setOrientation(HORIZONTAL);
@@ -174,6 +155,25 @@ public class SavingListActivity extends ListActivity {
 			params.weight = 1.0f;
 			//params.gravity = Gravity.RIGHT;
 			layout.addView(textCheckin, params);			
+			
+			tlayout.addView(layout);
+			
+			//type
+			layout = new LinearLayout(context);
+			layout.setOrientation(HORIZONTAL);
+			
+			tv = new TextView(context);
+			tv.setText(R.string.str_type);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;			
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(tv, params);
+			
+			textType = new TextView(context);
+			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 1.0f;
+			//params.gravity = Gravity.RIGHT;
+			layout.addView(textType, params);			
 			
 			tlayout.addView(layout);
 			

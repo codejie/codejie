@@ -36,13 +36,13 @@ public class DBAccess {
 	public static final String TABLE_COLUMN_STRING		= "string";
 	public static final String TABLE_COLUMN_INTEGER		= "value";
 	
-	public static final int SAVING_TYPE_CURRENT			= 1;
-	public static final int SAVING_TYPE_FIXED_3_MONTH	= 2;
-	public static final int SAVING_TYPE_FIXED_6_MONTH	= 3;
-	public static final int SAVING_TYPE_FIXED_1_YEAR	= 4;
-	public static final int SAVING_TYPE_FIXED_2_YEAR	= 5;
-	public static final int SAVING_TYPE_FIXED_3_YEAR	= 6;
-	public static final int SAVING_TYPE_FIXED_5_YEAR	= 7;
+	public static final int SAVING_TYPE_CURRENT			= 0;
+	public static final int SAVING_TYPE_FIXED_3_MONTH	= 1;
+	public static final int SAVING_TYPE_FIXED_6_MONTH	= 2;
+	public static final int SAVING_TYPE_FIXED_1_YEAR	= 3;
+	public static final int SAVING_TYPE_FIXED_2_YEAR	= 4;
+	public static final int SAVING_TYPE_FIXED_3_YEAR	= 5;
+	public static final int SAVING_TYPE_FIXED_5_YEAR	= 6;
 	
 	public static final int CURRENCY_TYPE_RMB			= 0;
 	public static final int CURRENCY_TYPE_US			= 1;
@@ -151,7 +151,7 @@ public class DBAccess {
 		return cursor.getInt(0);
 	}
 	//
-	
+	//public int insertRate
 	//
 	public int insertSaving(final String title, float amount, int currency, final String checkin, int type, int bank, final String note) {
 		ContentValues values = new ContentValues();

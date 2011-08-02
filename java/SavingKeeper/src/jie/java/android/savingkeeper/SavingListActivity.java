@@ -292,6 +292,7 @@ public class SavingListActivity extends ListActivity {
     	SavingDetailActivity act = new SavingDetailActivity();
 		Intent intent = new Intent(this, act.getClass());
 		intent.putExtra("ACTION", SavingDetailActivity.ACTION_ADD);
+		intent.putExtra("ID", -1);
 		this.startActivity(intent);
     }
     

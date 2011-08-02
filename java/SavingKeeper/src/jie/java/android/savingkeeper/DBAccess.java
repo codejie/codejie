@@ -91,8 +91,8 @@ public class DBAccess {
 		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_RATE + " ("
 		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
 		+ TABLE_COLUMN_TYPE + " INTEGER, "
-		+ TABLE_COLUMN_START + " TEXT,"
-		+ TABLE_COLUMN_END + " TEXT,"
+		+ TABLE_COLUMN_START + " INTEGER,"
+		+ TABLE_COLUMN_END + " INTEGER,"
 		+ TABLE_COLUMN_RATE + " REAL"
 		+ ");";
 		
@@ -150,9 +150,7 @@ public class DBAccess {
 		cursor.moveToFirst();
 		return cursor.getInt(0);
 	}
-	//
-	//public int insertRate
-	//
+
 	public int insertSaving(final String title, float amount, int currency, final String checkin, int type, int bank, final String note) {
 		ContentValues values = new ContentValues();
 		values.put(TABLE_COLUMN_TITLE, title);
@@ -168,6 +166,11 @@ public class DBAccess {
 		return 0;
 	}
 
+	//
+	public float getRate(int checkin, int type) {
+		return 0.0f;
+	}
+	
 	//
 	public int insert(final TestData data) {
 		

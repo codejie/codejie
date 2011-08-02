@@ -43,6 +43,19 @@ public class SavingListActivity extends ListActivity {
 		}
 		
 		public void bindView(View view, Context context, Cursor cursor) {
+			String title = cursor.getString(1);
+			String amount = cursor.getString(2);
+			//String end = GLOBAL.DBACCESS.calcMoney(/*amount, currency, checkin, endtime, type*/);
+			//String now = GLOBAL.DBACCESS.calcMoney(/*amount, currency, checkin, now, type */);
+			String currency = GLOBAL.DBACCESS.getCurrency(cursor.getLong(3));
+			String checkin = GLOBAL.DBACCESS.getCheckin(cursor.getLong(4));
+			String type = GLOBAL.DBACCESS.getType(cursor.getLong(5));
+			String bank = GLOBAL.DBACCESS.getBank(cursor.getLong(6));
+			String note = cursor.getString(7);
+			String end, now;
+			GLOBAL.DBACCESS.calcMoney(cursor.getFloat(2), cursor.getLong(3), cursor.getLong(4), cursor.getLong(5), end, now);
+			
+			
 			((SavingListView)view).setTitle(cursor.getString(0), cursor.getString(1));
 		}
 	}
@@ -229,7 +242,7 @@ public class SavingListActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Cursor cursor = GLOBAL.DBACCESS.query();
+		Cursor cursor = GLOBAL.DBACCESS.querySaving();
 		this.startManagingCursor(cursor);
 		ListAdapter adapter = new DataCursorAdapter(this, cursor);		
 		this.setListAdapter(adapter);

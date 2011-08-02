@@ -5,7 +5,10 @@
  */
 package jie.java.android.savingkeeper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -41,7 +44,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 	private int iID = -1;
 	
 	private int iYear, iMonth, iDay;
-	private long iType, iBank;
+	private long iCurrency, iType, iBank;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,29 +56,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 		this.setContentView(R.layout.savingdetail);
 		
 		initView();
-		
-		////// 
-		
-		((Button)this.findViewById(R.id.btnCheckin)).setOnClickListener(this);
-		//((Spinner)this.findViewById(R.id.listCurrency)).setOnItemClickListener(mMessageClickedHandler); 		
-		
-/*
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[] { "RMB", "US", "EU" });
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		((Spinner)this.findViewById(R.id.listCurrency)).setAdapter(adapter);
-*/		
-/*
-		//if(this.action == ACTION_ADD) {
-		if(this.getIntent().getExtras().getInt("ACTION") == ACTION_ADD) {
-			Button btn = new Button(this);
-			btn.setText(R.string.str_button_add);
-			LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.weight = 1.0f;
-			((LinearLayout)this.findViewById(R.id.mainLayout)).addView(btn, params);
-			//View view = this.addContentView(view, params) .getContentView();
-		}
-*/		
-	}
+	}		
 	
 	private void initView() {
 		
@@ -85,7 +66,22 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 		ArrayAdapter<String> adapterCurrency = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.currency));
 		adapterCurrency.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		((Spinner)this.findViewById(R.id.listCurrency)).setAdapter(adapterCurrency);
+		Spinner currency = ((Spinner)this.findViewById(R.id.listCurrency));
+		currency.setAdapter(adapterCurrency);
+		currency.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
+				iCurrency = id;				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		
 		ArrayAdapter<String> adapterType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.type));
 		adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -96,7 +92,6 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
 				iType = id;
-				Toast.makeText(SavingDetailActivity.this, "pos: " + position + " id: " + id, Toast.LENGTH_SHORT).show();
 			}
 
 			@Override
@@ -115,7 +110,6 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
 				iBank = id;
-				Toast.makeText(SavingDetailActivity.this, "pos: " + position + " id: " + id, Toast.LENGTH_SHORT).show();
 			}
 
 			@Override
@@ -185,11 +179,27 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 		if(iAction == ACTION_ADD || iAction == ACTION_EDIT) {
 			
 			String title = ((EditText)this.findViewById(R.id.textTitle)).getText().toString();
-			float amont = Float.valueOf(((EditText)this.findViewById(R.id.textAmount)).getText().toString());
+			float amount = Float.valueOf(((EditText)this.findViewById(R.id.textAmount)).getText().toString());
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+			long checkin = 0;
+			try {
+				checkin = fmt.parse(((EditText)this.findViewById(R.id.textCheckin)).getText().toString()).getTime();
+			} catch (ParseException e) {
+				Toast.makeText(this, "Error Date Format", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			String note = ((EditText)this.findViewById(R.id.textNote)).getText().toString();
+			
+			if(iAction == ACTION_ADD) {
+				GLOBAL.DBACCESS.insertSaving(title, amount, iCurrency, checkin, iType, iBank, note);
+			}
+			else {
+				GLOBAL.DBACCESS.updateSaving(iID, title, amount, iCurrency, checkin, iType, iBank, note);
+			}
 			
 		}
 		else if(iAction == ACTION_REMOVE) {
-			
+			GLOBAL.DBACCESS.removeSaving(iID);
 		}
 		else {
 			

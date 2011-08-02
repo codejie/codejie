@@ -73,7 +73,7 @@ public class DBAccess {
 		+ TABLE_COLUMN_TITLE + " TEXT,"
 		+ TABLE_COLUMN_AMOUNT + " REAL,"
 		+ TABLE_COLUMN_CURRENCY + " INTEGER,"
-		+ TABLE_COLUMN_CHECKIN + " TEXT,"
+		+ TABLE_COLUMN_CHECKIN + " INTEGER,"
 		+ TABLE_COLUMN_TYPE + " INTEGER,"
 		+ TABLE_COLUMN_BANK + " INTEGER,"
 		+ TABLE_COLUMN_NOTE + " TEXT"
@@ -90,6 +90,7 @@ public class DBAccess {
 
 		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_RATE + " ("
 		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
+		+ TABLE_COLUMN_CURRENCY + " INTEGER, "
 		+ TABLE_COLUMN_TYPE + " INTEGER, "
 		+ TABLE_COLUMN_START + " INTEGER,"
 		+ TABLE_COLUMN_END + " INTEGER,"
@@ -151,7 +152,15 @@ public class DBAccess {
 		return cursor.getInt(0);
 	}
 
-	public int insertSaving(final String title, float amount, int currency, final String checkin, int type, int bank, final String note) {
+	//
+	public Cursor querySaving() {
+		String col[] = new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_TITLE, TABLE_COLUMN_AMOUNT, TABLE_COLUMN_CURRENCY, TABLE_COLUMN_CHECKIN, TABLE_COLUMN_TYPE, TABLE_COLUMN_BANK, TABLE_COLUMN_NOTE }; 
+		Cursor  cursor = db.query(TABLE_NAME_SAVING, col, null, null, null, null, null, null);//"", new String[] {}, "", "", "", "");
+		cursor.moveToFirst();
+		return cursor;		
+	}
+	
+	public int insertSaving(final String title, float amount, long currency, long checkin, long type, long bank, final String note) {
 		ContentValues values = new ContentValues();
 		values.put(TABLE_COLUMN_TITLE, title);
 		values.put(TABLE_COLUMN_AMOUNT, amount);
@@ -164,6 +173,14 @@ public class DBAccess {
 		if(db.insert(TABLE_NAME_SAVING, null, values) == -1)
 			return -1;
 		return 0;
+	}
+	
+	public int updateSaving(int id, final String title, float amount, long currency, long checkin, long type, long bank, final String note) {
+		return -1;
+	}
+	
+	public int removeSaving(int id) {
+		return -1;
 	}
 
 	//
@@ -194,5 +211,9 @@ public class DBAccess {
 		return cursor;
 	}
 	
+	//
+	public int calcMoney(float amount, long currency, long checkin, long type, String endMoney, String nowMoney) {
+		return -1;
+	}
 	
 }

@@ -29,7 +29,7 @@
 									<listOptionValue builtIn="false" value="ACEF"/>
 									<listOptionValue builtIn="false" value="ACEX"/>
 									<listOptionValue builtIn="false" value="ACE"/>
-									<listOptionValue builtIn="false" value="occi"/>
+									<listOptionValue builtIn="false" value="oci"/>
 								</option>
 								<option id="macosx.cpp.link.option.paths.273231537" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${ORA_SDK_ROOT}&quot;"/>

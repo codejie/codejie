@@ -5,6 +5,7 @@
  *      Author: codejie
  */
 
+#include "ace/OS_NS_time.h"
 #include "acex/ACEX.h"
 
 #include "Defines.h"

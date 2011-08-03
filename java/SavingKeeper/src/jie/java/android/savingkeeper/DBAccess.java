@@ -5,7 +5,13 @@
  */
 package jie.java.android.savingkeeper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.ResourceBundle;
+
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -74,7 +80,7 @@ public class DBAccess {
 		+ TABLE_COLUMN_AMOUNT + " REAL,"
 		+ TABLE_COLUMN_CURRENCY + " INTEGER,"
 		+ TABLE_COLUMN_CHECKIN + " INTEGER,"
-		+ TABLE_COLUMN_TYPE + " INTEGER,"
+		+ TABLE_COLUMN_TYPE + " TEXT,"
 		+ TABLE_COLUMN_BANK + " INTEGER,"
 		+ TABLE_COLUMN_NOTE + " TEXT"
 		+ ");";
@@ -92,8 +98,8 @@ public class DBAccess {
 		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
 		+ TABLE_COLUMN_CURRENCY + " INTEGER, "
 		+ TABLE_COLUMN_TYPE + " INTEGER, "
-		+ TABLE_COLUMN_START + " INTEGER,"
-		+ TABLE_COLUMN_END + " INTEGER,"
+		+ TABLE_COLUMN_START + " TEXT,"
+		+ TABLE_COLUMN_END + " TEXT,"
 		+ TABLE_COLUMN_RATE + " REAL"
 		+ ");";
 		
@@ -160,7 +166,7 @@ public class DBAccess {
 		return cursor;		
 	}
 	
-	public int insertSaving(final String title, float amount, long currency, long checkin, long type, long bank, final String note) {
+	public int insertSaving(final String title, float amount, long currency, final String checkin, long type, long bank, final String note) {
 		ContentValues values = new ContentValues();
 		values.put(TABLE_COLUMN_TITLE, title);
 		values.put(TABLE_COLUMN_AMOUNT, amount);
@@ -175,7 +181,7 @@ public class DBAccess {
 		return 0;
 	}
 	
-	public int updateSaving(int id, final String title, float amount, long currency, long checkin, long type, long bank, final String note) {
+	public int updateSaving(int id, final String title, float amount, long currency, final String checkin, long type, long bank, final String note) {
 		return -1;
 	}
 	
@@ -212,7 +218,41 @@ public class DBAccess {
 	}
 	
 	//
+	public String getCurrency(Activity act, long currency) {
+		
+		String[] str = act.getResources().getStringArray(R.array.currency);
+		return str[(int)currency];
+/*		
+		if(currency == CURRENCY_TYPE_RMB) {
+			return act.getResources().getString(R.string.currency_rmb);
+		}
+		else if(currency == CURRENCY_TYPE_US) {
+			return act.getResources().getString(R.string.currency_us);
+		}
+		else if(currency == CURRENCY_TYPE_EU) {
+			return act.getResources().getString(R.string.currency_eu);
+		}
+		else {
+			return "unkn";
+		}
+*/		
+	}
+	
+	public String getCheckin(long time) {
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd"); 
+		Date date = new Date(time * 1000);
+		return fmt.format(date);
+	}
+	
+	public String getType(Activity act, long type) {
+		
+		String[] str = act.getResources().getStringArray(R.array.type);
+		return str[(int)type];		
+	}
+	
 	public int calcMoney(float amount, long currency, long checkin, long type, String endMoney, String nowMoney) {
+		endMoney = "1.00";
+		nowMoney = "22.00";
 		return -1;
 	}
 	

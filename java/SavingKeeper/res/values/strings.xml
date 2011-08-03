@@ -26,4 +26,7 @@
     <string name="str_button_add">Add</string>
     <string name="str_button_edit">Update</string>
     <string name="str_button_remove">Remove</string>
+    <string name="currency_rmb">RMB</string>
+    <string name="currency_us">US</string>
+    <string name="currency_eu">EU</string>
 </resources>

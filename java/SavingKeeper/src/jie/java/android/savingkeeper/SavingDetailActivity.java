@@ -77,8 +77,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
+				// TODO Auto-generated method stub				
 			}
 			
 		});
@@ -180,14 +179,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			
 			String title = ((EditText)this.findViewById(R.id.textTitle)).getText().toString();
 			float amount = Float.valueOf(((EditText)this.findViewById(R.id.textAmount)).getText().toString());
-			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-			long checkin = 0;
-			try {
-				checkin = fmt.parse(((EditText)this.findViewById(R.id.textCheckin)).getText().toString()).getTime();
-			} catch (ParseException e) {
-				Toast.makeText(this, "Error Date Format", Toast.LENGTH_SHORT).show();
-				return;
-			}
+			String checkin = ((EditText)this.findViewById(R.id.textCheckin)).getText().toString();
 			String note = ((EditText)this.findViewById(R.id.textNote)).getText().toString();
 			
 			if(iAction == ACTION_ADD) {
@@ -204,6 +196,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 		else {
 			
 		}
+		this.finish();
 	}
 	
 }

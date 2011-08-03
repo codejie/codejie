@@ -47,16 +47,17 @@ public class SavingListActivity extends ListActivity {
 			String amount = cursor.getString(2);
 			//String end = GLOBAL.DBACCESS.calcMoney(/*amount, currency, checkin, endtime, type*/);
 			//String now = GLOBAL.DBACCESS.calcMoney(/*amount, currency, checkin, now, type */);
-			String currency = GLOBAL.DBACCESS.getCurrency(cursor.getLong(3));
-			String checkin = GLOBAL.DBACCESS.getCheckin(cursor.getLong(4));
-			String type = GLOBAL.DBACCESS.getType(cursor.getLong(5));
+			String currency = GLOBAL.DBACCESS.getCurrency(SavingListActivity.this, cursor.getLong(3));
+			String checkin = cursor.getString(4);
+			String type = GLOBAL.DBACCESS.getType(SavingListActivity.this, cursor.getLong(5));
 			String bank = GLOBAL.DBACCESS.getBank(cursor.getLong(6));
 			String note = cursor.getString(7);
-			String end, now;
+			String end = new String(), now = new String();
 			GLOBAL.DBACCESS.calcMoney(cursor.getFloat(2), cursor.getLong(3), cursor.getLong(4), cursor.getLong(5), end, now);
 			
 			
-			((SavingListView)view).setTitle(cursor.getString(0), cursor.getString(1));
+			//((SavingListView)view).setTitle(cursor.getString(0), cursor.getString(1));
+			((SavingListView)view).setContent(title, amount, currency, checkin, type, bank, note, end, now);
 		}
 	}
 	
@@ -140,14 +141,14 @@ public class SavingListActivity extends ListActivity {
 			tv = new TextView(context);
 			tv.setText(R.string.str_currency);
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.weight = 1.0f;			
+			params.weight = 1.0f;
 			//params.gravity = Gravity.RIGHT;
 			layout.addView(tv, params);
 			
 			textCurrency = new TextView(context);
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;
-			//params.gravity = Gravity.RIGHT;
+			params.gravity = Gravity.LEFT;
 			layout.addView(textCurrency, params);			
 			
 			tlayout.addView(layout);
@@ -160,13 +161,13 @@ public class SavingListActivity extends ListActivity {
 			tv.setText(R.string.str_checkin);
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;			
-			//params.gravity = Gravity.RIGHT;
+			//params.gravity = Gravity.LEFT;
 			layout.addView(tv, params);
 			
 			textCheckin = new TextView(context);
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;
-			//params.gravity = Gravity.RIGHT;
+			params.gravity = Gravity.LEFT;
 			layout.addView(textCheckin, params);			
 			
 			tlayout.addView(layout);
@@ -185,7 +186,7 @@ public class SavingListActivity extends ListActivity {
 			textType = new TextView(context);
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;
-			//params.gravity = Gravity.RIGHT;
+			params.gravity = Gravity.LEFT;
 			layout.addView(textType, params);			
 			
 			tlayout.addView(layout);
@@ -204,7 +205,7 @@ public class SavingListActivity extends ListActivity {
 			textBank = new TextView(context);
 			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;
-			//params.gravity = Gravity.RIGHT;
+			params.gravity = Gravity.LEFT;
 			layout.addView(textBank, params);			
 			
 			tlayout.addView(layout);			
@@ -227,6 +228,18 @@ public class SavingListActivity extends ListActivity {
 			textEnd.setText(value);
 			textBank.setText(value);
 			textNote.setText(title);
+		}
+		
+		public void setContent(final String title, final String amount, final String currency, final String checkin, final String type, final String bank, final String note, final String end, final String now) {
+			textTitle.setText(title);
+			textAmount.setText(amount);
+			textCurrency.setText(currency);
+			textCheckin.setText(checkin);
+			textType.setText(type);
+			textBank.setText(bank);
+			textNote.setText(note);
+			textEnd.setText(end);
+			textNow.setText(now);
 		}
 		
 		public void setExpanded() {

@@ -720,24 +720,28 @@ const std::string DataAccess::GetPacketCPItemMinuteValue(const Packet &packet, c
     //cou + min + avg + max
     std::string ret = "";
     Packet::TCPItemDataMap::const_iterator it = data.find("Cou");
-    if(it == data.end())
-        throw PacketException("can not find Cou value : " + item, packet);
-    ret += it->second;
+    if(it != data.end())
+		ret += it->second;
+	else
+		ret + = "0.0";
 
     it = data.find("Min");
-    if(it == data.end())
-        throw PacketException("can not find Min value : " + item, packet);
-    ret += ("," + it->second);
+    if(it != data.end())
+	    ret += ("," + it->second);
+	else
+		ret += ",0.0";
 
     it = data.find("Avg");
-    if(it == data.end())
-        throw PacketException("can not find Avg value : " + item, packet);
-    ret += ("," + it->second);
+    if(it != data.end())
+	    ret += ("," + it->second);
+	else
+		ret += ",0.0";
 
     it = data.find("Max");
     if(it == data.end())
-        throw PacketException("can not find Max value : " + item, packet);
-    ret += ("," + it->second);
+	    ret += ("," + it->second);
+	else
+		ret += ",0.0";
 
     return ret;
 }
@@ -755,7 +759,8 @@ const std::string DataAccess::GetPacketCPItemDayValue(const Packet &packet, cons
 const std::string DataAccess::GetPacketCPItemRuntimeValue(const Packet &packet, const std::string &item, const Packet::TCPItemDataMap &data) const
 {
     Packet::TCPItemDataMap::const_iterator it = data.find("Rtd");
-    if(it == data.end())
-        throw PacketException("can not find Rtd value : " + item, packet);
-	return it->second;
+    if(it != data.end())
+		return it->second;
+	else
+		return "0.0";
 }

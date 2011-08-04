@@ -124,7 +124,10 @@ int CoreMsgTask::OnServerSocketDisconnect(int clientid)
 {
 	TDTUMap::iterator it = _mapDTU.find(clientid);
 	if(it != _mapDTU.end())
+	{
+		UnregTimer(it->second.timer);
 		_mapDTU.erase(it);
+	}
 	return 0;
 }
 
@@ -136,5 +139,6 @@ int CoreMsgTask::RegTimer(int clientid, int type, unsigned int timeout)
 
 void CoreMsgTask::UnregTimer(int timerid)
 {
-	this->remove_timer(timerid);
+	if(timerid != -1)
+		this->remove_timer(timerid);
 }

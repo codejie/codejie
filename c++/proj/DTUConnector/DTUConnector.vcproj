@@ -182,6 +182,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ConnectionServer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\CoreMsgTask.cpp"
 				>
 			</File>
@@ -195,6 +199,10 @@
 			</File>
 			<File
 				RelativePath=".\Options.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Packet.cpp"
 				>
 			</File>
 		</Filter>

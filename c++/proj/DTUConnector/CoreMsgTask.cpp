@@ -69,6 +69,23 @@ int CoreMsgTask::OnAppTaskMsgProc(const ACEX_Message &msg)
 
 int CoreMsgTask::OnTimerMsgProc(const ACEX_Message& msg)
 {
+	if(msg.fparam() == FPARAM_PACKET)
+	{
+		OnTimerPacket(msg.sparam());
+	}
+	else if(msg.fparam() == FPARAM_PACKET_TIMEOUT)
+	{
+		OnTimerPacketTimeout(msg.sparam());
+	}
+	else if(msg.fparam() == FPARAM_SOCKET_TIMEOUT)
+	{
+		OnTimerSocketTimeout(msg.sparam());
+	}
+	else
+	{
+		ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnTimerMsgProc>Unknwon fparam - " << msg.fparam() << std::endl);
+	}
+
 	return 0;
 }
 
@@ -131,6 +148,11 @@ int CoreMsgTask::OnServerSocketDisconnect(int clientid)
 	return 0;
 }
 
+int CoreMsgTask::OnServerPacket(int clientid, const Packet& packet)
+{
+}
+
+//
 int CoreMsgTask::RegTimer(int clientid, int type, unsigned int timeout)
 {
 	ACEX_Message msg(TASK_TIMER, FPARAM_SOCKET_TIMEOUT, 0);

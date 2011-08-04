@@ -16,5 +16,6 @@ const int FPARAM_PACKET				=   1;
 const int FPARAM_SOCKET_TIMEOUT		=	2;
 const int FPARAM_SOCKET_CONNECT		=	3;
 const int FPARAM_SOCKET_DISCONNECT	=	4;
+const int FPARAM_PACKET_TIMEOUT		=	5;
 
 #endif

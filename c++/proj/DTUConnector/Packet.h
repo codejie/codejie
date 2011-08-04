@@ -19,6 +19,8 @@ protected:
 
 class Packet
 {
+public:
+	static const size_t MIN_PACKET_SIZE			=	8;
 protected:
 	static const char PACKET_FLAG_HELLO		=	0x31;
 	static const char PACKET_FLAG_DATARESP	=	0x01;

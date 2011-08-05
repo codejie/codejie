@@ -35,7 +35,10 @@ public class DBAccess {
 	public static final String TABLE_COLUMN_BANK		= "Bank";
 	public static final String TABLE_COLUMN_NOTE		= "Note";	
 	public static final String TABLE_COLUMN_START		= "Start";
-	public static final String TABLE_COLUMN_END			= "End";	
+	public static final String TABLE_COLUMN_END			= "End";
+	public static final String TABLE_COLUMN_RATE_RMB	= "Rate_RMB";
+	public static final String TABLE_COLUMN_RATE_US		= "Rate_US";
+	public static final String TABLE_COLUMN_RATE_EU		= "Rate_EU";
 
 	public static final String TABLE_NAME_TEST			= "Test";
 
@@ -100,7 +103,9 @@ public class DBAccess {
 		+ TABLE_COLUMN_TYPE + " INTEGER, "
 		+ TABLE_COLUMN_START + " TEXT,"
 		+ TABLE_COLUMN_END + " TEXT,"
-		+ TABLE_COLUMN_RATE + " REAL"
+		+ TABLE_COLUMN_RATE_RMB + " REAL,"
+		+ TABLE_COLUMN_RATE_US + " REAL,"
+		+ TABLE_COLUMN_RATE_EU + " REAL"
 		+ ");";
 		
 		db.execSQL(sql);
@@ -190,6 +195,10 @@ public class DBAccess {
 	}
 
 	//
+	public int insertRate(final String start, final String end, int type, float rmb, float us, float eu) {
+		//check
+		return -1;
+	}
 	public float getRate(int checkin, int type) {
 		return 0.0f;
 	}
@@ -250,9 +259,9 @@ public class DBAccess {
 		return str[(int)type];		
 	}
 	
-	public int calcMoney(float amount, long currency, long checkin, long type, String endMoney, String nowMoney) {
-		endMoney = "1.00";
-		nowMoney = "22.00";
+	public int calcMoney(float amount, long currency, long checkin, long type, StringBuffer endMoney, StringBuffer nowMoney) {
+		endMoney.append("1.00");
+		nowMoney.append("22.00");
 		return -1;
 	}
 	

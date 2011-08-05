@@ -52,12 +52,12 @@ public class SavingListActivity extends ListActivity {
 			String type = GLOBAL.DBACCESS.getType(SavingListActivity.this, cursor.getLong(5));
 			String bank = GLOBAL.DBACCESS.getBank(cursor.getLong(6));
 			String note = cursor.getString(7);
-			String end = new String(), now = new String();
+			StringBuffer end = new StringBuffer(), now = new StringBuffer();
 			GLOBAL.DBACCESS.calcMoney(cursor.getFloat(2), cursor.getLong(3), cursor.getLong(4), cursor.getLong(5), end, now);
 			
 			
 			//((SavingListView)view).setTitle(cursor.getString(0), cursor.getString(1));
-			((SavingListView)view).setContent(title, amount, currency, checkin, type, bank, note, end, now);
+			((SavingListView)view).setContent(title, amount, currency, checkin, type, bank, note, end.toString(), now.toString());
 		}
 	}
 	
@@ -140,13 +140,13 @@ public class SavingListActivity extends ListActivity {
 			
 			tv = new TextView(context);
 			tv.setText(R.string.str_currency);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.weight = 1.0f;
+			params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 2.0f;
 			//params.gravity = Gravity.RIGHT;
 			layout.addView(tv, params);
 			
 			textCurrency = new TextView(context);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;
 			params.gravity = Gravity.LEFT;
 			layout.addView(textCurrency, params);			
@@ -159,13 +159,13 @@ public class SavingListActivity extends ListActivity {
 			
 			tv = new TextView(context);
 			tv.setText(R.string.str_checkin);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.weight = 1.0f;			
+			params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 2.0f;			
 			//params.gravity = Gravity.LEFT;
 			layout.addView(tv, params);
 			
 			textCheckin = new TextView(context);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;
 			params.gravity = Gravity.LEFT;
 			layout.addView(textCheckin, params);			
@@ -178,13 +178,13 @@ public class SavingListActivity extends ListActivity {
 			
 			tv = new TextView(context);
 			tv.setText(R.string.str_type);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.weight = 1.0f;			
+			params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 2.0f;			
 			//params.gravity = Gravity.RIGHT;
 			layout.addView(tv, params);
 			
 			textType = new TextView(context);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;
 			params.gravity = Gravity.LEFT;
 			layout.addView(textType, params);			
@@ -197,13 +197,13 @@ public class SavingListActivity extends ListActivity {
 			
 			tv = new TextView(context);
 			tv.setText(R.string.str_bank);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.weight = 1.0f;			
+			params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			params.weight = 2.0f;			
 			//params.gravity = Gravity.RIGHT;
 			layout.addView(tv, params);
 			
 			textBank = new TextView(context);
-			params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			params.weight = 1.0f;
 			params.gravity = Gravity.LEFT;
 			layout.addView(textBank, params);			
@@ -220,7 +220,7 @@ public class SavingListActivity extends ListActivity {
 			tlayout.addView(textNote, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			
 		
-			this.addView(tlayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			this.addView(tlayout, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		}
 		
 		public void setTitle(String title, String value) {

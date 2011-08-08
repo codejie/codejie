@@ -35,6 +35,8 @@ public:
 	virtual ~CoreMsgTask();
 
 	int Init(const ConfigLoader& config);
+
+	void Show(std::ostream& os) const;
 protected:
 	void Final();
 
@@ -52,8 +54,16 @@ private:
 	int OnTimerPacketTimeout(int clientid);
 	int OnTimerSocketTimeout(int clientid);
 
+	int OnServerHelloPacket(int clientid, const Packet& packet);
+	int OnServerDataRespPacket(int clientid, const Packet& packet);
+
 	int RegTimer(int clientid, int type, unsigned int timeout);
 	void UnregTimer(int timerid);
+
+	int SendDataReqPacket(int clientid);
+private:
+	int _iReqInterval;
+	int _iPacketTimeout;
 private:
 	TDTUMap _mapDTU;
 };

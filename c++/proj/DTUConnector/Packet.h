@@ -21,7 +21,7 @@ class Packet
 {
 public:
 	static const size_t MIN_PACKET_SIZE			=	8;
-protected:
+
 	static const char PACKET_FLAG_HELLO		=	0x31;
 	static const char PACKET_FLAG_DATARESP	=	0x01;
 public:
@@ -36,10 +36,10 @@ public:
 	static size_t Make(const char* buf, size_t size, Packet*& packet);
 	static size_t Make(const Packet& packet, char*& buf);
 
-	virtual void Show(std::ostream& os) const = 0;
+	virtual void Show(std::ostream& os) const;
 protected:
 	virtual int Analyse(const char* buf, size_t size) { return -1; }
-	virtual int Assemble(char* buf) { return -1; }
+	virtual int Assemble(char* buf) const { return -1; }
 public:
 	PacketType _type;
 };
@@ -50,8 +50,9 @@ public:
 	static const size_t SIZE		=	11;
 public:
 	HelloPacket();
-	virtual ~HelloPacket();
+	virtual ~HelloPacket() {}
 
+	virtual void Show(std::ostream& os) const;
 protected:
 	virtual int Analyse(const char* buf, size_t size);
 public:
@@ -64,9 +65,17 @@ public:
 	static const size_t SIZE		=	8;
 public:
 	DataReqPacket();
-	virtual ~DataReqPacket();
+	virtual ~DataReqPacket() {}
+
+	virtual void Show(std::ostream& os) const;
 protected:
-	virtual int Assemble(char* buf);
+	virtual int Assemble(char* buf) const;
+public:
+	unsigned char _addr;
+	unsigned char _read;
+	unsigned char _reg[2];
+	unsigned char _number[2];
+	unsigned char _crc[2];
 };
 
 class DataRespPacket : public Packet
@@ -76,8 +85,16 @@ public:
 public:
 	DataRespPacket();
 	virtual ~DataRespPacket();
+
+	virtual void Show(std::ostream& os) const;
 protected:
 	virtual int Analyse(const char* buf, size_t size);
+public:
+	unsigned char _addr;
+	unsigned char _read;
+	unsigned char _number;
+	unsigned char _value[4];
+	unsigned char _crc[2];
 };
 
 

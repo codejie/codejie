@@ -9,6 +9,7 @@
 
 #include "Defines.h"
 #include "ConfigLoader.h"
+#include "Packet.h"
 #include "CoreMsgTask.h"
 
 CoreMsgTask::CoreMsgTask()
@@ -22,6 +23,8 @@ CoreMsgTask::~CoreMsgTask()
 
 int CoreMsgTask::Init(const ConfigLoader& config)
 {
+	_iReqInterval = config.m_iScanInterval;
+	_iPacketTimeout = 30;
 
 	return 0;
 }
@@ -114,6 +117,17 @@ int CoreMsgTask::OnServerMsgProc(const ACEX_Message &msg)
 
 int CoreMsgTask::OnServerPacket(int clientid, const Packet &packet)
 {
+	switch(packet._type)
+	{
+	case Packet::PACKET_FLAG_HELLO:
+		OnServerHelloPacket(clientid, packet);
+		break;
+	case Packet::PACKET_FLAG_DATARESP:
+		OnServerDataRespPacket(clientid, packet);
+		break;
+	default:
+		ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnServerPacket>Unknwon packet type - " << packet._type << std::endl);	
+	}
 	return -1;
 }
 
@@ -131,8 +145,9 @@ int CoreMsgTask::OnServerSocketConnect(int clientid, const std::string &ip, unsi
 	data.port = port;
 	data.status = DS_WAITTEL;
 	data.update = ACE_OS::time(NULL);
-	data.count = 0;
-	data.timer = RegTimer(clientid, FPARAM_SOCKET_TIMEOUT, 30);
+	data.data = 0;
+	data.hello = 0;
+	data.timer = RegTimer(clientid, FPARAM_SOCKET_TIMEOUT, _iPacketTimeout);
 
 	return _mapDTU.insert(std::make_pair(clientid, data)).second ? 0 : -1;
 }
@@ -148,8 +163,94 @@ int CoreMsgTask::OnServerSocketDisconnect(int clientid)
 	return 0;
 }
 
-int CoreMsgTask::OnServerPacket(int clientid, const Packet& packet)
+///
+int CoreMsgTask::OnServerHelloPacket(int clientid, const Packet& packet)
 {
+	TDTUMap::iterator it = _mapDTU.find(clientid);
+	if(it == _mapDTU.end())
+		return -1;
+
+	const HelloPacket& hello = reinterpret_cast<const HelloPacket&>(packet);
+
+	UnregTimer(it->second.timer);
+
+	if(it->second.status == DS_WAITTEL)
+	{
+		it->second.tel = hello._tele;
+		if(DBAccess.SearchStation(it->second.tel, it->second.stationid) != 0)
+		{
+			ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnServerHelloPacket>Find station id failed - tel : " << it->second.tel << std::endl);
+			return -1;
+		}
+		it->second.status = DS_DATAREQ;
+
+		it->second.timer = RegTimer(clientid, FPARAM_PACKET, _iReqInterval);
+	}
+
+	++ it->second.hello;
+	it->second.update = ACE_OS::time(NULL);
+
+	return 0;
+}
+
+int CoreMsgTask::OnServerDataRespPacket(int clientid, const Packet &packet)
+{
+	TDTUMap::iterator it = _mapDTU.find(clientid);
+	if(it == _mapDTU.end())
+		return -1;
+
+	const DataRespPacket& resp = reinterpret_cast<const DataRespPacket&>(packet);
+
+	UnregTimer(it->second.timer);
+
+	if(it->second.status == DS_WAITTEL)
+	{
+		ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnServerDataRespPacket>Client does not connect yet - clientid : " << clientid << std::endl);
+		return -1;
+	}
+
+	if(DBAccess.InsertData(it->second.stationid, resp) != 0)
+	{
+		ACEX_LOG_OS(LM_WARNING, "<>Clienet insert data failed - clientid : " << clientid << "\nPacket : " << packet << std::endl);
+		return -1;
+	}
+	
+	++ it->second.data;
+	it->second.update = ACE_OS::time(NULL);
+	it->second.status = DS_DATAREQ;
+	it->second.timer = RegTimer(clientid, FPARAM_PACKET, _iReqInterval);
+
+	return 0;
+}
+
+///
+int CoreMsgTask::OnTimerSocketTimeout(int clientid)
+{
+	ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnTimerSocketTimeout>Client wait hello data timeout - clientid : " << clientid << std::endl);
+	//shutdown client
+	return 0;
+}
+
+int CoreMsgTask::OnTimerPacket(int clientid)
+{
+	TDTUMap::iterator it = _mapDTU.find(clientid);
+	if(it == _mapDTU.end())
+		return -1;
+
+	if(SendDataReqPacket(clientid) != 0)
+	{
+		//shutdown client
+		return -1;
+	}
+
+	return 0;
+}
+
+int CoreMsgTask::OnTimerPacketTimeout(int clientid)
+{
+	ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnTimerPacketTimeout>Client recv data timeout - clientid : " << clientid << std::endl);
+	//shutdown client
+	return 0;
 }
 
 //

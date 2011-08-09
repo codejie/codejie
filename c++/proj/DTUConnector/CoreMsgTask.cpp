@@ -10,9 +10,13 @@
 #include "Defines.h"
 #include "ConfigLoader.h"
 #include "Packet.h"
+#include "ConnectionServer.h"
 #include "CoreMsgTask.h"
 
 CoreMsgTask::CoreMsgTask()
+: _iReqInterval(0)
+, _iPacketTimeout(0)
+, _ptrConnServer(NULL)
 {
 }
 
@@ -23,6 +27,11 @@ CoreMsgTask::~CoreMsgTask()
 
 int CoreMsgTask::Init(const ConfigLoader& config)
 {
+	_ptrConnServer.reset(new ConnectionServer(this));
+
+	if(_ptrConnServer->open(ACE_INET_Addr(config.m_strConnectionAddr.c_str())) != 0)
+		return -1;
+
 	_iReqInterval = config.m_iScanInterval;
 	_iPacketTimeout = 30;
 
@@ -31,6 +40,10 @@ int CoreMsgTask::Init(const ConfigLoader& config)
 
 void CoreMsgTask::Final()
 {
+	if(_ptrConnServer.get() != NULL)
+	{
+		_ptrConnServer->Final();
+	}
 	this->clear_timer();
 }
 

@@ -7,6 +7,8 @@
 #include <icrsint.h>
 #include <iostream>
 
+//http://msdn.microsoft.com/en-us/library/ms677554(v=vs.85).aspx
+
 int main()
 {
 	if(FAILED(::CoInitialize(NULL)))

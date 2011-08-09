@@ -5,11 +5,13 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <memory>
 
 #include "acex/Task.h"
 
 class ConfigLoader;
 class Packet;
+class ConnectionServer;
 
 class CoreMsgTask: public ACEX_Message_Task
 {
@@ -64,6 +66,8 @@ private:
 private:
 	int _iReqInterval;
 	int _iPacketTimeout;
+
+	std::auto_ptr<ConnectionServer> _ptrConnServer;
 private:
 	TDTUMap _mapDTU;
 };

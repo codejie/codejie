@@ -12,6 +12,7 @@ import java.util.Map;
 
 import android.app.ExpandableListActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.widget.ExpandableListAdapter;
 import android.widget.SimpleExpandableListAdapter;
 
@@ -51,13 +52,37 @@ public class RateListActivity extends ExpandableListActivity {
 		Map<String, String> m = new HashMap<String, String>();
 		m.put(P_TITLE, "p_title");
 		titleData.add(m);
+		m = new HashMap<String, String>();
+		m.put(P_TITLE, "p_title");
+		if(titleData.indexOf(m) == -1)
+			titleData.add(m);
 		
 		List<Map<String, String>> c = new ArrayList<Map<String, String>>();
 		m = new HashMap<String, String>();
-		m.put(C_TITLE, "c_title");
+		m.put(C_TITLE, "C_RATE_RMB");
 		c.add(m);
+		m = new HashMap<String, String>();
+		m.put(C_TITLE, "C_RATE_US");
+		c.add(m);
+		m = new HashMap<String, String>();
+		m.put(C_TITLE, "C_RATE_EU");
+		c.add(m);		
+		
+		childData.add(c);
+//	
+		c = new ArrayList<Map<String, String>>();
+		m = new HashMap<String, String>();
+		m.put(C_TITLE, "C_RATE_RMB");
+		c.add(m);
+	
 		
 		childData.add(c);		
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		this.getMenuInflater().inflate(R.menu.ratelist, menu);
+		return true;
+	}	
 	
 }

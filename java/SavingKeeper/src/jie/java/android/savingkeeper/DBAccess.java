@@ -39,6 +39,14 @@ public class DBAccess {
 	public static final String TABLE_COLUMN_RATE_RMB	= "Rate_RMB";
 	public static final String TABLE_COLUMN_RATE_US		= "Rate_US";
 	public static final String TABLE_COLUMN_RATE_EU		= "Rate_EU";
+	public static final String TABLE_COLUMN_RATE_0		= "Rate_0";
+	public static final String TABLE_COLUMN_RATE_1		= "Rate_1";
+	public static final String TABLE_COLUMN_RATE_2		= "Rate_2";
+	public static final String TABLE_COLUMN_RATE_3		= "Rate_3";
+	public static final String TABLE_COLUMN_RATE_4		= "Rate_4";
+	public static final String TABLE_COLUMN_RATE_5		= "Rate_5";
+	public static final String TABLE_COLUMN_RATE_6		= "Rate_6";
+	
 
 	public static final String TABLE_NAME_TEST			= "Test";
 
@@ -99,13 +107,16 @@ public class DBAccess {
 
 		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_RATE + " ("
 		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
-		+ TABLE_COLUMN_CURRENCY + " INTEGER, "
-		+ TABLE_COLUMN_TYPE + " INTEGER, "
 		+ TABLE_COLUMN_START + " TEXT,"
 		+ TABLE_COLUMN_END + " TEXT,"
-		+ TABLE_COLUMN_RATE_RMB + " REAL,"
-		+ TABLE_COLUMN_RATE_US + " REAL,"
-		+ TABLE_COLUMN_RATE_EU + " REAL"
+		+ TABLE_COLUMN_CURRENCY + " INTEGER, "
+		+ TABLE_COLUMN_RATE_0 + " REAL,"
+		+ TABLE_COLUMN_RATE_1 + " REAL,"
+		+ TABLE_COLUMN_RATE_2 + " REAL,"
+		+ TABLE_COLUMN_RATE_3 + " REAL,"
+		+ TABLE_COLUMN_RATE_4 + " REAL,"
+		+ TABLE_COLUMN_RATE_5 + " REAL,"
+		+ TABLE_COLUMN_RATE_6 + " REAL"
 		+ ");";
 		
 		db.execSQL(sql);
@@ -195,11 +206,38 @@ public class DBAccess {
 	}
 
 	//
-	public int insertRate(final String start, final String end, int type, float rmb, float us, float eu) {
-		//check
-		return -1;
+	public int insertRate(final String start, final String end, int currency, float rate0, float rate1, float rate2, float rate3, float rate4, float rate5, float rate6) {
+		
+		ContentValues values = new ContentValues();
+		values.put(TABLE_COLUMN_START, start);
+		values.put(TABLE_COLUMN_END, end);
+		values.put(TABLE_COLUMN_CURRENCY, currency);
+		values.put(TABLE_COLUMN_RATE_0, rate0);
+		values.put(TABLE_COLUMN_RATE_1, rate1);
+		values.put(TABLE_COLUMN_RATE_2, rate2);
+		values.put(TABLE_COLUMN_RATE_3, rate3);
+		values.put(TABLE_COLUMN_RATE_4, rate4);
+		values.put(TABLE_COLUMN_RATE_5, rate5);
+		values.put(TABLE_COLUMN_RATE_6, rate6);
+		
+		if(db.insert(TABLE_NAME_RATE, null, values) == -1) {
+			Log.w(GLOBAL.APP_TAG, "insert rate data failed.");
+			return -1;
+		}
+		
+		return 0;
 	}
-	public float getRate(int checkin, int type) {
+	
+	public Cursor queryRate() {
+						
+		String[] col = new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_START, TABLE_COLUMN_END, TABLE_COLUMN_CURRENCY,
+						TABLE_COLUMN_RATE_0, TABLE_COLUMN_RATE_1, TABLE_COLUMN_RATE_2, TABLE_COLUMN_RATE_3, TABLE_COLUMN_RATE_4, TABLE_COLUMN_RATE_5, TABLE_COLUMN_RATE_6 };
+		Cursor cursor = db.query(TABLE_NAME_RATE, col, null, null, null, null, "ORDER BY " + TABLE_COLUMN_START + " AND " + TABLE_COLUMN_CURRENCY);
+		cursor.moveToFirst();
+		return cursor;
+	}
+	
+	public float getRate(int checkin, int currency, int type) {
 		return 0.0f;
 	}
 	

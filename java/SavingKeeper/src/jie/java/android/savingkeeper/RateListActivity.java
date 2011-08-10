@@ -11,8 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.ExpandableListActivity;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ExpandableListAdapter;
 import android.widget.SimpleExpandableListAdapter;
 
@@ -49,6 +52,16 @@ public class RateListActivity extends ExpandableListActivity {
 	}
 	
 	private void initData(List<Map<String, String>> titleData, List<List<Map<String, String>>> childData) {
+		
+		Cursor cursor = GLOBAL.DBACCESS.queryRate();
+		
+		while(cursor.moveToNext()) {
+			
+			Log.d(GLOBAL.APP_TAG, "start : " + cursor.getString(1) + " currency : " + cursor.getString(3));
+			
+		}
+		
+		
 		Map<String, String> m = new HashMap<String, String>();
 		m.put(P_TITLE, "p_title");
 		titleData.add(m);
@@ -85,4 +98,21 @@ public class RateListActivity extends ExpandableListActivity {
 		return true;
 	}	
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.menu_addrate:
+			onMenuAddRate();
+			break;
+		default:
+			return false;
+		}
+		return true;
+	}
+	
+	private void onMenuAddRate() {
+		GLOBAL.DBACCESS.insertRate("2011-08-01", "9999-12-31", 0, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2011-08-01", "9999-12-31", 1, 1.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2011-08-01", "9999-12-31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+	}
 }

@@ -12,6 +12,7 @@
 class ConfigLoader;
 class Packet;
 class ConnectionServer;
+class DataAccess;
 
 class CoreMsgTask: public ACEX_Message_Task
 {
@@ -68,6 +69,7 @@ private:
 	int _iPacketTimeout;
 
 	std::auto_ptr<ConnectionServer> _ptrConnServer;
+	std::auto_ptr<DataAccess> _ptrDataAccess;
 private:
 	TDTUMap _mapDTU;
 };

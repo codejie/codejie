@@ -11,12 +11,15 @@
 #include "ConfigLoader.h"
 #include "Packet.h"
 #include "ConnectionServer.h"
+#include "DataAccess.h"
+#include "Toolkit.h"
 #include "CoreMsgTask.h"
 
 CoreMsgTask::CoreMsgTask()
 : _iReqInterval(0)
 , _iPacketTimeout(0)
 , _ptrConnServer(NULL)
+, _ptrDataAccess(NULL)
 {
 }
 
@@ -27,9 +30,18 @@ CoreMsgTask::~CoreMsgTask()
 
 int CoreMsgTask::Init(const ConfigLoader& config)
 {
-	_ptrConnServer.reset(new ConnectionServer(this));
+	_ptrDataAccess.reset(new DataAccess());
+	if(_ptrDataAccess.get() == NULL)
+		return -1;
 
-	if(_ptrConnServer->open(ACE_INET_Addr(config.m_strConnectionAddr.c_str())) != 0)
+	if(_ptrDataAccess->Init(config.m_strDBServer, config.m_strDBDatabase, config.m_strDBUser, config.m_strDBPasswd) != 0)
+		return -1;
+
+	_ptrConnServer.reset(new ConnectionServer(this));
+	if(_ptrConnServer.get() == NULL)
+		return -1;
+
+	if(_ptrConnServer->Open(config.m_strConnectionAddr.c_str()) != 0)
 		return -1;
 
 	_iReqInterval = config.m_iScanInterval;
@@ -44,6 +56,10 @@ void CoreMsgTask::Final()
 	{
 		_ptrConnServer->Final();
 	}
+
+	if(_ptrDataAccess.get() != NULL)
+		_ptrDataAccess->Final();
+
 	this->clear_timer();
 }
 
@@ -190,7 +206,7 @@ int CoreMsgTask::OnServerHelloPacket(int clientid, const Packet& packet)
 	if(it->second.status == DS_WAITTEL)
 	{
 		it->second.tel = hello._tele;
-		if(DBAccess.SearchStation(it->second.tel, it->second.stationid) != 0)
+		if(_ptrDataAccess->SearchStation(it->second.tel, it->second.stationid) != 0)
 		{
 			ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnServerHelloPacket>Find station id failed - tel : " << it->second.tel << std::endl);
 			return -1;
@@ -222,7 +238,7 @@ int CoreMsgTask::OnServerDataRespPacket(int clientid, const Packet &packet)
 		return -1;
 	}
 
-	if(DBAccess.InsertData(it->second.stationid, resp) != 0)
+	if(_ptrDataAccess->OnData(it->second.stationid, Toolkit::Buffer2Float(resp._value)) != 0)
 	{
 		ACEX_LOG_OS(LM_WARNING, "<>Clienet insert data failed - clientid : " << clientid << "\nPacket : " << packet << std::endl);
 		return -1;

@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 
+#include "ace/OS_NS_time.h"
 
 namespace Toolkit
 {
@@ -183,6 +184,15 @@ std::ostream& PrintBinary(std::ostream& os, const char* pData, size_t iSize)
        os.flags(lflag);
 
        return os;
+}
+
+const std::string TimeToString(const time_t& tTime)
+{
+	char acTime[14 + 1];
+	acTime[19] = '\0';
+	struct tm tmTime;
+	ACE_OS::strftime(acTime, sizeof(acTime), "%Y%m%d%H%M%S", ACE_OS::localtime_r(&tTime, &tmTime));
+	return std::string(acTime);
 }
 
 }

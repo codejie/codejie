@@ -47,6 +47,20 @@ int PacketProcessor::Analyse(const std::string& stream, Packet& packet)
 	return 0;
 }
 
+int PacketProcessor::Make(std::string& stream, const Packet& packet)
+{
+	std::string str;
+	if(packet.Make(str) != 0)
+		return -1;
+	std::ostringstream ostr;
+
+	ostr.fill('0');
+	ostr << TAG_BEGIN << ostr.width(4) << str.size() << DataCRC(str);
+
+	stream = ostr.str();
+	return 0;
+}
+
 int PacketProcessor::Check(const std::string& stream, int& datasize)
 {
 	if(stream.substr(0, 2) != TAG_BEGIN)
@@ -68,8 +82,16 @@ int PacketProcessor::DataCRCCheck(const std::string& data, const std::string& cr
 {
 	unsigned int check = Toolkit::CRC16((const unsigned char*)data.c_str(), data.size());
 	std::ostringstream ostr;
-	ostr << std::ios::hex << check;
+	ostr << std::ios_base::hex << std::ios_base::uppercase << check;
 	return ostr.str() == crc ? 0 : -1;
+}
+
+const std::string PacketProcessor::DataCRC(const std::string& data)
+{
+	unsigned int check = Toolkit::CRC16((const unsigned char*)data.c_str(), data.size());
+	std::ostringstream ostr;
+	ostr << std::ios_base::hex << std::ios_base::uppercase << check;
+	return ostr.str();
 }
 
 int PacketProcessor::DataAnalyse(const std::string& stream, Packet& packet)

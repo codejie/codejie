@@ -56,6 +56,7 @@ protected:
 	int CPDataAnalyse(const std::string& data);
 	int CPItemAnalyse(const std::string& item);
 
+	const std::string CPMake() const;
 public:
 	std::string QN;
 	std::string PNUM;

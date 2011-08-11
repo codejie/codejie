@@ -30,6 +30,8 @@ protected:
 	static int Check(const std::string& stream, int& datasize);
 	static int DataCRCCheck(const std::string& data, const std::string& crc);
 	static int DataAnalyse(const std::string& stream, Packet& packet);
+
+	static const std::string DataCRC(const std::string& data);
 };
 
 #endif /* __PACKETANALYSER_H__ */

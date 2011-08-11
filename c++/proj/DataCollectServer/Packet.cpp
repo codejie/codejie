@@ -5,6 +5,8 @@
  *      Author: jie
  */
 
+#include <sstream>
+
 #include "Packet.h"
 
 const std::string Packet::PD_TAG_QN                 =   "QN";
@@ -73,6 +75,38 @@ int Packet::Analyse(const std::string& packet)
 
 	return CPAnalyse(packet.substr(begin));
 }
+
+int Packet::Make(std::string &packet) const
+{
+//QN=20040516010101001;ST=32;CN=1012;PW=123456;MN=88888880000001;Flag=3;CP=&&MFlag=50&&
+	std::ostringstream ostr;
+	
+	if(!QN.empty())
+		ostr << PD_TAG_QN <<"=" << QN << ";";
+	if(!PNUM.empty())
+		ostr << PD_TAG_PNUM <<"=" << PNUM << ";";
+	if(!PNO.empty())
+		ostr << PD_TAG_PNO <<"=" << PNO << ";";
+	if(!ST.empty())
+		ostr << PD_TAG_ST <<"=" << ST << ";";
+	if(!CN.empty())
+		ostr << PD_TAG_CN <<"=" << CN << ";";
+	if(!PW.empty())
+		ostr << PD_TAG_PW <<"=" << PW << ";";
+	if(!MN.empty())
+		ostr << PD_TAG_MN <<"=" << MN << ";";
+	if(!Flag.empty())
+		ostr << PD_TAG_FLAG <<"=" << Flag << ";";
+
+	if(CP.data.size() > 0)
+	{
+		ostr << PD_TAG_CP << "=&&" << CPMake() << "&&";
+	}
+	packet = ostr.str();
+
+	return 0;
+}
+	//
 
 int Packet::CPAnalyse(const std::string& packet)
 {
@@ -149,6 +183,61 @@ int Packet::CPItemAnalyse(const std::string& item)
 	}
 }
 
+const std::string Packet::CPMake() const
+{
+	std::ostringstream ostr;
+//Data
+	TCPDataMap::const_iterator it = CP.data.begin();
+	while(it != CP.data.end())
+	{
+		ostr << it->first << "=" << it->second;
+
+		++ it;
+		if(it != CP.data.end())
+		{
+			ostr << ";";
+		}
+		else
+		{
+			if(CP.item.size() > 0)
+				ostr << ";";
+			break;
+		}		
+	}
+//Item
+	TCPItemMap::const_iterator i = CP.item.begin();
+	while(i != CP.item.end())
+	{
+		TCPItemDataMap::const_iterator ii = i->second.begin();
+		while(ii != i->second.end())
+		{
+			ostr << i->first << "-" << ii->first << "=" << ii->second;
+			++ ii;
+			if(ii != i->second.end())
+			{
+				ostr << ",";
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		++ i;
+		if(i != CP.item.end())
+		{
+			ostr << ";";
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	return ostr.str();
+}
+
+///
 void Packet::Show(std::ostream& os) const
 {
 	os << "\nQN = " << QN;

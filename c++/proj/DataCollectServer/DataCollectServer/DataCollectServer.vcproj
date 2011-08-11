@@ -182,6 +182,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CommandServerTask.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\ConfigLoader.cpp"
 				>
 			</File>
@@ -225,6 +229,10 @@
 			</File>
 			<File
 				RelativePath="..\Commands.h"
+				>
+			</File>
+			<File
+				RelativePath="..\CommandServerTask.h"
 				>
 			</File>
 			<File

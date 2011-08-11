@@ -723,7 +723,7 @@ const std::string DataAccess::GetPacketCPItemMinuteValue(const Packet &packet, c
     if(it != data.end())
 		ret += it->second;
 	else
-		ret + = "0.0";
+		ret += "0.0";
 
     it = data.find("Min");
     if(it != data.end())

@@ -178,6 +178,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CommandPacket.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\Commands.cpp"
 				>
 			</File>
@@ -225,6 +229,10 @@
 			>
 			<File
 				RelativePath="..\CollectServerTask.h"
+				>
+			</File>
+			<File
+				RelativePath="..\CommandPacket.h"
 				>
 			</File>
 			<File

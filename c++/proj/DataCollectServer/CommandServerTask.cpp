@@ -2,7 +2,7 @@
 #include "acex/ACEX.h"
 
 #include "Defines.h"
-#include "PacketProcessor.h"
+#include "CommandPacket.h"
 #include "CommandServerTask.h"
 
 CommandServerTask::CommandServerTask(ACEX_Message_Task* msgtask)
@@ -38,7 +38,7 @@ int CommandServerTask::handle_connect(int clientid, ACEX_TcpStream& client)
 
 	ACEX_LOG_OS(LM_INFO, "<CommandServerTask::handle_connect>Client connect - clientid : [" << clientid << "] " << addr->get_host_addr() << ":" << addr->get_port_number() << std::endl);
 
-	ACEX_Message msg(TASK_COLLECT_SERVER, FPARAM_SOCKET_CONNECT, clientid, addr);
+	ACEX_Message msg(TASK_COMMAND_SERVER, FPARAM_SOCKET_CONNECT, clientid, addr);
 	_taskMsg->put_msg(msg);
 
 	return 0;
@@ -48,7 +48,7 @@ int CommandServerTask::handle_close(int clientid, ACEX_TcpStream& client)
 {
 	ACEX_LOG_OS(LM_INFO, "<CommandServerTask::handle_close>Client disconnect - clientid : " << clientid << std::endl);
 
-	ACEX_Message msg(TASK_COLLECT_SERVER, FPARAM_SOCKET_DISCONNECT, clientid);
+	ACEX_Message msg(TASK_COMMAND_SERVER, FPARAM_SOCKET_DISCONNECT, clientid);
 	_taskMsg->put_msg(msg);
 
 	return 0;
@@ -58,27 +58,24 @@ int CommandServerTask::handle_recv(int clientid, ACEX_TcpStream& client)
 {
 	size_t in = client.in_avail();
 
-	while(in >= PacketProcessor::MIN_SIZE)
-	{
-		std::string recv(client.gptr(), in);
-		std::string::size_type pos = recv.find(PacketProcessor::TAG_END) + PacketProcessor::TAG_END.size();
-		if(pos != std::string::npos && pos <= PacketProcessor::MAX_SIZE)
-		{
-			char* buf = new char[pos];
-			client.read(buf, pos);
+    if(in > CommandPacket::CMD_POST.size())
+    {
+        char* buf = new char[in];
+        client.read(buf, in);
+        CommandPacket *packet = NULL;
+        if(CommandPacket::Analyse(std::string(buf, in), packet) != 0)
+        {
+            delete [] buf;
+            return -1;
+        }
+        delete [] buf;
 
-			ACEX_Message msg(TASK_COLLECT_SERVER, FPARAM_PACKET, ((clientid << 16) | pos), buf);
-			_taskMsg->put_msg(msg);
+		ACEX_Message msg(TASK_COMMAND_SERVER, FPARAM_PACKET, clientid, packet);
+		_taskMsg->put_msg(msg);
 
-            ++ _count;
-		}
-		else if(pos > PacketProcessor::MAX_SIZE)
-		{
-			ACEX_LOG_OS(LM_ERROR, "<CommandServerTask::handle_recv>Packet too long - clientid : " << clientid << std::endl);
-			return -1;
-		}
-		in = client.in_avail();
-	}
+        ++ _count;
+    }
+
 	return 0;
 }
 

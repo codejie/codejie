@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataCollectServer", "DataCo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OCIPP", "..\OCIPP\OCIPP.vcproj", "{AD7A5BBD-FF93-44ED-B107-5ADF0C58602B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "crc_test", "..\crc_test\crc_test.vcproj", "{F00B2083-A376-4DFD-8F1E-D9580438522D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{AD7A5BBD-FF93-44ED-B107-5ADF0C58602B}.Debug|Win32.Build.0 = Debug|Win32
 		{AD7A5BBD-FF93-44ED-B107-5ADF0C58602B}.Release|Win32.ActiveCfg = Release|Win32
 		{AD7A5BBD-FF93-44ED-B107-5ADF0C58602B}.Release|Win32.Build.0 = Release|Win32
+		{F00B2083-A376-4DFD-8F1E-D9580438522D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F00B2083-A376-4DFD-8F1E-D9580438522D}.Debug|Win32.Build.0 = Debug|Win32
+		{F00B2083-A376-4DFD-8F1E-D9580438522D}.Release|Win32.ActiveCfg = Release|Win32
+		{F00B2083-A376-4DFD-8F1E-D9580438522D}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

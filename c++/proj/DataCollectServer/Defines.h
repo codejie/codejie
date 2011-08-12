@@ -9,6 +9,7 @@
 const int TASK_APP     			=   1;
 const int TASK_TIMER    		=   2;
 const int TASK_COLLECT_SERVER   =   3;
+const int TASK_COMMAND_SERVER   =   4;
 
 
 const int FPARAM_SHUTDOWN			=   0;

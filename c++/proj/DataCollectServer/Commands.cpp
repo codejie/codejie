@@ -251,6 +251,7 @@ int CCmdTest::execute(std::ostream& os)
 	Packet packet;
 
 	std::string str = "ST=32;CN=2051;QN=20040516010101001;PW=123456;MN=88888880000001;PNO=1;PNUM=1;CP=&&DataTime=20040516021000;B01-Cou=200;101-Cou=2.5,101-Min=1.1,101-Avg=1.1,101-Max=1.1;102-Cou=2.5,102-Min=2.1,102-Avg=2.1,102-Max=2.1&&";
+    //std::string str = ST=31;CN=2011;PW=123456;MN=88888888888888;CP=&&DataTime=20110806122650;02-Rtd=111.0,02-ZsRtd=226.8,02-Flag=N;03-Rtd=0.0,03-ZsRtd=0.0,03-Flag=N;01-Rtd=0.0,01-ZsRtd=0.0,01-Flag=N;S01-Rtd=6.0,S01-Flag=N;S03-Rtd=100.0,S03-Flag=N;S08-Rtd=2.0,S08-Flag=N;S02-Rtd=8.0,S02-Flag=N;B02-Rtd=297217.2,B02-Flag=N;S05-Rtd=0.0,S05-Flag=N&&C5C1;
 
 	packet.Analyse(str);
 	os << packet << std::endl;

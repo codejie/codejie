@@ -178,19 +178,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\CommandPacket.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\Commands.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\CommandServerTask.cpp"
+				RelativePath="..\ConfigLoader.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\ConfigLoader.cpp"
+				RelativePath="..\ControllerServerTask.cpp"
 				>
 			</File>
 			<File
@@ -203,6 +199,10 @@
 			</File>
 			<File
 				RelativePath="..\DataCollectServerApp.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DataLoader.cpp"
 				>
 			</File>
 			<File
@@ -232,19 +232,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\CommandPacket.h"
-				>
-			</File>
-			<File
 				RelativePath="..\Commands.h"
 				>
 			</File>
 			<File
-				RelativePath="..\CommandServerTask.h"
+				RelativePath="..\ConfigLoader.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ConfigLoader.h"
+				RelativePath="..\ControllerServerTask.h"
 				>
 			</File>
 			<File
@@ -257,6 +253,10 @@
 			</File>
 			<File
 				RelativePath="..\DataCollectServerApp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\DataLoader.h"
 				>
 			</File>
 			<File

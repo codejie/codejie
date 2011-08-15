@@ -50,6 +50,9 @@ int ConfigLoader::Load(const std::string& filename)
 	if(ini.get_string_value(key, "CollectAddr", tmp) != 0)
 		return -1;
 	m_strCollectAddr = tmp.c_str();
+	if(ini.get_string_value(key, "ControllerAddr", tmp) != 0)
+		return -1;
+	m_strControllerAddr = tmp.c_str();
 	if(ini.get_string_value(key, "CommandAddr", tmp) != 0)
 		return -1;
 	m_strCommandAddr = tmp.c_str();
@@ -80,6 +83,7 @@ void ConfigLoader::Show(std::ostream& os) const
     os << "\nLogSize = " << m_iLogSize;
     os << "\nMMLAddr = " << m_strMMLAddr;
     os << "\nCollectAddr = " << m_strCollectAddr;
+	os << "\nControllerAddr = " << m_strControllerAddr;
     os << "\nCommandAddr = " << m_strCommandAddr;
     os << "\nDBServer = " << m_strDBServer;
     os << "\nDBUser = " << m_strDBUser;

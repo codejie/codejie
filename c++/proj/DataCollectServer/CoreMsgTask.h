@@ -12,10 +12,9 @@
 
 #include "DataAccess.h"
 #include "CollectServerTask.h"
-#include "CommandServerTask.h"
+#include "ControllerServerTask.h"
 
 class Packet;
-class CommandPacket;
 class ConfigLoader;
 
 class CoreMsgTask: public ACEX_Message_Task
@@ -45,29 +44,29 @@ public:
 	void ShowClient(std::ostream& os) const;
 protected:
 	void Final();
-	int UpdateClientCount(int clientid);
+	int UpdateClientCount(int collect, int clientid);//collect == 1 is client, else is controller
 protected:
 	virtual int handle_msg(const ACEX_Message& msg);
     int OnTimerMsgProc(const ACEX_Message& msg);
     int OnAppTaskMsgProc(const ACEX_Message& msg);
     int OnCollectServerMsgProc(const ACEX_Message& msg);
-    int OnCommandServerMsgProc(const ACEX_Message& msg);
+    int OnControllerServerMsgProc(const ACEX_Message& msg);
 
 private:
     int OnCollectPacket(const Packet& packet);
 	int OnCollectConnect(int clientid, const std::string& ip, unsigned int port);
 	int OnCollectDisconnect(int clientid);
 
-    int OnCommandPacket(const CommandPacket& packet);
-	int OnCommandConnect(int clientid, const std::string& ip, unsigned int port);
-	int OnCommandDisconnect(int clientid);
+    int OnControllerPacket(const Packet& packet);
+	int OnControllerConnect(int clientid, const std::string& ip, unsigned int port);
+	int OnControllerDisconnect(int clientid);
 private:
     std::auto_ptr<DataAccess> _objDataAccess;
     std::auto_ptr<CollectServerTask> _taskCollectServer;
-    std::auto_ptr<CommandServerTask> _taskCommandServer;
+    std::auto_ptr<ControllerServerTask> _taskControllerServer;
 private:
 	TClientMap _mapClient;
-    TClientMap _mapCommand;
+    TClientMap _mapController;
 };
 
 #endif /* __COREMSGTASK_H__ */

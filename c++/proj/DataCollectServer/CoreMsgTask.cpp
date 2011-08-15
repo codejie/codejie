@@ -10,7 +10,6 @@
 
 #include "Defines.h"
 #include "Packet.h"
-#include "CommandPacket.h"
 #include "ConfigLoader.h"
 #include "PacketProcessor.h"
 #include "CollectServerTask.h"
@@ -19,7 +18,7 @@
 CoreMsgTask::CoreMsgTask()
 : _objDataAccess(NULL)
 , _taskCollectServer(NULL)
-, _taskCommandServer(NULL)
+, _taskControllerServer(NULL)
 {
 }
 
@@ -43,10 +42,10 @@ int CoreMsgTask::Init(const ConfigLoader& config)
 		return -1;
 	}
 
-	_taskCommandServer.reset(new CommandServerTask(this));
-	if(_taskCommandServer->Open(config.m_strCommandAddr) != 0)
+	_taskControllerServer.reset(new ControllerServerTask(this));
+	if(_taskControllerServer->Open(config.m_strControllerAddr) != 0)
 	{
-		ACEX_LOG_OS(LM_ERROR, "<CoreMsgTask::Init>Command Server open failed - addr : " << config.m_strCommandAddr << std::endl);
+		ACEX_LOG_OS(LM_ERROR, "<CoreMsgTask::Init>Controller Server open failed - addr : " << config.m_strControllerAddr << std::endl);
 		return -1;
 	}
 
@@ -55,10 +54,10 @@ int CoreMsgTask::Init(const ConfigLoader& config)
 
 void CoreMsgTask::Final()
 {
-	if(_taskCommandServer.get() != NULL)
+	if(_taskControllerServer.get() != NULL)
 	{
-		_taskCommandServer->Final();
-		_taskCommandServer.reset(NULL);
+		_taskControllerServer->Final();
+		_taskControllerServer.reset(NULL);
 	}
 
 	if(_taskCollectServer.get() != NULL)
@@ -82,7 +81,7 @@ int CoreMsgTask::handle_msg(const ACEX_Message& msg)
     }
     else if(msg.msg_id() == TASK_COMMAND_SERVER)
     {
-        return OnCommandServerMsgProc(msg);
+        return OnControllerServerMsgProc(msg);
     }
     else if(msg.msg_id() == TASK_TIMER)
     {
@@ -129,7 +128,7 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 		Packet packet;
 		if(PacketProcessor::Analyse(std::string(buf, size), packet) == 0)
 		{
-			UpdateClientCount(msg.sparam() >> 16);
+			UpdateClientCount(1, msg.sparam() >> 16);
 			OnCollectPacket(packet);
 		}
 		else
@@ -186,13 +185,22 @@ int CoreMsgTask::OnCollectDisconnect(int clientid)
 	return 0;
 }
 
-int CoreMsgTask::UpdateClientCount(int clientid)
+int CoreMsgTask::UpdateClientCount(int collect, int clientid)
 {
-	TClientMap::iterator it = _mapClient.find(clientid);
-	if(it == _mapClient.end())
-		return -1;
-	++ it->second.count;
-
+	if(collect == 1)
+	{
+		TClientMap::iterator it = _mapClient.find(clientid);
+		if(it == _mapClient.end())
+			return -1;
+		++ it->second.count;
+	}
+	else
+	{
+		TClientMap::iterator it = _mapController.find(clientid);
+		if(it == _mapController.end())
+			return -1;
+		++ it->second.count;
+	}
 	return 0;
 }
 
@@ -225,9 +233,9 @@ void CoreMsgTask::ShowClient(std::ostream &os) const
 	{
 		os << "\n Terminal : [" << it->first << "] - " << it->second.count << "\n\t " << it->second.ip << ":" << it->second.port << " - " << it->second.update; 
 	}
-    os << "--- \nCommand Client ---";
+    os << "--- \nController Client ---";
 
-	for(TClientMap::const_iterator it = _mapCommand.begin(); it != _mapCommand.end(); ++ it)
+	for(TClientMap::const_iterator it = _mapController.begin(); it != _mapController.end(); ++ it)
 	{
 		os << "\n Terminal : [" << it->first << "] - " << it->second.count << "\n\t " << it->second.ip << ":" << it->second.port << " - " << it->second.update; 
 	}
@@ -236,40 +244,53 @@ void CoreMsgTask::ShowClient(std::ostream &os) const
 
 //
 
-int CoreMsgTask::OnCommandServerMsgProc(const ACEX_Message& msg)
+int CoreMsgTask::OnControllerServerMsgProc(const ACEX_Message& msg)
 {
 	if(msg.fparam() == FPARAM_PACKET)
 	{
-        std::auto_ptr<CommandPacket> packet(reinterpret_cast<CommandPacket*>(msg.data()));
-        OnCommandPacket(*packet);
+		size_t size = (size_t)(msg.sparam() & 0x0000FFFF);
+		const char* buf = (const char*)msg.data();
+
+		Packet packet;
+		if(PacketProcessor::Analyse(std::string(buf, size), packet) == 0)
+		{
+			UpdateClientCount(0, msg.sparam() >> 16);
+			OnControllerPacket(packet);
+		}
+		else
+		{
+			ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnControllerServerMsgProc>Packet Process failed - stream : " << std::string(buf, size) << std::endl);
+		}
+
+		delete [] buf;
 	}
 	else if(msg.fparam() == FPARAM_SOCKET_CONNECT)
 	{
 		ACE_INET_Addr* addr =  reinterpret_cast<ACE_INET_Addr*>(msg.data());
-		OnCommandConnect(msg.sparam(), addr->get_host_addr(), addr->get_port_number());
+		OnControllerConnect(msg.sparam(), addr->get_host_addr(), addr->get_port_number());
 		delete addr;
 	}
 	else if(msg.fparam() == FPARAM_SOCKET_DISCONNECT)
 	{
-		OnCommandDisconnect(msg.sparam());
+		OnControllerDisconnect(msg.sparam());
 	}
 	else
 	{
-		ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnCommandServerMsgProc>Unknwon fparam - " << msg.fparam() << std::endl);
+		ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnControllerServerMsgProc>Unknwon fparam - " << msg.fparam() << std::endl);
 	}
 
 	return 0;
 }
 
-int CoreMsgTask::OnCommandPacket(const CommandPacket& packet)
+int CoreMsgTask::OnControllerPacket(const Packet& packet)
 {
-	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnCommandPacket>Get Command Packet - " << packet << std::endl);
+	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnControllerPacket>Get Controller Packet - " << packet << std::endl);
 
 //
 	return 0;
 }
 
-int CoreMsgTask::OnCommandConnect(int clientid, const std::string& ip, unsigned int port)
+int CoreMsgTask::OnControllerConnect(int clientid, const std::string& ip, unsigned int port)
 {
 	ClientData_t data;
 	data.ip = ip;
@@ -277,14 +298,14 @@ int CoreMsgTask::OnCommandConnect(int clientid, const std::string& ip, unsigned 
 	data.update = ACE_OS::time(NULL);
 	data.count = 0;
 
-	_mapCommand.insert(std::make_pair(clientid, data));
+	_mapController.insert(std::make_pair(clientid, data));
 
 	return 0;
 }
 
-int CoreMsgTask::OnCommandDisconnect(int clientid)
+int CoreMsgTask::OnControllerDisconnect(int clientid)
 {
-	_mapCommand.erase(clientid);
+	_mapController.erase(clientid);
 
 	return 0;
 }

@@ -24,6 +24,8 @@ public:
 	PacketProcessor();
 	virtual ~PacketProcessor();
 
+	static int SetPacketDefault(Packet& packet);
+
 	static int Analyse(const std::string& stream, Packet& packet, bool checkcrc);
 	static int Make(std::string& stream, const Packet& packet);
 protected:

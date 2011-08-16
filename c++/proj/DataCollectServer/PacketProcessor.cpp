@@ -24,6 +24,12 @@ PacketProcessor::PacketProcessor() {
 PacketProcessor::~PacketProcessor() {
 }
 
+int PacketProcessor::SetPacketDefault(Packet& packet)
+{
+	//packet->QN = ACE_Time_Value tv = ACE_OS::gettimeofday() 
+	return 0;
+}
+
 int PacketProcessor::Analyse(const std::string& stream, Packet& packet, bool checkcrc)
 {
 	ACEX_LOG_OS(LM_DEBUG, "<PacketProcessor::Analyse>Get packet stream - \n" << stream << std::endl);

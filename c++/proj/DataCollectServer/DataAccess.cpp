@@ -764,3 +764,44 @@ const std::string DataAccess::GetPacketCPItemRuntimeValue(const Packet &packet, 
 	else
 		return "0.0";
 }
+
+///
+int DataAccess::GetValveControlData(const std::string& nid, Packet& packet)
+{
+	//select s_value from ic_fm_record where m_flag = '0'
+
+    if(_isconnected != true)
+        return -1;
+
+    try
+    {
+        const std::string sql = "select s_value from ic_fm_record where m_flag = '0'";
+
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
+		
+		std::string value;
+		stmt->defineString(1, value);
+
+		stmt->execute();
+
+		while(stmt->getNext() == 0)
+        {
+			packet.
+			break;
+            if(!_mapStationInfectant.insert(std::make_pair(std::make_pair(sid, iid), infcol)).second)
+            {
+                ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadDefColumnFromDB>Load Infectant column failed - Station:" << sid << " Infectant:" << iid << std::endl);
+                return -1;
+            }
+        }
+
+		_conn->destroyStatement(stmt);
+    }
+    catch(ocipp::Exception& e)
+    {
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadDefColumnFromDB>Load Infectant column exception - " << e << std::endl);
+        return -1;
+    }
+
+	return 0;
+}

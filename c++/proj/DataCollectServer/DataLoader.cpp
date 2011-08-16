@@ -1,5 +1,6 @@
 
 #include "Defines.h"
+#include "PacketProcessor.h"
 #include "DataAccess.h"
 #include "DataLoader.h"
 
@@ -106,5 +107,20 @@ int DataLoader::OnTimer(int clientid, DataLoader::TimerType type)
     return 0;
 }
 
+int DataLoader::LoadValveControlData(int clientid, Packet*& packet)
+{
+
+	packet = new Packet();
+
+	PacketProcessor::SetPacketDefault(*packet);
+
+	if(_dataAccess->GetValveControlData("", *packet) != 0)
+	{
+		delete packet, packet = NULL;
+		return -1;
+	}
+	
+	return 0;
+}
 
 

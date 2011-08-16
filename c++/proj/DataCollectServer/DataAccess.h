@@ -65,6 +65,14 @@ public:
 	void ShowStationID(std::ostream &os, const std::string& ano) const;
 	void ShowInfectantID(std::ostream& os, const std::string& nid) const;
 	void Show(std::ostream& os) const;
+
+	int GetValveControlData(const std::string& nid, Packet& packet);
+	int GetFeeAddData(const std::string& nid, Packet& packet);
+	int GetRealData(const std::string& nid, Packet& packet);
+
+	int UpdateValveControlDataFlag(const std::string& nid);
+	int UpdateFeeAddDataFlag(const std::string& nid);
+	int UpdateRealDataFlag(const std::string& nid);
 private:
 	int Connect();
 	void Disconnect();

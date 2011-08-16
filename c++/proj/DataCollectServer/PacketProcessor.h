@@ -24,10 +24,10 @@ public:
 	PacketProcessor();
 	virtual ~PacketProcessor();
 
-	static int Analyse(const std::string& stream, Packet& packet);
+	static int Analyse(const std::string& stream, Packet& packet, bool checkcrc);
 	static int Make(std::string& stream, const Packet& packet);
 protected:
-	static int Check(const std::string& stream, int& datasize);
+	static int Check(const std::string& stream, int& datasize, bool checkcrc);
 	static int DataCRCCheck(const std::string& data, const std::string& crc);
 	static int DataAnalyse(const std::string& stream, Packet& packet);
 

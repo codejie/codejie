@@ -57,6 +57,10 @@ int ConfigLoader::Load(const std::string& filename)
 		return -1;
 	m_strCommandAddr = tmp.c_str();
 
+	if(ini.get_string_value(key, "CheckCRC", tmp) != 0)
+		return -1;
+	m_bCheckCRC = (tmp.c_str() == "1");
+
 	if(ini.open_section(root, "Database", 0, key) != 0)
 		return -1;
 	
@@ -85,6 +89,7 @@ void ConfigLoader::Show(std::ostream& os) const
     os << "\nCollectAddr = " << m_strCollectAddr;
 	os << "\nControllerAddr = " << m_strControllerAddr;
     os << "\nCommandAddr = " << m_strCommandAddr;
+    os << "\nCheckCRC = " << m_bCheckCRC;
     os << "\nDBServer = " << m_strDBServer;
     os << "\nDBUser = " << m_strDBUser;
     os << "\nDBPasswd = " << m_strDBPasswd << std::endl;

@@ -65,6 +65,7 @@ private:
     std::auto_ptr<CollectServerTask> _taskCollectServer;
     std::auto_ptr<ControllerServerTask> _taskControllerServer;
 private:
+    bool _crcCheck;
 	TClientMap _mapClient;
     TClientMap _mapController;
 };

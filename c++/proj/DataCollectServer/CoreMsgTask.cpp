@@ -49,6 +49,8 @@ int CoreMsgTask::Init(const ConfigLoader& config)
 		return -1;
 	}
 
+    _crcCheck = config.m_bCheckCRC;
+
 	return 0;
 }
 
@@ -126,7 +128,7 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 		const char* buf = (const char*)msg.data();
 
 		Packet packet;
-		if(PacketProcessor::Analyse(std::string(buf, size), packet) == 0)
+		if(PacketProcessor::Analyse(std::string(buf, size), packet, _crcCheck) == 0)
 		{
 			UpdateClientCount(1, msg.sparam() >> 16);
 			OnCollectPacket(packet);
@@ -252,7 +254,7 @@ int CoreMsgTask::OnControllerServerMsgProc(const ACEX_Message& msg)
 		const char* buf = (const char*)msg.data();
 
 		Packet packet;
-		if(PacketProcessor::Analyse(std::string(buf, size), packet) == 0)
+		if(PacketProcessor::Analyse(std::string(buf, size), packet, _crcCheck) == 0)
 		{
 			UpdateClientCount(0, msg.sparam() >> 16);
 			OnControllerPacket(packet);

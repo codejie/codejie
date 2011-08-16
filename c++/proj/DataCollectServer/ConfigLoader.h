@@ -21,6 +21,8 @@ public:
 	std::string m_strControllerAddr;
     std::string m_strCommandAddr;
 
+    bool m_bCheckCRC;
+
     std::string m_strDBServer;
     std::string m_strDBUser;
     std::string m_strDBPasswd;

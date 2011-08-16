@@ -24,11 +24,11 @@ PacketProcessor::PacketProcessor() {
 PacketProcessor::~PacketProcessor() {
 }
 
-int PacketProcessor::Analyse(const std::string& stream, Packet& packet)
+int PacketProcessor::Analyse(const std::string& stream, Packet& packet, bool checkcrc)
 {
 	ACEX_LOG_OS(LM_DEBUG, "<PacketProcessor::Analyse>Get packet stream - \n" << stream << std::endl);
 	int datasize = 0;
-	if(Check(stream, datasize) == 0)
+	if(Check(stream, datasize, checkcrc) == 0)
 	{
 		if(DataAnalyse(stream.substr(6, datasize), packet) == 0)
 		{
@@ -61,7 +61,7 @@ int PacketProcessor::Make(std::string& stream, const Packet& packet)
 	return 0;
 }
 
-int PacketProcessor::Check(const std::string& stream, int& datasize)
+int PacketProcessor::Check(const std::string& stream, int& datasize, bool checkcrc)
 {
 	if(stream.substr(0, 2) != TAG_BEGIN)
 	{
@@ -72,9 +72,11 @@ int PacketProcessor::Check(const std::string& stream, int& datasize)
 	if(datasize < 0 || datasize > 1024)
 		return -1;
 
-//	if(DataCRCCheck(stream.substr(6, datasize), stream.substr(datasize + 6, 4)) != 0)
-//		return -1;
-
+    if(checkcrc == true)
+    {
+	    if(DataCRCCheck(stream.substr(6, datasize), stream.substr(datasize + 6, 4)) != 0)
+		    return -1;
+    }
 	return 0;
 }
 

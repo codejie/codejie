@@ -786,20 +786,161 @@ int DataAccess::GetValveControlData(const std::string& nid, Packet& packet)
 
 		while(stmt->getNext() == 0)
         {
-			packet.
+            Packet::TCPItemDataMap m;
+            m.insert(std::make_pair("Data", value));
+            packet.CP.item.insert(std::make_pair("Valve", m));
 			break;
-            if(!_mapStationInfectant.insert(std::make_pair(std::make_pair(sid, iid), infcol)).second)
-            {
-                ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadDefColumnFromDB>Load Infectant column failed - Station:" << sid << " Infectant:" << iid << std::endl);
-                return -1;
-            }
         }
 
 		_conn->destroyStatement(stmt);
     }
     catch(ocipp::Exception& e)
     {
-        ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadDefColumnFromDB>Load Infectant column exception - " << e << std::endl);
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::GetValveControlData>Load data exception - " << e << std::endl);
+        return -1;
+    }
+
+	return 0;
+}
+
+int DataAccess::GetFeeAddData(const std::string &nid, Packet &packet)
+{
+//select csn,SEWAGE_NUMBER,cod_number,nh_number,NH_NUMBER,CREATE_DATE from ic_fee_record where M_FLAG = '0'
+    try
+    {
+        const std::string sql = "select csn,SEWAGE_NUMBER,cod_number,nh_number,CREATE_DATE from ic_fee_record where M_FLAG = '0'";
+
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
+		
+		std::string csn, sewage, cod, nh, date;
+		stmt->defineString(1, csn);
+        stmt->defineString(2, sewage);
+        stmt->defineString(3, cod);
+        stmt->defineString(4, nh);
+        stmt->defineString(5, date);
+
+		stmt->execute();
+
+		while(stmt->getNext() == 0)
+        {
+            packet.CP.data.insert(std::make_pair("CSN", csn));
+            packet.CP.data.insert(std::make_pair("DataTime", date));
+
+
+            Packet::TCPItemDataMap m1;
+            m1.insert(std::make_pair("Data", sewage));
+            packet.CP.item.insert(std::make_pair("B01", m1));
+
+            Packet::TCPItemDataMap m2;
+            m2.insert(std::make_pair("Data", cod));
+            packet.CP.item.insert(std::make_pair("011", m2));
+
+            Packet::TCPItemDataMap m3;
+            m3.insert(std::make_pair("Data", sewage));
+            packet.CP.item.insert(std::make_pair("060", m3));
+
+            Packet::TCPItemDataMap m4;
+            m4.insert(std::make_pair("Data", "100"));
+            packet.CP.item.insert(std::make_pair("Valve", m4));
+
+			break;
+        }
+
+		_conn->destroyStatement(stmt);
+    }
+    catch(ocipp::Exception& e)
+    {
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::GetFeeAddData>Load data exception - " << e << std::endl);
+        return -1;
+    }
+
+	return 0;
+}
+
+
+int DataAccess::GetRealData(const std::string &nid, Packet &packet)
+{
+//select real_out_number,	real_cod_out_number,real_nh_out_number,
+//				y_out_number,m_out_number,l_out_number,alo_y_out_number,alo_m_out_number,
+//				alo_l_out_number,y_out_rate,m_out_rate,l_out_rate,y_cod_out_number,
+//				m_cod_out_number,l_cod_out_number,alo_cod_y_out_number,alo_cod_m_out_number,
+//				alo_cod_l_out_number,y_cod_out_rate,m_cod_out_rate,l_cod_out_rate,
+//				y_nh_out_number,m_nh_out_number,l_nh_out_number,alo_nh_y_out_number,
+//				alo_nh_m_out_number,alo_nh_l_out_number,y_nh_out_rate,m_nh_out_rate,
+//				l_nh_out_rate,d_out_number,d_cod_out_number,d_nh_out_number,
+//				is_alerm,is_color
+//	 			from IC_MONITOR_REAL_MINREALwhere M_FLAG = '0'
+
+    try
+    {
+        const std::string sql = "select real_out_number,real_cod_out_number,real_nh_out_number,\
+				y_out_number,m_out_number,l_out_number,alo_y_out_number,alo_m_out_number,d_out_number,alo_l_out_number,y_out_rate,m_out_rate,l_out_rate,\
+                y_cod_out_number, m_cod_out_number,l_cod_out_number,d_cod_out_number,alo_cod_y_out_number,alo_cod_m_out_number,alo_cod_l_out_number,y_cod_out_rate,m_cod_out_rate,l_cod_out_rate,\
+				y_nh_out_number,m_nh_out_number,l_nh_out_number,d_nh_out_number,alo_nh_y_out_number,alo_nh_m_out_number,alo_nh_l_out_number,y_nh_out_rate,m_nh_out_rate,l_nh_out_rate,\
+                is_alerm,is_color from IC_MONITOR_REAL_MINREAL where M_FLAG = '0'";
+
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
+		
+		std::string r_b01, r_011, r_060;
+        std::string y_b01, m_b01, l_b01, d_b01, alo_y_b01, alo_m_b01, alo_l_b01, y_b01_r, m_b01_r, l_b01_r;
+        std::string y_011, m_011, l_011, d_011, alo_y_011, alo_m_011, alo_l_011, y_011_r, m_011_r, l_011_r;
+        std::string y_060, m_060, l_060, d_060, alo_y_060, alo_m_060, alo_l_060, y_060_r, m_060_r, l_060_r;
+        std::string alerm, color;
+
+		stmt->defineString(1, r_b01);
+        stmt->defineString(2, r_011);
+        stmt->defineString(3, r_060);
+
+        stmt->defineString(4, y_b01);
+        stmt->defineString(5, m_b01);
+        stmt->defineString(6, l_b01);
+        stmt->defineString(7, d_b01);
+        stmt->defineString(8, alo_y_b01);
+        stmt->defineString(9, alo_m_b01);
+        stmt->defineString(10, alo_l_b01);
+        stmt->defineString(11, y_b01_r);
+        stmt->defineString(12, m_b01_r);
+        stmt->defineString(13, l_b01_r);
+
+        stmt->defineString(14, y_011);
+        stmt->defineString(15, m_011);
+        stmt->defineString(16, l_011);
+        stmt->defineString(17, d_011);
+        stmt->defineString(18, alo_y_011);
+        stmt->defineString(19, alo_m_011);
+        stmt->defineString(20, alo_l_011);
+        stmt->defineString(21, y_011_r);
+        stmt->defineString(22, m_011_r);
+        stmt->defineString(23, l_011_r);
+
+        stmt->defineString(24, y_060);
+        stmt->defineString(25, m_060);
+        stmt->defineString(26, l_060);
+        stmt->defineString(27, d_060);
+        stmt->defineString(28, alo_y_060);
+        stmt->defineString(29, alo_m_060);
+        stmt->defineString(30, alo_l_060);
+        stmt->defineString(31, y_060_r);
+        stmt->defineString(32, m_060_r);
+        stmt->defineString(33, l_060_r);
+
+        stmt->defineString(34, alerm);
+        stmt->defineString(35, color);
+
+		stmt->execute();
+
+		while(stmt->getNext() == 0)
+        {
+
+
+			break;
+        }
+
+		_conn->destroyStatement(stmt);
+    }
+    catch(ocipp::Exception& e)
+    {
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::GetFeeAddData>Load data exception - " << e << std::endl);
         return -1;
     }
 

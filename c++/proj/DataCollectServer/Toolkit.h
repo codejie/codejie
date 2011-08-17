@@ -8,6 +8,13 @@
 #ifndef __TOOLKIT_H__
 #define __TOOLKIT_H__
 
+#include <string>
+
+#include "ace/OS_NS_time.h"
+#include "ace/OS_NS_sys_time.h"
+#include "ace/OS_NS_stdio.h"
+//#include "ace/Time_Value.h"
+
 
 namespace Toolkit
 {
@@ -57,6 +64,26 @@ unsigned short CRC16(const unsigned char* data, size_t size)
 		crc = (crc >> 8) ^ CRC16_TABLE[(crc ^ (*data ++)) & 0xFF];
 	}
 	return crc;
+}
+
+const std::string GetTimeOfDay()
+{
+    ACE_Time_Value tv = ACE_OS::gettimeofday();
+    time_t t = tv.sec();
+	struct tm tt;
+    ACE_OS::localtime_r(&t, &tt);
+
+    char buf[17 + 1];
+    buf[17] = '\0';
+    ACE_OS::sprintf(buf, "%4d%2d%2d%2d%2d%2d%3d", 
+        tt.tm_year + 1900,
+        tt.tm_mon + 1,
+        tt.tm_mday,
+        tt.tm_hour,
+        tt.tm_min,
+        tt.tm_sec,
+        tv.msec() / 1000);
+    return std::string(buf);   
 }
 
 }

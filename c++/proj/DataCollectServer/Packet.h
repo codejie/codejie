@@ -30,7 +30,16 @@ public:
     static const std::string PD_CN_MINUTELYDATA;
     static const std::string PD_CN_HOURLYDATA;
 
+    static const std::string PD_CN_VALVECONTROL;
+    static const std::string PD_CN_FEEADD;
+    static const std::string PD_CN_READDATA;
+    static const std::string PD_CN_FEEUPLOAD;
+    static const std::string PD_CN_VALVEDATA;
+
     static const std::string PD_CP_TAG_DATATIME;
+
+    static const std::string VALUE_DEFAULT_MN;
+    static const std::string VALUE_DEFAULT_PW;
 
 public:
 	typedef std::map<std::string, std::string> TCPDataMap; //cp + data

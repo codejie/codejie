@@ -25,7 +25,18 @@ const std::string Packet::PD_CN_DAILYDATA           =   "2031";
 const std::string Packet::PD_CN_MINUTELYDATA        =   "2051";
 const std::string Packet::PD_CN_HOURLYDATA          =   "2061";
 
+const std::string Packet::PD_CN_VALVECONTROL        =   "3050";
+const std::string Packet::PD_CN_FEEADD              =   "3051";
+const std::string Packet::PD_CN_READDATA            =   "3052";
+const std::string Packet::PD_CN_FEEUPLOAD           =   "3053";
+const std::string Packet::PD_CN_VALVEDATA           =   "3054";
+
 const std::string Packet::PD_CP_TAG_DATATIME =   "DataTime";
+
+
+const std::string Packet::VALUE_DEFAULT_MN          =   "88888880000001";
+const std::string Packet::VALUE_DEFAULT_PW          =   "123456";
+
 
 Packet::Packet()
 {

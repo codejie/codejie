@@ -1,5 +1,6 @@
 
 #include "Defines.h"
+#include "Toolkit.h"
 #include "PacketProcessor.h"
 #include "DataAccess.h"
 #include "DataLoader.h"
@@ -112,7 +113,12 @@ int DataLoader::LoadValveControlData(int clientid, Packet*& packet)
 
 	packet = new Packet();
 
-	PacketProcessor::SetPacketDefault(*packet);
+    packet->QN = Toolkit::GetTimeOfDay();
+    packet->ST = "91";
+    packet->CN = Packet::PD_CN_VALVECONTROL;
+    packet->PW = Packet::VALUE_DEFAULT_PW;
+    packet->MN = Packet::VALUE_DEFAULT_MN;
+    packet->Flag = "1";
 
 	if(_dataAccess->GetValveControlData("", *packet) != 0)
 	{

@@ -931,7 +931,55 @@ int DataAccess::GetRealData(const std::string &nid, Packet &packet)
 
 		while(stmt->getNext() == 0)
         {
+            Packet::TCPItemDataMap m1;
+            m1.insert(std::make_pair("Real_Data", r_b01));
+			m1.insert(std::make_pair("Y_Data", y_b01));
+			m1.insert(std::make_pair("M_Data", m_b01));
+			m1.insert(std::make_pair("L_Data", l_b01));
+			m1.insert(std::make_pair("D_Data", d_b01));
+			m1.insert(std::make_pair("Alo_Y_Data", alo_y_b01));
+			m1.insert(std::make_pair("Alo_M_Data", alo_m_b01));
+			m1.insert(std::make_pair("Alo_L_Data", alo_l_b01));
+			m1.insert(std::make_pair("Y_Rate", y_b01));
+			m1.insert(std::make_pair("M_Rate", m_b01));
+			m1.insert(std::make_pair("L_Rate", l_b01));
+            packet.CP.item.insert(std::make_pair("B01", m1));			
 
+            Packet::TCPItemDataMap m2;
+            m2.insert(std::make_pair("Real_Data", r_011));
+			m2.insert(std::make_pair("Y_Data", y_011));
+			m2.insert(std::make_pair("M_Data", m_011));
+			m2.insert(std::make_pair("L_Data", l_011));
+			m2.insert(std::make_pair("D_Data", d_011));
+			m2.insert(std::make_pair("Alo_Y_Data", alo_y_011));
+			m2.insert(std::make_pair("Alo_M_Data", alo_m_011));
+			m2.insert(std::make_pair("Alo_L_Data", alo_l_011));
+			m2.insert(std::make_pair("Y_Rate", y_011));
+			m2.insert(std::make_pair("M_Rate", m_011));
+			m2.insert(std::make_pair("L_Rate", l_011));
+            packet.CP.item.insert(std::make_pair("011", m2));
+
+            Packet::TCPItemDataMap m3;
+            m3.insert(std::make_pair("Real_Data", r_060));
+			m3.insert(std::make_pair("Y_Data", y_060));
+			m3.insert(std::make_pair("M_Data", m_060));
+			m3.insert(std::make_pair("L_Data", l_060));
+			m3.insert(std::make_pair("D_Data", d_060));
+			m3.insert(std::make_pair("Alo_Y_Data", alo_y_060));
+			m3.insert(std::make_pair("Alo_M_Data", alo_m_060));
+			m3.insert(std::make_pair("Alo_L_Data", alo_l_060));
+			m3.insert(std::make_pair("Y_Rate", y_060));
+			m3.insert(std::make_pair("M_Rate", m_060));
+			m3.insert(std::make_pair("L_Rate", l_060));
+            packet.CP.item.insert(std::make_pair("B01", m3));
+
+            Packet::TCPItemDataMap m4;
+			m4.insert(std::make_pair("Data", alerm));
+			packet.CP.item.insert(std::make_pair("Alerm", m4));
+
+            Packet::TCPItemDataMap m5;
+			m5.insert(std::make_pair("Data", color));
+			packet.CP.item.insert(std::make_pair("Color", m5));
 
 			break;
         }
@@ -940,7 +988,76 @@ int DataAccess::GetRealData(const std::string &nid, Packet &packet)
     }
     catch(ocipp::Exception& e)
     {
-        ACEX_LOG_OS(LM_ERROR, "<DataAccess::GetFeeAddData>Load data exception - " << e << std::endl);
+        ACEX_LOG_OS(LM_ERROR, "<DataAccess::GetRealData>Load data exception - " << e << std::endl);
+        return -1;
+    }
+
+	return 0;
+}
+
+int DataAccess::UpdateValveControlDataFlag(const std::string& nid)
+{
+	//update ic_fm_record  set m_flag = '1'
+
+    if(_isconnected != true)
+        return -1;
+
+    try
+    {
+		const std::string sql = "update ic_fm_record  set m_flag = '1' where m_flag = '0'";
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
+
+		_conn->destroyStatement(stmt);
+    }
+    catch(const ocipp::Exception& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::UpdateValveControlDataFlag>update flag exception - " << e << std::endl);
+        return -1;
+    }
+
+	return 0;
+}
+
+int DataAccess::UpdateFeeAddDataFlag(const std::string& nid)
+{
+	//update ic_fee_record set M_FLAG = '1'
+
+    if(_isconnected != true)
+        return -1;
+
+    try
+    {
+		const std::string sql = "update ic_fee_record set M_FLAG = '1' where m_flag = '0'";
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
+
+		_conn->destroyStatement(stmt);
+    }
+    catch(const ocipp::Exception& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::UpdateFeeAddDataFlag>update flag exception - " << e << std::endl);
+        return -1;
+    }
+
+	return 0;
+}
+
+int DataAccess::UpdateRealDataFlag(const std::string& nid)
+{
+	//update IC_MONITOR_REAL_MINREAL set M_FLAG = '1'
+
+    if(_isconnected != true)
+        return -1;
+
+    try
+    {
+		const std::string sql = "update IC_MONITOR_REAL_MINREAL set M_FLAG = '1' where m_flag = '0'";
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
+
+		_conn->destroyStatement(stmt);
+    }
+    catch(const ocipp::Exception& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::UpdateRealDataFlag>update flag exception - " << e << std::endl);
         return -1;
     }
 

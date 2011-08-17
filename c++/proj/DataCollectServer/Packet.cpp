@@ -27,7 +27,7 @@ const std::string Packet::PD_CN_HOURLYDATA          =   "2061";
 
 const std::string Packet::PD_CN_VALVECONTROL        =   "3050";
 const std::string Packet::PD_CN_FEEADD              =   "3051";
-const std::string Packet::PD_CN_READDATA            =   "3052";
+const std::string Packet::PD_CN_REALDATA            =   "3052";
 const std::string Packet::PD_CN_FEEUPLOAD           =   "3053";
 const std::string Packet::PD_CN_VALVEDATA           =   "3054";
 

@@ -32,7 +32,7 @@ public:
 
     static const std::string PD_CN_VALVECONTROL;
     static const std::string PD_CN_FEEADD;
-    static const std::string PD_CN_READDATA;
+    static const std::string PD_CN_REALDATA;
     static const std::string PD_CN_FEEUPLOAD;
     static const std::string PD_CN_VALVEDATA;
 

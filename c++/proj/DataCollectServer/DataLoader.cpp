@@ -1,7 +1,6 @@
 
 #include "Defines.h"
 #include "Toolkit.h"
-#include "PacketProcessor.h"
 #include "DataAccess.h"
 #include "DataLoader.h"
 
@@ -110,7 +109,6 @@ int DataLoader::OnTimer(int clientid, DataLoader::TimerType type)
 
 int DataLoader::LoadValveControlData(int clientid, Packet*& packet)
 {
-
 	packet = new Packet();
 
     packet->QN = Toolkit::GetTimeOfDay();
@@ -129,4 +127,42 @@ int DataLoader::LoadValveControlData(int clientid, Packet*& packet)
 	return 0;
 }
 
+int DataLoader::LoadFeeAddData(int clientid, Packet*& packet)
+{
+	packet = new Packet();
 
+    packet->QN = Toolkit::GetTimeOfDay();
+    packet->ST = "91";
+	packet->CN = Packet::PD_CN_FEEADD;
+    packet->PW = Packet::VALUE_DEFAULT_PW;
+    packet->MN = Packet::VALUE_DEFAULT_MN;
+    packet->Flag = "1";
+
+	if(_dataAccess->GetValveControlData("", *packet) != 0)
+	{
+		delete packet, packet = NULL;
+		return -1;
+	}
+	
+	return 0;
+}
+
+int DataLoader::LoadRealData(int clientid, Packet*& packet)
+{
+	packet = new Packet();
+
+    packet->QN = Toolkit::GetTimeOfDay();
+    packet->ST = "91";
+    packet->CN = Packet::PD_CN_REALDATA;
+    packet->PW = Packet::VALUE_DEFAULT_PW;
+    packet->MN = Packet::VALUE_DEFAULT_MN;
+    packet->Flag = "1";
+
+	if(_dataAccess->GetValveControlData("", *packet) != 0)
+	{
+		delete packet, packet = NULL;
+		return -1;
+	}
+	
+	return 0;
+}

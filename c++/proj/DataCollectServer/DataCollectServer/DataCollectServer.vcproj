@@ -221,6 +221,10 @@
 				RelativePath="..\PacketProcessor.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\Toolkit.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

@@ -26,6 +26,9 @@ public:
     std::string m_strDBServer;
     std::string m_strDBUser;
     std::string m_strDBPasswd;
+
+    int m_iRealtimeInterval;
+    int m_iPeriodInterval;
 };
 
 #endif

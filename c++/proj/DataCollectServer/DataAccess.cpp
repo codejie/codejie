@@ -477,30 +477,74 @@ void DataAccess::Show(std::ostream& os) const
     _dataStatistic.Show(os);
 }
 
-int DataAccess::OnData(const Packet &packet)
+int DataAccess::OnPacket(const Packet &packet)
 {
-    if(packet.CN == Packet::PD_CN_DAILYDATA)
-    {
-        return OnDailyData(packet);
+    if(packet.ST == Packet::PD_ST_21)
+    {//collect data
+        if(packet.CN == Packet::PD_CN_DAILYDATA)
+        {
+            return OnDailyData(packet);
+        }
+        else if(packet.CN == Packet::PD_CN_MINUTELYDATA)
+        {
+		    //OnDailyData(packet);
+		    //OnHourlyData(packet);
+            return OnMinutelyData(packet);
+        }
+        else if(packet.CN == Packet::PD_CN_HOURLYDATA)
+        {
+            return OnHourlyData(packet);
+        }
+        else if(packet.CN == Packet::PD_CN_RUNTIMEDATA)
+        {
+            return OnRuntimeData(packet);
+        }
+        else
+        {
+            return OnUnknownData(packet);
+        }
     }
-    else if(packet.CN == Packet::PD_CN_MINUTELYDATA)
-    {
-		//OnDailyData(packet);
-		//OnHourlyData(packet);
-        return OnMinutelyData(packet);
-    }
-    else if(packet.CN == Packet::PD_CN_HOURLYDATA)
-    {
-        return OnHourlyData(packet);
-    }
-    else if(packet.CN == Packet::PD_CN_RUNTIMEDATA)
-    {
-        return OnRuntimeData(packet);
+    else if(packet.ST == Packet::PD_ST_91)
+    {//control response
+        try
+        {
+            const std::string& ret = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_EXERTN);
+            if(ret == "1")
+            {
+                if(packet.CN == Packet::PD_CN_VALVECONTROL)
+                {
+                    return OnValveControl(packet);
+                }
+                else if(packet.CN == Packet::PD_CN_ICFEEADD)
+                {
+                    return OnICFeeAdd(packet);
+                }
+                else if(packet.CN == Packet::PD_CN_VALVEREALDATA)
+                {
+                    return OnValveRealData(packet);
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        catch(const PacketException& e)
+        {
+            ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnPacket>Get ExeRtn - " << e << "\n" << packet << std::endl);
+            
+            return -1;
+        }
     }
     else
     {
-        return OnUnknownData(packet);
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnPacket>Recv UNKNOWN ST - " << packet.ST << "\n" << packet << std::endl);
     }
+
     return -1;
 }
 
@@ -715,6 +759,17 @@ const std::string& DataAccess::GetPacketCPDataValue(const Packet& packet, const 
     return it->second;
 }
 
+const std::string& DataAccess::GetPacketCPItemValue(const Packet& packet, const std::string& inf, const std::string& item) const
+{
+    Packet::TCPItemMap::const_iterator it = packet.CP.item.find(inf);
+    if(it == packet.CP.item.end())
+        throw PacketException("can not find cp - item : " + inf, packet);
+    Packet::TCPItemDataMap::const_iterator i = it->second.find(item);
+    if(i == it->second.end())
+        throw PacketException("can not find cp - item - tag : " + item, packet);
+    return i->second;
+}
+
 const std::string DataAccess::GetPacketCPItemMinuteValue(const Packet &packet, const std::string &item, const Packet::TCPItemDataMap &data) const
 {
     //cou + min + avg + max
@@ -766,7 +821,7 @@ const std::string DataAccess::GetPacketCPItemRuntimeValue(const Packet &packet, 
 }
 
 ///
-int DataAccess::GetValveControlData(const std::string& nid, Packet& packet)
+int DataAccess::GetValveControlData(Packet& packet)
 {
 	//select s_value from ic_fm_record where m_flag = '0'
 
@@ -803,7 +858,7 @@ int DataAccess::GetValveControlData(const std::string& nid, Packet& packet)
 	return 0;
 }
 
-int DataAccess::GetFeeAddData(const std::string &nid, Packet &packet)
+int DataAccess::GetICFeeAddData(Packet &packet)
 {
 //select csn,SEWAGE_NUMBER,cod_number,nh_number,NH_NUMBER,CREATE_DATE from ic_fee_record where M_FLAG = '0'
     try
@@ -858,7 +913,7 @@ int DataAccess::GetFeeAddData(const std::string &nid, Packet &packet)
 }
 
 
-int DataAccess::GetRealData(const std::string &nid, Packet &packet)
+int DataAccess::GetValveRealData(Packet &packet)
 {
 //select real_out_number,	real_cod_out_number,real_nh_out_number,
 //				y_out_number,m_out_number,l_out_number,alo_y_out_number,alo_m_out_number,
@@ -995,7 +1050,7 @@ int DataAccess::GetRealData(const std::string &nid, Packet &packet)
 	return 0;
 }
 
-int DataAccess::UpdateValveControlDataFlag(const std::string& nid)
+int DataAccess::OnValveControl(const Packet& packet)
 {
 	//update ic_fm_record  set m_flag = '1'
 
@@ -1018,7 +1073,7 @@ int DataAccess::UpdateValveControlDataFlag(const std::string& nid)
 	return 0;
 }
 
-int DataAccess::UpdateFeeAddDataFlag(const std::string& nid)
+int DataAccess::OnICFeeAdd(const Packet& packet)
 {
 	//update ic_fee_record set M_FLAG = '1'
 
@@ -1041,7 +1096,7 @@ int DataAccess::UpdateFeeAddDataFlag(const std::string& nid)
 	return 0;
 }
 
-int DataAccess::UpdateRealDataFlag(const std::string& nid)
+int DataAccess::OnValveRealData(const Packet& packet)
 {
 	//update IC_MONITOR_REAL_MINREAL set M_FLAG = '1'
 
@@ -1058,6 +1113,79 @@ int DataAccess::UpdateRealDataFlag(const std::string& nid)
     catch(const ocipp::Exception& e)
     {
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::UpdateRealDataFlag>update flag exception - " << e << std::endl);
+        return -1;
+    }
+
+	return 0;
+}
+
+int DataAccess::SetICFeeUploadData(const Packet &packet)
+{
+//insert into ic_card_record(station_id,sn_no,sewage_number,cod_number,nh_number,m_time)
+//	values('3301091139','?','?','?','?','?')
+    if(_isconnected != true)
+        return -1;
+
+    const std::string& sid = packet.MN;
+    const std::string& ic  = GetPacketCPDataValue(packet, "CSN");
+    const std::string& sewage = GetPacketCPItemValue(packet, "B01", "Data");
+    const std::string& cod = GetPacketCPItemValue(packet, "011", "Data");
+    const std::string& nh = GetPacketCPItemValue(packet, "060", "Data");
+    const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
+
+    try
+    {
+        const std::string sql = "insert into ic_card_record(station_id,sn_no,sewage_number,cod_number,nh_number,m_time) values(:1, :2, :3, :4, :5, TO_DATE(:6, 'yyyymmddhh24miss'))";
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
+
+        stmt->bindString(1, sid);
+        stmt->bindString(2, ic);
+        stmt->bindString(3, sewage);
+        stmt->bindString(4, cod);
+        stmt->bindString(5, nh);
+        stmt->bindString(6, mtime);
+
+		_conn->destroyStatement(stmt);
+    }
+    catch(const ocipp::Exception& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnICFeeUpload>insert data exception - " << e << std::endl);
+        return -1;
+    }
+
+	return 0;
+}
+
+int DataAccess::SetValveUploadData(const Packet &packet)
+{
+//insert into ic_fm_info(station_id,m_time,f_e_value,f_out_value,cor_value)
+//	values('3301091139','?','?','?','?')
+
+    if(_isconnected != true)
+        return -1;
+
+    const std::string& sid = packet.MN;
+    const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
+    const std::string& ev = GetPacketCPItemValue(packet, "E_Valve", "Data");
+    const std::string& cv = GetPacketCPItemValue(packet, "C_Valve", "Data");
+    const std::string& v = GetPacketCPItemValue(packet, "Valve", "Data");
+
+    try
+    {
+        const std::string sql = "insert into ic_fm_info(station_id,m_time,f_e_value,f_out_value,cor_value) values(:1, TO_DATE(:2, 'yyyymmddhh24miss'), :3, :4, :5)";
+        ocipp::Statement *stmt = _conn->makeStatement(sql);
+
+        stmt->bindString(1, sid);
+        stmt->bindString(2, mtime);
+        stmt->bindString(3, ev);
+        stmt->bindString(4, v);
+        stmt->bindString(5, cv);
+
+		_conn->destroyStatement(stmt);
+    }
+    catch(const ocipp::Exception& e)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnValveUpload>insert data exception - " << e << std::endl);
         return -1;
     }
 

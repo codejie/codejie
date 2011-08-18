@@ -45,12 +45,16 @@ protected:
     int PutMsg(int clientid, int type, const Packet* packet);
 private:
 	int LoadValveControlData(int clientid, Packet*& packet);
-	int LoadFeeAddData(int clientid, Packet*& packet);
-	int LoadRealData(int clientid, Packet*& packet);
+	int LoadICFeeAddData(int clientid, Packet*& packet);
+	int LoadValveRealData(int clientid, Packet*& packet);
 
 	int UpdateValveControlDataFlag(int clientid);
 	int UpdateFeeAddDataFlag(int clientid);
 	int UpdateRealDataFlag(int clientid);
+
+	int OnICFeeUpload(int clientid, const Packet& packet, int ret);
+	int OnValveUpload(int clientid, const Packet& packet, int ret);
+
 private:
     ACEX_Message_Task* _taskMsg;
     DataAccess* _dataAccess;

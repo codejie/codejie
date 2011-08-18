@@ -3,6 +3,7 @@
 
 
 #include <iostream>
+#include <string>
 
 #include "acex/NB_Tcp_Server.h"
 #include "acex/Task.h"
@@ -14,6 +15,7 @@ public:
 	virtual ~ControllerServerTask();
 
 	int Open(const std::string& local);
+    int Send(int clientid, const std::string& stream);
 
 	void Final();
 

@@ -31,12 +31,16 @@ public:
     static const std::string PD_CN_HOURLYDATA;
 
     static const std::string PD_CN_VALVECONTROL;
-    static const std::string PD_CN_FEEADD;
-    static const std::string PD_CN_REALDATA;
-    static const std::string PD_CN_FEEUPLOAD;
-    static const std::string PD_CN_VALVEDATA;
+    static const std::string PD_CN_ICFEEADD;
+    static const std::string PD_CN_VALVEREALDATA;
+    static const std::string PD_CN_ICFEEUPLOAD;
+    static const std::string PD_CN_VALVEUPLOAD;
 
     static const std::string PD_CP_TAG_DATATIME;
+    static const std::string PD_CP_TAG_EXERTN;
+
+    static const std::string PD_ST_21;
+    static const std::string PD_ST_91;
 
     static const std::string VALUE_DEFAULT_MN;
     static const std::string VALUE_DEFAULT_PW;

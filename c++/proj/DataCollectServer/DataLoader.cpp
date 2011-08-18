@@ -1,4 +1,6 @@
 
+#include "acex/ACEX.h"
+
 #include "Defines.h"
 #include "Toolkit.h"
 #include "DataAccess.h"
@@ -90,18 +92,18 @@ int DataLoader::OnTimer(int clientid, DataLoader::TimerType type)
     {
         if(LoadValveControlData(clientid, packet) == 0)
         {
-            PutMsg(clientid, FPARAM_DATA_VALVECONTROL, packet); 
+            PutMsg(clientid, FPARAM_PACKET, packet); 
         }
-        if(LoadFeeAddData(clientid, packet) == 0)
+        if(LoadICFeeAddData(clientid, packet) == 0)
         {
-            PutMsg(clientid, FPARAM_DATA_FEEADD, packet);
+            PutMsg(clientid, FPARAM_PACKET, packet);
         }
     }
     else
     {
-        if(LoadRealData(clientid, packet) == 0)
+        if(LoadValveRealData(clientid, packet) == 0)
         {
-            PutMsg(clientid, FPARAM_DATA_REAL, packet);
+            PutMsg(clientid, FPARAM_PACKET, packet);
         }
     }
     return 0;
@@ -112,13 +114,13 @@ int DataLoader::LoadValveControlData(int clientid, Packet*& packet)
 	packet = new Packet();
 
     packet->QN = Toolkit::GetTimeOfDay();
-    packet->ST = "91";
+    packet->ST = Packet::PD_ST_91;
     packet->CN = Packet::PD_CN_VALVECONTROL;
     packet->PW = Packet::VALUE_DEFAULT_PW;
     packet->MN = Packet::VALUE_DEFAULT_MN;
     packet->Flag = "1";
 
-	if(_dataAccess->GetValveControlData("", *packet) != 0)
+	if(_dataAccess->GetValveControlData(*packet) != 0)
 	{
 		delete packet, packet = NULL;
 		return -1;
@@ -127,18 +129,18 @@ int DataLoader::LoadValveControlData(int clientid, Packet*& packet)
 	return 0;
 }
 
-int DataLoader::LoadFeeAddData(int clientid, Packet*& packet)
+int DataLoader::LoadICFeeAddData(int clientid, Packet*& packet)
 {
 	packet = new Packet();
 
     packet->QN = Toolkit::GetTimeOfDay();
     packet->ST = "91";
-	packet->CN = Packet::PD_CN_FEEADD;
+	packet->CN = Packet::PD_CN_ICFEEADD;
     packet->PW = Packet::VALUE_DEFAULT_PW;
     packet->MN = Packet::VALUE_DEFAULT_MN;
     packet->Flag = "1";
 
-	if(_dataAccess->GetValveControlData("", *packet) != 0)
+    if(_dataAccess->GetICFeeAddData(*packet) != 0)
 	{
 		delete packet, packet = NULL;
 		return -1;
@@ -147,22 +149,93 @@ int DataLoader::LoadFeeAddData(int clientid, Packet*& packet)
 	return 0;
 }
 
-int DataLoader::LoadRealData(int clientid, Packet*& packet)
+int DataLoader::LoadValveRealData(int clientid, Packet*& packet)
 {
 	packet = new Packet();
 
     packet->QN = Toolkit::GetTimeOfDay();
     packet->ST = "91";
-    packet->CN = Packet::PD_CN_REALDATA;
+    packet->CN = Packet::PD_CN_VALVEREALDATA;
     packet->PW = Packet::VALUE_DEFAULT_PW;
     packet->MN = Packet::VALUE_DEFAULT_MN;
     packet->Flag = "1";
 
-	if(_dataAccess->GetValveControlData("", *packet) != 0)
+    if(_dataAccess->GetValveRealData(*packet) != 0)
 	{
 		delete packet, packet = NULL;
 		return -1;
 	}
 	
 	return 0;
+}
+
+
+int DataLoader::OnPacket(int clientid, const Packet &packet)
+{
+    if(packet.ST == Packet::PD_ST_91)
+    {
+        if(packet.CN == Packet::PD_CN_VALVECONTROL || packet.CN == Packet::PD_CN_ICFEEADD || packet.CN == Packet::PD_CN_VALVEREALDATA)
+        {
+            return _dataAccess->OnPacket(packet);
+        }
+        else if(packet.CN == Packet::PD_CN_ICFEEUPLOAD)
+        {
+            int ret = _dataAccess->SetICFeeUploadData(packet);
+            return OnICFeeUpload(clientid, packet, ret);
+        }
+        else if(packet.CN == Packet::PD_CN_VALVEUPLOAD)
+        {
+            int ret = _dataAccess->SetValveUploadData(packet);
+            return OnValveUpload(clientid, packet, ret);
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    else
+    {
+        return -1;
+    }
+    return 0;
+}
+
+int DataLoader::OnICFeeUpload(int clientid, const Packet &packet, int ret)
+{
+    Packet* resp = new Packet();
+
+    resp->ST = "91";
+    resp->CN = Packet::PD_CN_ICFEEUPLOAD;
+    resp->PW = packet.PW;
+    resp->MN = packet.MN;
+
+    resp->CP.data.insert(std::make_pair(Packet::PD_TAG_QN, packet.QN));
+    resp->CP.data.insert(std::make_pair(Packet::PD_CP_TAG_EXERTN, (ret == 1 ? "1" : "0")));
+
+    PutMsg(clientid, FPARAM_PACKET, resp);
+
+    return 0;
+}
+
+int DataLoader::OnValveUpload(int clientid, const Packet &packet, int ret)
+{
+    Packet* resp = new Packet();
+
+    resp->ST = "91";
+    resp->CN = Packet::PD_CN_VALVEUPLOAD;
+    resp->PW = packet.PW;
+    resp->MN = packet.MN;
+
+    resp->CP.data.insert(std::make_pair(Packet::PD_TAG_QN, packet.QN));
+    resp->CP.data.insert(std::make_pair(Packet::PD_CP_TAG_EXERTN, (ret == 1 ? "1" : "0")));
+
+    PutMsg(clientid, FPARAM_PACKET, resp);
+
+    return 0;
+}
+
+int DataLoader::OnPacketTimeout(int clientid, const Packet &packet)
+{
+    ACEX_LOG_OS(LM_WARNING, "<>Packet resp timeout - clientid : " << clientid << "\n" << packet << std::endl);
+    return 0;
 }

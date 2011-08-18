@@ -31,6 +31,13 @@ void ControllerServerTask::Final()
 	this->deactivate();
 }
 
+int ControllerServerTask::Send(int clientid, const std::string& stream)
+{
+    if(this->send(clientid, stream.c_str(), stream.size()) == ACEX_NB_Tcp_Server_Task::SEND_SUCCESS)
+        return 0;
+    return -1;
+}
+
 int ControllerServerTask::handle_connect(int clientid, ACEX_TcpStream& client)
 {
 	ACE_INET_Addr* addr = new ACE_INET_Addr();

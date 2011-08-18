@@ -21,8 +21,10 @@ const int FPARAM_SOCKET_CONNECT		=	3;
 const int FPARAM_SOCKET_DISCONNECT	=	4;
 const int FPARAM_DATALOADER_RTTIMER   =   5;
 const int FPARAM_DATALOADER_PDTIMER   =   6;
-const int FPARAM_DATA_VALVECONTROL  =   7;
-const int FPARAM_DATA_FEEADD        =   8;
-const int FPARAM_DATA_REAL          =   9;
+//const int FPARAM_DATA_VALVECONTROL  =   7;
+//const int FPARAM_DATA_FEEADD        =   8;
+//const int FPARAM_DATA_REAL          =   9;
+
+const int FPARAM_STATEDATA          =   10;
 
 #endif

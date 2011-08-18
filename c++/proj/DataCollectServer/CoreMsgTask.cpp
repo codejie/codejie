@@ -17,13 +17,16 @@
 
 CoreMsgTask::CoreMsgTask()
 : _objDataAccess(NULL)
+, _objDataLoader(NULL)
 , _taskCollectServer(NULL)
 , _taskControllerServer(NULL)
+, _iStateDataCount(0)
 {
 }
 
 CoreMsgTask::~CoreMsgTask()
 {
+    this->clear_timer();
 }
 
 int CoreMsgTask::Init(const ConfigLoader& config)
@@ -32,6 +35,13 @@ int CoreMsgTask::Init(const ConfigLoader& config)
     if(_objDataAccess->Init(config.m_strDBServer, config.m_strDBUser, config.m_strDBPasswd) != 0)
     {
         ACEX_LOG_OS(LM_ERROR, "<CoreMsgTask::Init>DataAccesss init failed - " << config.m_strDBUser << ":" << config.m_strDBPasswd << "@" << config.m_strDBServer << std::endl);
+        return -1;
+    }
+
+    _objDataLoader.reset(new DataLoader(this, _objDataAccess.get()));
+    if(_objDataLoader->Init(config.m_iRealtimeInterval, config.m_iPeriodInterval) != 0)
+    {
+        ACEX_LOG_OS(LM_ERROR, "<CoreMsgTask::Init>DataLoader init failed." << std::endl);
         return -1;
     }
 
@@ -68,6 +78,12 @@ void CoreMsgTask::Final()
 		_taskCollectServer.reset(NULL);
 	}
 
+    if(_objDataLoader.get() != NULL)
+    {
+        _objDataLoader->Final();
+        _objDataLoader.reset(NULL);
+    }
+
     if(_objDataAccess.get() != NULL)
     {
         _objDataAccess->Final();
@@ -84,6 +100,10 @@ int CoreMsgTask::handle_msg(const ACEX_Message& msg)
     else if(msg.msg_id() == TASK_COMMAND_SERVER)
     {
         return OnControllerServerMsgProc(msg);
+    }
+    else if(msg.msg_id() == OBJ_DATALOADER)
+    {
+        return OnDataLoaderMsgProc(msg);
     }
     else if(msg.msg_id() == TASK_TIMER)
     {
@@ -117,6 +137,11 @@ int CoreMsgTask::OnAppTaskMsgProc(const ACEX_Message &msg)
 
 int CoreMsgTask::OnTimerMsgProc(const ACEX_Message& msg)
 {
+    if(msg.fparam() == FPARAM_STATEDATA)
+    {
+        RemoveStateData(msg.sparam());
+    }
+
 	return 0;
 }
 
@@ -162,7 +187,7 @@ int CoreMsgTask::OnCollectPacket(const Packet& packet)
 {
 	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnCollectPacket>Get Collect Packet - " << packet << std::endl);
 
-    _objDataAccess->OnData(packet);
+    _objDataAccess->OnPacket(packet);
 
 	return 0;
 }
@@ -256,8 +281,8 @@ int CoreMsgTask::OnControllerServerMsgProc(const ACEX_Message& msg)
 		Packet packet;
 		if(PacketProcessor::Analyse(std::string(buf, size), packet, _crcCheck) == 0)
 		{
-			UpdateClientCount(0, msg.sparam() >> 16);
-			OnControllerPacket(packet);
+//			UpdateClientCount(0, msg.sparam() >> 16);
+			OnControllerPacket((msg.sparam() >> 16), packet);
 		}
 		else
 		{
@@ -284,11 +309,18 @@ int CoreMsgTask::OnControllerServerMsgProc(const ACEX_Message& msg)
 	return 0;
 }
 
-int CoreMsgTask::OnControllerPacket(const Packet& packet)
+int CoreMsgTask::OnControllerPacket(int clientid, const Packet& packet)
 {
 	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnControllerPacket>Get Controller Packet - " << packet << std::endl);
 
-//
+    Packet::TCPDataMap::const_iterator it = packet.CP.data.find(Packet::PD_TAG_QN);
+    if(it != packet.CP.data.end())
+    {
+        RemoveStateData(it->second);
+    }
+
+    _objDataLoader->OnPacket(clientid, packet);
+
 	return 0;
 }
 
@@ -300,6 +332,8 @@ int CoreMsgTask::OnControllerConnect(int clientid, const std::string& ip, unsign
 	data.update = ACE_OS::time(NULL);
 	data.count = 0;
 
+    _objDataLoader->OnControllerConnected(clientid);
+
 	_mapController.insert(std::make_pair(clientid, data));
 
 	return 0;
@@ -307,7 +341,105 @@ int CoreMsgTask::OnControllerConnect(int clientid, const std::string& ip, unsign
 
 int CoreMsgTask::OnControllerDisconnect(int clientid)
 {
-	_mapController.erase(clientid);
+    _objDataLoader->OnControllerDisconnect(clientid);
+
+    _mapController.erase(clientid);
 
 	return 0;
+}
+
+///
+int CoreMsgTask::InsertStateData(int clientid, int type, const Packet* packet)
+{
+    StateData_t data;
+    data.clientid = clientid;
+    data.type = type;
+    data.packet = packet;
+
+    ACEX_Message msg(TASK_TIMER, FPARAM_STATEDATA, (++ _iStateDataCount)); 
+    data.timer = this->regist_timer(msg, ACE_Time_Value(30));
+
+    _mapStateIndex.insert(std::make_pair(packet->QN, _iStateDataCount));
+    _mapStateData.insert(std::make_pair(_iStateDataCount, data));
+
+    return 0;
+}
+
+int CoreMsgTask::RemoveStateData(const std::string& qn)
+{
+    TStateIndexMap::iterator it = _mapStateIndex.find(qn);
+    if(it == _mapStateIndex.end())
+        return -1;
+    
+    TStateDataMap::iterator i = _mapStateData.find(it->second);
+    if(i == _mapStateData.end())
+        return -1;
+
+    this->remove_timer(i->second.timer);
+    delete i->second.packet;
+
+    _mapStateData.erase(i);
+
+    _mapStateIndex.erase(it);
+
+    return 0;
+}
+
+int CoreMsgTask::RemoveStateData(unsigned int state)
+{
+    TStateDataMap::iterator it = _mapStateData.find(state);
+    if(it == _mapStateData.end())
+        return -1;
+
+//    this->remove_timer(it->second.timer);
+
+    TStateIndexMap::iterator i = _mapStateIndex.find(it->second.packet->QN);
+    if(i == _mapStateIndex.end())
+        return -1;
+
+    _mapStateIndex.erase(i);
+
+    _objDataLoader->OnPacketTimeout(it->second.clientid, *it->second.packet);
+
+    delete it->second.packet;
+
+    _mapStateData.erase(it);
+
+    return 0;
+}
+
+///
+int CoreMsgTask::OnDataLoaderMsgProc(const ACEX_Message &msg)
+{
+    if(msg.fparam() == FPARAM_DATALOADER_RTTIMER)
+    {
+        _objDataLoader->OnTimer(msg.sparam(), DataLoader::TT_REALTIME);
+    }
+    else if(msg.fparam() == FPARAM_DATALOADER_PDTIMER)
+    {
+        _objDataLoader->OnTimer(msg.sparam(), DataLoader::TT_PERIOD);
+    }
+    else if(msg.fparam() == FPARAM_PACKET)
+    {
+        std::auto_ptr<Packet> packet(reinterpret_cast<Packet*>(msg.data()));
+        if(packet.get() == NULL)
+            return -1;
+
+        std::string stream;
+        if(PacketProcessor::Make(stream, *packet) != 0)
+            return -1;
+
+        if(_taskControllerServer->Send(msg.sparam(), stream) != 0)
+            return -1;
+        
+        if(packet->CN == Packet::PD_CN_VALVECONTROL || packet->CN == Packet::PD_CN_ICFEEADD || packet->CN == Packet::PD_CN_VALVEREALDATA)
+        {
+            return InsertStateData(msg.sparam(), msg.fparam(), packet.release());
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    return 0;
 }

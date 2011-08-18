@@ -76,6 +76,14 @@ int ConfigLoader::Load(const std::string& filename)
 		return -1;
 	m_strDBPasswd = tmp.c_str();
 	
+	if(ini.get_string_value(key, "RealtimeInterval", tmp) != 0)
+		return -1;
+    m_iRealtimeInterval = ACE_OS::atoi(tmp.c_str());
+
+	if(ini.get_string_value(key, "PeriodInterval", tmp) != 0)
+		return -1;
+    m_iPeriodInterval = ACE_OS::atoi(tmp.c_str());
+
 	return 0;
 }
 
@@ -92,7 +100,10 @@ void ConfigLoader::Show(std::ostream& os) const
     os << "\nCheckCRC = " << m_bCheckCRC;
     os << "\nDBServer = " << m_strDBServer;
     os << "\nDBUser = " << m_strDBUser;
-    os << "\nDBPasswd = " << m_strDBPasswd << std::endl;
+    os << "\nDBPasswd = " << m_strDBPasswd;
+    os << "\nRealtimeInterval = " << m_iRealtimeInterval;
+    os << "\nPeriodInterval = " << m_iPeriodInterval << std::endl;
+
 }
 
 

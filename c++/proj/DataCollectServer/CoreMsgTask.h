@@ -11,6 +11,7 @@
 #include "acex/Task.h"
 
 #include "DataAccess.h"
+#include "DataLoader.h"
 #include "CollectServerTask.h"
 #include "ControllerServerTask.h"
 
@@ -31,6 +32,15 @@ protected:
 
 	typedef std::map<int, ClientData_t> TClientMap;
 
+    struct StateData_t
+    {
+        int clientid;
+        int type;
+        const Packet* packet;
+        int timer;
+    };
+    typedef std::map<unsigned int, StateData_t> TStateDataMap;
+    typedef std::map<const std::string, unsigned int> TStateIndexMap;//qn + count
 public:
 	CoreMsgTask();
 	virtual ~CoreMsgTask();
@@ -51,23 +61,32 @@ protected:
     int OnAppTaskMsgProc(const ACEX_Message& msg);
     int OnCollectServerMsgProc(const ACEX_Message& msg);
     int OnControllerServerMsgProc(const ACEX_Message& msg);
-
+    int OnDataLoaderMsgProc(const ACEX_Message& msg);
 private:
     int OnCollectPacket(const Packet& packet);
 	int OnCollectConnect(int clientid, const std::string& ip, unsigned int port);
 	int OnCollectDisconnect(int clientid);
 
-    int OnControllerPacket(const Packet& packet);
+    int OnControllerPacket(int clientid, const Packet& packet);
 	int OnControllerConnect(int clientid, const std::string& ip, unsigned int port);
 	int OnControllerDisconnect(int clientid);
 private:
+    int InsertStateData(int clientid, int type, const Packet* packet);
+    int RemoveStateData(unsigned int state);
+    int RemoveStateData(const std::string& qn);
+private:
     std::auto_ptr<DataAccess> _objDataAccess;
+    std::auto_ptr<DataLoader> _objDataLoader;
     std::auto_ptr<CollectServerTask> _taskCollectServer;
     std::auto_ptr<ControllerServerTask> _taskControllerServer;
 private:
     bool _crcCheck;
 	TClientMap _mapClient;
     TClientMap _mapController;
+private:
+    unsigned int _iStateDataCount;
+    TStateDataMap _mapStateData;
+    TStateIndexMap _mapStateIndex;
 };
 
 #endif /* __COREMSGTASK_H__ */

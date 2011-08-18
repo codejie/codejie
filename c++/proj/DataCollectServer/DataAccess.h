@@ -59,20 +59,20 @@ public:
 	int Init(const std::string& server, const std::string& user, const std::string& passwd);
 	void Final();
 
-    int OnData(const Packet& packet);
+    int OnPacket(const Packet& packet);
 
     void ShowColumn(std::ostream &os) const;
 	void ShowStationID(std::ostream &os, const std::string& ano) const;
 	void ShowInfectantID(std::ostream& os, const std::string& nid) const;
 	void Show(std::ostream& os) const;
 
-	int GetValveControlData(const std::string& nid, Packet& packet);
-	int GetFeeAddData(const std::string& nid, Packet& packet);
-	int GetRealData(const std::string& nid, Packet& packet);
+	int GetValveControlData(Packet& packet);
+	int GetICFeeAddData(Packet& packet);
+	int GetValveRealData(Packet& packet);
 
-	int UpdateValveControlDataFlag(const std::string& nid);
-	int UpdateFeeAddDataFlag(const std::string& nid);
-	int UpdateRealDataFlag(const std::string& nid);
+    int SetICFeeUploadData(const Packet& packet);
+    int SetValveUploadData(const Packet& packet);
+
 private:
 	int Connect();
 	void Disconnect();
@@ -92,8 +92,16 @@ private:
     int OnHourlyData(const Packet& packet);
     int OnRuntimeData(const Packet& packet);
     int OnUnknownData(const Packet& packet);
+
+//    int OnICFeeUpload(const Packet& packet);
+//    int OnValveUpload(const Packet& packet);
+
+	int OnValveControl(const Packet& packet);
+	int OnICFeeAdd(const Packet& packet);
+	int OnValveRealData(const Packet& packet);
 private:
     const std::string& GetPacketCPDataValue(const Packet& packet, const std::string& tag) const;
+    const std::string& GetPacketCPItemValue(const Packet& packet, const std::string& inf, const std::string& item) const;
     const std::string GetPacketCPItemMinuteValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;
     const std::string GetPacketCPItemHourValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;
     const std::string GetPacketCPItemDayValue(const Packet& packet, const std::string& item, const Packet::TCPItemDataMap& data) const;

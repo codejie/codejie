@@ -111,7 +111,7 @@ int Packet::Make(std::string &packet) const
 	if(!Flag.empty())
 		ostr << PD_TAG_FLAG <<"=" << Flag << ";";
 
-	if(CP.data.size() > 0)
+    if(CP.data.size() > 0 || CP.item.size() > 0)
 	{
 		ostr << PD_TAG_CP << "=&&" << CPMake() << "&&";
 	}

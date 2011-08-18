@@ -54,8 +54,12 @@ int PacketProcessor::Make(std::string& stream, const Packet& packet)
 		return -1;
 	std::ostringstream ostr;
 
-	ostr.fill('0');
-	ostr << TAG_BEGIN << ostr.width(4) << str.size() << DataCRC(str);
+	ostr << TAG_BEGIN;
+    ostr.fill('0');
+    ostr.width(4);
+    ostr << str.size();
+    ostr.width(0);
+    ostr << str << DataCRC(str) << "\r\n";
 
 	stream = ostr.str();
 	return 0;
@@ -92,7 +96,7 @@ const std::string PacketProcessor::DataCRC(const std::string& data)
 {
 	unsigned int check = Toolkit::CRC16((const unsigned char*)data.c_str(), data.size());
 	std::ostringstream ostr;
-	ostr << std::ios_base::hex << std::ios_base::uppercase << check;
+	ostr << std::hex << std::uppercase << check;
 	return ostr.str();
 }
 

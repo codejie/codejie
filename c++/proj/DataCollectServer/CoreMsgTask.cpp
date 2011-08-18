@@ -97,7 +97,7 @@ int CoreMsgTask::handle_msg(const ACEX_Message& msg)
     {
         return OnCollectServerMsgProc(msg);
     }
-    else if(msg.msg_id() == TASK_COMMAND_SERVER)
+    else if(msg.msg_id() == TASK_CONTROLLER_SERVER)
     {
         return OnControllerServerMsgProc(msg);
     }

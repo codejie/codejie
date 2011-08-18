@@ -828,6 +828,8 @@ int DataAccess::GetValveControlData(Packet& packet)
     if(_isconnected != true)
         return -1;
 
+    int ret = -1;
+
     try
     {
         const std::string sql = "select s_value from ic_fm_record where m_flag = '0'";
@@ -844,6 +846,8 @@ int DataAccess::GetValveControlData(Packet& packet)
             Packet::TCPItemDataMap m;
             m.insert(std::make_pair("Data", value));
             packet.CP.item.insert(std::make_pair("Valve", m));
+
+            ret  = 0;
 			break;
         }
 
@@ -855,15 +859,21 @@ int DataAccess::GetValveControlData(Packet& packet)
         return -1;
     }
 
-	return 0;
+	return ret;
 }
 
 int DataAccess::GetICFeeAddData(Packet &packet)
 {
 //select csn,SEWAGE_NUMBER,cod_number,nh_number,NH_NUMBER,CREATE_DATE from ic_fee_record where M_FLAG = '0'
+
+    int ret = -1;
+
+    if(_isconnected != true)
+        return -1;
+
     try
     {
-        const std::string sql = "select csn,SEWAGE_NUMBER,cod_number,nh_number,CREATE_DATE from ic_fee_record where M_FLAG = '0'";
+        const std::string sql = "select csn,SEWAGE_NUMBER,cod_number,nh_number,TO_CHAR(CREATE_DATE, 'yyyymmddhh24miss') from ic_fee_record where M_FLAG = '0'";
 
         ocipp::Statement *stmt = _conn->makeStatement(sql);
 		
@@ -898,6 +908,8 @@ int DataAccess::GetICFeeAddData(Packet &packet)
             m4.insert(std::make_pair("Data", "100"));
             packet.CP.item.insert(std::make_pair("Valve", m4));
 
+            ret = 0;
+
 			break;
         }
 
@@ -909,7 +921,7 @@ int DataAccess::GetICFeeAddData(Packet &packet)
         return -1;
     }
 
-	return 0;
+	return ret;
 }
 
 
@@ -925,6 +937,11 @@ int DataAccess::GetValveRealData(Packet &packet)
 //				l_nh_out_rate,d_out_number,d_cod_out_number,d_nh_out_number,
 //				is_alerm,is_color
 //	 			from IC_MONITOR_REAL_MINREALwhere M_FLAG = '0'
+
+    int ret = -1;
+
+    if(_isconnected != true)
+        return -1;
 
     try
     {
@@ -1036,6 +1053,8 @@ int DataAccess::GetValveRealData(Packet &packet)
 			m5.insert(std::make_pair("Data", color));
 			packet.CP.item.insert(std::make_pair("Color", m5));
 
+            ret = 0;
+
 			break;
         }
 
@@ -1047,7 +1066,7 @@ int DataAccess::GetValveRealData(Packet &packet)
         return -1;
     }
 
-	return 0;
+	return ret;
 }
 
 int DataAccess::OnValveControl(const Packet& packet)

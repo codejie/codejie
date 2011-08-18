@@ -67,14 +67,14 @@ const std::string GetTimeOfDay()
 
     char buf[17 + 1];
     buf[17] = '\0';
-    ACE_OS::sprintf(buf, "%4d%2d%2d%2d%2d%2d%3d", 
+    ACE_OS::sprintf(buf, "%4d%02d%02d%02d%02d%02d%03d", 
         tt.tm_year + 1900,
         tt.tm_mon + 1,
         tt.tm_mday,
         tt.tm_hour,
         tt.tm_min,
         tt.tm_sec,
-        tv.msec() / 1000);
+        (tv.usec() / 1000));
     return std::string(buf);   
 }
 

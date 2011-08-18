@@ -33,6 +33,7 @@ void ControllerServerTask::Final()
 
 int ControllerServerTask::Send(int clientid, const std::string& stream)
 {
+    ACEX_LOG_OS(LM_DEBUG, "<ControllerServerTask::Send>Send Packet - \n" << stream << std::endl);
     if(this->send(clientid, stream.c_str(), stream.size()) == ACEX_NB_Tcp_Server_Task::SEND_SUCCESS)
         return 0;
     return -1;

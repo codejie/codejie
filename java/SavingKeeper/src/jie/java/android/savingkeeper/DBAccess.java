@@ -152,13 +152,13 @@ public class DBAccess {
 		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_TITLE }, TABLE_COLUMN_ID + "=" + id, null, null, null, null);
 		if(cursor.getCount() == 0)
 			return "Unknown";
-		cursor.moveToFirst();
+		//cursor.moveToFirst();
 		return cursor.getString(0);
 	}
 	
 	public Cursor queryBank() {
 		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_TITLE }, null, null, null, null, null, null);
-		cursor.moveToFirst();
+		//cursor.moveToFirst();
 		return cursor;
 	}
 	
@@ -178,7 +178,7 @@ public class DBAccess {
 	public Cursor querySaving() {
 		String col[] = new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_TITLE, TABLE_COLUMN_AMOUNT, TABLE_COLUMN_CURRENCY, TABLE_COLUMN_CHECKIN, TABLE_COLUMN_TYPE, TABLE_COLUMN_BANK, TABLE_COLUMN_NOTE }; 
 		Cursor  cursor = db.query(TABLE_NAME_SAVING, col, null, null, null, null, null, null);//"", new String[] {}, "", "", "", "");
-		cursor.moveToFirst();
+		//cursor.moveToFirst();
 		return cursor;		
 	}
 	
@@ -232,8 +232,8 @@ public class DBAccess {
 						
 		String[] col = new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_START, TABLE_COLUMN_END, TABLE_COLUMN_CURRENCY,
 						TABLE_COLUMN_RATE_0, TABLE_COLUMN_RATE_1, TABLE_COLUMN_RATE_2, TABLE_COLUMN_RATE_3, TABLE_COLUMN_RATE_4, TABLE_COLUMN_RATE_5, TABLE_COLUMN_RATE_6 };
-		Cursor cursor = db.query(TABLE_NAME_RATE, col, null, null, null, null, "ORDER BY " + TABLE_COLUMN_START + " AND " + TABLE_COLUMN_CURRENCY);
-		cursor.moveToFirst();
+		Cursor cursor = db.query(TABLE_NAME_RATE, col, null, null, null, null, TABLE_COLUMN_START);
+		//cursor.moveToFirst();
 		return cursor;
 	}
 	

@@ -26,6 +26,13 @@ public class RateListActivity extends ExpandableListActivity {
 	private static final String C_RATE_US	=	"US";
 	private static final String C_RATE_EU	=	"EU";
 	
+	private static final String C_RATE_0	=	"RATE_0";
+	private static final String C_RATE_1	=	"RATE_1";
+	private static final String C_RATE_2	=	"RATE_2";
+	private static final String C_RATE_3	=	"RATE_3";
+	private static final String C_RATE_4	=	"RATE_4";
+	private static final String C_RATE_5	=	"RATE_5";
+	private static final String C_RATE_6	=	"RATE_6";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,13 +62,71 @@ public class RateListActivity extends ExpandableListActivity {
 		
 		Cursor cursor = GLOBAL.DBACCESS.queryRate();
 		
+		int count = 0;
+		List<Map<String, String>> c = new ArrayList<Map<String, String>>();	
+		Map<String, String> m = null;
 		while(cursor.moveToNext()) {
 			
 			Log.d(GLOBAL.APP_TAG, "start : " + cursor.getString(1) + " currency : " + cursor.getString(3));
+			if(count == 0)
+			{
+				m = new HashMap<String, String>();
+				m.put(C_TITLE, cursor.getString(1) + " - " + cursor.getShort(2));
+				titleData.add(m);
+			}
+
+			if(cursor.getInt(3) == DBAccess.CURRENCY_TYPE_RMB) {
+				m = new HashMap<String, String>();
+				m.put(C_TITLE, C_RATE_RMB);
+				m.put(C_RATE_0, cursor.getString(4));
+				m.put(C_RATE_1, cursor.getString(5));
+				m.put(C_RATE_2, cursor.getString(6));
+				m.put(C_RATE_3, cursor.getString(7));
+				m.put(C_RATE_4, cursor.getString(8));
+				m.put(C_RATE_5, cursor.getString(9));
+				m.put(C_RATE_6, cursor.getString(10));
+				c.add(m);				
+//				childData.add(c);
+			}
+			else if(cursor.getInt(3) == DBAccess.CURRENCY_TYPE_US) {
+				m = new HashMap<String, String>();
+				m.put(C_TITLE, C_RATE_US);
+				m.put(C_RATE_0, cursor.getString(4));
+				m.put(C_RATE_1, cursor.getString(5));
+				m.put(C_RATE_2, cursor.getString(6));
+				m.put(C_RATE_3, cursor.getString(7));
+				m.put(C_RATE_4, cursor.getString(8));
+				m.put(C_RATE_5, cursor.getString(9));
+				m.put(C_RATE_6, cursor.getString(10));
+				c.add(m);
+				
+//				childData.add(c);
+			}
+			else if(cursor.getInt(3) == DBAccess.CURRENCY_TYPE_EU) {
+				m = new HashMap<String, String>();
+				m.put(C_TITLE, C_RATE_EU);
+				m.put(C_RATE_0, cursor.getString(4));
+				m.put(C_RATE_1, cursor.getString(5));
+				m.put(C_RATE_2, cursor.getString(6));
+				m.put(C_RATE_3, cursor.getString(7));
+				m.put(C_RATE_4, cursor.getString(8));
+				m.put(C_RATE_5, cursor.getString(9));
+				m.put(C_RATE_6, cursor.getString(10));
+				c.add(m);
+				
+//				childData.add(c);
+			}
 			
+			++ count;
+			
+			if(count == 3) {
+				childData.add(c);
+				c = new ArrayList<Map<String, String>>();
+				count = 0;
+			}
 		}
 		
-		
+/*		
 		Map<String, String> m = new HashMap<String, String>();
 		m.put(P_TITLE, "p_title");
 		titleData.add(m);
@@ -90,6 +155,7 @@ public class RateListActivity extends ExpandableListActivity {
 	
 		
 		childData.add(c);		
+*/		
 	}
 
 	@Override
@@ -111,8 +177,8 @@ public class RateListActivity extends ExpandableListActivity {
 	}
 	
 	private void onMenuAddRate() {
-		GLOBAL.DBACCESS.insertRate("2011-08-01", "9999-12-31", 0, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
-		GLOBAL.DBACCESS.insertRate("2011-08-01", "9999-12-31", 1, 1.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
-		GLOBAL.DBACCESS.insertRate("2011-08-01", "9999-12-31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2011-08-02", "9999-12-31", 0, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2011-08-02", "9999-12-31", 1, 1.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2011-08-02", "9999-12-31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
 	}
 }

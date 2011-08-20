@@ -506,6 +506,7 @@ int DataAccess::OnPacket(const Packet &packet)
     }
     else if(packet.ST == Packet::PD_ST_91)
     {//control response
+/*
         try
         {
             const std::string& ret = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_EXERTN);
@@ -539,6 +540,7 @@ int DataAccess::OnPacket(const Packet &packet)
             
             return -1;
         }
+*/
     }
     else
     {
@@ -1069,7 +1071,7 @@ int DataAccess::GetValveRealData(Packet &packet)
 	return ret;
 }
 
-int DataAccess::OnValveControl(const Packet& packet)
+int DataAccess::UpdateValveControlFlag(const Packet& packet)
 {
 	//update ic_fm_record  set m_flag = '1'
 
@@ -1078,11 +1080,22 @@ int DataAccess::OnValveControl(const Packet& packet)
 
     try
     {
-		const std::string sql = "update ic_fm_record  set m_flag = '1' where m_flag = '0'";
-        ocipp::Statement *stmt = _conn->makeStatement(sql);
+		const std::string& ret = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_EXERTN);
+		if(ret == "1")
+		{
+			const std::string sql = "update ic_fm_record  set m_flag = '1' where m_flag = '0'";
+			ocipp::Statement *stmt = _conn->makeStatement(sql);
 
-		_conn->destroyStatement(stmt);
+			stmt->execute();
+
+			_conn->destroyStatement(stmt);
+		}
     }
+	catch(const PacketException& pe)
+	{
+		ACEX_LOG_OS(LM_WARNING, "<DataAccess::UpdateValveControlDataFlag>Get tag data failed - " << pe << std::endl);
+		return -1;
+	}
     catch(const ocipp::Exception& e)
     {
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::UpdateValveControlDataFlag>update flag exception - " << e << std::endl);
@@ -1092,7 +1105,7 @@ int DataAccess::OnValveControl(const Packet& packet)
 	return 0;
 }
 
-int DataAccess::OnICFeeAdd(const Packet& packet)
+int DataAccess::UpdateICFeeAddFlag(const Packet& packet)
 {
 	//update ic_fee_record set M_FLAG = '1'
 
@@ -1101,11 +1114,22 @@ int DataAccess::OnICFeeAdd(const Packet& packet)
 
     try
     {
-		const std::string sql = "update ic_fee_record set M_FLAG = '1' where m_flag = '0'";
-        ocipp::Statement *stmt = _conn->makeStatement(sql);
+		const std::string& ret = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_EXERTN);
+		if(ret == "1") 
+		{
+			const std::string sql = "update ic_fee_record set M_FLAG = '1' where m_flag = '0'";
+			ocipp::Statement *stmt = _conn->makeStatement(sql);
 
-		_conn->destroyStatement(stmt);
+			stmt->execute();
+
+			_conn->destroyStatement(stmt);
+		}
     }
+	catch(const PacketException& pe)
+	{
+		ACEX_LOG_OS(LM_WARNING, "<DataAccess::UpdateFeeAddDataFlag>Get tag data failed - " << pe << std::endl);
+		return -1;
+	}
     catch(const ocipp::Exception& e)
     {
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::UpdateFeeAddDataFlag>update flag exception - " << e << std::endl);
@@ -1115,7 +1139,7 @@ int DataAccess::OnICFeeAdd(const Packet& packet)
 	return 0;
 }
 
-int DataAccess::OnValveRealData(const Packet& packet)
+int DataAccess::UpdateValveRealDataFlag(const Packet& packet)
 {
 	//update IC_MONITOR_REAL_MINREAL set M_FLAG = '1'
 
@@ -1124,11 +1148,22 @@ int DataAccess::OnValveRealData(const Packet& packet)
 
     try
     {
-		const std::string sql = "update IC_MONITOR_REAL_MINREAL set M_FLAG = '1' where m_flag = '0'";
-        ocipp::Statement *stmt = _conn->makeStatement(sql);
+		const std::string& ret = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_EXERTN);
+		if(ret == "1")
+		{
+			const std::string sql = "update IC_MONITOR_REAL_MINREAL set M_FLAG = '1' where m_flag = '0'";
+			ocipp::Statement *stmt = _conn->makeStatement(sql);
 
-		_conn->destroyStatement(stmt);
+			stmt->execute();
+
+			_conn->destroyStatement(stmt);
+		}
     }
+	catch(const PacketException& pe)
+	{
+		ACEX_LOG_OS(LM_WARNING, "<DataAccess::UpdateRealDataFlag>Get tag data failed - " << pe << std::endl);
+		return -1;
+	}
     catch(const ocipp::Exception& e)
     {
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::UpdateRealDataFlag>update flag exception - " << e << std::endl);
@@ -1145,15 +1180,22 @@ int DataAccess::SetICFeeUploadData(const Packet &packet)
     if(_isconnected != true)
         return -1;
 
-    const std::string& sid = packet.MN;
-    const std::string& ic  = GetPacketCPDataValue(packet, "CSN");
-    const std::string& sewage = GetPacketCPItemValue(packet, "B01", "Data");
-    const std::string& cod = GetPacketCPItemValue(packet, "011", "Data");
-    const std::string& nh = GetPacketCPItemValue(packet, "060", "Data");
-    const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
+    //const std::string& sid = packet.MN;
+    //const std::string& ic  = GetPacketCPDataValue(packet, "CSN");
+    //const std::string& sewage = GetPacketCPItemValue(packet, "B01", "Data");
+    //const std::string& cod = GetPacketCPItemValue(packet, "011", "Data");
+    //const std::string& nh = GetPacketCPItemValue(packet, "060", "Data");
+    //const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
 
     try
     {
+		const std::string& sid = packet.MN;
+		const std::string& ic  = GetPacketCPDataValue(packet, "CSN");
+		const std::string& sewage = GetPacketCPItemValue(packet, "B01", "Data");
+		const std::string& cod = GetPacketCPItemValue(packet, "011", "Data");
+		const std::string& nh = GetPacketCPItemValue(packet, "060", "Data");
+		const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
+
         const std::string sql = "insert into ic_card_record(station_id,sn_no,sewage_number,cod_number,nh_number,m_time) values(:1, :2, :3, :4, :5, TO_DATE(:6, 'yyyymmddhh24miss'))";
         ocipp::Statement *stmt = _conn->makeStatement(sql);
 
@@ -1164,8 +1206,15 @@ int DataAccess::SetICFeeUploadData(const Packet &packet)
         stmt->bindString(5, nh);
         stmt->bindString(6, mtime);
 
+		stmt->execute();
+
 		_conn->destroyStatement(stmt);
     }
+	catch(const PacketException& pe)
+	{
+		ACEX_LOG_OS(LM_WARNING, "<>Get tag data failed - " << pe << std::endl);
+		return -1;
+	}
     catch(const ocipp::Exception& e)
     {
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnICFeeUpload>insert data exception - " << e << std::endl);
@@ -1183,14 +1232,20 @@ int DataAccess::SetValveUploadData(const Packet &packet)
     if(_isconnected != true)
         return -1;
 
-    const std::string& sid = packet.MN;
-    const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
-    const std::string& ev = GetPacketCPItemValue(packet, "E_Valve", "Data");
-    const std::string& cv = GetPacketCPItemValue(packet, "C_Valve", "Data");
-    const std::string& v = GetPacketCPItemValue(packet, "Valve", "Data");
+    //const std::string& sid = packet.MN;
+    //const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
+    //const std::string& ev = GetPacketCPItemValue(packet, "E_Valve", "Data");
+    //const std::string& cv = GetPacketCPItemValue(packet, "C_Valve", "Data");
+    //const std::string& v = GetPacketCPItemValue(packet, "Valve", "Data");
 
     try
     {
+		const std::string& sid = packet.MN;
+		const std::string& mtime = GetPacketCPDataValue(packet, Packet::PD_CP_TAG_DATATIME);
+		const std::string& ev = GetPacketCPItemValue(packet, "E_Valve", "Data");
+		const std::string& cv = GetPacketCPItemValue(packet, "C_Valve", "Data");
+		const std::string& v = GetPacketCPItemValue(packet, "Valve", "Data");
+
         const std::string sql = "insert into ic_fm_info(station_id,m_time,f_e_value,f_out_value,cor_value) values(:1, TO_DATE(:2, 'yyyymmddhh24miss'), :3, :4, :5)";
         ocipp::Statement *stmt = _conn->makeStatement(sql);
 
@@ -1200,8 +1255,15 @@ int DataAccess::SetValveUploadData(const Packet &packet)
         stmt->bindString(4, v);
         stmt->bindString(5, cv);
 
+		stmt->execute();
+
 		_conn->destroyStatement(stmt);
     }
+	catch(const PacketException& pe)
+	{
+		ACEX_LOG_OS(LM_WARNING, "<>Get tag data failed - " << pe << std::endl);
+		return -1;
+	}
     catch(const ocipp::Exception& e)
     {
         ACEX_LOG_OS(LM_WARNING, "<DataAccess::OnValveUpload>insert data exception - " << e << std::endl);

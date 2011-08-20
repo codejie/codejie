@@ -172,29 +172,51 @@ int DataLoader::LoadValveRealData(int clientid, Packet*& packet)
 
 int DataLoader::OnPacket(int clientid, const Packet &packet)
 {
-    if(packet.ST == Packet::PD_ST_91)
+	try
+	{
+		if(packet.ST == Packet::PD_ST_91)
+		{
+/*			if(packet.CN == Packet::PD_CN_VALVECONTROL || packet.CN == Packet::PD_CN_ICFEEADD || packet.CN == Packet::PD_CN_VALVEREALDATA)
+			{
+				return _dataAccess->OnPacket(packet);
+			}
+			else*/ 
+			if(packet.CN == Packet::PD_CN_ICFEEUPLOAD)
+			{
+				int ret = _dataAccess->SetICFeeUploadData(packet);
+				return OnICFeeUpload(clientid, packet, ret);
+			}
+			else if(packet.CN == Packet::PD_CN_VALVEUPLOAD)
+			{
+				int ret = _dataAccess->SetValveUploadData(packet);
+				return OnValveUpload(clientid, packet, ret);
+			}
+			else if(packet.CN == Packet::PD_CN_VALVECONTROL)
+			{
+				return _dataAccess->UpdateValveControlFlag(packet);
+			}
+			else if(packet.CN == Packet::PD_CN_ICFEEADD)
+			{
+				return _dataAccess->UpdateICFeeAddFlag(packet);
+			}
+			else if(packet.CN == Packet::PD_CN_VALVEREALDATA)
+			{
+				return _dataAccess->UpdateValveRealDataFlag(packet);
+			}
+			else
+			{
+				return -1;
+			}
+		}
+		else
+		{
+			return -1;
+		}
+	}
+    catch(const PacketException& e)
     {
-        if(packet.CN == Packet::PD_CN_VALVECONTROL || packet.CN == Packet::PD_CN_ICFEEADD || packet.CN == Packet::PD_CN_VALVEREALDATA)
-        {
-            return _dataAccess->OnPacket(packet);
-        }
-        else if(packet.CN == Packet::PD_CN_ICFEEUPLOAD)
-        {
-            int ret = _dataAccess->SetICFeeUploadData(packet);
-            return OnICFeeUpload(clientid, packet, ret);
-        }
-        else if(packet.CN == Packet::PD_CN_VALVEUPLOAD)
-        {
-            int ret = _dataAccess->SetValveUploadData(packet);
-            return OnValveUpload(clientid, packet, ret);
-        }
-        else
-        {
-            return -1;
-        }
-    }
-    else
-    {
+        ACEX_LOG_OS(LM_WARNING, "<DataLoader::OnPacket>Get ExeRtn - " << e << "\n" << packet << std::endl);
+        
         return -1;
     }
     return 0;
@@ -210,7 +232,7 @@ int DataLoader::OnICFeeUpload(int clientid, const Packet &packet, int ret)
     resp->MN = packet.MN;
 
     resp->CP.data.insert(std::make_pair(Packet::PD_TAG_QN, packet.QN));
-    resp->CP.data.insert(std::make_pair(Packet::PD_CP_TAG_EXERTN, (ret == 1 ? "1" : "0")));
+    resp->CP.data.insert(std::make_pair(Packet::PD_CP_TAG_EXERTN, (ret == 0 ? "1" : "0")));
 
     PutMsg(clientid, FPARAM_PACKET, resp);
 
@@ -227,7 +249,7 @@ int DataLoader::OnValveUpload(int clientid, const Packet &packet, int ret)
     resp->MN = packet.MN;
 
     resp->CP.data.insert(std::make_pair(Packet::PD_TAG_QN, packet.QN));
-    resp->CP.data.insert(std::make_pair(Packet::PD_CP_TAG_EXERTN, (ret == 1 ? "1" : "0")));
+    resp->CP.data.insert(std::make_pair(Packet::PD_CP_TAG_EXERTN, (ret == 0 ? "1" : "0")));
 
     PutMsg(clientid, FPARAM_PACKET, resp);
 

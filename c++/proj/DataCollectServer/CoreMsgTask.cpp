@@ -239,9 +239,12 @@ void CoreMsgTask::ShowData(bool stat, std::ostream& os) const
         _objDataAccess->ShowColumn(os);
 }
 
-void CoreMsgTask::ShowPacket(std::ostream &os) const
+void CoreMsgTask::ShowPacket(int clienttype, std::ostream &os) const
 {
-    _taskCollectServer->Show(os);
+	if(clienttype == CLIENTTYPE_TERMINAL)
+		_taskCollectServer->Show(os);
+	else
+		_taskControllerServer->Show(os);
 }
 
 void CoreMsgTask::ShowStationID(std::ostream& os, const std::string& ano) const
@@ -253,19 +256,35 @@ void CoreMsgTask::ShowInfectantID(std::ostream& os, const std::string& nid) cons
     _objDataAccess->ShowInfectantID(os, nid);
 }
 
-void CoreMsgTask::ShowClient(std::ostream &os) const
+void CoreMsgTask::ShowClient(int clienttype, std::ostream &os) const
 {
-    os << "--- \nTerminal Client ---";
-	for(TClientMap::const_iterator it = _mapClient.begin(); it != _mapClient.end(); ++ it)
+	if(clienttype == CLIENTTYPE_TERMINAL)
 	{
-		os << "\n Terminal : [" << it->first << "] - " << it->second.count << "\n\t " << it->second.ip << ":" << it->second.port << " - " << it->second.update; 
+		os << "\n--- Terminal Client ---";
+		for(TClientMap::const_iterator it = _mapClient.begin(); it != _mapClient.end(); ++ it)
+		{
+			os << "\n Terminal : [" << it->first << "] - " << it->second.count << "\n\t " << it->second.ip << ":" << it->second.port << " - " << it->second.update; 
+		}
 	}
-    os << "--- \nController Client ---";
+	else if(clienttype == CLIENTTYPE_CONTROLLER)
+	{
+		os << "\n--- Controller Client ---";
 
-	for(TClientMap::const_iterator it = _mapController.begin(); it != _mapController.end(); ++ it)
-	{
-		os << "\n Terminal : [" << it->first << "] - " << it->second.count << "\n\t " << it->second.ip << ":" << it->second.port << " - " << it->second.update; 
+		for(TClientMap::const_iterator it = _mapController.begin(); it != _mapController.end(); ++ it)
+		{
+			os << "\n Terminal : [" << it->first << "] - " << it->second.count << "\n\t " << it->second.ip << ":" << it->second.port << " - " << it->second.update; 
+		}
 	}
+	os << std::endl;
+}
+
+void CoreMsgTask::ShowStateData(std::ostream& os) const
+{
+	os << "\n--- State Data ---";
+
+	os << "\nState Size = " << _mapStateData.size();
+	os << "\nIndex Size = " << _mapStateIndex.size();
+
 	os << std::endl;
 }
 
@@ -344,7 +363,24 @@ int CoreMsgTask::OnControllerDisconnect(int clientid)
     _objDataLoader->OnControllerDisconnect(clientid);
 
     _mapController.erase(clientid);
+/*
+	TStateDataMap::iterator it = _mapStateData.begin();
+	while(it != _mapStateData.end())
+	{
+		if(it->second.clientid == clientid)
+		{
+			_mapStateIndex.erase(it->second.packet->QN);
 
+			delete it->second.packet;
+			this->remove_timer(it->second.timer);
+			_mapStateData.erase(it ++);
+		}
+		else
+		{
+			++ it;
+		}
+	}
+*/
 	return 0;
 }
 

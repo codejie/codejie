@@ -134,6 +134,8 @@ int DataCollectServerApp::regist_command()
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowDataAccess().tag() + "' command failed.", __FILE__, __LINE__);
 	if(command_parser()->regist_command(CCmdShowTerminal()) != 0)
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowTerminal().tag() + "' command failed.", __FILE__, __LINE__);
+	if(command_parser()->regist_command(CCmdShowController()) != 0)
+		throw ACEX_Runtime_Exception("Register '" + CCmdShowController().tag() + "' command failed.", __FILE__, __LINE__);
 
 //	if(command_parser()->regist_command(CCmdTest()) != 0)
 //		throw ACEX_Runtime_Exception("Register '" + CCmdTest().tag() + "' command failed.", __FILE__, __LINE__);
@@ -274,9 +276,9 @@ void DataCollectServerApp::ShowData(bool stat, std::ostream& os) const
     _taskCore.ShowData(stat, os);
 }
 
-void DataCollectServerApp::ShowPacket(std::ostream& os) const
+void DataCollectServerApp::ShowPacket(int clienttype, std::ostream& os) const
 {
-    _taskCore.ShowPacket(os);
+    _taskCore.ShowPacket(clienttype, os);
 }
 
 void DataCollectServerApp::ShowStationID(std::ostream& os, const std::string& ano) const
@@ -289,9 +291,14 @@ void DataCollectServerApp::ShowInfectantID(std::ostream& os, const std::string& 
     _taskCore.ShowInfectantID(os, nid);
 }
 
-void DataCollectServerApp::ShowTerminal(std::ostream& os) const
+void DataCollectServerApp::ShowTerminal(int clienttype, std::ostream& os) const
 {
-	_taskCore.ShowClient(os);
+	_taskCore.ShowClient(clienttype, os);
+}
+
+void DataCollectServerApp::ShowStateData(std::ostream& os) const
+{
+	_taskCore.ShowStateData(os);
 }
 
 int DataCollectServerApp::Shutdown()

@@ -39,7 +39,7 @@ protected:
         const Packet* packet;
         int timer;
     };
-    typedef std::map<unsigned int, StateData_t> TStateDataMap;
+    typedef std::map<unsigned int, StateData_t> TStateDataMap;//state + data
     typedef std::map<const std::string, unsigned int> TStateIndexMap;//qn + count
 public:
 	CoreMsgTask();
@@ -48,10 +48,11 @@ public:
 	int Init(const ConfigLoader& config);
 
     void ShowData(bool stat, std::ostream& os) const;
-    void ShowPacket(std::ostream& os) const;
+    void ShowPacket(int clienttype, std::ostream& os) const;
 	void ShowStationID(std::ostream& os, const std::string& ano) const;
 	void ShowInfectantID(std::ostream& os, const std::string& nid) const;
-	void ShowClient(std::ostream& os) const;
+	void ShowClient(int clienttype, std::ostream& os) const;
+	void ShowStateData(std::ostream& os) const;
 protected:
 	void Final();
 	int UpdateClientCount(int collect, int clientid);//collect == 1 is client, else is controller

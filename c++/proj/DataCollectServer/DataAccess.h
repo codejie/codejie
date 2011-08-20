@@ -73,6 +73,9 @@ public:
     int SetICFeeUploadData(const Packet& packet);
     int SetValveUploadData(const Packet& packet);
 
+	int UpdateValveControlFlag(const Packet& packet);
+	int UpdateICFeeAddFlag(const Packet& packet);
+	int UpdateValveRealDataFlag(const Packet& packet);
 private:
 	int Connect();
 	void Disconnect();
@@ -96,9 +99,9 @@ private:
 //    int OnICFeeUpload(const Packet& packet);
 //    int OnValveUpload(const Packet& packet);
 
-	int OnValveControl(const Packet& packet);
-	int OnICFeeAdd(const Packet& packet);
-	int OnValveRealData(const Packet& packet);
+//	int OnValveControl(const Packet& packet);
+//	int OnICFeeAdd(const Packet& packet);
+//	int OnValveRealData(const Packet& packet);
 private:
     const std::string& GetPacketCPDataValue(const Packet& packet, const std::string& tag) const;
     const std::string& GetPacketCPItemValue(const Packet& packet, const std::string& inf, const std::string& item) const;

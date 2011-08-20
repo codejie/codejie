@@ -1,4 +1,5 @@
 
+#include "Defines.h"
 #include "ConfigLoader.h"
 //#include "TerminalManager.h"
 //#include "DataLoader.h"
@@ -145,7 +146,7 @@ int CCmdShowDataAccess::execute(std::ostream& os)
 		}
         else if(this->args_[0] == "pac" || this->args_[0] == "packet")
 		{
-            theApp.ShowPacket(os);
+            theApp.ShowPacket(CLIENTTYPE_TERMINAL, os);
 		}
 		else if(this->args_[0] == "id" || this->args_[0] == "stationid")
 		{
@@ -168,6 +169,10 @@ int CCmdShowDataAccess::execute(std::ostream& os)
 			{
 				this->help_verbose(os);
 			}
+		}
+		else if(this->args_[0] == "state")
+		{
+			theApp.ShowStateData(os);
 		}
         else
             this->help_verbose(os);
@@ -208,7 +213,7 @@ int CCmdShowTerminal::execute(std::ostream& os)
 	{
         if(this->args_[0] == "pac" || this->args_[0] == "packet")
 		{
-            theApp.ShowPacket(os);
+            theApp.ShowPacket(CLIENTTYPE_TERMINAL, os);
 		}
 		else
 		{
@@ -217,7 +222,7 @@ int CCmdShowTerminal::execute(std::ostream& os)
 	}
 	else
 	{
-		theApp.ShowTerminal(os);
+		theApp.ShowTerminal(CLIENTTYPE_TERMINAL, os);
 	}
 	return 1;
 }
@@ -233,6 +238,49 @@ void CCmdShowTerminal::help_verbose(std::ostream& os) const
 	os << "\n    Usage:\n\t" << tag() << "[,pac(ket)]";
 	os << "\n    Example:\n\t" << tag() << std::endl;
 }
+////////////////////////////////////////////////////////////////////
+CCmdShowController* CCmdShowController::clone() const
+{
+	return new CCmdShowController(*this);
+}
+
+ACEX_Command_Tag CCmdShowController::tag() const
+{
+	return "showcontroller";
+}
+
+int CCmdShowController::execute(std::ostream& os)
+{
+	if(this->args_.count() > 0)
+	{
+        if(this->args_[0] == "pac" || this->args_[0] == "packet")
+		{
+            theApp.ShowPacket(CLIENTTYPE_CONTROLLER, os);
+		}
+		else
+		{
+			this->help_verbose(os);
+		}
+	}
+	else
+	{
+		theApp.ShowTerminal(CLIENTTYPE_CONTROLLER, os);
+	}
+	return 1;
+}
+
+void CCmdShowController::help(std::ostream& os) const
+{
+	os << "    Show terminal info.";
+}
+
+void CCmdShowController::help_verbose(std::ostream& os) const
+{
+	help(os);
+	os << "\n    Usage:\n\t" << tag() << "[,pac(ket)]";
+	os << "\n    Example:\n\t" << tag() << std::endl;
+}
+
 //////////////////////////////////////////////////////////////////////////
 CCmdTest* CCmdTest::clone() const
 {

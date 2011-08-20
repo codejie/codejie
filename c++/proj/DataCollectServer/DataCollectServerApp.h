@@ -39,10 +39,11 @@ public:
 	void ShowOptions(std::ostream& os) const;
 	void ShowConfig(std::ostream& os) const;
     void ShowData(bool stat, std::ostream& os) const;
-    void ShowPacket(std::ostream& os) const;
+    void ShowPacket(int clienttype, std::ostream& os) const;
 	void ShowStationID(std::ostream& os, const std::string& ano) const;
 	void ShowInfectantID(std::ostream& os, const std::string& nid) const;
-	void ShowTerminal(std::ostream& os) const;
+	void ShowTerminal(int clienttype, std::ostream& os) const;
+	void ShowStateData(std::ostream& os) const;
 
 	int Shutdown();
 private:

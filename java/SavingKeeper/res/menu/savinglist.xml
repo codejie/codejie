@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_add_saving" android:title="@string/menu_addsaving"></item><item android:id="@+id/menu_banklist" android:title="@string/menu_banklist"></item>
+    <item android:id="@+id/menu_add_saving" android:title="@string/menu_addsaving"></item><item android:id="@+id/menu_ratelist" android:title="@string/menu_ratelist"></item><item android:id="@+id/menu_banklist" android:title="@string/menu_banklist"></item>
     <item android:id="@+id/menu_exit" android:title="@string/menu_exit"></item>
+    
     
     
 </menu>

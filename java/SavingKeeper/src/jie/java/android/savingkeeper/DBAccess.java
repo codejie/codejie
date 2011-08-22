@@ -72,16 +72,17 @@ public class DBAccess {
 
 	private SQLiteDatabase db = null;
 	
-	public DBAccess(final String dbfile) {
-		onCreate(dbfile);
+	public DBAccess() {
+		//onCreate(dbfile);
 	}
 
-	private void onCreate(String dbfile) {
+	public int init(final String dbfile) {
 		try {
 			db = SQLiteDatabase.openOrCreateDatabase(dbfile, null);
 		}
 		catch(SQLiteException e) {
 			Log.w(GLOBAL.APP_TAG, e.toString());
+			return -1;
 		}
 		db.setVersion(DATABASE_VERSION);
 		
@@ -128,10 +129,16 @@ public class DBAccess {
 		+ TABLE_COLUMN_INTEGER + " INTEGER"
 		+ ");";
 		
-		db.execSQL(sql);		
+		db.execSQL(sql);
+		
+		return 0;
 	}
 	
-	public void close (){
+	public void release() {
+		this.close();
+	}
+	
+	protected void close (){
 		if(db != null) {
 			db.close();
 		}
@@ -264,26 +271,6 @@ public class DBAccess {
 		return cursor;
 	}
 	
-	//
-	public String getCurrency(Activity act, long currency) {
-		
-		String[] str = act.getResources().getStringArray(R.array.currency);
-		return str[(int)currency];
-/*		
-		if(currency == CURRENCY_TYPE_RMB) {
-			return act.getResources().getString(R.string.currency_rmb);
-		}
-		else if(currency == CURRENCY_TYPE_US) {
-			return act.getResources().getString(R.string.currency_us);
-		}
-		else if(currency == CURRENCY_TYPE_EU) {
-			return act.getResources().getString(R.string.currency_eu);
-		}
-		else {
-			return "unkn";
-		}
-*/		
-	}
 	
 	public String getCheckin(long time) {
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -291,11 +278,6 @@ public class DBAccess {
 		return fmt.format(date);
 	}
 	
-	public String getType(Activity act, long type) {
-		
-		String[] str = act.getResources().getStringArray(R.array.type);
-		return str[(int)type];		
-	}
 	
 	public int calcMoney(float amount, long currency, long checkin, long type, StringBuffer endMoney, StringBuffer nowMoney) {
 		endMoney.append("1.00");

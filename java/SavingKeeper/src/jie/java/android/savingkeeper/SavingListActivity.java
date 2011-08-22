@@ -47,9 +47,9 @@ public class SavingListActivity extends ListActivity {
 			String amount = cursor.getString(2);
 			//String end = GLOBAL.DBACCESS.calcMoney(/*amount, currency, checkin, endtime, type*/);
 			//String now = GLOBAL.DBACCESS.calcMoney(/*amount, currency, checkin, now, type */);
-			String currency = GLOBAL.DBACCESS.getCurrency(SavingListActivity.this, cursor.getLong(3));
+			String currency = RCLoader.getCurrency(SavingListActivity.this, cursor.getLong(3));
 			String checkin = cursor.getString(4);
-			String type = GLOBAL.DBACCESS.getType(SavingListActivity.this, cursor.getLong(5));
+			String type = RCLoader.getType(SavingListActivity.this, cursor.getLong(5));
 			String bank = GLOBAL.DBACCESS.getBank(cursor.getLong(6));
 			String note = cursor.getString(7);
 			StringBuffer end = new StringBuffer(), now = new StringBuffer();
@@ -291,6 +291,9 @@ public class SavingListActivity extends ListActivity {
     	case R.id.menu_add_saving:
     		onMenuAddSaving();
     		break;
+    	case R.id.menu_ratelist:
+    		onMenuRateList();
+    		break;
     	case R.id.menu_banklist:
     		onMenuBankList();
     		break;
@@ -320,6 +323,11 @@ public class SavingListActivity extends ListActivity {
 		intent.putExtra("ACTION", SavingDetailActivity.ACTION_ADD);
 		intent.putExtra("ID", -1);
 		this.startActivity(intent);
+    }
+    
+    protected void onMenuRateList() {
+		Intent intent = new Intent(this, RateListActivity.class);
+		this.startActivity(intent);   	
     }
     
     protected void onMenuBankList() {

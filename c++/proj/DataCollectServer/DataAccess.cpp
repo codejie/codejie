@@ -1045,11 +1045,11 @@ int DataAccess::GetValveRealData(Packet &packet)
 			m3.insert(std::make_pair("Y_Rate", y_060));
 			m3.insert(std::make_pair("M_Rate", m_060));
 			m3.insert(std::make_pair("L_Rate", l_060));
-            packet.CP.item.insert(std::make_pair("B01", m3));
+            packet.CP.item.insert(std::make_pair("060", m3));
 
             Packet::TCPItemDataMap m4;
 			m4.insert(std::make_pair("Data", alerm));
-			packet.CP.item.insert(std::make_pair("Alerm", m4));
+			packet.CP.item.insert(std::make_pair("Alarm", m4));
 
             Packet::TCPItemDataMap m5;
 			m5.insert(std::make_pair("Data", color));

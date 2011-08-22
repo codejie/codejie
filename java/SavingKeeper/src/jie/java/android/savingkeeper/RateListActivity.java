@@ -49,7 +49,7 @@ public class RateListActivity extends ExpandableListActivity {
 				childData,
 				//android.R.layout.simple_expandable_list_item_1,
 				R.layout.ratedetail,
-				new String[] { C_TITLE },
+				new String[] { C_TITLE, C_RATE_0, C_RATE_1, C_RATE_2, C_RATE_3, C_RATE_4, C_RATE_5, C_RATE_6 },
 				//new int[] { android.R.id.text1}
 				new int[] { R.id.textView1 }
 				);
@@ -71,7 +71,7 @@ public class RateListActivity extends ExpandableListActivity {
 			if(count == 0)
 			{
 				m = new HashMap<String, String>();
-				m.put(C_TITLE, cursor.getString(1) + " - " + cursor.getShort(2));
+				m.put(C_TITLE, cursor.getString(1) + " - " + cursor.getString(2));
 				titleData.add(m);
 			}
 
@@ -177,8 +177,8 @@ public class RateListActivity extends ExpandableListActivity {
 	}
 	
 	private void onMenuAddRate() {
-		GLOBAL.DBACCESS.insertRate("2011-08-02", "9999-12-31", 0, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
-		GLOBAL.DBACCESS.insertRate("2011-08-02", "9999-12-31", 1, 1.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
-		GLOBAL.DBACCESS.insertRate("2011-08-02", "9999-12-31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2011.08.02", "9999.12.31", 0, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2011.08.02", "9999.12.31", 1, 1.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2011.08.02", "9999.12.31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
 	}
 }

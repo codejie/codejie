@@ -152,7 +152,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 				iYear = year;
 				iMonth = monthOfYear;
 				iDay = dayOfMonth;
-				checkin.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+				checkin.setText(year + "." + (monthOfYear + 1) + "." + dayOfMonth);
 			}
 			
 		};

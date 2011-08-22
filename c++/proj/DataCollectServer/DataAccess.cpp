@@ -959,7 +959,7 @@ int DataAccess::GetValveRealData(Packet &packet)
         std::string y_b01, m_b01, l_b01, d_b01, alo_y_b01, alo_m_b01, alo_l_b01, y_b01_r, m_b01_r, l_b01_r;
         std::string y_011, m_011, l_011, d_011, alo_y_011, alo_m_011, alo_l_011, y_011_r, m_011_r, l_011_r;
         std::string y_060, m_060, l_060, d_060, alo_y_060, alo_m_060, alo_l_060, y_060_r, m_060_r, l_060_r;
-        std::string alerm, color;
+        std::string alarm, color;
 
 		stmt->defineString(1, r_b01);
         stmt->defineString(2, r_011);
@@ -998,7 +998,7 @@ int DataAccess::GetValveRealData(Packet &packet)
         stmt->defineString(32, m_060_r);
         stmt->defineString(33, l_060_r);
 
-        stmt->defineString(34, alerm);
+        stmt->defineString(34, alarm);
         stmt->defineString(35, color);
 
 		stmt->execute();
@@ -1048,7 +1048,7 @@ int DataAccess::GetValveRealData(Packet &packet)
             packet.CP.item.insert(std::make_pair("060", m3));
 
             Packet::TCPItemDataMap m4;
-			m4.insert(std::make_pair("Data", alerm));
+			m4.insert(std::make_pair("Data", alarm));
 			packet.CP.item.insert(std::make_pair("Alarm", m4));
 
             Packet::TCPItemDataMap m5;

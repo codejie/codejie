@@ -948,7 +948,7 @@ int DataAccess::GetValveRealData(Packet &packet)
     try
     {
         const std::string sql = "select real_out_number,real_cod_out_number,real_nh_out_number,\
-				y_out_number,m_out_number,l_out_number,alo_y_out_number,alo_m_out_number,d_out_number,alo_l_out_number,y_out_rate,m_out_rate,l_out_rate,\
+				y_out_number,m_out_number,l_out_number,d_out_number,alo_y_out_number,alo_m_out_number,alo_l_out_number,y_out_rate,m_out_rate,l_out_rate,\
                 y_cod_out_number, m_cod_out_number,l_cod_out_number,d_cod_out_number,alo_cod_y_out_number,alo_cod_m_out_number,alo_cod_l_out_number,y_cod_out_rate,m_cod_out_rate,l_cod_out_rate,\
 				y_nh_out_number,m_nh_out_number,l_nh_out_number,d_nh_out_number,alo_nh_y_out_number,alo_nh_m_out_number,alo_nh_l_out_number,y_nh_out_rate,m_nh_out_rate,l_nh_out_rate,\
                 is_alerm,is_color from IC_MONITOR_REAL_MINREAL where M_FLAG = '0'";

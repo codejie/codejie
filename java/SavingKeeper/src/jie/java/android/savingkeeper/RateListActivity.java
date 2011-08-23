@@ -213,8 +213,8 @@ public class RateListActivity extends ExpandableListActivity {
 	}
 	
 	private void onMenuAddRate() {
-		GLOBAL.DBACCESS.insertRate("2011.08.02", "9999.12.31", 0, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
-		GLOBAL.DBACCESS.insertRate("2011.08.02", "9999.12.31", 1, 1.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
-		GLOBAL.DBACCESS.insertRate("2011.08.02", "9999.12.31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 0, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 1, 1.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
 	}
 }

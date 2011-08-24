@@ -3,7 +3,7 @@
 
 
 #define APP_TITLE   "DTUConnector"
-#define APP_VERSION "1.0.0"
+#define APP_VERSION "1.8.24"
 #define SYS_PROMPT	"Connector>"
 
 const int TASK_APP     			=   1;

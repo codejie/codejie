@@ -6,6 +6,8 @@
 #include "acex/NB_Tcp_Server.h"
 #include "acex/Task.h"
 
+class Packet;
+
 class ConnectionServer: public ACEX_NB_Tcp_Server_Task
 {
 private:
@@ -15,7 +17,7 @@ public:
 	virtual ~ConnectionServer();
 
 	int Open(const std::string& local);
-
+    int SendPacket(int clientid, const Packet& packet);
 	void Final();
 
     void Show(std::ostream& os) const;

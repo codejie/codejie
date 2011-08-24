@@ -149,10 +149,16 @@ int CoreMsgTask::OnServerPacket(int clientid, const Packet &packet)
 	switch(packet._type)
 	{
 	case Packet::PACKET_FLAG_HELLO:
-		OnServerHelloPacket(clientid, packet);
+		if(OnServerHelloPacket(clientid, packet) != 0)
+        {
+            ShutdownClient(clientid);
+        }
 		break;
 	case Packet::PACKET_FLAG_DATARESP:
-		OnServerDataRespPacket(clientid, packet);
+		if(OnServerDataRespPacket(clientid, packet) != 0)
+        {
+            ShutdownClient(clientid);
+        }
 		break;
 	default:
 		ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnServerPacket>Unknwon packet type - " << packet._type << std::endl);	
@@ -174,6 +180,7 @@ int CoreMsgTask::OnServerSocketConnect(int clientid, const std::string &ip, unsi
 	data.port = port;
 	data.status = DS_WAITTEL;
 	data.update = ACE_OS::time(NULL);
+    data.req  = 0;
 	data.data = 0;
 	data.hello = 0;
 	data.timer = RegTimer(clientid, FPARAM_SOCKET_TIMEOUT, _iPacketTimeout);
@@ -238,9 +245,9 @@ int CoreMsgTask::OnServerDataRespPacket(int clientid, const Packet &packet)
 		return -1;
 	}
 
-	if(_ptrDataAccess->OnData(it->second.stationid, Toolkit::Buffer2Float(resp._value)) != 0)
+	if(_ptrDataAccess->OnData(it->second.stationid, Toolkit::Buffer2Float((const char*)resp._value)) != 0)
 	{
-		ACEX_LOG_OS(LM_WARNING, "<>Clienet insert data failed - clientid : " << clientid << "\nPacket : " << packet << std::endl);
+		ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnServerDataRespPacket>Clienet insert data failed - clientid : " << clientid << "\nPacket : " << packet << std::endl);
 		return -1;
 	}
 	
@@ -256,7 +263,7 @@ int CoreMsgTask::OnServerDataRespPacket(int clientid, const Packet &packet)
 int CoreMsgTask::OnTimerSocketTimeout(int clientid)
 {
 	ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnTimerSocketTimeout>Client wait hello data timeout - clientid : " << clientid << std::endl);
-	//shutdown client
+	ShutdownClient(clientid);
 	return 0;
 }
 
@@ -268,9 +275,12 @@ int CoreMsgTask::OnTimerPacket(int clientid)
 
 	if(SendDataReqPacket(clientid) != 0)
 	{
-		//shutdown client
+		ShutdownClient(clientid);
 		return -1;
 	}
+
+    ++ it->second.req;
+    it->second.status = DS_WAITRSP;
 
 	return 0;
 }
@@ -279,6 +289,7 @@ int CoreMsgTask::OnTimerPacketTimeout(int clientid)
 {
 	ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnTimerPacketTimeout>Client recv data timeout - clientid : " << clientid << std::endl);
 	//shutdown client
+    ShutdownClient(clientid);
 	return 0;
 }
 
@@ -293,4 +304,25 @@ void CoreMsgTask::UnregTimer(int timerid)
 {
 	if(timerid != -1)
 		this->remove_timer(timerid);
+}
+
+//
+void CoreMsgTask::ShutdownClient(int clientid)
+{
+    if(_ptrConnServer.get() != NULL)
+    {
+        _ptrConnServer->shutdown_client(clientid);
+    }
+}
+
+//
+int CoreMsgTask::SendDataReqPacket(int clientid)
+{
+    if(_ptrConnServer.get() != NULL)
+    {
+        DataReqPacket packet;
+        return _ptrConnServer->SendPacket(clientid, packet);
+    }
+    
+    return -1;
 }

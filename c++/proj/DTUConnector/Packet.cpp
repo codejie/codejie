@@ -55,6 +55,8 @@ size_t Packet::Make(const char *buf, size_t size, Packet *&packet)
 
 size_t Packet::Make(const Packet &packet, char *&buf)
 {
+    buf = NULL;
+
 	if(packet._type == PT_DATAREQ)
 	{
 		buf = new char[DataReqPacket::SIZE];
@@ -69,7 +71,7 @@ size_t Packet::Make(const Packet &packet, char *&buf)
 	{
 		throw PacketException("Un-support packet.", NULL, 0);
 	}
-	return 0;
+	return -1;
 }
 
 void Packet::Show(std::ostream& os) const

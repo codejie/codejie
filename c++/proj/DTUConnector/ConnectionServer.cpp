@@ -32,6 +32,28 @@ void ConnectionServer::Final()
 	this->deactivate();
 }
 
+int ConnectionServer::SendPacket(int clientid, const Packet& packet)
+{
+    ACEX_LOG_OS(LM_DEBUG, "<ConnectionServer::SendPacket>Send packet to client : " << clientid << "\n" << packet << std::endl);
+
+    try
+    {
+        char* buf = NULL;
+        size_t sz = Packet::Make(packet, buf);
+        if(sz < 0)
+        {
+            return -1;
+        }
+
+        return this->send(clientid, buf, sz);
+    }
+    catch(const PacketException& e)
+    {
+        ACEX_LOG_OS(LM_ERROR, "<ConnectionServer::SendPacket>Send packet to client : " << clientid << " exception : " << e << std::endl);
+    }
+    return -1;
+}
+
 int ConnectionServer::handle_connect(int clientid, ACEX_TcpStream& client)
 {
 	ACE_INET_Addr* addr = new ACE_INET_Addr();

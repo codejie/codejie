@@ -217,6 +217,10 @@
 				RelativePath=".\Packet.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Toolkit.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -257,10 +261,6 @@
 			</File>
 			<File
 				RelativePath=".\Packet.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SQLPP.h"
 				>
 			</File>
 			<File

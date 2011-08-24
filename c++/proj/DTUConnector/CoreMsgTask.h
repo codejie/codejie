@@ -29,6 +29,7 @@ protected:
 		DTUStatus status;
 		int timer;
 		time_t update;
+        size_t req;
 		size_t data;
 		size_t hello;
 	};
@@ -43,6 +44,7 @@ public:
 protected:
 	void Final();
 
+    void ShutdownClient(int clientid);
 protected:
 	virtual int handle_msg(const ACEX_Message& msg);
     int OnTimerMsgProc(const ACEX_Message& msg);

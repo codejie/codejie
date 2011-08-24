@@ -84,7 +84,7 @@ public:
 	static const size_t SIZE		=	9;
 public:
 	DataRespPacket();
-	virtual ~DataRespPacket();
+    virtual ~DataRespPacket() {}
 
 	virtual void Show(std::ostream& os) const;
 protected:

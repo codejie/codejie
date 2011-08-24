@@ -92,4 +92,12 @@ public class DataCalculator {
 		
 		return 0;
 	}
+	
+	public int calcMoney(final String checkin, float amount, int currency, int type, float end, float now) {
+		
+		end = RateData.get(0).data[currency][type] * amount;// 10.0f;
+		now = RateData.get(0).data[currency][type + 1] * amount;
+		
+		return 0;
+	}
 }

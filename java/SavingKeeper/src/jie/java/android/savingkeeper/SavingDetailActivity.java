@@ -44,7 +44,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 	private int iID = -1;
 	
 	private int iYear, iMonth, iDay;
-	private long iCurrency, iType, iBank;
+	private int iCurrency, iType, iBank;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-				iCurrency = id;				
+				iCurrency = (int)id;				
 			}
 
 			@Override
@@ -90,7 +90,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-				iType = id;
+				iType = (int)id;
 			}
 
 			@Override
@@ -108,7 +108,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-				iBank = id;
+				iBank = (int)id;
 			}
 
 			@Override

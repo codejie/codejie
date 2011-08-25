@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
@@ -44,20 +45,21 @@ public class SavingListActivity extends ListActivity {
 		
 		public void bindView(View view, Context context, Cursor cursor) {
 			String title = cursor.getString(1);
-			String amount = cursor.getString(2);
-			//String end = GLOBAL.DBACCESS.calcMoney(/*amount, currency, checkin, endtime, type*/);
-			//String now = GLOBAL.DBACCESS.calcMoney(/*amount, currency, checkin, now, type */);
-			String currency = RCLoader.getCurrency(SavingListActivity.this, cursor.getLong(3));
+			float amount = cursor.getFloat(2);
+			int currency = cursor.getInt(3);
 			String checkin = cursor.getString(4);
-			String type = RCLoader.getType(SavingListActivity.this, cursor.getLong(5));
-			String bank = GLOBAL.DBACCESS.getBank(cursor.getLong(6));
+			int type = cursor.getInt(5);
+			int bank = cursor.getInt(6);
 			String note = cursor.getString(7);
-			StringBuffer end = new StringBuffer(), now = new StringBuffer();
-			GLOBAL.DBACCESS.calcMoney(cursor.getFloat(2), cursor.getLong(3), cursor.getLong(4), cursor.getLong(5), end, now);
 			
+			float end = 0.0f, now = 0.0f;
+			GLOBAL.CALCULATOR.calcMoney(checkin, amount, currency, type, end, now);
 			
+			Log.d(GLOBAL.APP_TAG, "end = " + String.format("%.2f", end) + " now = " + now);
 			//((SavingListView)view).setTitle(cursor.getString(0), cursor.getString(1));
-			((SavingListView)view).setContent(title, amount, currency, checkin, type, bank, note, end.toString(), now.toString());
+
+			((SavingListView)view).setContent(title, String.format("%.2f", amount), RCLoader.getCurrency(SavingListActivity.this, currency),
+					checkin, RCLoader.getType(SavingListActivity.this, type), GLOBAL.DBACCESS.getBank(bank), note, String.format("%.2f", end), String.format("%.2f", now));
 		}
 	}
 	

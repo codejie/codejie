@@ -9,17 +9,17 @@ import android.app.Activity;
 
 public class RCLoader {
 
-	public static String getType(Activity act, long type) {
+	public static String getType(Activity act, int type) {
 		
 		String[] str = act.getResources().getStringArray(R.array.type);
-		return str[(int)type];		
+		return str[type];		
 	}
 	
 	//
-	public static String getCurrency(Activity act, long currency) {
+	public static String getCurrency(Activity act, int currency) {
 		
 		String[] str = act.getResources().getStringArray(R.array.currency);
-		return str[(int)currency];
+		return str[currency];
 /*		
 		if(currency == CURRENCY_TYPE_RMB) {
 			return act.getResources().getString(R.string.currency_rmb);

@@ -155,7 +155,7 @@ public class DBAccess {
 		return 0;
 	}
 	
-	public final String getBank(long id) {
+	public final String getBank(int id) {
 		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_TITLE }, TABLE_COLUMN_ID + "=" + id, null, null, null, null);
 		if(cursor.getCount() == 0)
 			return "Unknown";
@@ -169,13 +169,13 @@ public class DBAccess {
 		return cursor;
 	}
 	
-	public int removeBank(long id) {
+	public int removeBank(int id) {
 		if(checkBankUsed(id) > 0)
 			return -1;
 		return db.delete(TABLE_NAME_BANK, TABLE_COLUMN_ID + " = " + id, null);
 	}
 	
-	public int checkBankUsed(long id) {
+	public int checkBankUsed(int id) {
 		Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_SAVING + " WHERE " + TABLE_NAME_BANK + " = " + id, null);
 		cursor.moveToFirst();
 		return cursor.getInt(0);
@@ -189,7 +189,7 @@ public class DBAccess {
 		return cursor;		
 	}
 	
-	public int insertSaving(final String title, float amount, long currency, final String checkin, long type, long bank, final String note) {
+	public int insertSaving(final String title, float amount, int currency, final String checkin, int type, int bank, final String note) {
 		ContentValues values = new ContentValues();
 		values.put(TABLE_COLUMN_TITLE, title);
 		values.put(TABLE_COLUMN_AMOUNT, amount);
@@ -204,7 +204,7 @@ public class DBAccess {
 		return 0;
 	}
 	
-	public int updateSaving(int id, final String title, float amount, long currency, final String checkin, long type, long bank, final String note) {
+	public int updateSaving(int id, final String title, float amount, int currency, final String checkin, int type, int bank, final String note) {
 		return -1;
 	}
 	
@@ -240,7 +240,7 @@ public class DBAccess {
 		String[] col = new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_START, TABLE_COLUMN_END, TABLE_COLUMN_CURRENCY,
 						TABLE_COLUMN_RATE_0, TABLE_COLUMN_RATE_1, TABLE_COLUMN_RATE_2, TABLE_COLUMN_RATE_3, TABLE_COLUMN_RATE_4, TABLE_COLUMN_RATE_5, TABLE_COLUMN_RATE_6 };
 		Cursor cursor = db.query(TABLE_NAME_RATE, col, null, null, null, null, TABLE_COLUMN_START);
-		cursor.moveToFirst();
+		//cursor.moveToFirst();
 		return cursor;
 	}
 	
@@ -273,13 +273,13 @@ public class DBAccess {
 	
 	
 	public String getCheckin(long time) {
-		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd"); 
 		Date date = new Date(time * 1000);
 		return fmt.format(date);
 	}
 	
 	
-	public int calcMoney(float amount, long currency, long checkin, long type, StringBuffer endMoney, StringBuffer nowMoney) {
+	public int calcMoney(float amount, int currency, int checkin, int type, StringBuffer endMoney, StringBuffer nowMoney) {
 		endMoney.append("1.00");
 		nowMoney.append("22.00");
 		return -1;

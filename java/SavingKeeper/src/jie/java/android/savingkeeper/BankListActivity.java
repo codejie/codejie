@@ -38,7 +38,7 @@ public class BankListActivity extends ListActivity {
 	private static final int DIALOG_ADD_BANK		=	1;
 	private static final int DIALOG_REMOVE_BANK		=	2;
 	
-	private long idBank = -1;
+	private int idBank = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,7 @@ public class BankListActivity extends ListActivity {
 	}
 */	
 	public void onListItemLongClick(View v, int position, long id) {
-		idBank = id;
+		idBank = (int)id;
 		this.showDialog(DIALOG_REMOVE_BANK);		
 	}
 /*	

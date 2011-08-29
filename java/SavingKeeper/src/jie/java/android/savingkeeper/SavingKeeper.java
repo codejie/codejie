@@ -24,14 +24,8 @@ public class SavingKeeper extends Activity {
         setContentView(R.layout.main);
         
         GLOBAL.init();    	
-/*
-        try {
-			Thread.sleep(500);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
- */      
-		Intent intent = new Intent(this, RateListActivity.class);
+
+        Intent intent = new Intent(this, RateListActivity.class);
 		this.startActivity(intent);
 		//Test.startActivity(BankListActivity.this);
 		//this.finish();
@@ -41,34 +35,8 @@ public class SavingKeeper extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Test.insertData();
-				//Toast.makeText(v.getContext(), "hello", 2).show();
-				//Test.queryData();
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				Test.startActivity(SavingKeeper.this);
-				//Test.queryData();
-				//Test.insertData();
-/*				
-				AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-				builder.setMessage("alert...........");
-				builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
-				AlertDialog alert = builder.create();
-				alert.show();
-*/				
-/*		        Intent intent = new Intent();
-		        intent.setClassName("jie.java.android.savingkeeper", "MsgBoxActivity");
-		        startActivity(intent);
-*/		        	
+				Intent intent = new Intent(SavingKeeper.this, SavingListActivity.class);
+				SavingKeeper.this.startActivity(intent);	        	
 			}
         	
         });

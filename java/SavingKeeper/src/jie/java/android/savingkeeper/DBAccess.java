@@ -47,12 +47,6 @@ public class DBAccess {
 	public static final String TABLE_COLUMN_RATE_5		= "Rate_5";
 	public static final String TABLE_COLUMN_RATE_6		= "Rate_6";
 	
-
-	public static final String TABLE_NAME_TEST			= "Test";
-
-	public static final String TABLE_COLUMN_STRING		= "string";
-	public static final String TABLE_COLUMN_INTEGER		= "value";
-	
 	public static final int SAVING_TYPE_CURRENT			= 0;
 	public static final int SAVING_TYPE_FIXED_3_MONTH	= 1;
 	public static final int SAVING_TYPE_FIXED_6_MONTH	= 2;
@@ -118,15 +112,6 @@ public class DBAccess {
 		+ TABLE_COLUMN_RATE_4 + " REAL,"
 		+ TABLE_COLUMN_RATE_5 + " REAL,"
 		+ TABLE_COLUMN_RATE_6 + " REAL"
-		+ ");";
-		
-		db.execSQL(sql);
-		
-		
-		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_TEST + " ("
-		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
-		+ TABLE_COLUMN_STRING + " TEXT,"
-		+ TABLE_COLUMN_INTEGER + " INTEGER"
 		+ ");";
 		
 		db.execSQL(sql);
@@ -246,43 +231,6 @@ public class DBAccess {
 	
 	public float getRate(int checkin, int currency, int type) {
 		return 0.0f;
-	}
-	
-	//
-	public int insert(final TestData data) {
-		
-		ContentValues values = new ContentValues();
-		
-		values.put(TABLE_COLUMN_STRING, data.str);
-		values.put(TABLE_COLUMN_INTEGER, data.value);
-		
-		if(db.insert(TABLE_NAME_TEST, null, values) == -1) {
-			Log.w(GLOBAL.APP_TAG, "insert failed.");
-			return -1;
-		}
-		
-		return 0;
-	}
-	
-	public Cursor query(){
-		String col[] = new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_STRING, TABLE_COLUMN_INTEGER }; 
-		Cursor  cursor = db.query(TABLE_NAME_TEST, col, null, null, null, null, null, null);//"", new String[] {}, "", "", "", "");
-		cursor.moveToFirst();
-		return cursor;
-	}
-	
-	
-	public String getCheckin(long time) {
-		SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd"); 
-		Date date = new Date(time * 1000);
-		return fmt.format(date);
-	}
-	
-	
-	public int calcMoney(float amount, int currency, int checkin, int type, StringBuffer endMoney, StringBuffer nowMoney) {
-		endMoney.append("1.00");
-		nowMoney.append("22.00");
-		return -1;
 	}
 	
 }

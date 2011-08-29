@@ -52,21 +52,18 @@ public class SavingListActivity extends ListActivity {
 			int bank = cursor.getInt(6);
 			String note = cursor.getString(7);
 			
-			float end = 0.0f, now = 0.0f;
-			GLOBAL.CALCULATOR.calcMoney(checkin, amount, currency, type, end, now);
+			DataCalculator.CalcResult result = new DataCalculator.CalcResult();
+			GLOBAL.CALCULATOR.calcMoney(checkin, amount, currency, type, result);
 			
-			Log.d(GLOBAL.APP_TAG, "end = " + String.format("%.2f", end) + " now = " + now);
+			Log.d(GLOBAL.APP_TAG, "end = " + String.format("%.2f", result.end) + " now = " + result.now);
 			//((SavingListView)view).setTitle(cursor.getString(0), cursor.getString(1));
 
 			((SavingListView)view).setContent(title, String.format("%.2f", amount), RCLoader.getCurrency(SavingListActivity.this, currency),
-					checkin, RCLoader.getType(SavingListActivity.this, type), GLOBAL.DBACCESS.getBank(bank), note, String.format("%.2f", end), String.format("%.2f", now));
+					checkin, RCLoader.getType(SavingListActivity.this, type), GLOBAL.DBACCESS.getBank(bank), note, String.format("%.2f", result.end), String.format("%.2f", result.now));
 		}
 	}
 	
 	protected class SavingListView extends LinearLayout {
-		
-		private TextView viewText;
-		private TextView viewText2;
 		
 		private TextView textTitle;
 		private TextView textAmount;

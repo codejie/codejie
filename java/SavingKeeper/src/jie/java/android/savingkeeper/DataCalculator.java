@@ -15,6 +15,16 @@ import android.util.Log;
 
 public class DataCalculator {
 
+	public static final class CalcResult {
+		public float now;
+		public float end;
+		
+		public CalcResult() {
+			now = 0;
+			end = 0;
+		}
+	}
+	
 	private final class RateData {
 		public Date begin = new Date();
 		public Date end = new Date();
@@ -94,15 +104,15 @@ public class DataCalculator {
 		return 0;
 	}
 	
-	public int calcMoney(final String checkin, float amount, int currency, int type, float end, float now) {
+	public int calcMoney(final String checkin, float amount, int currency, int type, CalcResult result) {
 		
 		for(RateData data : RateData) {
 			Log.d(GLOBAL.APP_TAG, "begin: " + data.begin.toString() + " end:" + data.end.toString() + " data: " + data.data[0][1]);
 		}
 		
 		
-		end = RateData.get(0).data[currency][type] * amount;// 10.0f;
-		now = RateData.get(0).data[currency][type + 1] * amount;
+		result.end = RateData.get(0).data[currency][type] * amount;// 10.0f;
+		result.now = RateData.get(0).data[currency][type + 1] * amount;
 		
 		return 0;
 	}

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.database.Cursor;
+import android.util.Log;
 
 public class DataCalculator {
 
@@ -94,6 +95,11 @@ public class DataCalculator {
 	}
 	
 	public int calcMoney(final String checkin, float amount, int currency, int type, float end, float now) {
+		
+		for(RateData data : RateData) {
+			Log.d(GLOBAL.APP_TAG, "begin: " + data.begin.toString() + " end:" + data.end.toString() + " data: " + data.data[0][1]);
+		}
+		
 		
 		end = RateData.get(0).data[currency][type] * amount;// 10.0f;
 		now = RateData.get(0).data[currency][type + 1] * amount;

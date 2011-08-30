@@ -25,11 +25,12 @@ public class SavingKeeper extends Activity {
         
         GLOBAL.init();    	
 
-        Intent intent = new Intent(this, RateListActivity.class);
+        //Intent intent = new Intent(this, RateListActivity.class);
+        Intent intent = new Intent(this, RateDetailActivity.class);
 		this.startActivity(intent);
 		//Test.startActivity(BankListActivity.this);
 		//this.finish();
-
+/*
         btn = (Button)this.findViewById(R.id.button1);
         btn.setOnClickListener(new OnClickListener() {
 
@@ -40,6 +41,7 @@ public class SavingKeeper extends Activity {
 			}
         	
         });
+*/        
     }
     
     protected void finalize() {

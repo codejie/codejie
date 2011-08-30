@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent">
+    <TextView android:text="TextView" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_marginLeft="20dp" android:id="@+id/rate_title"></TextView>
+    <TableLayout android:layout_height="wrap_content" android:id="@+id/tableLayout1" android:layout_marginLeft="4dp" android:layout_weight="1" android:layout_width="fill_parent">
+        <TableRow android:layout_height="wrap_content" android:layout_marginLeft="40dp" android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_marginRight="4dp">
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_title_0"></TextView>
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_0"></TextView>
+        </TableRow>
+        <TableRow android:layout_height="wrap_content" android:layout_marginLeft="40dp" android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_marginRight="4dp">
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_title_1"></TextView>
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_1"></TextView>
+        </TableRow>
+        <TableRow android:layout_height="wrap_content" android:layout_marginLeft="40dp" android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_marginRight="4dp">
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_title_2"></TextView>
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_2"></TextView>
+        </TableRow>
+        <TableRow android:layout_height="wrap_content" android:layout_marginLeft="40dp" android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_marginRight="4dp">
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_title_3"></TextView>
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_3"></TextView>
+        </TableRow>
+        <TableRow android:layout_height="wrap_content" android:layout_marginLeft="40dp" android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_marginRight="4dp">
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_title_4"></TextView>
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_4"></TextView>
+        </TableRow>
+        <TableRow android:layout_height="wrap_content" android:layout_marginLeft="40dp" android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_marginRight="4dp">
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_title_5"></TextView>
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="TextView" android:id="@+id/rate_5"></TextView>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="40dp" android:layout_marginRight="4dp">
+            <TextView android:text="TextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/rate_title_6"></TextView>
+            <TextView android:text="TextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/rate_6"></TextView>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

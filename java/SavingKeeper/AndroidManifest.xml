@@ -18,5 +18,6 @@
         <activity android:name="SavingDetailActivity" android:label="@string/menu_addsaving">
         </activity>
         <activity android:name="RateListActivity" android:label="@string/title_ratelist"></activity>
+        <activity android:name="RateDetailActivity" android:label="@string/title_addrate"></activity>
     </application>
 </manifest>

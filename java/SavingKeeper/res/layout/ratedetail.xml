@@ -3,7 +3,7 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
-  android:layout_height="fill_parent" android:orientation="vertical">
+  android:layout_height="fill_parent" android:orientation="vertical" android:layout_marginRight="4dp">
     <TextView android:text="TextView" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
     <LinearLayout android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:layout_height="wrap_content">
         <EditText android:text="EditText" android:layout_height="wrap_content" android:id="@+id/editText1" android:layout_weight="3" android:layout_width="wrap_content"></EditText>
@@ -15,7 +15,7 @@
         <Button android:text="Button" android:layout_height="wrap_content" android:layout_weight="1" android:layout_width="wrap_content" android:id="@+id/button2"></Button>
     </LinearLayout>
     <Button android:text="Button" android:id="@+id/button3" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
-    <TableLayout android:id="@+id/tableLayout1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp">
+    <TableLayout android:id="@+id/tableLayout1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp">
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow07">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView07" android:text="TextView" android:layout_weight="3"></TextView>
             <EditText android:layout_width="wrap_content" android:text="EditText" android:id="@+id/EditText07" android:layout_height="wrap_content" android:layout_weight="1"></EditText>
@@ -50,7 +50,7 @@
         </TableRow>
     </TableLayout>
     <Button android:text="Button" android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/Button01"></Button>
-    <TableLayout android:id="@+id/TableLayout01" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp">
+    <TableLayout android:id="@+id/TableLayout01" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp">
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow14">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView08" android:text="TextView" android:layout_weight="3"></TextView>
             <EditText android:layout_width="wrap_content" android:text="EditText" android:id="@+id/EditText14" android:layout_height="wrap_content" android:layout_weight="1"></EditText>
@@ -85,7 +85,7 @@
         </TableRow>
     </TableLayout>
     <Button android:text="Button" android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/Button02"></Button>
-    <TableLayout android:id="@+id/TableLayout02" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp">
+    <TableLayout android:id="@+id/TableLayout02" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp">
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow22">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView16" android:text="TextView" android:layout_weight="3"></TextView>
             <EditText android:layout_width="wrap_content" android:text="EditText" android:id="@+id/EditText22" android:layout_height="wrap_content" android:layout_weight="1"></EditText>

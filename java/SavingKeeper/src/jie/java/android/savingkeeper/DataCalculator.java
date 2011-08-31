@@ -8,6 +8,7 @@ package jie.java.android.savingkeeper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import android.database.Cursor;
@@ -110,10 +111,44 @@ public class DataCalculator {
 			Log.d(GLOBAL.APP_TAG, "begin: " + data.begin.toString() + " end:" + data.end.toString() + " data: " + data.data[0][1]);
 		}
 		
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd");
+		Date ci = null;
+		try {
+			ci = fmt.parse(checkin);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return -1;
+		}
+		
+		result.end = calcEndMoney(ci, amount, currency, type);
+		result.now = calcNowMoney(ci, amount, currency, type);
+		
+		
 		
 		result.end = RateData.get(0).data[currency][type] * amount;// 10.0f;
 		result.now = RateData.get(0).data[currency][type + 1] * amount;
 		
 		return 0;
+	}
+	
+	private float calcEndMoney(Date checkin, float amount, int currency, int type) {
+
+		Date endDate =null;//Calendar.getInstance().getTime();
+		if(type == GLOBAL.DBACCESS.SAVING_TYPE_CURRENT) {
+			endDate = Calendar.getInstance().getTime();
+		}
+		else if(type == GLOBAL.DBACCESS.SAVING_TYPE_FIXED_3_MONTH) {
+			endDate.setMonth(endDate.getMonth() + 3); 	
+		}
+		for(RateData data : RateData) {
+			
+		}
+		
+		return 0.0f;
+	}
+	
+	private float calcNowMoney(Date checkin, float amount, int currency, int type) {
+		
+		return 0.0f;
 	}
 }

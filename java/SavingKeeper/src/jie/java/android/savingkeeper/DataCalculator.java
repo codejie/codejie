@@ -132,19 +132,24 @@ public class DataCalculator {
 	}
 	
 	private float calcEndMoney(Date checkin, float amount, int currency, int type) {
-
+		
+		float result = 0.0f;
+		
 		Date endDate =null;//Calendar.getInstance().getTime();
 		if(type == GLOBAL.DBACCESS.SAVING_TYPE_CURRENT) {
 			endDate = Calendar.getInstance().getTime();
 		}
 		else if(type == GLOBAL.DBACCESS.SAVING_TYPE_FIXED_3_MONTH) {
-			endDate.setMonth(endDate.getMonth() + 3); 	
+			endDate.setMonth(endDate.getMonth() + 3);
+		}
+		else {
+			return result;
 		}
 		for(RateData data : RateData) {
 			
 		}
 		
-		return 0.0f;
+		return result;
 	}
 	
 	private float calcNowMoney(Date checkin, float amount, int currency, int type) {

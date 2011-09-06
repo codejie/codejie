@@ -3,8 +3,6 @@
 
 #include "acex/ACEX.h"
 #include "acex/Exception.h"
-#include "acex/Command_Parser.h"
-#include "acef/Commands.h"
 
 #include "acesf/Service.h"
 
@@ -37,17 +35,6 @@ ACESF_Service::ACESF_Service(const std::string& name, const std::string& desc)
 
 ACESF_Service::~ACESF_Service()
 {
-}
-
-void ACESF_Service::regist_name(const std::string& name, const std::string& desc)
-{
-	name_ = name;
-	desc_ = desc;
-}
-
-void ACESF_Service::regist_app(ACEX_Message_Task *app)
-{
-	app_ = app;
 }
 
 int ACESF_Service::getopt(int argc, char* argv[])
@@ -146,9 +133,100 @@ int ACESF_Service::handle_timeout(const ACE_Time_Value &current_time, const void
 
 int ACESF_Service::svc()
 {
-	ACE_NT_SERVICE_RUN(Beeper,
-                          SERVICE::instance (),
-                          ret);
+	return -1;
+}
+
+int ACESF_Service::run(int argc, char* argv[])
+{
+	pACESF_Service->regist_name();
+	pACESF_Service->regist_app();
+
+	this->init(argc, argv);
+
+	if(opt_.install_ == 1 && opt_.remove_ != 1)
+	{
+		if(this->insert(opt_.startup_) == -1)
+			return -1;
+		return 0;
+	}
+
+	if(opt_.remove_ == 1 && opt_.install_ != 1)
+	{
+		if(this->remove() == -1)
+			return -1;
+		return 0;
+	}
+
+	if(opt_.start_ == 1)
+	{
+		if(this->start_svc() == -1)
+			return -1;
+		return 0;
+	}
+
+	if(opt_.kill_ == 1)
+	{
+		if(this->stop_svc() == -1)
+			return -1;
+		return 0;
+	}
+
+	if(opt_.type_ == 1)
+	{
+		if(this->startup(opt_.startup_) == -1)
+			return -1;
+		return 0;
+	}
+
+	//opt_.debug_
+	
+	if(this->app_ != NULL)
+	{
+		try
+		{
+			this->app_ ->run(argc, argv);
+
+			return 0;
+		}
+		catch(ACEX_Exception& e)
+		{
+			ACEX_LOG_OS(LM_EMERGENCY, "Exception: " << e <<". Program will exit.\n");
+		}
+		catch(std::exception& e)
+		{
+			ACEX_LOG_OS(LM_EMERGENCY, "Exception: " << e.what() <<". Program will exit.\n");
+		}
+		catch(...)
+		{
+			ACEX_LOG_OS(LM_EMERGENCY, "Exception: Unknow exception. Program will exit.\n");
+		}
+
+		return -1;		
+	}
+
+	this->regist_svc();
 
 	return 0;
 }
+
+/*
+
+void ACESF_Service::regist_app()
+{
+	app_ = app;
+}
+void ACESF_Service::regist_name()
+{
+ACE_NT_SERVICE_DEFINE (Beeper,
+                       Service,
+                       ACE_TEXT ("Annoying Beeper Service"));
+}
+
+void ACESF_Service::regist_svc()
+{
+      ACE_NT_SERVICE_RUN (Beeper,
+                          SERVICE::instance (),
+                          ret);
+}
+
+*/

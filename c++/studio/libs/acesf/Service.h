@@ -1,5 +1,5 @@
-#ifndef __SERVICE_H__
-#define __SERVICE_H__
+#ifndef __ACESF_SERVICE_H__
+#define __ACESF_SERVICE_H__
 
 #include <string>
 #include <iostream>
@@ -40,7 +40,7 @@ public:
 	
 	virtual int svc();
 
-	void show_usage(std::ostream& os) const;
+	void show_usage(std::ostream& os) const {}
 protected:
     virtual void handle_control(DWORD control_code);
     virtual int handle_exception(ACE_HANDLE handle);

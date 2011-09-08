@@ -5,12 +5,15 @@
 #include "ace/OS_NS_errno.h"
 #include "ace/Reactor.h"
 
+#include "acex/Exception.h"
+
 #include "Defines.h"
+#include "DataCollectServerApp.h"
 #include "Service.h"
 
 ServiceKeeper::ServiceKeeper()
 {
-    reactor (ACE_Reactor::instance ());
+    //reactor (ACE_Reactor::instance ());
 }
 
 ServiceKeeper::~ServiceKeeper() 
@@ -19,12 +22,15 @@ ServiceKeeper::~ServiceKeeper()
 
 void ServiceKeeper::handle_control(DWORD control_code)
 {
+	        ACE_DEBUG((LM_INFO, ACE_TEXT("get control\n")));
+
     if (control_code == SERVICE_CONTROL_SHUTDOWN || control_code == SERVICE_CONTROL_STOP)
     {
         report_status(SERVICE_STOP_PENDING);
         ACE_DEBUG((LM_INFO, ACE_TEXT("ServiceKeeper control stop requested\n")));
-        stop_ = 1;
-        reactor()->notify(this, ACE_Event_Handler::EXCEPT_MASK);
+		theApp.Shutdown();
+        //stop_ = 1;
+        //reactor()->notify(this, ACE_Event_Handler::EXCEPT_MASK);
     }
     else
     {
@@ -44,15 +50,43 @@ int ServiceKeeper::handle_timeout(const ACE_Time_Value &tv, const void *)
 int ServiceKeeper::svc()
 {
     ACE_DEBUG((LM_DEBUG, ACE_TEXT ("ServiceKeeper::svc\n")));
-    if(report_status (SERVICE_RUNNING) == 0)
-        reactor ()->owner (ACE_Thread::self ());
+	report_status (SERVICE_RUNNING);
+    //if(report_status (SERVICE_RUNNING) == 0)
+    //    reactor ()->owner (ACE_Thread::self ());
 
     this->stop_ = 0;
 
-    while(!this->stop_)
-    {
-        reactor()->handle_events ();
-    }
+	try
+	{
+		char* argv[2] = 
+		{
+			APP_TITLE,
+			"-d",
+		};
+
+		theApp.run(2, argv);
+
+//		return 0;
+	}
+	catch(ACEX_Exception& e)
+	{
+		ACE_DEBUG((LM_EMERGENCY, "Exception: 1 Program will exit.\n"));
+	}
+	catch(std::exception& e)
+	{
+		ACE_DEBUG((LM_EMERGENCY, "Exception: 2 Program will exit.\n"));
+	}
+	catch(...)
+	{
+		ACE_DEBUG((LM_EMERGENCY, "Exception: Unknow exception. Program will exit.\n"));
+	}
+
+ //   while(!this->stop_)
+ //   {
+ //       reactor()->handle_events();
+ //   }
+
+	//theApp.Shutdown();
 
     // Cleanly terminate connections, terminate threads.
     ACE_DEBUG((LM_DEBUG, ACE_TEXT ("Shutting down\n")));

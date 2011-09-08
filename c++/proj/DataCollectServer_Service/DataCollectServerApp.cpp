@@ -88,15 +88,15 @@ int DataCollectServerApp::init(int argc, char* argv[])
 		ACEX_LOG_OS(LM_STARTUP, std::setw(40) << "[OK]" << std::endl);
 	}
 
-	if(_stOptions.PopStart())
-	{
-		char c = EOF;
-#if defined(_WIN32)
-		std::cout << c << std::flush;
-#else
-		write(STDOUT_FILENO, &c, sizeof(c));
-#endif
-	}
+//	if(_stOptions.PopStart())
+//	{
+//		char c = EOF;
+//#if defined(_WIN32)
+//		std::cout << c << std::flush;
+//#else
+//		write(STDOUT_FILENO, &c, sizeof(c));
+//#endif
+//	}
 	ACEX_LOG_OS(LM_STARTUP, std::endl);
 	return 0;
 }
@@ -105,9 +105,9 @@ int DataCollectServerApp::fini()
 {
 	StopTasks();
 	ACEF_App::fini();
-#if defined(_WIN32)
-	exit(0);
-#endif
+//#if defined(_WIN32)
+//	exit(0);
+//#endif
 	return 0;
 }
 

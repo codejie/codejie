@@ -80,7 +80,7 @@ int COptions::Scan(int argc, char *argv[])
 			}
 		}
 	}
-	_strAppTitle = argv[0];
+//	_strAppTitle = argv[0];
 	return 0;
 }
 

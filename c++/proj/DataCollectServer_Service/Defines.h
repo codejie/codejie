@@ -3,6 +3,7 @@
 
 
 #define APP_TITLE   "DataCollectServer"
+#define APP_DESC    "HuanTai Data Collect Service"
 #define APP_VERSION "1.8.22"
 #define SYS_PROMPT	"DCServer>"
 

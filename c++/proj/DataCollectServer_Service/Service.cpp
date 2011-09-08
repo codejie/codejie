@@ -71,14 +71,17 @@ int ServiceKeeper::svc()
 	catch(ACEX_Exception& e)
 	{
 		ACE_DEBUG((LM_EMERGENCY, "Exception: 1 Program will exit.\n"));
+		report_status(SERVICE_STOPPED);
 	}
 	catch(std::exception& e)
-	{
+	{ 
 		ACE_DEBUG((LM_EMERGENCY, "Exception: 2 Program will exit.\n"));
+		report_status(SERVICE_STOPPED);
 	}
 	catch(...)
 	{
 		ACE_DEBUG((LM_EMERGENCY, "Exception: Unknow exception. Program will exit.\n"));
+		report_status(SERVICE_STOPPED);
 	}
 
  //   while(!this->stop_)

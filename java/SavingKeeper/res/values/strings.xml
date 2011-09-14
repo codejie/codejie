@@ -43,4 +43,5 @@
     <string name="title_type_fixed_y2">2 Year Time deposits</string>
     <string name="title_type_fixed_y3">3 Year Time deposits</string>
     <string name="title_type_fixed_y5">5 Year Time deposits</string>
+    <string name="str_default_money">0.00</string>
 </resources>

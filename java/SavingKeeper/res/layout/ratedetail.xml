@@ -6,105 +6,126 @@
   android:layout_height="fill_parent" android:orientation="vertical" android:layout_marginRight="4dp">
     <TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_start_date"></TextView>
     <LinearLayout android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:layout_height="wrap_content">
-        <EditText android:layout_height="wrap_content" android:id="@+id/editText1" android:layout_weight="3" android:layout_width="wrap_content" android:text="2008.01.02"></EditText>
+        <EditText android:layout_height="wrap_content" android:layout_weight="3" android:layout_width="wrap_content" android:text="2008.01.02" android:id="@+id/editStartDate"></EditText>
         <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="@string/title_setdate" android:id="@+id/btnStartDate"></Button>
     </LinearLayout>
     <TextView android:id="@+id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_end_date"></TextView>
     <LinearLayout android:layout_width="fill_parent" android:id="@+id/linearLayout2" android:layout_height="wrap_content">
-        <EditText android:layout_height="wrap_content" android:id="@+id/editText2" android:layout_width="wrap_content" android:layout_weight="3" android:text="9999.12.31"></EditText>
+        <EditText android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="3" android:text="9999.12.31" android:id="@+id/editEndDate"></EditText>
         <Button android:layout_height="wrap_content" android:layout_weight="1" android:layout_width="wrap_content" android:text="@string/title_setdate" android:id="@+id/btnEndDate"></Button>
     </LinearLayout>
     <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/button01" android:text="@string/currency_rmb"></Button>
-    <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:id="@+id/tableLayout01" android:visibility="gone">
+    <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:id="@+id/tableLayout01" android:layout_marginRight="8dp" android:visibility="gone">
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow11">
             <TextView android:layout_height="wrap_content" android:id="@+id/TextView01" android:layout_weight="3" android:layout_width="wrap_content" android:text="@string/title_type_current"></TextView>
-            <EditText android:layout_height="wrap_content" android:layout_weight="1" android:layout_width="wrap_content" android:text="EditText" android:id="@+id/EditText11"></EditText>
+            <EditText android:layout_height="wrap_content" android:layout_weight="1" android:layout_width="wrap_content" android:text="@string/str_default_money" android:id="@+id/EditText11"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow12">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView07" android:layout_weight="3" android:text="@string/title_type_fixed_m3"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText12"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText12"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow13">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView06" android:layout_weight="3" android:text="@string/title_type_fixed_m6"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText13"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText13"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow14">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView05" android:layout_weight="3" android:text="@string/title_type_fixed_y1"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText14"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText14"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow15">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView04" android:layout_weight="3" android:text="@string/title_type_fixed_y2"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText15"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText15"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow16">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView03" android:layout_weight="3" android:text="@string/title_type_fixed_y3"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText16"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText16"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow17">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView02" android:layout_weight="3" android:text="@string/title_type_fixed_y5"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText17"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText17"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
     </TableLayout>
     <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/button02" android:text="@string/currency_us"></Button>
-    <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:visibility="gone" android:id="@+id/tableLayout02">
+    <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:visibility="gone" android:id="@+id/tableLayout02" android:layout_marginRight="8dp">
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow21">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView08" android:layout_weight="3" android:text="@string/title_type_current"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText21"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText21"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow22">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView09" android:layout_weight="3" android:text="@string/title_type_fixed_m3"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText22"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText22"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow23">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView10" android:layout_weight="3" android:text="@string/title_type_fixed_m6"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText23"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText23"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow24">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView14" android:layout_weight="3" android:text="@string/title_type_fixed_y1"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText24"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText24"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow25">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView15" android:layout_weight="3" android:text="@string/title_type_fixed_y2"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText25"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText25"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow26">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView12" android:layout_weight="3" android:text="@string/title_type_fixed_y3"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText26"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText26"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow27">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView13" android:layout_weight="3" android:text="@string/title_type_fixed_y5"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText27"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText27"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
     </TableLayout>
     <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/button03" android:text="@string/currency_eu"></Button>
-    <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:visibility="gone" android:id="@+id/tableLayout03">
+    <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:visibility="gone" android:id="@+id/tableLayout03" android:layout_marginRight="8dp">
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow31">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView16" android:layout_weight="3" android:text="@string/title_type_current"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText31"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText31"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow32">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView17" android:layout_weight="3" android:text="@string/title_type_fixed_m3"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText32"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText32"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow33">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView18" android:layout_weight="3" android:text="@string/title_type_fixed_m6"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText33"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText33"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow34">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView22" android:layout_weight="3" android:text="@string/title_type_fixed_y1"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText34"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText34"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow35">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView23" android:layout_weight="3" android:text="@string/title_type_fixed_y2"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText35"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText35"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow36">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView20" android:layout_weight="3" android:text="@string/title_type_fixed_y3"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText36"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText36"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow37">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="3" android:id="@+id/TextView21" android:text="@string/title_type_fixed_y5"></TextView>
-            <EditText android:layout_width="wrap_content" android:text="EditText" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText37"></EditText>
+            <EditText android:layout_width="wrap_content" android:text="@string/str_default_money" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/EditText37"></EditText>
+            <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
     </TableLayout>
     <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/str_button_add" android:id="@+id/btnInsert"></Button>

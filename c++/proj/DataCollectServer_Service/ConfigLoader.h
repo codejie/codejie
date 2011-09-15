@@ -18,6 +18,7 @@ public:
     unsigned int m_iLogSize;
     std::string m_strMMLAddr;
     std::string m_strCollectAddr;
+	std::string m_strZJCollectAddr;
 	std::string m_strControllerAddr;
     std::string m_strCommandAddr;
 

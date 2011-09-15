@@ -237,6 +237,10 @@
 				RelativePath="..\Toolkit.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\ZJPacket.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -309,6 +313,10 @@
 			</File>
 			<File
 				RelativePath="..\Toolkit.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ZJPacket.h"
 				>
 			</File>
 		</Filter>

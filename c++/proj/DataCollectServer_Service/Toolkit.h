@@ -9,6 +9,7 @@
 #define __TOOLKIT_H__
 
 #include <string>
+#include <iostream>
 
 #include "ace/OS_NS_time.h"
 #include "ace/OS_NS_sys_time.h"
@@ -25,6 +26,8 @@ extern const unsigned short CRC_BASE;
 
 extern unsigned short CRC16(const unsigned char* data, size_t size);
 extern const std::string GetTimeOfDay();
+
+std::ostream& PrintBinary(std::ostream& os, const char* pData, size_t iSize);
 
 }
 

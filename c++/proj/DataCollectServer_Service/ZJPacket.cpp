@@ -5,30 +5,39 @@
 namespace ZJ
 {
 
-CPacket::CPacket()
+Packet::Packet()
 : m_uiDataLen(0)
 , m_pDataBuf(NULL)
 {
 }
 
-CPacket::~CPacket()
+Packet::~Packet()
 {
 	DataFree();
 }
 
-int CPacket::Create(ACEX_InputCDR &input_cdr, CPacket *&packet)
+int Packet::Create(ACEX_InputCDR &input_cdr, Packet *&packet)
 {
-	packet = new CPacket;
+	packet = new Packet;
 
 	return packet->Read(input_cdr);
 }
 
-size_t CPacket::HeaderLength()
+size_t Packet::HeaderLength()
 {
 	return 8;
 }
 
-size_t CPacket::Length() const
+size_t Packet::PacketLength(ACEX_InputCDR &input_cdr)
+{
+    int sz = 0;
+    input_cdr >> sz;
+    input_cdr >> sz;
+
+    return sz;
+}
+
+size_t Packet::Length() const
 {
 	return sizeof(m_uiStart)
 			+ sizeof(m_uiLength)
@@ -50,7 +59,7 @@ size_t CPacket::Length() const
 			+ sizeof(m_uiEnd);
 }
 
-int CPacket::Read(ACEX_InputCDR &input_cdr)
+int Packet::Read(ACEX_InputCDR &input_cdr)
 {
 	//Header
 	input_cdr.read(m_uiStart);
@@ -59,7 +68,7 @@ int CPacket::Read(ACEX_InputCDR &input_cdr)
 	input_cdr.read(m_uiChecksum);
 
 	if(CheckChecksum() != 0)
-		throw CPacketException(PEID_CHECKSUM_FAIL, "check checksum fail.");
+		throw PacketException(PEID_CHECKSUM_FAIL, "check checksum fail.");
 
 	//Body
 	input_cdr.read(m_ucVersion);
@@ -79,14 +88,14 @@ int CPacket::Read(ACEX_InputCDR &input_cdr)
 	input_cdr.read(m_acCRC, 2);
 
 	if(CheckCRC() != 0)
-		throw CPacketException(PEID_CRC_FAIL, "check CRC fail.");
+		throw PacketException(PEID_CRC_FAIL, "check CRC fail.");
 
 	input_cdr.read(m_uiEnd);
 
 	return input_cdr.good_bit() ? 0 : -1;
 }
 
-int CPacket::Write(ACEX_OutputCDR &output_cdr)
+int Packet::Write(ACEX_OutputCDR &output_cdr) const
 {
 	//Header
 	output_cdr.write(m_uiStart);
@@ -119,7 +128,7 @@ int CPacket::Write(ACEX_OutputCDR &output_cdr)
 	return output_cdr.good_bit() ? 0 : -1;
 }
 
-void CPacket::Print(std::ostream &os) const
+void Packet::Show(std::ostream &os) const
 {
 	//Header
 	os << "\nStart = " << m_uiStart;
@@ -148,14 +157,14 @@ void CPacket::Print(std::ostream &os) const
 }
 
 ///
-int CPacket::DataAlloc()
+int Packet::DataAlloc()
 {
 	m_pDataBuf = new char[m_uiDataLen];
 
 	return 0;
 }
 
-void CPacket::DataFree()
+void Packet::DataFree()
 {
 	if(m_pDataBuf != NULL)
 	{
@@ -164,7 +173,7 @@ void CPacket::DataFree()
 	}
 }
 
-int CPacket::SetData(const char* data, unsigned int len)
+int Packet::SetData(const char* data, unsigned int len)
 {
 	if(data == NULL || len == 0)
 		return -1;
@@ -179,7 +188,7 @@ int CPacket::SetData(const char* data, unsigned int len)
 	return 0;
 }
 
-int CPacket::AttachData(const char* data, unsigned int len)
+int Packet::AttachData(const char* data, unsigned int len)
 {
 	if(data == NULL || len == 0)
 		return -1;
@@ -187,29 +196,29 @@ int CPacket::AttachData(const char* data, unsigned int len)
 	DataFree();
 
 	m_uiDataLen = len;
-	m_pDataBuf = data;
+	m_pDataBuf = const_cast<char*>(data);
 
 	return 0;
 }
 
-int CPacket::CheckChecksum() const
+int Packet::CheckChecksum() const
 {
 	unsigned int checksum = ((m_uiLength << 19) + (m_uiLength >> 13)) ^ ((m_uiOrdinal << 25) + (m_uiOrdinal >> 7));
 	return checksum == m_uiChecksum ? 0 : -1;
 }
 
-int CPacket::SetChecksum()
+int Packet::SetChecksum() const
 {
 	m_uiChecksum = ((m_uiLength << 19) + (m_uiLength >> 13)) ^ ((m_uiOrdinal << 25) + (m_uiOrdinal >> 7));
 	return 0;
 }
 
-int CPacket::CheckCRC() const
+int Packet::CheckCRC() const
 {
 	return 0;
 }
 
-int CPacket::SetCRC()
+int Packet::SetCRC() const
 {
 	m_acCRC[0] = 0;
 	m_acCRC[1] = 0;
@@ -217,9 +226,20 @@ int CPacket::SetCRC()
 	return 0;
 }
 
-
 }
 
+//////
+std::ostream& operator << (std::ostream& os, const ZJ::Packet& packet)
+{
+	packet.Show(os);
+	return os;
+}
+
+std::ostream& operator << (std::ostream& os, const ZJ::PacketException& exception)
+{
+    exception.Show(os);
+    return os;
+}
 
 
 

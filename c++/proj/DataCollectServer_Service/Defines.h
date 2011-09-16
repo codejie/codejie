@@ -13,6 +13,7 @@ const int TASK_COLLECT_SERVER   =   3;
 const int TASK_COMMAND_SERVER   =   4;
 const int TASK_CONTROLLER_SERVER=	5;
 const int OBJ_DATALOADER        =   6;
+const int TASK_ZJCOLLECT_SERVER =   7;
 
 
 const int FPARAM_SHUTDOWN			=   0;

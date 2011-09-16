@@ -13,54 +13,57 @@ namespace ZJ
 const unsigned int PEID_CHECKSUM_FAIL	=	1;
 const unsigned int PEID_CRC_FAIL		=	2;
 
-class CPacketException
+class PacketException
 {
 public:
-	CPacketException(unsigned int id, const std::string& info = "")
+	PacketException(unsigned int id, const std::string& info = "")
 		: m_id(id), m_info(info)
 	{
 	}
-	virtual ~CPacketException() {}
+	virtual ~PacketException() {}
+
+    virtual void Show(std::ostream& os) const;
 protected:
-    CPacketException(const CPacketException &right);
-	CPacketException& operator=(const CPacketException &right) { return *this; }
+    PacketException(const PacketException &right);
+	PacketException& operator=(const PacketException &right) { return *this; }
 public:
 	unsigned int m_id;
 	std::string m_info;
 };
 
-class CPacket
+class Packet
 {
 public:
-	CPacket();
-	virtual ~CPacket();
+	Packet();
+	virtual ~Packet();
 
 public:
-	static int Create(ACEX_InputCDR &input_cdr, CPacket*& packet);
+	static int Create(ACEX_InputCDR &input_cdr, Packet*& packet);
 	static size_t HeaderLength();
+    static size_t PacketLength(ACEX_InputCDR &input_cdr);
 	virtual size_t Length() const;
 	virtual int Read(ACEX_InputCDR& input_cdr);
-	virtual int Write(ACEX_OutputCDR& output_cdr);
+	virtual int Write(ACEX_OutputCDR& output_cdr) const;
 
 	int SetData(const char* data, unsigned int len);
 	int AttachData(const char* data, unsigned int len);
 
-	virtual void Print(std::ostream& os) const;
+	virtual void Show(std::ostream& os) const;
 protected:
 	int DataAlloc();
 	void DataFree();
 
 	int CheckChecksum() const;
-	int SetChecksum();
+	int SetChecksum() const;
 
 	int CheckCRC() const;
-	int SetCRC();
+	int SetCRC() const;
 public:
 	//header
 	unsigned int m_uiStart;
 	unsigned int m_uiLength;
 	unsigned int m_uiOrdinal;
-	unsigned int m_uiChecksum;
+	mutable unsigned int m_uiChecksum;
 	//Body
 	unsigned char m_ucVersion;
 	unsigned char m_ucPacketType;
@@ -73,10 +76,13 @@ public:
 	unsigned int m_uiDataLen;
 	char* m_pDataBuf;
 	//End
-	char m_acCRC[2];
+	mutable char m_acCRC[2];
 	unsigned int m_uiEnd;
 };
 
 }
+
+extern std::ostream& operator << (std::ostream& os, const ZJ::Packet& packet);
+extern std::ostream& operator << (std::ostream& os, const ZJ::PacketException& exception);
 
 #endif

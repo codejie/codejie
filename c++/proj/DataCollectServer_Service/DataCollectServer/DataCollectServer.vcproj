@@ -238,6 +238,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ZJCollectServerTask.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\ZJPacket.cpp"
 				>
 			</File>
@@ -313,6 +317,10 @@
 			</File>
 			<File
 				RelativePath="..\Toolkit.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ZJCollectServerTask.h"
 				>
 			</File>
 			<File

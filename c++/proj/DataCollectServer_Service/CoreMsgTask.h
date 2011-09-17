@@ -30,7 +30,7 @@ protected:
 		size_t count;
 	};
 
-	typedef std::map<int, ClientData_t> TClientMap;
+	typedef std::map<std::pair<int, int>, ClientData_t> TClientMap;
 
     struct StateData_t
     {

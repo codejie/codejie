@@ -22,9 +22,9 @@ public:
 	}
 	virtual ~PacketException() {}
 
-    virtual void Show(std::ostream& os) const;
+	virtual void Show(std::ostream& os) const {};
 protected:
-    PacketException(const PacketException &right);
+	PacketException(const PacketException &right) {};
 	PacketException& operator=(const PacketException &right) { return *this; }
 public:
 	unsigned int m_id;

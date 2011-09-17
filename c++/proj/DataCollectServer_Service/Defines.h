@@ -4,7 +4,7 @@
 
 #define APP_TITLE   "DataCollectServer"
 #define APP_DESC    "HuanTai Data Collect Service"
-#define APP_VERSION "1.8.22"
+#define APP_VERSION "1.09.17"
 #define SYS_PROMPT	"DCServer>"
 
 const int TASK_APP     			=   1;
@@ -31,5 +31,6 @@ const int FPARAM_STATEDATA          =   10;
 
 const int CLIENTTYPE_TERMINAL		=	1;
 const int CLIENTTYPE_CONTROLLER		=	2;
+const int CLIENTTYPE_ZJTERMINAL		=	3;
 
 #endif

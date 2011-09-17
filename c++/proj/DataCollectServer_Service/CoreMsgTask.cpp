@@ -200,34 +200,25 @@ int CoreMsgTask::OnCollectConnect(int clientid, const std::string& ip, unsigned 
 	data.update = ACE_OS::time(NULL);
 	data.count = 0;
 
-	_mapClient.insert(std::make_pair(clientid, data));
+	_mapClient.insert(std::make_pair(std::make_pair(CLIENTTYPE_TERMINAL, clientid), data));
 
 	return 0;
 }
 
 int CoreMsgTask::OnCollectDisconnect(int clientid)
 {
-	_mapClient.erase(clientid);
+	_mapClient.erase(std::make_pair(CLIENTTYPE_TERMINAL, clientid));
 
 	return 0;
 }
 
-int CoreMsgTask::UpdateClientCount(int collect, int clientid)
+int CoreMsgTask::UpdateClientCount(int clienttype, int clientid)
 {
-	if(collect == 1)
-	{
-		TClientMap::iterator it = _mapClient.find(clientid);
-		if(it == _mapClient.end())
-			return -1;
-		++ it->second.count;
-	}
-	else
-	{
-		TClientMap::iterator it = _mapController.find(clientid);
-		if(it == _mapController.end())
-			return -1;
-		++ it->second.count;
-	}
+	TClientMap::iterator it = _mapClient.find(std::make_pair(clienttype, clientid));
+	if(it == _mapClient.end())
+		return -1;
+	++ it->second.count;
+
 	return 0;
 }
 
@@ -258,22 +249,11 @@ void CoreMsgTask::ShowInfectantID(std::ostream& os, const std::string& nid) cons
 
 void CoreMsgTask::ShowClient(int clienttype, std::ostream &os) const
 {
-	if(clienttype == CLIENTTYPE_TERMINAL)
+	for(TClientMap::const_iterator it = _mapClient.begin(); it != _mapClient.end(); ++ it)
 	{
-		os << "\n--- Terminal Client ---";
-		for(TClientMap::const_iterator it = _mapClient.begin(); it != _mapClient.end(); ++ it)
-		{
-			os << "\n Terminal : [" << it->first << "] - " << it->second.count << "\n\t " << it->second.ip << ":" << it->second.port << " - " << it->second.update; 
-		}
-	}
-	else if(clienttype == CLIENTTYPE_CONTROLLER)
-	{
-		os << "\n--- Controller Client ---";
-
-		for(TClientMap::const_iterator it = _mapController.begin(); it != _mapController.end(); ++ it)
-		{
-			os << "\n Terminal : [" << it->first << "] - " << it->second.count << "\n\t " << it->second.ip << ":" << it->second.port << " - " << it->second.update; 
-		}
+		if(it->first.first != clienttype)
+			continue;
+		os << "\n Terminal : [" << it->first.first << ":" << it->first.second << "] - " << it->second.count << "\n\t " << it->second.ip << ":" << it->second.port << " - " << it->second.update; 
 	}
 	os << std::endl;
 }
@@ -353,7 +333,7 @@ int CoreMsgTask::OnControllerConnect(int clientid, const std::string& ip, unsign
 
     _objDataLoader->OnControllerConnected(clientid);
 
-	_mapController.insert(std::make_pair(clientid, data));
+	_mapController.insert(std::make_pair(std::make_pair(CLIENTTYPE_CONTROLLER, clientid), data));
 
 	return 0;
 }
@@ -362,7 +342,7 @@ int CoreMsgTask::OnControllerDisconnect(int clientid)
 {
     _objDataLoader->OnControllerDisconnect(clientid);
 
-    _mapController.erase(clientid);
+	_mapController.erase(std::make_pair(CLIENTTYPE_CONTROLLER, clientid));
 /*
 	TStateDataMap::iterator it = _mapStateData.begin();
 	while(it != _mapStateData.end())

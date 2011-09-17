@@ -257,7 +257,7 @@ int ServiceStarter::run(int argc, char* argv[])
     }
     else
     {
-        ofstream *output_file = new ofstream("service_jie.log", ios::out);
+        ofstream *output_file = new ofstream("service_dcs.log", ios::out);
         if(output_file && output_file->rdstate() == ios::goodbit)
         {
             ACE_LOG_MSG->msg_ostream(output_file, 1);

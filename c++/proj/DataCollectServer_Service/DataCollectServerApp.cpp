@@ -80,14 +80,14 @@ int DataCollectServerApp::init(int argc, char* argv[])
     {
         exit(0);
     }
-
+/*
 	if(!_stOptions.DaemonOpt() && !_stOptions.PopStart())
 	{
 		ACEX_LOG_OS(LM_STARTUP, "Standard input task start..." << std::endl);
 		std_in_task()->activate();
 		ACEX_LOG_OS(LM_STARTUP, std::setw(40) << "[OK]" << std::endl);
 	}
-
+*/
 //	if(_stOptions.PopStart())
 //	{
 //		char c = EOF;
@@ -230,13 +230,14 @@ int DataCollectServerApp::StartTasks()
 
 void DataCollectServerApp::StopTasks()
 {
+/*
 	if(!_stOptions.DaemonOpt())
 	{
 		ACEX_LOG_OS(LM_SHUTDOWN, "\nStandard input task shutdown.." << std::endl);
 		std_in_task()->deactivate();
 		ACEX_LOG_OS(LM_SHUTDOWN, std::setw(40) << "[OK]" << std::endl);
 	}
-
+*/
 	ACEX_LOG_OS(LM_SHUTDOWN, "Telnet task shutdown.." << std::endl);
 	telnet_server_task()->deactivate();
 	ACEX_LOG_OS(LM_SHUTDOWN, std::setw(40) << "[OK]" << std::endl);

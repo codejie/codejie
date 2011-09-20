@@ -10,6 +10,7 @@
 
 #include "Defines.h"
 #include "Packet.h"
+#include "ZJPacket.h"
 #include "ConfigLoader.h"
 #include "PacketProcessor.h"
 #include "CollectServerTask.h"
@@ -97,6 +98,10 @@ int CoreMsgTask::handle_msg(const ACEX_Message& msg)
     {
         return OnCollectServerMsgProc(msg);
     }
+    else if(msg.msg_id() == TASK_ZJCOLLECT_SERVER)
+    {
+        return OnZJCollectServerMsgProc(msg);
+    }
     else if(msg.msg_id() == TASK_CONTROLLER_SERVER)
     {
         return OnControllerServerMsgProc(msg);
@@ -155,7 +160,7 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 		Packet packet;
 		if(PacketProcessor::Analyse(std::string(buf, size), packet, _crcCheck) == 0)
 		{
-			UpdateClientCount(1, msg.sparam() >> 16);
+			UpdateClientCount(CLIENTTYPE_TERMINAL, msg.sparam() >> 16);
 			OnCollectPacket(packet);
 		}
 		else
@@ -211,7 +216,7 @@ int CoreMsgTask::OnCollectDisconnect(int clientid)
 
 	return 0;
 }
-
+///
 int CoreMsgTask::UpdateClientCount(int clienttype, int clientid)
 {
 	TClientMap::iterator it = _mapClient.find(std::make_pair(clienttype, clientid));
@@ -280,7 +285,7 @@ int CoreMsgTask::OnControllerServerMsgProc(const ACEX_Message& msg)
 		Packet packet;
 		if(PacketProcessor::Analyse(std::string(buf, size), packet, _crcCheck) == 0)
 		{
-//			UpdateClientCount(0, msg.sparam() >> 16);
+			UpdateClientCount(CLIENTTYPE_CONTROLLER, msg.sparam() >> 16);
 			OnControllerPacket((msg.sparam() >> 16), packet);
 		}
 		else
@@ -343,24 +348,7 @@ int CoreMsgTask::OnControllerDisconnect(int clientid)
     _objDataLoader->OnControllerDisconnect(clientid);
 
 	_mapController.erase(std::make_pair(CLIENTTYPE_CONTROLLER, clientid));
-/*
-	TStateDataMap::iterator it = _mapStateData.begin();
-	while(it != _mapStateData.end())
-	{
-		if(it->second.clientid == clientid)
-		{
-			_mapStateIndex.erase(it->second.packet->QN);
 
-			delete it->second.packet;
-			this->remove_timer(it->second.timer);
-			_mapStateData.erase(it ++);
-		}
-		else
-		{
-			++ it;
-		}
-	}
-*/
 	return 0;
 }
 
@@ -459,3 +447,61 @@ int CoreMsgTask::OnDataLoaderMsgProc(const ACEX_Message &msg)
     }
     return 0;
 }
+
+///
+
+int CoreMsgTask::OnZJCollectServerMsgProc(const ACEX_Message& msg)
+{
+	if(msg.fparam() == FPARAM_PACKET)
+	{
+        std::auto_ptr<ZJ::Packet> packet(reinterpret_cast<ZJ::Packet*>(msg.data()));
+        
+		UpdateClientCount(CLIENTTYPE_ZJTERMINAL, msg.sparam());
+		OnZJCollectPacket(packet);
+	}
+	else if(msg.fparam() == FPARAM_SOCKET_CONNECT)
+	{
+		ACE_INET_Addr* addr =  reinterpret_cast<ACE_INET_Addr*>(msg.data());
+		OnZJCollectConnect(msg.sparam(), addr->get_host_addr(), addr->get_port_number());
+		delete addr;
+	}
+	else if(msg.fparam() == FPARAM_SOCKET_DISCONNECT)
+	{
+		OnZJCollectDisconnect(msg.sparam());
+	}
+	else
+	{
+		ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnZJCollectServerMsgProc>Unknwon fparam - " << msg.fparam() << std::endl);
+	}
+
+	return 0;
+}
+
+int CoreMsgTask::OnZJCollectPacket(const Packet& packet)
+{
+	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnZJCollectPacket>Get Collect Packet - " << packet << std::endl);
+
+
+	return 0;
+}
+
+int CoreMsgTask::OnZJCollectConnect(int clientid, const std::string& ip, unsigned int port)
+{
+	ClientData_t data;
+	data.ip = ip;
+	data.port = port;
+	data.update = ACE_OS::time(NULL);
+	data.count = 0;
+
+	_mapClient.insert(std::make_pair(std::make_pair(CLIENTTYPE_ZJTERMINAL, clientid), data));
+
+	return 0;
+}
+
+int CoreMsgTask::OnZJCollectDisconnect(int clientid)
+{
+	_mapClient.erase(std::make_pair(CLIENTTYPE_ZJTERMINAL, clientid));
+
+	return 0;
+}
+

@@ -16,6 +16,7 @@
 #include "ControllerServerTask.h"
 
 class Packet;
+class ZJ::Packet;
 class ConfigLoader;
 
 class CoreMsgTask: public ACEX_Message_Task
@@ -63,6 +64,7 @@ protected:
     int OnCollectServerMsgProc(const ACEX_Message& msg);
     int OnControllerServerMsgProc(const ACEX_Message& msg);
     int OnDataLoaderMsgProc(const ACEX_Message& msg);
+    int OnZJCollectServerMsgProc(const ACEX_Message& msg);
 private:
     int OnCollectPacket(const Packet& packet);
 	int OnCollectConnect(int clientid, const std::string& ip, unsigned int port);
@@ -71,6 +73,10 @@ private:
     int OnControllerPacket(int clientid, const Packet& packet);
 	int OnControllerConnect(int clientid, const std::string& ip, unsigned int port);
 	int OnControllerDisconnect(int clientid);
+
+    int OnZJControllerPacket(int clientid, const ZJ::Packet& packet);
+	int OnZJControllerConnect(int clientid, const std::string& ip, unsigned int port);
+	int OnZJControllerDisconnect(int clientid);
 private:
     int InsertStateData(int clientid, int type, const Packet* packet);
     int RemoveStateData(unsigned int state);

@@ -10,6 +10,7 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +37,8 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 		
 		((Button)this.findViewById(R.id.btnStartDate)).setOnClickListener(this);
 		((Button)this.findViewById(R.id.btnEndDate)).setOnClickListener(this);
+		
+		((Button)this.findViewById(R.id.btnInsert)).setOnClickListener(this);
 	}
 
 	@Override
@@ -157,6 +160,10 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 		
 		GLOBAL.DBACCESS.insertRate(start, end, currency, rate0, rate1, rate2, rate3, rate4, rate5, rate6);
 		
+		this.finish();
+		
+		Intent intent = new Intent(this, RateListActivity.class);
+		this.startActivity(intent);		
 	}
 	
 }

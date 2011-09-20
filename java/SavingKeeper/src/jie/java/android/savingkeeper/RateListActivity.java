@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.ExpandableListActivity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,7 +57,7 @@ public class RateListActivity extends ExpandableListActivity {
 				new int[] { android.R.id.text1 },
 				childData,
 				//android.R.layout.simple_expandable_list_item_1,
-				R.layout.ratedetail,
+				R.layout.ratedatadetail,
 				new String[] { C_TITLE, C_TITLE_0, C_TITLE_1, C_TITLE_2, C_TITLE_3, C_TITLE_4, C_TITLE_5, C_TITLE_6, 
 						C_RATE_0, C_RATE_1, C_RATE_2, C_RATE_3, C_RATE_4, C_RATE_5, C_RATE_6 },
 				//new int[] { android.R.id.text1}
@@ -96,13 +97,13 @@ public class RateListActivity extends ExpandableListActivity {
 				m.put(C_TITLE_5, RCLoader.getType(this, 5));
 				m.put(C_TITLE_6, RCLoader.getType(this, 6));
 				
-				m.put(C_RATE_0, cursor.getString(4));
-				m.put(C_RATE_1, cursor.getString(5));
-				m.put(C_RATE_2, cursor.getString(6));
-				m.put(C_RATE_3, cursor.getString(7));
-				m.put(C_RATE_4, cursor.getString(8));
-				m.put(C_RATE_5, cursor.getString(9));
-				m.put(C_RATE_6, cursor.getString(10));
+				m.put(C_RATE_0, String.format("%.2f%%", cursor.getFloat(4)));
+				m.put(C_RATE_1, String.format("%.2f%%", cursor.getFloat(5)));
+				m.put(C_RATE_2, String.format("%.2f%%", cursor.getFloat(6)));
+				m.put(C_RATE_3, String.format("%.2f%%", cursor.getFloat(7)));
+				m.put(C_RATE_4, String.format("%.2f%%", cursor.getFloat(8)));
+				m.put(C_RATE_5, String.format("%.2f%%", cursor.getFloat(9)));
+				m.put(C_RATE_6, String.format("%.2f%%", cursor.getFloat(10)));
 				c.add(m);				
 //				childData.add(c);
 			}
@@ -118,13 +119,13 @@ public class RateListActivity extends ExpandableListActivity {
 				m.put(C_TITLE_5, RCLoader.getType(this, 5));
 				m.put(C_TITLE_6, RCLoader.getType(this, 6));				
 				
-				m.put(C_RATE_0, cursor.getString(4));
-				m.put(C_RATE_1, cursor.getString(5));
-				m.put(C_RATE_2, cursor.getString(6));
-				m.put(C_RATE_3, cursor.getString(7));
-				m.put(C_RATE_4, cursor.getString(8));
-				m.put(C_RATE_5, cursor.getString(9));
-				m.put(C_RATE_6, cursor.getString(10));
+				m.put(C_RATE_0, String.format("%.2f%%", cursor.getFloat(4)));
+				m.put(C_RATE_1, String.format("%.2f%%", cursor.getFloat(5)));
+				m.put(C_RATE_2, String.format("%.2f%%", cursor.getFloat(6)));
+				m.put(C_RATE_3, String.format("%.2f%%", cursor.getFloat(7)));
+				m.put(C_RATE_4, String.format("%.2f%%", cursor.getFloat(8)));
+				m.put(C_RATE_5, String.format("%.2f%%", cursor.getFloat(9)));
+				m.put(C_RATE_6, String.format("%.2f%%", cursor.getFloat(10)));
 				c.add(m);
 				
 //				childData.add(c);
@@ -141,13 +142,13 @@ public class RateListActivity extends ExpandableListActivity {
 				m.put(C_TITLE_5, RCLoader.getType(this, 5));
 				m.put(C_TITLE_6, RCLoader.getType(this, 6));
 				
-				m.put(C_RATE_0, cursor.getString(4));
-				m.put(C_RATE_1, cursor.getString(5));
-				m.put(C_RATE_2, cursor.getString(6));
-				m.put(C_RATE_3, cursor.getString(7));
-				m.put(C_RATE_4, cursor.getString(8));
-				m.put(C_RATE_5, cursor.getString(9));
-				m.put(C_RATE_6, cursor.getString(10));
+				m.put(C_RATE_0, String.format("%.2f%%", cursor.getFloat(4)));
+				m.put(C_RATE_1, String.format("%.2f%%", cursor.getFloat(5)));
+				m.put(C_RATE_2, String.format("%.2f%%", cursor.getFloat(6)));
+				m.put(C_RATE_3, String.format("%.2f%%", cursor.getFloat(7)));
+				m.put(C_RATE_4, String.format("%.2f%%", cursor.getFloat(8)));
+				m.put(C_RATE_5, String.format("%.2f%%", cursor.getFloat(9)));
+				m.put(C_RATE_6, String.format("%.2f%%", cursor.getFloat(10)));
 				c.add(m);
 				
 //				childData.add(c);
@@ -160,38 +161,11 @@ public class RateListActivity extends ExpandableListActivity {
 				c = new ArrayList<Map<String, String>>();
 				count = 0;
 			}
-		}
-		
-/*		
-		Map<String, String> m = new HashMap<String, String>();
-		m.put(P_TITLE, "p_title");
-		titleData.add(m);
-		m = new HashMap<String, String>();
-		m.put(P_TITLE, "p_title");
-		if(titleData.indexOf(m) == -1)
-			titleData.add(m);
-		
-		List<Map<String, String>> c = new ArrayList<Map<String, String>>();
-		m = new HashMap<String, String>();
-		m.put(C_TITLE, "C_RATE_RMB");
-		c.add(m);
-		m = new HashMap<String, String>();
-		m.put(C_TITLE, "C_RATE_US");
-		c.add(m);
-		m = new HashMap<String, String>();
-		m.put(C_TITLE, "C_RATE_EU");
-		c.add(m);		
-		
-		childData.add(c);
-//	
-		c = new ArrayList<Map<String, String>>();
-		m = new HashMap<String, String>();
-		m.put(C_TITLE, "C_RATE_RMB");
-		c.add(m);
+		}		
+	}
 	
-		
-		childData.add(c);		
-*/		
+	public void refreshList() {
+		this.getExpandableListView().removeAllViews();
 	}
 
 	@Override
@@ -213,8 +187,11 @@ public class RateListActivity extends ExpandableListActivity {
 	}
 	
 	private void onMenuAddRate() {
-		GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 0, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
-		GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 1, 1.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
-		GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+        Intent intent = new Intent(this, RateDetailActivity.class);
+		this.startActivity(intent);
+		this.finish();
+		//GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 0, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		//GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 1, 1.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
+		//GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
 	}
 }

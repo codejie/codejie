@@ -15,10 +15,17 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.Toast;
 
 public class RateListActivity extends ExpandableListActivity {
 	private static final String P_TITLE		=	"TITLE";
@@ -66,6 +73,7 @@ public class RateListActivity extends ExpandableListActivity {
 		
 		initData(titleData, childData);
 		this.setListAdapter(adapter);
+		this.registerForContextMenu(this.getExpandableListView());
 	}
 	
 	private void initData(List<Map<String, String>> titleData, List<List<Map<String, String>>> childData) {
@@ -194,4 +202,21 @@ public class RateListActivity extends ExpandableListActivity {
 		//GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 1, 1.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
 		//GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
 	}
+	
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		Log.d(GLOBAL.APP_TAG, "contextmenu:" + menu.toString() + " view:" + v.toString() + " menuinfo:" + menuInfo.toString());
+		Log.d(GLOBAL.APP_TAG, "pos: " + ((ExpandableListView.ExpandableListContextMenuInfo)menuInfo).packedPosition + " id:" + ((ExpandableListView.ExpandableListContextMenuInfo)menuInfo).id);
+		this.getMenuInflater().inflate(R.menu.banklist, menu);
+//		this.getMenuInflater().inflate(R.menu.banklist_context, menu);
+	}
+	
+	public void ExpandableListContextMenuInfo (View targetView, long packedPosition, long id) {
+		Log.d(GLOBAL.APP_TAG, "view:" + targetView.toString() + " position:" + packedPosition + " id:" + id);
+	}
+/*	
+	public void onItemLongClick(AdapterView<?> parent, View child, int position, long id) {
+		if(parent == this.getExpandableListView())
+			this.getExpandableListView().removeViewAt(position);
+	}
+*/	
 }

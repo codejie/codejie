@@ -209,10 +209,7 @@ public class RateListActivity extends ExpandableListActivity {
 		this.getMenuInflater().inflate(R.menu.banklist, menu);
 //		this.getMenuInflater().inflate(R.menu.banklist_context, menu);
 	}
-	
-	public void ExpandableListContextMenuInfo (View targetView, long packedPosition, long id) {
-		Log.d(GLOBAL.APP_TAG, "view:" + targetView.toString() + " position:" + packedPosition + " id:" + id);
-	}
+
 /*	
 	public void onItemLongClick(AdapterView<?> parent, View child, int position, long id) {
 		if(parent == this.getExpandableListView())

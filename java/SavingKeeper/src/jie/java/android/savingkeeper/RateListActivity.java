@@ -73,7 +73,18 @@ public class RateListActivity extends ExpandableListActivity {
 		
 		initData(titleData, childData);
 		this.setListAdapter(adapter);
-		this.registerForContextMenu(this.getExpandableListView());
+		
+		this.getExpandableListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				RateListActivity.this.onItemLongClick(parent, view, position, id);
+				//Toast.makeText(BankListActivity.this, "pos:" + position + " id:" + id, Toast.LENGTH_SHORT).show();
+				return true;
+			}
+			
+		});		
+		
+		//this.registerForContextMenu(this.getExpandableListView());
 	}
 	
 	private void initData(List<Map<String, String>> titleData, List<List<Map<String, String>>> childData) {
@@ -105,13 +116,13 @@ public class RateListActivity extends ExpandableListActivity {
 				m.put(C_TITLE_5, RCLoader.getType(this, 5));
 				m.put(C_TITLE_6, RCLoader.getType(this, 6));
 				
-				m.put(C_RATE_0, String.format("%.2f%%", cursor.getFloat(4)));
-				m.put(C_RATE_1, String.format("%.2f%%", cursor.getFloat(5)));
-				m.put(C_RATE_2, String.format("%.2f%%", cursor.getFloat(6)));
-				m.put(C_RATE_3, String.format("%.2f%%", cursor.getFloat(7)));
-				m.put(C_RATE_4, String.format("%.2f%%", cursor.getFloat(8)));
-				m.put(C_RATE_5, String.format("%.2f%%", cursor.getFloat(9)));
-				m.put(C_RATE_6, String.format("%.2f%%", cursor.getFloat(10)));
+				m.put(C_RATE_0, String.format("%.3f%%", cursor.getFloat(4)));
+				m.put(C_RATE_1, String.format("%.3f%%", cursor.getFloat(5)));
+				m.put(C_RATE_2, String.format("%.3f%%", cursor.getFloat(6)));
+				m.put(C_RATE_3, String.format("%.3f%%", cursor.getFloat(7)));
+				m.put(C_RATE_4, String.format("%.3f%%", cursor.getFloat(8)));
+				m.put(C_RATE_5, String.format("%.3f%%", cursor.getFloat(9)));
+				m.put(C_RATE_6, String.format("%.3f%%", cursor.getFloat(10)));
 				c.add(m);				
 //				childData.add(c);
 			}
@@ -127,13 +138,13 @@ public class RateListActivity extends ExpandableListActivity {
 				m.put(C_TITLE_5, RCLoader.getType(this, 5));
 				m.put(C_TITLE_6, RCLoader.getType(this, 6));				
 				
-				m.put(C_RATE_0, String.format("%.2f%%", cursor.getFloat(4)));
-				m.put(C_RATE_1, String.format("%.2f%%", cursor.getFloat(5)));
-				m.put(C_RATE_2, String.format("%.2f%%", cursor.getFloat(6)));
-				m.put(C_RATE_3, String.format("%.2f%%", cursor.getFloat(7)));
-				m.put(C_RATE_4, String.format("%.2f%%", cursor.getFloat(8)));
-				m.put(C_RATE_5, String.format("%.2f%%", cursor.getFloat(9)));
-				m.put(C_RATE_6, String.format("%.2f%%", cursor.getFloat(10)));
+				m.put(C_RATE_0, String.format("%.3f%%", cursor.getFloat(4)));
+				m.put(C_RATE_1, String.format("%.3f%%", cursor.getFloat(5)));
+				m.put(C_RATE_2, String.format("%.3f%%", cursor.getFloat(6)));
+				m.put(C_RATE_3, String.format("%.3f%%", cursor.getFloat(7)));
+				m.put(C_RATE_4, String.format("%.3f%%", cursor.getFloat(8)));
+				m.put(C_RATE_5, String.format("%.3f%%", cursor.getFloat(9)));
+				m.put(C_RATE_6, String.format("%.3f%%", cursor.getFloat(10)));
 				c.add(m);
 				
 //				childData.add(c);
@@ -150,13 +161,13 @@ public class RateListActivity extends ExpandableListActivity {
 				m.put(C_TITLE_5, RCLoader.getType(this, 5));
 				m.put(C_TITLE_6, RCLoader.getType(this, 6));
 				
-				m.put(C_RATE_0, String.format("%.2f%%", cursor.getFloat(4)));
-				m.put(C_RATE_1, String.format("%.2f%%", cursor.getFloat(5)));
-				m.put(C_RATE_2, String.format("%.2f%%", cursor.getFloat(6)));
-				m.put(C_RATE_3, String.format("%.2f%%", cursor.getFloat(7)));
-				m.put(C_RATE_4, String.format("%.2f%%", cursor.getFloat(8)));
-				m.put(C_RATE_5, String.format("%.2f%%", cursor.getFloat(9)));
-				m.put(C_RATE_6, String.format("%.2f%%", cursor.getFloat(10)));
+				m.put(C_RATE_0, String.format("%.3f%%", cursor.getFloat(4)));
+				m.put(C_RATE_1, String.format("%.3f%%", cursor.getFloat(5)));
+				m.put(C_RATE_2, String.format("%.3f%%", cursor.getFloat(6)));
+				m.put(C_RATE_3, String.format("%.3f%%", cursor.getFloat(7)));
+				m.put(C_RATE_4, String.format("%.3f%%", cursor.getFloat(8)));
+				m.put(C_RATE_5, String.format("%.3f%%", cursor.getFloat(9)));
+				m.put(C_RATE_6, String.format("%.3f%%", cursor.getFloat(10)));
 				c.add(m);
 				
 //				childData.add(c);
@@ -203,17 +214,20 @@ public class RateListActivity extends ExpandableListActivity {
 		//GLOBAL.DBACCESS.insertRate("2010.08.02", "9999.12.31", 2, 2.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f);
 	}
 	
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		Log.d(GLOBAL.APP_TAG, "contextmenu:" + menu.toString() + " view:" + v.toString() + " menuinfo:" + menuInfo.toString());
-		Log.d(GLOBAL.APP_TAG, "pos: " + ((ExpandableListView.ExpandableListContextMenuInfo)menuInfo).packedPosition + " id:" + ((ExpandableListView.ExpandableListContextMenuInfo)menuInfo).id);
-		this.getMenuInflater().inflate(R.menu.banklist, menu);
+//	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+//		Log.d(GLOBAL.APP_TAG, "contextmenu:" + menu.toString() + " view:" + v.toString() + " menuinfo:" + menuInfo.toString());
+//		Log.d(GLOBAL.APP_TAG, "pos: " + ((ExpandableListView.ExpandableListContextMenuInfo)menuInfo).packedPosition + " id:" + ((ExpandableListView.ExpandableListContextMenuInfo)menuInfo).id);
+//		this.getExpandableListView().getItemAtPosition(position)
+//		this.getMenuInflater().inflate(R.menu.ratelist_remove, menu);
 //		this.getMenuInflater().inflate(R.menu.banklist_context, menu);
-	}
+//	}
 
-/*	
+	
 	public void onItemLongClick(AdapterView<?> parent, View child, int position, long id) {
-		if(parent == this.getExpandableListView())
-			this.getExpandableListView().removeViewAt(position);
+		if(parent == this.getExpandableListView()) {
+			Log.d(GLOBAL.APP_TAG, "position:" + position + " id:" + id);
+			//this.getExpandableListView().removeViewAt(position);
+		}
 	}
-*/	
+	
 }

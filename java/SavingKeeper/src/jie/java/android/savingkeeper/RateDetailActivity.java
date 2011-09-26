@@ -137,7 +137,7 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 		GLOBAL.DBACCESS.insertRate(start, end, currency, rate0, rate1, rate2, rate3, rate4, rate5, rate6);
 		
 		
-		currency = DBAccess.CURRENCY_TYPE_RMB;
+		currency = DBAccess.CURRENCY_TYPE_US;
 		rate0 = Float.valueOf(((EditText)this.findViewById(R.id.EditText21)).getText().toString());
 		rate1 = Float.valueOf(((EditText)this.findViewById(R.id.EditText22)).getText().toString());
 		rate2 = Float.valueOf(((EditText)this.findViewById(R.id.EditText23)).getText().toString());
@@ -149,7 +149,7 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 		GLOBAL.DBACCESS.insertRate(start, end, currency, rate0, rate1, rate2, rate3, rate4, rate5, rate6);
 		
 		
-		currency = DBAccess.CURRENCY_TYPE_RMB;
+		currency = DBAccess.CURRENCY_TYPE_EU;
 		rate0 = Float.valueOf(((EditText)this.findViewById(R.id.EditText31)).getText().toString());
 		rate1 = Float.valueOf(((EditText)this.findViewById(R.id.EditText32)).getText().toString());
 		rate2 = Float.valueOf(((EditText)this.findViewById(R.id.EditText33)).getText().toString());

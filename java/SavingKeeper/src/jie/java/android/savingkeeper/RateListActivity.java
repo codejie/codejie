@@ -49,20 +49,26 @@ public class RateListActivity extends ExpandableListActivity {
 	private static final String C_RATE_4	=	"RATE_4";
 	private static final String C_RATE_5	=	"RATE_5";
 	private static final String C_RATE_6	=	"RATE_6";
+	
+	
+	List<Map<String, String>> _titleData = new ArrayList<Map<String, String>>();
+	List<List<Map<String, String>>> _childData = new ArrayList<List<Map<String, String>>>();
+	
+	SimpleExpandableListAdapter _adapter = null;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		List<Map<String, String>> titleData = new ArrayList<Map<String, String>>();
-		List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
+//		List<Map<String, String>> titleData = new ArrayList<Map<String, String>>();
+//		List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
 		
-		SimpleExpandableListAdapter adapter = new SimpleExpandableListAdapter(
+		_adapter = new SimpleExpandableListAdapter(
 				this,
-				titleData,
+				_titleData,
 				android.R.layout.simple_expandable_list_item_1,
 				new String[] { P_TITLE },
 				new int[] { android.R.id.text1 },
-				childData,
+				_childData,
 				//android.R.layout.simple_expandable_list_item_1,
 				R.layout.ratedatadetail,
 				new String[] { C_TITLE, C_TITLE_0, C_TITLE_1, C_TITLE_2, C_TITLE_3, C_TITLE_4, C_TITLE_5, C_TITLE_6, 
@@ -71,8 +77,8 @@ public class RateListActivity extends ExpandableListActivity {
 				new int[] { R.id.rate_title, R.id.rate_title_0, R.id.rate_title_1, R.id.rate_title_2, R.id.rate_title_3, R.id.rate_title_4, R.id.rate_title_5, R.id.rate_title_6,
 						R.id.rate_0, R.id.rate_1, R.id.rate_2, R.id.rate_3, R.id.rate_4, R.id.rate_5, R.id.rate_6});
 		
-		initData(titleData, childData);
-		this.setListAdapter(adapter);
+		initData(_titleData, _childData);
+		this.setListAdapter(_adapter);
 		
 		this.getExpandableListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
@@ -88,6 +94,9 @@ public class RateListActivity extends ExpandableListActivity {
 	}
 	
 	private void initData(List<Map<String, String>> titleData, List<List<Map<String, String>>> childData) {
+		
+		titleData.clear();
+		childData.clear();
 		
 		Cursor cursor = GLOBAL.DBACCESS.queryRate();
 		
@@ -184,7 +193,9 @@ public class RateListActivity extends ExpandableListActivity {
 	}
 	
 	public void refreshList() {
-		this.getExpandableListView().removeAllViews();
+		initData(_titleData, _childData	);	
+		
+		_adapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -226,6 +237,10 @@ public class RateListActivity extends ExpandableListActivity {
 	public void onItemLongClick(AdapterView<?> parent, View child, int position, long id) {
 		if(parent == this.getExpandableListView()) {
 			Log.d(GLOBAL.APP_TAG, "position:" + position + " id:" + id);
+			
+
+			//this.getExpandableListView().removeViews(0,1);
+			//this.refreshList();
 			//this.getExpandableListView().removeViewAt(position);
 		}
 	}

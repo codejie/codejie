@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Dialog;
 import android.app.ExpandableListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,6 +26,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class RateListActivity extends ExpandableListActivity {
@@ -50,6 +52,7 @@ public class RateListActivity extends ExpandableListActivity {
 	private static final String C_RATE_5	=	"RATE_5";
 	private static final String C_RATE_6	=	"RATE_6";
 	
+	private static final int DIALOG_REMOVE_RATE		=	1;
 	
 	List<Map<String, String>> _titleData = new ArrayList<Map<String, String>>();
 	List<List<Map<String, String>>> _childData = new ArrayList<List<Map<String, String>>>();
@@ -237,6 +240,11 @@ public class RateListActivity extends ExpandableListActivity {
 	public void onItemLongClick(AdapterView<?> parent, View child, int position, long id) {
 		if(parent == this.getExpandableListView()) {
 			Log.d(GLOBAL.APP_TAG, "position:" + position + " id:" + id);
+			Log.d(GLOBAL.APP_TAG, "CHILD:" + child.toString() + "text:" + ((TextView)child).getText().toString());
+			String str = ((TextView)child).getText().toString();
+			String s = str.substring(0, str.indexOf('-') - 1);
+			String e = str.substring(str.indexOf('-') + 1);
+			Log.d(GLOBAL.APP_TAG, "s:" + s + " e:" + e);
 			
 
 			//this.getExpandableListView().removeViews(0,1);
@@ -245,4 +253,11 @@ public class RateListActivity extends ExpandableListActivity {
 		}
 	}
 	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		
+		
+		
+		return null;
+	}
 }

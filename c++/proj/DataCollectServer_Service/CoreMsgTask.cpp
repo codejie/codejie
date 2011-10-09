@@ -493,9 +493,22 @@ int CoreMsgTask::OnZJCollectPacket(int clientid, const ZJ::Packet& packet)
         return -1;
     }
 
-    if(packet.m_ucPacketType
-    
-
+    if(packet.m_usFuncNo == ZJ::FUNCNO_DATA_RUNTIME)
+    {
+        _objDataAccess->OnZJRuntimeData(title, data);
+    }
+    else if(packet.m_usFuncNo == ZJ::FUNCNO_DATA_MINUTE)
+    {
+        _objDataAccess->OnZJMinuteData(title, data);
+    }
+    else if(packet.m_usFuncNo == ZJ::FUNCNO_DATA_HOUR)
+    {
+        _objDataAccess->OnZJHourData(title, data);
+    }
+    else
+    {
+        ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnZJCollectPacket>Unknown or Unsupport Packet." << std::endl);
+    }
 
 	return 0;
 }

@@ -16,6 +16,7 @@
 #include "ocipp.h"
 
 #include "Packet.h"
+#include "ZJPacket.h"
 
 class DataStatistic
 {
@@ -76,6 +77,10 @@ public:
 	int UpdateValveControlFlag(const Packet& packet);
 	int UpdateICFeeAddFlag(const Packet& packet);
 	int UpdateValveRealDataFlag(const Packet& packet);
+
+    int OnZJRuntimeData(const ZJ::TTitleVector& title, const ZJ::TDataVector& data);
+    int OnZJMinuteData(const ZJ::TTitleVector& title, const ZJ::TDataVector& data);
+    int OnZJHourData(const ZJ::TTitleVector& title, const ZJ::TDataVector& data);
 private:
 	int Connect();
 	void Disconnect();

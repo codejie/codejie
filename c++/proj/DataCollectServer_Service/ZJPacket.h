@@ -14,7 +14,9 @@ namespace ZJ
 const unsigned int PEID_CHECKSUM_FAIL	=	1;
 const unsigned int PEID_CRC_FAIL		=	2;
 
-const unsigned short FUNCNO_
+const unsigned short FUNCNO_DATA_RUNTIME    =   2411;
+const unsigned short FUNCNO_DATA_MINUTE     =   2404;
+const unsigned short FUNCNO_DATA_HOUR       =   2401;
 
 class PacketException
 {

@@ -9,8 +9,6 @@
 #include "acex/ACEX.h"
 
 #include "Defines.h"
-#include "Packet.h"
-#include "ZJPacket.h"
 #include "ConfigLoader.h"
 #include "PacketProcessor.h"
 #include "CollectServerTask.h"
@@ -161,7 +159,7 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 		if(PacketProcessor::Analyse(std::string(buf, size), packet, _crcCheck) == 0)
 		{
 			UpdateClientCount(CLIENTTYPE_TERMINAL, msg.sparam() >> 16);
-			OnCollectPacket(packet);
+            OnCollectPacket((msg.sparam() >> 16), packet);
 		}
 		else
 		{
@@ -188,7 +186,7 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 	return 0;
 }
 
-int CoreMsgTask::OnCollectPacket(const Packet& packet)
+int CoreMsgTask::OnCollectPacket(int clientid, const Packet& packet)
 {
 	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnCollectPacket>Get Collect Packet - " << packet << std::endl);
 
@@ -457,7 +455,7 @@ int CoreMsgTask::OnZJCollectServerMsgProc(const ACEX_Message& msg)
         std::auto_ptr<ZJ::Packet> packet(reinterpret_cast<ZJ::Packet*>(msg.data()));
         
 		UpdateClientCount(CLIENTTYPE_ZJTERMINAL, msg.sparam());
-		OnZJCollectPacket(packet);
+        OnZJCollectPacket(msg.sparam(), *packet.get());
 	}
 	else if(msg.fparam() == FPARAM_SOCKET_CONNECT)
 	{
@@ -477,9 +475,26 @@ int CoreMsgTask::OnZJCollectServerMsgProc(const ACEX_Message& msg)
 	return 0;
 }
 
-int CoreMsgTask::OnZJCollectPacket(const Packet& packet)
+int CoreMsgTask::OnZJCollectPacket(int clientid, const ZJ::Packet& packet)
 {
-	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnZJCollectPacket>Get Collect Packet - " << packet << std::endl);
+	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnZJCollectPacket>Get Collect Packet from " << clientid << "\n" << packet << std::endl);
+
+    if(packet.m_pDataBuf == NULL || packet.m_uiDataLen == 0)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnZJCollectPacket>Packet Data is empty." << std::endl);
+        return 0;
+    }
+
+    ZJ::TTitleVector title;
+    ZJ::TDataVector data;
+    if(packet.Decode(title, data) != 0)
+    {
+        ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnZJCollectPacket>Packet Decode data failed." << std::endl);
+        return -1;
+    }
+
+    if(packet.m_ucPacketType
+    
 
 
 	return 0;

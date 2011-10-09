@@ -226,6 +226,12 @@ int Packet::SetCRC() const
 	return 0;
 }
 
+int Packet::Decode(ZJ::TTitleVector &title, ZJ::TDataVector &data) const
+{
+    
+    return -1;
+}
+
 }
 
 //////

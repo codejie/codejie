@@ -4,6 +4,7 @@
 #include <iostream>
 #include <exception>
 #include <string>
+#include <vector>
 
 #include "acex/CDR_Stream.h"
 
@@ -12,6 +13,8 @@ namespace ZJ
 
 const unsigned int PEID_CHECKSUM_FAIL	=	1;
 const unsigned int PEID_CRC_FAIL		=	2;
+
+const unsigned short FUNCNO_
 
 class PacketException
 {
@@ -31,6 +34,9 @@ public:
 	std::string m_info;
 };
 
+typedef std::vector<std::string> TTitleVector;
+typedef std::vector<std::string> TDataVector;
+
 class Packet
 {
 public:
@@ -47,6 +53,8 @@ public:
 
 	int SetData(const char* data, unsigned int len);
 	int AttachData(const char* data, unsigned int len);
+
+    int Decode(TTitleVector &title, TDataVector &data) const;
 
 	virtual void Show(std::ostream& os) const;
 protected:

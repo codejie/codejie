@@ -12,11 +12,11 @@
 
 #include "DataAccess.h"
 #include "DataLoader.h"
+#include "Packet.h"
+#include "ZJPacket.h"
 #include "CollectServerTask.h"
 #include "ControllerServerTask.h"
 
-class Packet;
-class ZJ::Packet;
 class ConfigLoader;
 
 class CoreMsgTask: public ACEX_Message_Task
@@ -66,7 +66,7 @@ protected:
     int OnDataLoaderMsgProc(const ACEX_Message& msg);
     int OnZJCollectServerMsgProc(const ACEX_Message& msg);
 private:
-    int OnCollectPacket(const Packet& packet);
+    int OnCollectPacket(int clientid, const Packet& packet);
 	int OnCollectConnect(int clientid, const std::string& ip, unsigned int port);
 	int OnCollectDisconnect(int clientid);
 
@@ -74,9 +74,9 @@ private:
 	int OnControllerConnect(int clientid, const std::string& ip, unsigned int port);
 	int OnControllerDisconnect(int clientid);
 
-    int OnZJControllerPacket(int clientid, const ZJ::Packet& packet);
-	int OnZJControllerConnect(int clientid, const std::string& ip, unsigned int port);
-	int OnZJControllerDisconnect(int clientid);
+    int OnZJCollectPacket(int clientid, const ZJ::Packet& packet);
+	int OnZJCollectConnect(int clientid, const std::string& ip, unsigned int port);
+	int OnZJCollectDisconnect(int clientid);
 private:
     int InsertStateData(int clientid, int type, const Packet* packet);
     int RemoveStateData(unsigned int state);

@@ -248,9 +248,10 @@ public class RateListActivity extends ExpandableListActivity {
 			Log.d(GLOBAL.APP_TAG, "position:" + position + " id:" + id);
 			Log.d(GLOBAL.APP_TAG, "CHILD:" + child.toString() + "text:" + ((TextView)child).getText().toString());
 			String str = ((TextView)child).getText().toString();
-			String s = str.substring(0, str.indexOf('-') - 1);
-			String e = str.substring(str.indexOf('-') + 1);
-			Log.d(GLOBAL.APP_TAG, "s:" + s + " e:" + e);
+			_startDate = str.substring(0, str.indexOf('-') - 1);
+			_endDate = str.substring(str.indexOf('-') + 2);
+			
+			this.showDialog(DIALOG_REMOVE_RATE);
 			
 
 			//this.getExpandableListView().removeViews(0,1);
@@ -261,22 +262,40 @@ public class RateListActivity extends ExpandableListActivity {
 	
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		Builder build = new AlertDialog.Builder(this);
-		build.setIcon(android.R.drawable.ic_delete);
-		build.setTitle(R.string.title_reteremove);
-		build.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if(GLOBAL.DBACCESS.removeRate(_startDate, _endDate) != 0) {
-					
-				}
-				else {
-					RateListActivity.this.refreshList();
-				}
-			}
-		});
 		
-		return null;
+		Dialog dlg = null;
+		switch(id) {
+			case DIALOG_REMOVE_RATE: {
+				Builder build = new AlertDialog.Builder(this);
+				build.setIcon(android.R.drawable.ic_delete);
+				build.setTitle(R.string.title_reteremove);
+				build.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if(GLOBAL.DBACCESS.removeRate(_startDate, _endDate) != 0) {
+							Toast.makeText(RateListActivity.this, "Remove rate data failed.", 1).show();
+						}
+						else {
+							RateListActivity.this.refreshList();
+						}
+					}
+				});
+				build.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();				
+					}
+				});
+				
+				dlg = build.create();
+				break;
+			}
+			default: {
+				break;
+			}
+		}		
+		return dlg;
 	}
 }

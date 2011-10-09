@@ -229,6 +229,11 @@ public class DBAccess {
 		return cursor;
 	}
 	
+	public int removeRate(final String start, final String end) {
+		Log.d(GLOBAL.APP_TAG, "start:" + start + "end:" + end);
+		return (db.delete(TABLE_NAME_RATE, TABLE_COLUMN_START + "='" + start + "' and " + TABLE_COLUMN_END + "='" + end + "'", null) > 0 ? 0 : -1);
+	}
+	
 	public float getRate(int checkin, int currency, int type) {
 		return 0.0f;
 	}

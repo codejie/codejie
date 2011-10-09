@@ -10,8 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ExpandableListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -58,6 +61,9 @@ public class RateListActivity extends ExpandableListActivity {
 	List<List<Map<String, String>>> _childData = new ArrayList<List<Map<String, String>>>();
 	
 	SimpleExpandableListAdapter _adapter = null;
+	
+	private static String _startDate, _endDate;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -255,8 +261,21 @@ public class RateListActivity extends ExpandableListActivity {
 	
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		
-		
+		Builder build = new AlertDialog.Builder(this);
+		build.setIcon(android.R.drawable.ic_delete);
+		build.setTitle(R.string.title_reteremove);
+		build.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if(GLOBAL.DBACCESS.removeRate(_startDate, _endDate) != 0) {
+					
+				}
+				else {
+					RateListActivity.this.refreshList();
+				}
+			}
+		});
 		
 		return null;
 	}

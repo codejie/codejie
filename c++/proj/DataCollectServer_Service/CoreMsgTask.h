@@ -15,6 +15,7 @@
 #include "Packet.h"
 #include "ZJPacket.h"
 #include "CollectServerTask.h"
+#include "ZJPacket.h"
 #include "ControllerServerTask.h"
 
 class ConfigLoader;

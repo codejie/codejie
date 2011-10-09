@@ -53,11 +53,11 @@ int COptions::Scan(int argc, char *argv[])
 		case 'H':
 			_bHelp = true;
 			break;
-		case 'd':
-		case 'D':
-			_bDaemon = true;
-			_uiProxy = ACEX_Output_Proxy::LOG_FILE;
-			break;
+		//case 'd':
+		//case 'D':
+		//	_bDaemon = true;
+		//	_uiProxy = ACEX_Output_Proxy::LOG_FILE;
+		//	break;
 		case 'x':
 		case 'X':
 			_bVerbose = true;

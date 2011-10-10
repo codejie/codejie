@@ -18,7 +18,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -30,6 +32,9 @@ import android.widget.Toast;
 
 public class SavingListActivity extends ListActivity {
 
+	private int _id	=	-1;
+	private Cursor _cursor = null;
+	
 	protected class DataCursorAdapter extends CursorAdapter {
 
 		public DataCursorAdapter(Context context, Cursor c) {
@@ -58,7 +63,7 @@ public class SavingListActivity extends ListActivity {
 			Log.d(GLOBAL.APP_TAG, "end = " + String.format("%.2f", result.end) + " now = " + result.now);
 			//((SavingListView)view).setTitle(cursor.getString(0), cursor.getString(1));
 
-			((SavingListView)view).setContent(title, String.format("%.2f", amount), RCLoader.getCurrency(SavingListActivity.this, currency),
+			((SavingListView)view).setContent(cursor.getInt(0), title, String.format("%.2f", amount), RCLoader.getCurrency(SavingListActivity.this, currency),
 					checkin, RCLoader.getType(SavingListActivity.this, type), GLOBAL.DBACCESS.getBank(bank), note, String.format("%.2f", result.end), String.format("%.2f", result.now));
 		}
 	}
@@ -222,14 +227,9 @@ public class SavingListActivity extends ListActivity {
 			this.addView(tlayout, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		}
 		
-		public void setTitle(String title, String value) {
-			textTitle.setText(title);
-			textEnd.setText(value);
-			textBank.setText(value);
-			textNote.setText(title);
-		}
-		
-		public void setContent(final String title, final String amount, final String currency, final String checkin, final String type, final String bank, final String note, final String end, final String now) {
+		public void setContent(int id, final String title, final String amount, final String currency, final String checkin, final String type, final String bank, final String note, final String end, final String now) {
+			this.setId(id);
+			
 			textTitle.setText(title);
 			textAmount.setText(amount);
 			textCurrency.setText(currency);
@@ -254,18 +254,31 @@ public class SavingListActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Cursor cursor = GLOBAL.DBACCESS.querySaving();
-		this.startManagingCursor(cursor);
-		ListAdapter adapter = new DataCursorAdapter(this, cursor);		
+		_cursor = GLOBAL.DBACCESS.querySaving();
+		this.startManagingCursor(_cursor);
+		ListAdapter adapter = new DataCursorAdapter(this, _cursor);		
 		this.setListAdapter(adapter);
+		
+		
+		this.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				SavingListActivity.this.onListItemLongClick(parent, view, position, id);
+				return true;
+			}
+			
+		});
 		
 		//this.registerForContextMenu(this.getListView());
 	}
 	
+	
+	@Override
     protected void onListItemClick(ListView l, View v, int position, long id) 
     {    
     	((SavingListView)v).setExpanded();
-    	Toast.makeText(this, "view : " + v.getId() + " position : " + position + " id : " + id, 0).show();
+    	//Toast.makeText(this, "view : " + v.getId() + " position : " + position + " id : " + id, 0).show();
        //((SpeechListAdapter)getListAdapter()).toggle(position);
     }
     
@@ -336,5 +349,12 @@ public class SavingListActivity extends ListActivity {
     
     protected void onMenuExit() {
     	System.exit(0);
+    }
+    
+    protected void onListItemLongClick(AdapterView<?> parent, View child, int position, long id) {
+    	Log.d(GLOBAL.APP_TAG, "VIEW: " + child.getId() + " pos:" + position + " id:" + id);
+    	_id = child.getId();
+    	GLOBAL.DBACCESS.removeSaving(_id);
+    	_cursor.requery();
     }
 }

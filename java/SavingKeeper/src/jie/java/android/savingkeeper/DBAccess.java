@@ -194,6 +194,7 @@ public class DBAccess {
 	}
 	
 	public int removeSaving(int id) {
+		db.delete(TABLE_NAME_SAVING, TABLE_COLUMN_ID + "=" + id, null);
 		return -1;
 	}
 

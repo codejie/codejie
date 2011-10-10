@@ -106,10 +106,17 @@ public class DataCalculator {
 	}
 	
 	public int calcMoney(final String checkin, float amount, int currency, int type, CalcResult result) {
+		if(RateData.isEmpty()) {
+			result.now = 0.0f;
+			result.end = 0.0f;
+			return 0;
+		}
 		
 		for(RateData data : RateData) {
 			Log.d(GLOBAL.APP_TAG, "begin: " + data.begin.toString() + " end:" + data.end.toString() + " data: " + data.data[0][1]);
 		}
+		
+		//Date ci = TOOLKIT.String2Date(checkin);
 		
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd");
 		Date ci = null;

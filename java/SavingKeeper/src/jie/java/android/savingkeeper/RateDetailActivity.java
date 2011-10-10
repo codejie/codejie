@@ -160,10 +160,12 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 		
 		GLOBAL.DBACCESS.insertRate(start, end, currency, rate0, rate1, rate2, rate3, rate4, rate5, rate6);
 		
-		this.finish();
+		//this.finish();
 		
 		Intent intent = new Intent(this, RateListActivity.class);
-		this.startActivity(intent);		
+		this.startActivity(intent);
+		
+		this.finish();
 	}
 	
 }

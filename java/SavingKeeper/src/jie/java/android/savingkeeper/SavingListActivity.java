@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -238,6 +239,8 @@ public class SavingListActivity extends ListActivity {
 			this.setId(id);
 			
 			textTitle.setText(title);
+			textTitle.setTextColor(Color.GREEN);
+			
 			textAmount.setText(amount);
 			textCurrency.setText(currency);
 			textCheckin.setText(checkin);

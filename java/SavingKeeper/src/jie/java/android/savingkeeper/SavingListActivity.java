@@ -5,8 +5,12 @@
  */
 package jie.java.android.savingkeeper;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -33,7 +37,10 @@ import android.widget.Toast;
 public class SavingListActivity extends ListActivity {
 
 	private int _id	=	-1;
+	private String _title = null;
 	private Cursor _cursor = null;
+	
+	private static final int DIALOG_REMOVE_SAVING		=	1;
 	
 	protected class DataCursorAdapter extends CursorAdapter {
 
@@ -247,6 +254,10 @@ public class SavingListActivity extends ListActivity {
 			else
 				tlayout.setVisibility(VISIBLE);
 		}
+		
+		public String getTitle() {
+			return this.textTitle.getText().toString();
+		}
 	}
 
 	//
@@ -354,7 +365,44 @@ public class SavingListActivity extends ListActivity {
     protected void onListItemLongClick(AdapterView<?> parent, View child, int position, long id) {
     	Log.d(GLOBAL.APP_TAG, "VIEW: " + child.getId() + " pos:" + position + " id:" + id);
     	_id = child.getId();
-    	GLOBAL.DBACCESS.removeSaving(_id);
-    	_cursor.requery();
+    	_title = ((SavingListView)child).getTitle();
+    	Log.d(GLOBAL.APP_TAG, "Saving title:" + _title);
+    	
+    	this.showDialog(DIALOG_REMOVE_SAVING);
+//    	GLOBAL.DBACCESS.removeSaving(_id);
+//    	_cursor.requery();
+    }
+    
+    @Override
+    protected Dialog onCreateDialog(int id) {
+    	Dialog dlg = null;
+    	switch(id) {
+    	case DIALOG_REMOVE_SAVING: {   		
+    		Builder build = new AlertDialog.Builder(this);
+    		build.setIcon(android.R.drawable.ic_delete);
+    		build.setTitle("Remove " + _title + " ?");
+    		build.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+			    	GLOBAL.DBACCESS.removeSaving(_id);
+			    	_cursor.requery();					
+				}
+			});
+    		build.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});    		
+    		
+    		dlg = build.create();
+    		break;
+    	}
+    	default:
+    		break;
+    	}
+    	return dlg;
     }
 }

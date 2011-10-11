@@ -15,7 +15,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 public class DataCalculator {
-
+	
 	public static final class CalcResult {
 		public float now;
 		public float end;
@@ -106,18 +106,13 @@ public class DataCalculator {
 	}
 	
 	public int calcMoney(final String checkin, float amount, int currency, int type, CalcResult result) {
-		if(RateData.isEmpty()) {
-			result.now = 0.0f;
-			result.end = 0.0f;
-			return 0;
-		}
 		
 		for(RateData data : RateData) {
 			Log.d(GLOBAL.APP_TAG, "begin: " + data.begin.toString() + " end:" + data.end.toString() + " data: " + data.data[0][1]);
 		}
 		
-		//Date ci = TOOLKIT.String2Date(checkin);
-		
+		Date ci = TOOLKIT.String2Date(checkin);
+/*		
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd");
 		Date ci = null;
 		try {
@@ -126,25 +121,25 @@ public class DataCalculator {
 			e.printStackTrace();
 			return -1;
 		}
+*/		
+		
 		
 		result.end = calcEndMoney(ci, amount, currency, type);
 		result.now = calcNowMoney(ci, amount, currency, type);
 		
-		
-		
-		result.end = RateData.get(0).data[currency][type] * amount;// 10.0f;
-		result.now = RateData.get(0).data[currency][type + 1] * amount;
+		//result.end = RateData.get(0).data[currency][type] * amount;// 10.0f;
+		//result.now = RateData.get(0).data[currency][type + 1] * amount;
 		
 		return 0;
 	}
 	
 	private float calcEndMoney(Date checkin, float amount, int currency, int type) {
 		
-		float result = 0.0f;
+		float result = 10.0f;
 		
 		Date endDate =null;//Calendar.getInstance().getTime();
 		if(type == GLOBAL.DBACCESS.SAVING_TYPE_CURRENT) {
-			endDate = Calendar.getInstance().getTime();
+			//int delta = _current.compareTo(checkin);
 		}
 		else if(type == GLOBAL.DBACCESS.SAVING_TYPE_FIXED_3_MONTH) {
 			endDate.setMonth(endDate.getMonth() + 3);
@@ -161,6 +156,6 @@ public class DataCalculator {
 	
 	private float calcNowMoney(Date checkin, float amount, int currency, int type) {
 		
-		return 0.0f;
+		return 20.0f;
 	}
 }

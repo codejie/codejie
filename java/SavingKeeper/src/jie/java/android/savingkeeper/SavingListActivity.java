@@ -5,6 +5,8 @@
  */
 package jie.java.android.savingkeeper;
 
+import java.util.Date;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -239,7 +241,12 @@ public class SavingListActivity extends ListActivity {
 			this.setId(id);
 			
 			textTitle.setText(title);
-			textTitle.setTextColor(Color.GREEN);
+			if(isEnd(checkin)) {
+				textTitle.setTextColor(Color.YELLOW);
+			}
+			else {
+				textTitle.setTextColor(Color.GREEN);
+			}
 			
 			textAmount.setText(amount);
 			textCurrency.setText(currency);
@@ -260,6 +267,13 @@ public class SavingListActivity extends ListActivity {
 		
 		public String getTitle() {
 			return this.textTitle.getText().toString();
+		}
+		
+		protected boolean isEnd(final String checkin) {
+			Date ci = TOOLKIT.String2Date(checkin);
+			//if(ci > GLOBAL.TODAY)
+				
+			return false;
 		}
 	}
 
@@ -362,6 +376,11 @@ public class SavingListActivity extends ListActivity {
     }
     
     protected void onMenuExit() {
+ //   	Intent intent = new Intent(this, SavingKeeper.class);
+ //   	intent.putExtra("ACTION", GLOBAL.APP_ACTION_EXIT);
+ //   	this.startActivity(intent);
+ //   	this.finish();
+    	GLOBAL.close();
     	System.exit(0);
     }
     

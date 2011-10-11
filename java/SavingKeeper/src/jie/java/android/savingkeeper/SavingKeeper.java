@@ -33,7 +33,7 @@ public class SavingKeeper extends Activity {
         //Intent intent = new Intent(this, RateListActivity.class);
         Intent intent = new Intent(this, SavingListActivity.class);
 		this.startActivity(intent);
-		this.finish();
+		//this.finish();
 		//Test.startActivity(BankListActivity.this);
 		//this.finish();
 /*

@@ -203,8 +203,9 @@ public class RateListActivity extends ExpandableListActivity {
 	
 	public void refreshList() {
 		initData(_titleData, _childData	);	
-		
 		_adapter.notifyDataSetChanged();
+		
+		GLOBAL.CALCULATOR.reloadData();
 	}
 
 	@Override

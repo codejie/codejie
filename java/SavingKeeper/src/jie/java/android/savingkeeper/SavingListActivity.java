@@ -287,7 +287,7 @@ public class SavingListActivity extends ListActivity {
 		ListAdapter adapter = new DataCursorAdapter(this, _cursor);		
 		this.setListAdapter(adapter);
 		
-		
+/*		
 		this.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
 			@Override
@@ -297,8 +297,8 @@ public class SavingListActivity extends ListActivity {
 			}
 			
 		});
-		
-		//this.registerForContextMenu(this.getListView());
+*/		
+		this.registerForContextMenu(this.getListView());
 	}
 	
 	
@@ -316,14 +316,14 @@ public class SavingListActivity extends ListActivity {
     	inflater.inflate(R.menu.savinglist, menu);
     	return true;    	
     }
-/*	
+	
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         //super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_savinglist_context, menu);
+        inflater.inflate(R.menu.savinglist, menu);
     }
- */   
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	

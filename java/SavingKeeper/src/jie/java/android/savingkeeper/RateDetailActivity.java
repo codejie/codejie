@@ -162,6 +162,8 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 		
 		//this.finish();
 		
+		GLOBAL.CALCULATOR.reloadData();
+		
 		Intent intent = new Intent(this, RateListActivity.class);
 		this.startActivity(intent);
 		

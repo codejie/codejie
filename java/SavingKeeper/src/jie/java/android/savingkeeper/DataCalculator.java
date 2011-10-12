@@ -32,15 +32,19 @@ public class DataCalculator {
 		public float[][] data = new float[3][7];
 	}
 	
-	ArrayList<RateData> RateData = new ArrayList<RateData>();
+	private ArrayList<RateData> _rateData = new ArrayList<RateData>();
 	
 	public int init() {
-		loadRateData();
-		return 0;
+		return loadRateData();
 	}
 	
 	public void release() {
-		
+		_rateData.clear();
+	}
+	
+	public int reloadData() {
+		release();
+		return loadRateData();
 	}
 	
 	protected int loadRateData() {
@@ -94,12 +98,11 @@ public class DataCalculator {
 			
 			++ count;
 			if(count == 3) {
-				RateData.add(data);
+				_rateData.add(data);
 				
 				data = new RateData();			
 				count = 0;
-			}
-			
+			}			
 		}
 		
 		return 0;
@@ -107,7 +110,7 @@ public class DataCalculator {
 	
 	public int calcMoney(final String checkin, float amount, int currency, int type, CalcResult result) {
 		
-		for(RateData data : RateData) {
+		for(RateData data : _rateData) {
 			Log.d(GLOBAL.APP_TAG, "begin: " + data.begin.toString() + " end:" + data.end.toString() + " data: " + data.data[0][1]);
 		}
 		
@@ -122,8 +125,6 @@ public class DataCalculator {
 			return -1;
 		}
 */		
-		
-		
 		result.end = calcEndMoney(ci, amount, currency, type);
 		result.now = calcNowMoney(ci, amount, currency, type);
 		
@@ -135,19 +136,28 @@ public class DataCalculator {
 	
 	private float calcEndMoney(Date checkin, float amount, int currency, int type) {
 		
-		float result = 10.0f;
+		float result = 0.0f;
 		
-		Date endDate =null;//Calendar.getInstance().getTime();
-		if(type == GLOBAL.DBACCESS.SAVING_TYPE_CURRENT) {
+		//Date endDate =null;//Calendar.getInstance().getTime();
+		if(type == DBAccess.SAVING_TYPE_CURRENT) {
+			
+			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
+			
+			long days = (GLOBAL.TODAY.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24);
+			
+			float rate = getRate(checkin, currency, type);
+			
+			result = amount * days * (rate / 360.f);
+			
 			//int delta = _current.compareTo(checkin);
 		}
-		else if(type == GLOBAL.DBACCESS.SAVING_TYPE_FIXED_3_MONTH) {
-			endDate.setMonth(endDate.getMonth() + 3);
+		else if(type == DBAccess.SAVING_TYPE_FIXED_3_MONTH) {
+			//endDate.setMonth(endDate.getMonth() + 3);
 		}
 		else {
 			return result;
 		}
-		for(RateData data : RateData) {
+		for(RateData data : _rateData) {
 			
 		}
 		
@@ -155,7 +165,29 @@ public class DataCalculator {
 	}
 	
 	private float calcNowMoney(Date checkin, float amount, int currency, int type) {
+		float result = 0.0f;
+
+		if(type == DBAccess.SAVING_TYPE_CURRENT) {
+			
+			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
+			
+			long days = (GLOBAL.TODAY.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24);
+			
+			float rate = getRate(checkin, currency, type);
+			
+			result = amount * days * (rate / 360.f);
+			
+			//int delta = _current.compareTo(checkin);
+		}		
 		
-		return 20.0f;
+		return result;
+	
+	}
+	
+	private float getRate(Date checkin, int currency, int type) {
+		if(type == DBAccess.SAVING_TYPE_CURRENT) {
+			return _rateData.get(_rateData.size() - 1).data[currency][0];
+		}
+		return 0.0f;
 	}
 }

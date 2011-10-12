@@ -24,7 +24,7 @@
     </LinearLayout>
     <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout4" android:layout_weight="1">
         <Spinner android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="2" android:id="@+id/listType"></Spinner>
-        <EditText android:layout_height="wrap_content" android:layout_width="wrap_content" android:editable="false" android:singleLine="true" android:enabled="true" android:layout_weight="1" android:id="@+id/textRate" android:text="0.0%"></EditText>
+        <EditText android:layout_height="wrap_content" android:layout_width="wrap_content" android:editable="false" android:singleLine="true" android:enabled="true" android:layout_weight="1" android:id="@+id/textRate" android:text="0.00%" android:inputType="none"></EditText>
     </LinearLayout>
     <TextView android:text="@string/str_bank" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView6"></TextView>
     <Spinner android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/listBank"></Spinner>

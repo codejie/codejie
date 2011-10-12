@@ -184,7 +184,7 @@ public class DataCalculator {
 	
 	}
 	
-	private float getRate(Date checkin, int currency, int type) {
+	public float getRate(Date checkin, int currency, int type) {
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
 			return _rateData.get(_rateData.size() - 1).data[currency][0];
 		}

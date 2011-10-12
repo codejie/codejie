@@ -320,8 +320,16 @@ public class SavingListActivity extends ListActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         //super.onCreateContextMenu(menu, v, menuInfo);
+    	
+    	AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)(menuInfo);
+    	_id = (int) info.id;
+    	_title = ((SavingListView)info.targetView).getTitle();
+    	
+    	Log.d(GLOBAL.APP_TAG, "VIEW: " + _id);
+    	Log.d(GLOBAL.APP_TAG, "Saving title:" + _title);
+    	
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.savinglist, menu);
+        inflater.inflate(R.menu.savinglist_context, menu);
     }
     
     @Override
@@ -349,13 +357,22 @@ public class SavingListActivity extends ListActivity {
     	
     	//return super.onOptionsItemSelected(item);
     }
-/*    
+    
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-    	Toast.makeText(this, "" + item.getTitle().toString(),Toast.LENGTH_SHORT).show();
+    	//Toast.makeText(this, "" + item.getTitle().toString(),Toast.LENGTH_SHORT).show();
+    	switch(item.getItemId()) {
+    	case R.id.menu_saving_edit:
+    		onMenuSavingEdit();
+    		break;
+    	case R.id.menu_saving_remove:
+    		onMenuSavingRemove();
+    	default:
+    		break;
+    	}
     	return true;
     }
-*/    
+    
     ////////////
     protected void onMenuAddSaving() {
     	SavingDetailActivity act = new SavingDetailActivity();
@@ -383,7 +400,7 @@ public class SavingListActivity extends ListActivity {
     	GLOBAL.close();
     	System.exit(0);
     }
-    
+ /*   
     protected void onListItemLongClick(AdapterView<?> parent, View child, int position, long id) {
     	Log.d(GLOBAL.APP_TAG, "VIEW: " + child.getId() + " pos:" + position + " id:" + id);
     	_id = child.getId();
@@ -394,7 +411,7 @@ public class SavingListActivity extends ListActivity {
 //    	GLOBAL.DBACCESS.removeSaving(_id);
 //    	_cursor.requery();
     }
-    
+*/    
     @Override
     protected Dialog onCreateDialog(int id) {
     	Dialog dlg = null;
@@ -426,5 +443,17 @@ public class SavingListActivity extends ListActivity {
     		break;
     	}
     	return dlg;
+    }
+    
+    private void onMenuSavingEdit() {
+    	SavingDetailActivity act = new SavingDetailActivity();
+		Intent intent = new Intent(this, act.getClass());
+		intent.putExtra("ACTION", SavingDetailActivity.ACTION_EDIT);
+		intent.putExtra("ID", _id);
+		this.startActivity(intent);   	
+    }
+    
+    private void onMenuSavingRemove() {
+    	this.showDialog(DIALOG_REMOVE_SAVING);
     }
 }

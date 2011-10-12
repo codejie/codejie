@@ -40,18 +40,18 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 	
 	protected static final int DIALOG_SHOWDATE	=	0;
 	
-	private int iAction = 0;
-	private int iID = -1;
+	private int _iAction = 0;
+	private int _iID = -1;
 	
-	private int iYear, iMonth, iDay;
-	private int iCurrency, iType, iBank;
+	private int _iYear, _iMonth, _iDay;
+	private int _iCurrency = 0, _iType = 0, _iBank;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		iAction = this.getIntent().getExtras().getInt("ACTION");
-		iID = this.getIntent().getExtras().getInt("ID");
+		_iAction = this.getIntent().getExtras().getInt("ACTION");
+		_iID = this.getIntent().getExtras().getInt("ID");
 		
 		this.setContentView(R.layout.savingdetail);
 		
@@ -60,9 +60,12 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 	
 	private void initView() {
 		
-		iYear = Calendar.getInstance().get(Calendar.YEAR);
-		iMonth = Calendar.getInstance().get(Calendar.MONTH);
-		iDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);		
+		_iYear = Calendar.getInstance().get(Calendar.YEAR);
+		_iMonth = Calendar.getInstance().get(Calendar.MONTH);
+		_iDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+		
+		EditText checkin = (EditText)this.findViewById(R.id.textCheckin);
+		checkin.setText(_iYear + "." + (_iMonth + 1) + "." + _iDay);
 
 		ArrayAdapter<String> adapterCurrency = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.currency));
 		adapterCurrency.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -72,7 +75,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-				iCurrency = (int)id;				
+				_iCurrency = (int)id;				
 			}
 
 			@Override
@@ -81,6 +84,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			}
 			
 		});
+		currency.setSelection(_iCurrency);
 		
 		ArrayAdapter<String> adapterType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.type));
 		adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -90,13 +94,17 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-				iType = (int)id;
+				
+				//GLOBAL.CALCULATOR.getRate(checkin, currency, type);
+				
+				_iType = (int)id;
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parentView) {
 			}
 		});
+		type.setSelection(_iType);
 		
 		Cursor cursor = GLOBAL.DBACCESS.queryBank();
 		
@@ -108,7 +116,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-				iBank = (int)id;
+				_iBank = (int)id;
 			}
 
 			@Override
@@ -119,7 +127,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 		
 		Button btn = (Button)this.findViewById(R.id.btnAction);
 		
-		switch(iAction) {
+		switch(_iAction) {
 		case ACTION_ADD: {
 			btn.setText(R.string.str_button_add);
 		}
@@ -149,16 +157,16 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-				iYear = year;
-				iMonth = monthOfYear;
-				iDay = dayOfMonth;
+				_iYear = year;
+				_iMonth = monthOfYear;
+				_iDay = dayOfMonth;
 				checkin.setText(year + "." + (monthOfYear + 1) + "." + dayOfMonth);
 			}
 			
 		};
 		
 		if(id == DIALOG_SHOWDATE) {
-			return new DatePickerDialog(this, onCheckinListSelected, iYear, iMonth, iDay);
+			return new DatePickerDialog(this, onCheckinListSelected, _iYear, _iMonth, _iDay);
 		}
         return null;
     }	
@@ -175,23 +183,23 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 	}
 	
 	private void onBtnAction() {
-		if(iAction == ACTION_ADD || iAction == ACTION_EDIT) {
+		if(_iAction == ACTION_ADD || _iAction == ACTION_EDIT) {
 			
 			String title = ((EditText)this.findViewById(R.id.textTitle)).getText().toString();
 			float amount = Float.valueOf(((EditText)this.findViewById(R.id.textAmount)).getText().toString());
 			String checkin = ((EditText)this.findViewById(R.id.textCheckin)).getText().toString();
 			String note = ((EditText)this.findViewById(R.id.textNote)).getText().toString();
 			
-			if(iAction == ACTION_ADD) {
-				GLOBAL.DBACCESS.insertSaving(title, amount, iCurrency, checkin, iType, iBank, note);
+			if(_iAction == ACTION_ADD) {
+				GLOBAL.DBACCESS.insertSaving(title, amount, _iCurrency, checkin, _iType, _iBank, note);
 			}
 			else {
-				GLOBAL.DBACCESS.updateSaving(iID, title, amount, iCurrency, checkin, iType, iBank, note);
+				GLOBAL.DBACCESS.updateSaving(_iID, title, amount, _iCurrency, checkin, _iType, _iBank, note);
 			}
 			
 		}
-		else if(iAction == ACTION_REMOVE) {
-			GLOBAL.DBACCESS.removeSaving(iID);
+		else if(_iAction == ACTION_REMOVE) {
+			GLOBAL.DBACCESS.removeSaving(_iID);
 		}
 		else {
 			

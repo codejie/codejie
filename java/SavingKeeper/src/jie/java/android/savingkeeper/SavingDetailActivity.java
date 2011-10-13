@@ -75,7 +75,8 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-				_iCurrency = (int)id;				
+				_iCurrency = (int)id;
+				showRate();
 			}
 
 			@Override
@@ -94,10 +95,8 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-				
-				//GLOBAL.CALCULATOR.getRate(checkin, currency, type);
-				
 				_iType = (int)id;
+				showRate();
 			}
 
 			@Override
@@ -205,6 +204,12 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			
 		}
 		this.finish();
+	}
+	
+	private void showRate() {
+		//String checkin = ((EditText)this.findViewById(R.id.textCheckin)).getText().toString();
+		float rate = GLOBAL.CALCULATOR.getLatestRate(_iCurrency, _iType);
+		((EditText)this.findViewById(R.id.textRate)).setText(String.format("%.03f%%", rate));
 	}
 	
 }

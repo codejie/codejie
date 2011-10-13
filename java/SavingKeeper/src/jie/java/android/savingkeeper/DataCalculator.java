@@ -143,8 +143,7 @@ public class DataCalculator {
 			
 			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
 			
-			long days = (GLOBAL.TODAY.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24);
-			
+			long days = (GLOBAL.TODAY.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24);			
 			float rate = getRate(checkin, currency, type);
 			
 			result = amount * days * (rate / 360.f);
@@ -185,9 +184,19 @@ public class DataCalculator {
 	}
 	
 	public float getRate(Date checkin, int currency, int type) {
+		if(_rateData.size() == 0)
+			return 0.0f;
+		
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
 			return _rateData.get(_rateData.size() - 1).data[currency][0];
 		}
 		return 0.0f;
+	}
+	
+	public float getLatestRate(int currency, int type) {
+		if(_rateData.size() == 0)
+			return 0.0f;
+		
+		return _rateData.get(_rateData.size() - 1).data[currency][type];
 	}
 }

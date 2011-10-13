@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import android.database.Cursor;
 import android.util.Log;
@@ -164,11 +165,26 @@ public class DataCalculator {
 	}
 	
 	private float calcNowMoney(Date checkin, float amount, int currency, int type) {
-		float result = 0.0f;
+		float result = amount;
 
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
 			
 			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
+			
+			for(RateData data : _rateData) {
+				if(data.begin.compareTo(checkin) <= 0) {
+					if(data.end.compareTo(checkin) <= 0) {
+						result = calc(data.begin, data.end, result, data.data); 
+					}
+					else {
+						result = calc(data.begin, checkin, result, data.data);
+					}
+				}
+				else {
+					
+				}
+			}
+			
 			
 			long days = (GLOBAL.TODAY.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24);
 			
@@ -198,5 +214,24 @@ public class DataCalculator {
 			return 0.0f;
 		
 		return _rateData.get(_rateData.size() - 1).data[currency][type];
+	}
+	
+	///
+	private float calc(final Date begin, final Date end, final float amount, final float rate) {
+		float result = amount;
+		
+		Date closedate = new Date();
+		closedate.setMonth(Calendar.JUNE);
+		closedate.setDate(30);
+		
+		while(begin.compareTo(end) < 0) {
+			closedate.setYear(begin.getYear());
+			Log.d(GLOBAL.APP_TAG, "closedate:" + closedate.toString());
+			
+			
+			
+		}
+		
+		return amount;
 	}
 }

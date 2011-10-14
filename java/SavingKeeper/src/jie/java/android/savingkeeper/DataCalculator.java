@@ -34,6 +34,7 @@ public class DataCalculator {
 	}
 	
 	private ArrayList<RateData> _rateData = new ArrayList<RateData>();
+	private ArrayList<RateData> _rateSplitData = new ArrayList<RateData>();
 	
 	public int init() {
 		return loadRateData();
@@ -109,6 +110,21 @@ public class DataCalculator {
 		return 0;
 	}
 	
+	private void splitRateData() {
+		Date closedate = new Date(0, 5, 30);
+		for(RateData data : _rateData) {
+			closedate.setYear(data.begin.getYear());
+			if(data.begin.compareTo(closedate) <= 0) {
+				if(data.end.compareTo(closedate) )
+			}
+			else {
+				
+			}
+		}
+	}
+	
+	
+	
 	public int calcMoney(final String checkin, float amount, int currency, int type, CalcResult result) {
 		
 		for(RateData data : _rateData) {
@@ -170,7 +186,7 @@ public class DataCalculator {
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
 			
 			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
-			
+/*			
 			for(RateData data : _rateData) {
 				if(data.begin.compareTo(checkin) <= 0) {
 					if(data.end.compareTo(checkin) <= 0) {
@@ -184,7 +200,7 @@ public class DataCalculator {
 					
 				}
 			}
-			
+*/			
 			
 			long days = (GLOBAL.TODAY.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24);
 			

@@ -111,8 +111,38 @@ public class DataCalculator {
 	}
 	
 	private void splitRateData() {
-		Date closedate = new Date(0, 5, 30);
 		for(RateData data : _rateData) {
+			Date bc = new Date(data.begin.getYear(), 5, 30);
+			Date ec = new Date(data.end.getYear(), 5, 30);
+
+			if(data.begin.compareTo(bc) <=0) {
+				if(data.end.compareTo(bc) <= 0) {
+					_rateSplitData.add(data);
+				}
+				else {
+					if(data.end.compareTo(ec) <=0) {
+						
+						RateData d = new RateData();
+						d.begin = 
+						
+						d = new RateData();
+						d.begin = bc;
+						d.end = data.end;
+						d.data = data.data;
+						_rateSplitData.add(d);
+						
+						
+					}
+					else {
+						
+					}
+					
+				}
+			}
+			else if(data)
+			
+			
+			
 			closedate.setYear(data.begin.getYear());
 			if(data.begin.compareTo(closedate) <= 0) {
 				if(data.end.compareTo(closedate) )

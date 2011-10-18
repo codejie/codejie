@@ -42,11 +42,20 @@ public class DataCalculator {
 		
 		splitRateData();
 		
+		for(RateData data : _rateData) {
+			Log.d(GLOBAL.APP_TAG, "rate record: " + data.begin.toString() + " - " + data.end.toGMTString() + " - " + data.data[0][0]);
+		}
+		
+		for(RateData data : _rateSplitData) {
+			Log.d(GLOBAL.APP_TAG, "splitrate record: " + data.begin.toString() + " - " + data.end.toGMTString() + " - " + data.data[0][0]);
+		}
+		
 		return 0;
 	}
 	
 	public void release() {
 		_rateData.clear();
+		_rateSplitData.clear();
 	}
 	
 	public int reloadData() {
@@ -118,7 +127,9 @@ public class DataCalculator {
 	private void splitRateData() {
 		for(RateData data : _rateData) {
 			
-			Date cd = new Date(data.begin.getYear(), 5, 30);			
+			Date cd = new Date(data.begin.getYear(), 5, 30);
+			Log.d(GLOBAL.APP_TAG, "close date(0):" + cd.toGMTString());
+			
 			if(data.begin.compareTo(cd) <= 0 && data.end.compareTo(cd) <= 0) {
 				_rateSplitData.add(data);
 				continue;
@@ -126,6 +137,7 @@ public class DataCalculator {
 			
 			if(data.begin.compareTo(cd) > 0) {
 				cd.setYear(cd.getYear() + 1);
+				Log.d(GLOBAL.APP_TAG, "close date(1):" + cd.toGMTString());
 				
 				if(data.begin.compareTo(cd) <= 0 && data.end.compareTo(cd) <= 0) {
 					_rateSplitData.add(data);
@@ -138,13 +150,14 @@ public class DataCalculator {
 			d.begin = data.begin;
 			d.data = data.data;
 			
-			while(data.end.compareTo(cd) > 0) {
+			while(data.end.compareTo(cd) > 0 && data.end.compareTo(GLOBAL.TODAY) < 0) {
 				d.end = cd;
 				_rateSplitData.add(d);
 				
 				d.begin = cd;
 				d.begin.setDate(d.begin.getDate() + 1);
-				cd.setYear(cd.getYear() + 1);				
+				cd.setYear(cd.getYear() + 1);
+				Log.d(GLOBAL.APP_TAG, "close date(2):" + cd.toGMTString());
 			}
 			
 			d.end = data.end;

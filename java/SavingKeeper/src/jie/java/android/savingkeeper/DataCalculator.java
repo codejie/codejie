@@ -37,7 +37,12 @@ public class DataCalculator {
 	private ArrayList<RateData> _rateSplitData = new ArrayList<RateData>();
 	
 	public int init() {
-		return loadRateData();
+		if(loadRateData() != 0)
+			return -1;
+		
+		splitRateData();
+		
+		return 0;
 	}
 	
 	public void release() {
@@ -46,7 +51,7 @@ public class DataCalculator {
 	
 	public int reloadData() {
 		release();
-		return loadRateData();
+		return init();
 	}
 	
 	protected int loadRateData() {
@@ -112,44 +117,38 @@ public class DataCalculator {
 	
 	private void splitRateData() {
 		for(RateData data : _rateData) {
-			Date bc = new Date(data.begin.getYear(), 5, 30);
-			Date ec = new Date(data.end.getYear(), 5, 30);
-
-			if(data.begin.compareTo(bc) <=0) {
-				if(data.end.compareTo(bc) <= 0) {
-					_rateSplitData.add(data);
-				}
-				else {
-					if(data.end.compareTo(ec) <=0) {
-						
-						RateData d = new RateData();
-						d.begin = 
-						
-						d = new RateData();
-						d.begin = bc;
-						d.end = data.end;
-						d.data = data.data;
-						_rateSplitData.add(d);
-						
-						
-					}
-					else {
-						
-					}
-					
-				}
+			
+			Date cd = new Date(data.begin.getYear(), 5, 30);			
+			if(data.begin.compareTo(cd) <= 0 && data.end.compareTo(cd) <= 0) {
+				_rateSplitData.add(data);
+				continue;
 			}
-			else if(data)
 			
-			
-			
-			closedate.setYear(data.begin.getYear());
-			if(data.begin.compareTo(closedate) <= 0) {
-				if(data.end.compareTo(closedate) )
-			}
-			else {
+			if(data.begin.compareTo(cd) > 0) {
+				cd.setYear(cd.getYear() + 1);
 				
+				if(data.begin.compareTo(cd) <= 0 && data.end.compareTo(cd) <= 0) {
+					_rateSplitData.add(data);
+					continue;
+				}				
 			}
+			
+			
+			RateData d = new RateData();
+			d.begin = data.begin;
+			d.data = data.data;
+			
+			while(data.end.compareTo(cd) > 0) {
+				d.end = cd;
+				_rateSplitData.add(d);
+				
+				d.begin = cd;
+				d.begin.setDate(d.begin.getDate() + 1);
+				cd.setYear(cd.getYear() + 1);				
+			}
+			
+			d.end = data.end;
+			_rateSplitData.add(d);
 		}
 	}
 	
@@ -216,6 +215,28 @@ public class DataCalculator {
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
 			
 			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
+			
+			float r = 0.0f;		
+			for(RateData data : _rateSplitData) {
+				if(data.end.compareTo(checkin) > 0) {
+					if(data.end.compareTo(GLOBAL.TODAY) > 0) {
+						
+						r += (1 + data.data[currency][0] * getDays(GLOBAL.TODAY.getTime() - data.begin.getTime()));
+						
+						break;
+					}
+				}
+				
+				
+				if(data.begin.compareTo(checkin) <= 0) {
+					if(data.end.compareTo(GLOBAL.TODAY) < 0) {
+						r = ()
+					}
+				}
+				
+				checkin = 
+			}
+			
 /*			
 			for(RateData data : _rateData) {
 				if(data.begin.compareTo(checkin) <= 0) {

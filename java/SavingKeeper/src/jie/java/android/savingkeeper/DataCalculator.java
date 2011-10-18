@@ -209,6 +209,10 @@ public class DataCalculator {
 		return result;
 	}
 	
+	private long getDays(Date begin, Date end) {
+		return ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24)); 
+	}
+	
 	private float calcNowMoney(Date checkin, float amount, int currency, int type) {
 		float result = amount;
 
@@ -216,50 +220,28 @@ public class DataCalculator {
 			
 			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
 			
-			float r = 0.0f;		
 			for(RateData data : _rateSplitData) {
 				if(data.end.compareTo(checkin) > 0) {
+					float r = (data.data[currency][0] / 360.0f);
 					if(data.end.compareTo(GLOBAL.TODAY) > 0) {
-						
-						r += (1 + data.data[currency][0] * getDays(GLOBAL.TODAY.getTime() - data.begin.getTime()));
-						
+						if(data.begin.compareTo(checkin) >= 0) {
+							result *= (1 + r * getDays(data.begin, GLOBAL.TODAY));
+						}
+						else {
+							result *= (1 + r * getDays(checkin, GLOBAL.TODAY));
+						}
 						break;
 					}
-				}
-				
-				
-				if(data.begin.compareTo(checkin) <= 0) {
-					if(data.end.compareTo(GLOBAL.TODAY) < 0) {
-						r = ()
-					}
-				}
-				
-				checkin = 
-			}
-			
-/*			
-			for(RateData data : _rateData) {
-				if(data.begin.compareTo(checkin) <= 0) {
-					if(data.end.compareTo(checkin) <= 0) {
-						result = calc(data.begin, data.end, result, data.data); 
-					}
 					else {
-						result = calc(data.begin, checkin, result, data.data);
+						if(data.begin.compareTo(checkin) >= 0) {
+							result *= (1 + r * getDays(data.begin, data.end));
+						}
+						else {
+							result *= (1 + r * getDays(checkin, data.end));
+						}
 					}
 				}
-				else {
-					
-				}
 			}
-*/			
-			
-			long days = (GLOBAL.TODAY.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24);
-			
-			float rate = getRate(checkin, currency, type);
-			
-			result = amount * days * (rate / 360.f);
-			
-			//int delta = _current.compareTo(checkin);
 		}		
 		
 		return result;

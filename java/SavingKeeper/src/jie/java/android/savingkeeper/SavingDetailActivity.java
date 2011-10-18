@@ -209,7 +209,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 	private void showRate() {
 		//String checkin = ((EditText)this.findViewById(R.id.textCheckin)).getText().toString();
 		float rate = GLOBAL.CALCULATOR.getLatestRate(_iCurrency, _iType);
-		((EditText)this.findViewById(R.id.textRate)).setText(String.format("%.03f%%", rate));
+		((EditText)this.findViewById(R.id.textRate)).setText(String.format("%.03f%%", rate * 100));
 	}
 	
 }

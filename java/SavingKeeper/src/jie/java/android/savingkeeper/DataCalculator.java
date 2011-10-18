@@ -17,6 +17,8 @@ import android.util.Log;
 
 public class DataCalculator {
 	
+	private static final Date END_DATE = new Date(9999 - 1900, 11, 31);
+	
 	public static final class CalcResult {
 		public float now;
 		public float end;
@@ -85,31 +87,31 @@ public class DataCalculator {
 			}
 			
 			if(cursor.getInt(3) == DBAccess.CURRENCY_TYPE_RMB) {
-				data.data[0][0] = cursor.getFloat(4);
-				data.data[0][1] = cursor.getFloat(5);
-				data.data[0][2] = cursor.getFloat(6);
-				data.data[0][3] = cursor.getFloat(7);
-				data.data[0][4] = cursor.getFloat(8);
-				data.data[0][5] = cursor.getFloat(9);
-				data.data[0][6] = cursor.getFloat(10);
+				data.data[0][0] = cursor.getFloat(4) / 100;
+				data.data[0][1] = cursor.getFloat(5) / 100;
+				data.data[0][2] = cursor.getFloat(6) / 100;
+				data.data[0][3] = cursor.getFloat(7) / 100;
+				data.data[0][4] = cursor.getFloat(8) / 100;
+				data.data[0][5] = cursor.getFloat(9) / 100;
+				data.data[0][6] = cursor.getFloat(10) / 100;
 			}
 			else if(cursor.getInt(3) == DBAccess.CURRENCY_TYPE_US) {
-				data.data[1][0] = cursor.getFloat(4);
-				data.data[1][1] = cursor.getFloat(5);
-				data.data[1][2] = cursor.getFloat(6);
-				data.data[1][3] = cursor.getFloat(7);
-				data.data[1][4] = cursor.getFloat(8);
-				data.data[1][5] = cursor.getFloat(9);
-				data.data[1][6] = cursor.getFloat(10);
+				data.data[1][0] = cursor.getFloat(4) / 100;
+				data.data[1][1] = cursor.getFloat(5) / 100;
+				data.data[1][2] = cursor.getFloat(6) / 100;
+				data.data[1][3] = cursor.getFloat(7) / 100;
+				data.data[1][4] = cursor.getFloat(8) / 100;
+				data.data[1][5] = cursor.getFloat(9) / 100;
+				data.data[1][6] = cursor.getFloat(10) / 100;
 			}
 			else if(cursor.getInt(3) == DBAccess.CURRENCY_TYPE_EU) {
-				data.data[2][0] = cursor.getFloat(4);
-				data.data[2][1] = cursor.getFloat(5);
-				data.data[2][2] = cursor.getFloat(6);
-				data.data[2][3] = cursor.getFloat(7);
-				data.data[2][4] = cursor.getFloat(8);
-				data.data[2][5] = cursor.getFloat(9);
-				data.data[2][6] = cursor.getFloat(10);
+				data.data[2][0] = cursor.getFloat(4) / 100;
+				data.data[2][1] = cursor.getFloat(5) / 100;
+				data.data[2][2] = cursor.getFloat(6) / 100;
+				data.data[2][3] = cursor.getFloat(7) / 100;
+				data.data[2][4] = cursor.getFloat(8) / 100;
+				data.data[2][5] = cursor.getFloat(9) / 100;
+				data.data[2][6] = cursor.getFloat(10) / 100;
 			}
 			
 			++ count;
@@ -128,7 +130,7 @@ public class DataCalculator {
 		for(RateData data : _rateData) {
 			
 			Date cd = new Date(data.begin.getYear(), 5, 30);
-			Log.d(GLOBAL.APP_TAG, "close date(0):" + cd.toGMTString());
+			Log.d(GLOBAL.APP_TAG, "close date(0):" + cd.toString());
 			
 			if(data.begin.compareTo(cd) <= 0 && data.end.compareTo(cd) <= 0) {
 				_rateSplitData.add(data);
@@ -137,7 +139,7 @@ public class DataCalculator {
 			
 			if(data.begin.compareTo(cd) > 0) {
 				cd.setYear(cd.getYear() + 1);
-				Log.d(GLOBAL.APP_TAG, "close date(1):" + cd.toGMTString());
+				Log.d(GLOBAL.APP_TAG, "close date(1):" + cd.toString());
 				
 				if(data.begin.compareTo(cd) <= 0 && data.end.compareTo(cd) <= 0) {
 					_rateSplitData.add(data);
@@ -150,14 +152,17 @@ public class DataCalculator {
 			d.begin = data.begin;
 			d.data = data.data;
 			
-			while(data.end.compareTo(cd) > 0 && data.end.compareTo(GLOBAL.TODAY) < 0) {
+			Log.d(GLOBAL.APP_TAG, "Today:" + GLOBAL.TODAY.toString());
+			while(GLOBAL.TODAY.compareTo(cd) >= 0) {
 				d.end = cd;
 				_rateSplitData.add(d);
-				
+				d = new RateData();
 				d.begin = cd;
-				d.begin.setDate(d.begin.getDate() + 1);
-				cd.setYear(cd.getYear() + 1);
-				Log.d(GLOBAL.APP_TAG, "close date(2):" + cd.toGMTString());
+				d.data = data.data;
+
+				cd = new Date(cd.getYear() + 1, 5, 30);
+				//d.begin = cd;
+				Log.d(GLOBAL.APP_TAG, "close date(2):" + cd.toString());
 			}
 			
 			d.end = data.end;
@@ -192,22 +197,41 @@ public class DataCalculator {
 		
 		return 0;
 	}
+
+	private long getDays(Date begin, Date end) {
+		return ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24)); 
+	}	
 	
 	private float calcEndMoney(Date checkin, float amount, int currency, int type) {
 		
-		float result = 0.0f;
+		float result = amount;
 		
 		//Date endDate =null;//Calendar.getInstance().getTime();
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
-			
 			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
 			
-			long days = (GLOBAL.TODAY.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24);			
-			float rate = getRate(checkin, currency, type);
-			
-			result = amount * days * (rate / 360.f);
-			
-			//int delta = _current.compareTo(checkin);
+			for(RateData data : _rateSplitData) {
+				if(data.end.compareTo(checkin) > 0) {
+					float r = (data.data[currency][0] / 360.0f);
+					if(data.end.compareTo(GLOBAL.TODAY) > 0) {
+						if(data.begin.compareTo(checkin) >= 0) {
+							result *= (1 + r * getDays(data.begin, GLOBAL.TODAY));
+						}
+						else {
+							result *= (1 + r * getDays(checkin, GLOBAL.TODAY));
+						}
+						break;
+					}
+					else {
+						if(data.begin.compareTo(checkin) >= 0) {
+							result *= (1 + r * getDays(data.begin, data.end));
+						}
+						else {
+							result *= (1 + r * getDays(checkin, data.end));
+						}
+					}
+				}
+			}
 		}
 		else if(type == DBAccess.SAVING_TYPE_FIXED_3_MONTH) {
 			//endDate.setMonth(endDate.getMonth() + 3);
@@ -215,17 +239,10 @@ public class DataCalculator {
 		else {
 			return result;
 		}
-		for(RateData data : _rateData) {
-			
-		}
 		
 		return result;
 	}
-	
-	private long getDays(Date begin, Date end) {
-		return ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24)); 
-	}
-	
+		
 	private float calcNowMoney(Date checkin, float amount, int currency, int type) {
 		float result = amount;
 
@@ -261,39 +278,10 @@ public class DataCalculator {
 	
 	}
 	
-	public float getRate(Date checkin, int currency, int type) {
-		if(_rateData.size() == 0)
-			return 0.0f;
-		
-		if(type == DBAccess.SAVING_TYPE_CURRENT) {
-			return _rateData.get(_rateData.size() - 1).data[currency][0];
-		}
-		return 0.0f;
-	}
-	
 	public float getLatestRate(int currency, int type) {
 		if(_rateData.size() == 0)
 			return 0.0f;
 		
 		return _rateData.get(_rateData.size() - 1).data[currency][type];
-	}
-	
-	///
-	private float calc(final Date begin, final Date end, final float amount, final float rate) {
-		float result = amount;
-		
-		Date closedate = new Date();
-		closedate.setMonth(Calendar.JUNE);
-		closedate.setDate(30);
-		
-		while(begin.compareTo(end) < 0) {
-			closedate.setYear(begin.getYear());
-			Log.d(GLOBAL.APP_TAG, "closedate:" + closedate.toString());
-			
-			
-			
-		}
-		
-		return amount;
 	}
 }

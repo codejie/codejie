@@ -189,93 +189,116 @@ public class DataCalculator {
 			return -1;
 		}
 */		
-		result.end = calcEndMoney(ci, amount, currency, type);
-		result.now = calcNowMoney(ci, amount, currency, type);
+		return calcMoney(ci, amount, currency, type, result);
 		
 		//result.end = RateData.get(0).data[currency][type] * amount;// 10.0f;
 		//result.now = RateData.get(0).data[currency][type + 1] * amount;
-		
-		return 0;
 	}
 
 	private long getDays(Date begin, Date end) {
 		return ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24)); 
 	}	
 	
-	private float calcEndMoney(Date checkin, float amount, int currency, int type) {
+	private int getCurrentAmount(Date checkin, float amount, int currency, float result) {
+		result = amount;
 		
-		float result = amount;
+		for(RateData data : _rateSplitData) {
+			if(data.end.compareTo(checkin) > 0) {
+				float r = (data.data[currency][0] / 360.0f);
+				if(data.end.compareTo(GLOBAL.TODAY) > 0) {
+					if(data.begin.compareTo(checkin) >= 0) {
+						result *= (1 + r * getDays(data.begin, GLOBAL.TODAY));
+					}
+					else {
+						result *= (1 + r * getDays(checkin, GLOBAL.TODAY));
+					}
+					break;
+				}
+				else {
+					if(data.begin.compareTo(checkin) >= 0) {
+						result *= (1 + r * getDays(data.begin, data.end));
+					}
+					else {
+						result *= (1 + r * getDays(checkin, data.end));
+					}
+				}
+			}
+		}
+
+		return 0;
+	}
+	
+	private int getFixedRate(Date checkin, int currency, int type, float rate) {
 		
+		for(RateData data : _rateData) {
+			if(data.begin.compareTo(checkin) <= 0 && data.end.compareTo(checkin) > 0) {
+				rate =  data.data[currency][type];
+				return 0;
+			}
+		}
+		
+		return -1;
+	}
+	
+	private int getFixedMonthAmount(Date checkin, float amount, int currency, int type, CalcResult result) {
+		int months = 0;
+		switch(type) {
+		case DBAccess.SAVING_TYPE_FIXED_3_MONTH:
+			months = 3;
+			break;
+		case DBAccess.SAVING_TYPE_FIXED_6_MONTH:
+			months = 6;
+			break;
+		default:
+			break;
+		}
+		
+		Date t = checkin;
+		t.setMonth(t.getMonth() + months);
+		
+		if(t.compareTo(GLOBAL.TODAY) > 0) {
+			if(getCurrentAmount(checkin, amount, currency, result.now) != 0)
+				return -1;
+			result.end = amount;
+			return 0;
+		}
+		
+		result.end = amount;
+		result.now = amount;
+		while(t.compareTo(GLOBAL.TODAY) <= 0) {
+			float rate = 0.0f;
+			if(getFixedRate(t, currency, type, rate) != 0)
+				return -1;
+			rate = rate / 12;
+			result.end += result.end * (1 + rate);
+			
+			t.setMonth(t.getMonth() + months);
+		}
+		
+		t.setMonth(t.getMonth() - months);
+		
+		if(getCurrentAmount(t, result.end, currency, result.now) != 0)
+			return -1;
+		return 0;
+	}
+	
+	private int calcMoney(Date checkin, float amount, int currency, int type, CalcResult result) {		
 		//Date endDate =null;//Calendar.getInstance().getTime();
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
 			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
-			
-			for(RateData data : _rateSplitData) {
-				if(data.end.compareTo(checkin) > 0) {
-					float r = (data.data[currency][0] / 360.0f);
-					if(data.end.compareTo(GLOBAL.TODAY) > 0) {
-						if(data.begin.compareTo(checkin) >= 0) {
-							result *= (1 + r * getDays(data.begin, GLOBAL.TODAY));
-						}
-						else {
-							result *= (1 + r * getDays(checkin, GLOBAL.TODAY));
-						}
-						break;
-					}
-					else {
-						if(data.begin.compareTo(checkin) >= 0) {
-							result *= (1 + r * getDays(data.begin, data.end));
-						}
-						else {
-							result *= (1 + r * getDays(checkin, data.end));
-						}
-					}
-				}
-			}
+			float r = 0.0f;
+			if(getCurrentAmount(checkin, amount, currency, r) != 0)
+				return -1;
+			result.end = r;
+			result.now = r;
+			return 0;
 		}
-		else if(type == DBAccess.SAVING_TYPE_FIXED_3_MONTH) {
-			//endDate.setMonth(endDate.getMonth() + 3);
+		else if(type == DBAccess.SAVING_TYPE_FIXED_3_MONTH || type == DBAccess.SAVING_TYPE_FIXED_6_MONTH) {
+			return getFixedMonthAmount(checkin, amount, currency, type, result);
 		}
 		else {
-			return result;
+			return -1;
 		}
-		
-		return result;
-	}
-		
-	private float calcNowMoney(Date checkin, float amount, int currency, int type) {
-		float result = amount;
-
-		if(type == DBAccess.SAVING_TYPE_CURRENT) {
-			
-			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
-			
-			for(RateData data : _rateSplitData) {
-				if(data.end.compareTo(checkin) > 0) {
-					float r = (data.data[currency][0] / 360.0f);
-					if(data.end.compareTo(GLOBAL.TODAY) > 0) {
-						if(data.begin.compareTo(checkin) >= 0) {
-							result *= (1 + r * getDays(data.begin, GLOBAL.TODAY));
-						}
-						else {
-							result *= (1 + r * getDays(checkin, GLOBAL.TODAY));
-						}
-						break;
-					}
-					else {
-						if(data.begin.compareTo(checkin) >= 0) {
-							result *= (1 + r * getDays(data.begin, data.end));
-						}
-						else {
-							result *= (1 + r * getDays(checkin, data.end));
-						}
-					}
-				}
-			}
-		}		
-		
-		return result;
-	
 	}
 	
 	public float getLatestRate(int currency, int type) {

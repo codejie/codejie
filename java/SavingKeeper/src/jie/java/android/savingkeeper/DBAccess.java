@@ -116,6 +116,8 @@ public class DBAccess {
 		
 		db.execSQL(sql);
 		
+		initRateData();
+		
 		return 0;
 	}
 	
@@ -237,6 +239,23 @@ public class DBAccess {
 	
 	public float getRate(int checkin, int currency, int type) {
 		return 0.0f;
+	}
+	
+	private int initRateData() {
+		Cursor cursor = db.rawQuery("select count(*) from " + TABLE_NAME_RATE, null);
+		cursor.moveToFirst();
+		int c = cursor.getInt(0);
+		
+		Log.d(GLOBAL.APP_TAG, "rate row count:" + c);
+		
+		if(cursor.getInt(0) > 0) {
+			return -1;
+		}
+		
+		//http://www.abchina.com/cn/PublicPlate/Quotation/bwbll/201012/t20101213_45404.htm
+		//http://www.icbc.com.cn/icbc/金融信息/存贷款利率表/人民币存款利率表/
+		
+		return 0;
 	}
 	
 }

@@ -8,9 +8,7 @@ package jie.java.android.savingkeeper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import android.database.Cursor;
 import android.util.Log;
@@ -170,8 +168,6 @@ public class DataCalculator {
 		}
 	}
 	
-	
-	
 	public int calcMoney(final String checkin, float amount, int currency, int type, CalcResult result) {
 		
 		for(RateData data : _rateData) {
@@ -179,20 +175,8 @@ public class DataCalculator {
 		}
 		
 		Date ci = TOOLKIT.String2Date(checkin);
-/*		
-		SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd");
-		Date ci = null;
-		try {
-			ci = fmt.parse(checkin);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return -1;
-		}
-*/		
+	
 		return calcMoney(ci, amount, currency, type, result);
-		
-		//result.end = RateData.get(0).data[currency][type] * amount;// 10.0f;
-		//result.now = RateData.get(0).data[currency][type + 1] * amount;
 	}
 
 	private long getDays(Date begin, Date end) {

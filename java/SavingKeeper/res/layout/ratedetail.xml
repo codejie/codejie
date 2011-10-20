@@ -9,11 +9,12 @@
         <EditText android:layout_height="wrap_content" android:layout_weight="3" android:layout_width="wrap_content" android:text="2008.01.02" android:id="@+id/editStartDate"></EditText>
         <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:text="@string/title_setdate" android:id="@+id/btnStartDate"></Button>
     </LinearLayout>
-    <TextView android:id="@+id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_end_date"></TextView>
-    <LinearLayout android:layout_width="fill_parent" android:id="@+id/linearLayout2" android:layout_height="wrap_content">
+    <TextView android:id="@+id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_end_date" android:visibility="gone"></TextView>
+    <LinearLayout android:layout_width="fill_parent" android:id="@+id/linearLayout2" android:layout_height="wrap_content" android:visibility="gone">
         <EditText android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="3" android:text="9999.12.31" android:id="@+id/editEndDate"></EditText>
         <Button android:layout_height="wrap_content" android:layout_weight="1" android:layout_width="wrap_content" android:text="@string/title_setdate" android:id="@+id/btnEndDate"></Button>
     </LinearLayout>
+    <TextView android:layout_width="wrap_content" android:text="@string/str_rate" android:id="@+id/textView4" android:layout_height="wrap_content"></TextView>
     <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/button01" android:text="@string/currency_rmb"></Button>
     <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:id="@+id/tableLayout01" android:layout_marginRight="8dp" android:visibility="gone">
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow11">

@@ -199,8 +199,8 @@ public class DataCalculator {
 		return ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24)); 
 	}	
 	
-	private int getCurrentAmount(Date checkin, float amount, int currency, float result) {
-		result = amount;
+	private float getCurrentAmount(Date checkin, float amount, int currency) {
+		float result = amount;
 		
 		for(RateData data : _rateSplitData) {
 			if(data.end.compareTo(checkin) > 0) {
@@ -225,19 +225,18 @@ public class DataCalculator {
 			}
 		}
 
-		return 0;
+		return result;
 	}
 	
-	private int getFixedRate(Date checkin, int currency, int type, float rate) {
+	private float getFixedRate(Date checkin, int currency, int type) {
 		
 		for(RateData data : _rateData) {
 			if(data.begin.compareTo(checkin) <= 0 && data.end.compareTo(checkin) > 0) {
-				rate =  data.data[currency][type];
-				return 0;
+				return  data.data[currency][type];
 			}
 		}
 		
-		return -1;
+		return 0.0f;
 	}
 	
 	private int getFixedMonthAmount(Date checkin, float amount, int currency, int type, CalcResult result) {
@@ -257,8 +256,7 @@ public class DataCalculator {
 		t.setMonth(t.getMonth() + months);
 		
 		if(t.compareTo(GLOBAL.TODAY) > 0) {
-			if(getCurrentAmount(checkin, amount, currency, result.now) != 0)
-				return -1;
+			result.now = getCurrentAmount(checkin, amount, currency);
 			result.end = amount;
 			return 0;
 		}
@@ -266,19 +264,16 @@ public class DataCalculator {
 		result.end = amount;
 		result.now = amount;
 		while(t.compareTo(GLOBAL.TODAY) <= 0) {
-			float rate = 0.0f;
-			if(getFixedRate(t, currency, type, rate) != 0)
-				return -1;
+			float rate = getFixedRate(t, currency, type);
 			rate = rate / 12;
-			result.end += result.end * (1 + rate);
+			result.end = result.end * (1 + rate);
 			
 			t.setMonth(t.getMonth() + months);
 		}
 		
 		t.setMonth(t.getMonth() - months);
 		
-		if(getCurrentAmount(t, result.end, currency, result.now) != 0)
-			return -1;
+		result.now = getCurrentAmount(t, result.end, currency);
 		return 0;
 	}
 	
@@ -286,9 +281,7 @@ public class DataCalculator {
 		//Date endDate =null;//Calendar.getInstance().getTime();
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
 			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
-			float r = 0.0f;
-			if(getCurrentAmount(checkin, amount, currency, r) != 0)
-				return -1;
+			float r = getCurrentAmount(checkin, amount, currency);
 			result.end = r;
 			result.now = r;
 			return 0;

@@ -196,7 +196,11 @@ public class DataCalculator {
 	}
 
 	private long getDays(Date begin, Date end) {
-		return ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24)); 
+		long d = ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24));
+		if(d <= 0) {
+			Log.e(GLOBAL.APP_TAG, "error: " + d + " end:" + end.toString() + " begin:" + begin.toString());
+		}
+		return d;
 	}	
 	
 	private float getCurrentAmount(Date checkin, float amount, int currency) {
@@ -277,6 +281,50 @@ public class DataCalculator {
 		return 0;
 	}
 	
+	private int getFixedYearAmount(Date checkin, float amount, int currency, int type, CalcResult result) {
+		int years = 0;
+		switch(type) {
+		case DBAccess.SAVING_TYPE_FIXED_1_YEAR:
+			years = 1;
+			break;
+		case DBAccess.SAVING_TYPE_FIXED_2_YEAR:
+			years = 2;
+			break;
+		case DBAccess.SAVING_TYPE_FIXED_3_YEAR:
+			years = 3;
+			break;
+		case DBAccess.SAVING_TYPE_FIXED_5_YEAR:
+			years = 4;
+			break;
+		default:
+			break;
+		}
+		
+		Date t = checkin;
+		t.setYear(t.getYear() + years);
+		
+		if(t.compareTo(GLOBAL.TODAY) > 0) {
+			result.now = getCurrentAmount(checkin, amount, currency);
+			result.end = amount;
+			return 0;
+		}
+		
+		result.end = amount;
+		result.now = amount;
+		while(t.compareTo(GLOBAL.TODAY) <= 0) {
+			float rate = getFixedRate(t, currency, type);
+			result.end = result.end * (1 + rate);
+			
+			t.setYear(t.getYear() + years);
+		}
+		
+		t.setYear(t.getYear() - years);
+		
+		result.now = getCurrentAmount(t, result.end, currency);		
+		
+		return 0;
+	}
+	
 	private int calcMoney(Date checkin, float amount, int currency, int type, CalcResult result) {		
 		//Date endDate =null;//Calendar.getInstance().getTime();
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
@@ -288,6 +336,10 @@ public class DataCalculator {
 		}
 		else if(type == DBAccess.SAVING_TYPE_FIXED_3_MONTH || type == DBAccess.SAVING_TYPE_FIXED_6_MONTH) {
 			return getFixedMonthAmount(checkin, amount, currency, type, result);
+		}
+		else if(type == DBAccess.SAVING_TYPE_FIXED_1_YEAR || type == DBAccess.SAVING_TYPE_FIXED_2_YEAR
+				|| type == DBAccess.SAVING_TYPE_FIXED_3_YEAR || type == DBAccess.SAVING_TYPE_FIXED_5_YEAR) {
+			return getFixedYearAmount(checkin, amount, currency, type, result);
 		}
 		else {
 			return -1;

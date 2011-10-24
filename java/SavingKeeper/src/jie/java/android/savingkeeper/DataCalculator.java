@@ -240,7 +240,7 @@ public class DataCalculator {
 			break;
 		}
 		
-		Date t = checkin;
+		Date t = new Date(checkin.getYear(), checkin.getMonth(), checkin.getDay());
 		t.setMonth(t.getMonth() + months);
 		
 		if(t.compareTo(GLOBAL.TODAY) > 0) {
@@ -278,7 +278,7 @@ public class DataCalculator {
 			years = 3;
 			break;
 		case DBAccess.SAVING_TYPE_FIXED_5_YEAR:
-			years = 4;
+			years = 5;
 			break;
 		default:
 			break;

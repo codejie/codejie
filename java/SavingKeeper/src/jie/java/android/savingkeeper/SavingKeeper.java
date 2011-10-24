@@ -31,23 +31,24 @@ public class SavingKeeper extends Activity {
         //test();
         
         //Intent intent = new Intent(this, RateListActivity.class);
-        Intent intent = new Intent(this, SavingListActivity.class);
-		this.startActivity(intent);
-		this.finish();
+        //Intent intent = new Intent(this, SavingListActivity.class);
+		//this.startActivity(intent);
+		//this.finish();
 		//Test.startActivity(BankListActivity.this);
 		//this.finish();
-/*
+
         btn = (Button)this.findViewById(R.id.button1);
         btn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(SavingKeeper.this, SavingListActivity.class);
-				SavingKeeper.this.startActivity(intent);	        	
+				SavingKeeper.this.startActivity(intent);
+				SavingKeeper.this.finish();
 			}
         	
         });
-*/        
+     
     }
     
     protected void finalize() {

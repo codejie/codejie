@@ -24,6 +24,7 @@ public class DBAccess {
 	public static final String TABLE_NAME_BANK			= "Bank";
 	public static final String TABLE_NAME_RATE			= "Rate";
 	public static final String TABLE_NAME_SAVING		= "Saving";
+	private static final String TABLE_NAME_CONFIG		= "Config";
 	
 	public static final String TABLE_COLUMN_ID			= "_id";
 	public static final String TABLE_COLUMN_TITLE		= "Title";
@@ -46,6 +47,7 @@ public class DBAccess {
 	public static final String TABLE_COLUMN_RATE_4		= "Rate_4";
 	public static final String TABLE_COLUMN_RATE_5		= "Rate_5";
 	public static final String TABLE_COLUMN_RATE_6		= "Rate_6";
+	public static final String TABLE_COLUMN_VALUE		= "Value";
 	
 	public static final int SAVING_TYPE_CURRENT			= 0;
 	public static final int SAVING_TYPE_FIXED_3_MONTH	= 1;
@@ -59,11 +61,9 @@ public class DBAccess {
 	public static final int CURRENCY_TYPE_US			= 1;
 	public static final int CURRENCY_TYPE_EU			= 2;
 	
-	public static class TestData {
-		public String str;
-		public int value;
-	}
-
+	public static int CONFIG_ID_VERSION				= 1;
+	public static int CONFIG_ID_PASSWD					= 2;
+	
 	private SQLiteDatabase db = null;
 	
 	public DBAccess() {
@@ -112,10 +112,17 @@ public class DBAccess {
 		+ TABLE_COLUMN_RATE_4 + " REAL,"
 		+ TABLE_COLUMN_RATE_5 + " REAL,"
 		+ TABLE_COLUMN_RATE_6 + " REAL"
-		+ ");";
-		
+		+ ");";		
 		db.execSQL(sql);
 		
+		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_CONFIG + "("
+		+ TABLE_COLUMN_ID + " INTEGER PRIMARY KEY,"
+		+ TABLE_COLUMN_VALUE + " TEXT"
+		+ ");";
+		db.execSQL(sql);
+		
+		//
+		initConfigData();
 		initRateData();
 		
 		return 0;
@@ -258,4 +265,34 @@ public class DBAccess {
 		return 0;
 	}
 	
+	private int initConfigData() {
+		Cursor cursor = db.rawQuery("select count(*) from " + TABLE_NAME_CONFIG, null);
+		cursor.moveToFirst();
+		
+		if(cursor.getInt(0) > 0) {
+			return -1;
+		}
+		
+		ContentValues values = new ContentValues();
+		values.put(TABLE_COLUMN_ID, CONFIG_ID_VERSION);
+		values.put(TABLE_COLUMN_VALUE, "0.11.10.25");
+		
+		db.insert(TABLE_NAME_CONFIG, null, values);
+		
+		values.clear();
+		values.put(TABLE_COLUMN_ID, CONFIG_ID_PASSWD);
+		values.put(TABLE_COLUMN_VALUE, "123");
+		
+		db.insert(TABLE_NAME_CONFIG, null, values);
+		
+		return 0;
+	}
+	
+	public String getConfigValue(int id) {
+		Cursor cursor = db.query(TABLE_NAME_CONFIG, new String[] { TABLE_COLUMN_VALUE }, TABLE_COLUMN_ID + "=" + id, null, null, null, null);
+		if(cursor.moveToFirst()) {
+			return cursor.getString(0);
+		}
+		return new String("");
+	}
 }

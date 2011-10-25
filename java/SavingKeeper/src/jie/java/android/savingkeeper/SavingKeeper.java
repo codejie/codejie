@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class SavingKeeper extends Activity {
@@ -36,21 +37,33 @@ public class SavingKeeper extends Activity {
 		//this.finish();
 		//Test.startActivity(BankListActivity.this);
 		//this.finish();
-
+        
         btn = (Button)this.findViewById(R.id.button1);
         btn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(SavingKeeper.this, SavingListActivity.class);
-				SavingKeeper.this.startActivity(intent);
-				SavingKeeper.this.finish();
+	        	String passwd = SavingKeeper.this.getPasswd();// text.getText().toString();
+				String p = GLOBAL.DBACCESS.getConfigValue(DBAccess.CONFIG_ID_PASSWD);
+				if(passwd.equals(p)) {
+				
+					Intent intent = new Intent(SavingKeeper.this, SavingListActivity.class);
+					SavingKeeper.this.startActivity(intent);
+					SavingKeeper.this.finish();
+				}
+				else {
+					Toast.makeText(SavingKeeper.this, "Password is incorrect.", 1).show();
+				}
 			}
         	
         });
      
     }
     
+    public String getPasswd() {
+        EditText text = (EditText) this.findViewById(R.id.editText1);
+        return text.getText().toString();
+    }
     protected void finalize() {
     	//GLOBAL.close();
     }

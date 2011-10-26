@@ -35,7 +35,6 @@ import android.widget.LinearLayout.LayoutParams;
 public class SavingDetailActivity extends Activity implements OnClickListener {
 	
 	public static final int ACTION_ADD		=	1;
-	public static final int ACTION_REMOVE	=	2;
 	public static final int ACTION_EDIT		=	3;
 	
 	protected static final int DIALOG_SHOWDATE	=	0;
@@ -44,7 +43,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 	private int _iID = -1;
 	
 	private int _iYear, _iMonth, _iDay;
-	private int _iCurrency = 0, _iType = 0, _iBank;
+	private int _iCurrency = 0, _iType = 0, _iBank = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +55,8 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 		this.setContentView(R.layout.savingdetail);
 		
 		initView();
+		
+		initData();
 	}		
 	
 	private void initView() {
@@ -135,10 +136,6 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			btn.setText(R.string.str_button_edit);			
 		}
 		break;
-		case ACTION_REMOVE: {
-			btn.setText(R.string.str_button_remove);			
-		}
-		break;
 		default:
 			break;
 		}
@@ -147,6 +144,53 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 		((Button)this.findViewById(R.id.btnAction)).setOnClickListener(this);
 	}
 	
+	private void initData() {
+
+		_iYear = Calendar.getInstance().get(Calendar.YEAR);
+		_iMonth = Calendar.getInstance().get(Calendar.MONTH);
+		_iDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+		
+		_iCurrency = 0;
+		_iType = 0;
+		_iBank = 0;
+					
+		String title = "";
+		
+		int btnTitle = R.string.str_button_add;
+		
+		if(_iAction == ACTION_EDIT) {
+			
+			Cursor cursor = GLOBAL.DBACCESS.querySaving(_iID);
+			if(cursor.getCount() > 0) {
+				title = cursor.getString(1);
+				
+				String checkin = cursor.getString(columnIndex);
+				
+				
+				btnTitle = R.string.str_button_edit;
+			}
+			else {
+				//DIALOG_SHOW_ERROR
+			}
+		}
+		
+
+		
+		EditText checkin = (EditText)this.findViewById(R.id.textCheckin);
+		checkin.setText(_iYear + "." + (_iMonth + 1) + "." + _iDay);
+
+		Spinner currency = ((Spinner)this.findViewById(R.id.listCurrency));
+		currency.setSelection(_iCurrency);
+		
+		Spinner type = ((Spinner)this.findViewById(R.id.listType));
+		type.setSelection(_iType);
+
+		Spinner bank = ((Spinner)this.findViewById(R.id.listBank));
+		bank.setSelection(_iBank);
+		
+		Button btn = (Button)this.findViewById(R.id.btnAction);	
+		btn.setText(btnTitle);
+	}
 	
 	@Override
     protected Dialog onCreateDialog(int id) {

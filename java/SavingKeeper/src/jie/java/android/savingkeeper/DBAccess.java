@@ -183,6 +183,13 @@ public class DBAccess {
 		return cursor;		
 	}
 	
+	public Cursor querySaving(int id) {
+		String col[] = new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_TITLE, TABLE_COLUMN_AMOUNT, TABLE_COLUMN_CURRENCY, TABLE_COLUMN_CHECKIN, TABLE_COLUMN_TYPE, TABLE_COLUMN_BANK, TABLE_COLUMN_NOTE }; 
+		Cursor  cursor = db.query(TABLE_NAME_SAVING, col, TABLE_COLUMN_ID + " = " + id, null, null, null, null, null);
+		cursor.moveToFirst();
+		return cursor;
+	}
+	
 	public int insertSaving(final String title, float amount, int currency, final String checkin, int type, int bank, final String note) {
 		ContentValues values = new ContentValues();
 		values.put(TABLE_COLUMN_TITLE, title);
@@ -260,7 +267,7 @@ public class DBAccess {
 		}
 		
 		//http://www.abchina.com/cn/PublicPlate/Quotation/bwbll/201012/t20101213_45404.htm
-		//http://www.icbc.com.cn/icbc/金融信息/存贷款利率表/人民币存款利率表/
+		//http://www.icbc.com.cn/icbc/é‡‘èž�ä¿¡æ�¯/å­˜è´·æ¬¾åˆ©çŽ‡è¡¨/äººæ°‘å¸�å­˜æ¬¾åˆ©çŽ‡è¡¨/
 		
 		return 0;
 	}

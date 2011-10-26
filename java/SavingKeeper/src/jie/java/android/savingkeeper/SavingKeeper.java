@@ -111,12 +111,27 @@ public class SavingKeeper extends Activity {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
 				}
 			});
     		
     		}
     		break;
     	case DIALOG_ABOUT: {
+    		LayoutInflater factory = LayoutInflater.from(this);
+    		final View v = factory.inflate(R.layout.about, null);
+    		
+    		Builder build = new AlertDialog.Builder(this);
+    		build.setTitle(R.string.title_about);
+    		build.setView(v);
+    		
+    		build.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
     		
     		}
     		break;

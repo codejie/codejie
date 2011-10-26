@@ -49,4 +49,6 @@
     <string name="menu_saving_edit">Edit</string>
     <string name="menu_saving_remove">Remove</string>
     <string name="menu_cancel">Cancel</string>
+    <string name="menu_chgpasswd">Change Passwd</string>
+    <string name="menu_about">About</string>
 </resources>

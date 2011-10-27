@@ -206,7 +206,19 @@ public class DBAccess {
 	}
 	
 	public int updateSaving(int id, final String title, float amount, int currency, final String checkin, int type, int bank, final String note) {
-		return -1;
+		ContentValues values = new ContentValues();
+		values.put(TABLE_COLUMN_TITLE, title);
+		values.put(TABLE_COLUMN_AMOUNT, amount);
+		values.put(TABLE_COLUMN_CURRENCY, currency);
+		values.put(TABLE_COLUMN_CHECKIN, checkin);
+		values.put(TABLE_COLUMN_TYPE, type);
+		values.put(TABLE_COLUMN_BANK, bank);
+		values.put(TABLE_COLUMN_NOTE, note);	
+		
+		if(db.update(TABLE_NAME_SAVING, values, TABLE_COLUMN_ID + " = " + id, null) == -1)
+			return -1;
+		
+		return 0;
 	}
 	
 	public int removeSaving(int id) {

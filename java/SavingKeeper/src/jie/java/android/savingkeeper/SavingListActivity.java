@@ -450,7 +450,7 @@ public class SavingListActivity extends ListActivity {
 		Intent intent = new Intent(this, act.getClass());
 		intent.putExtra("ACTION", SavingDetailActivity.ACTION_EDIT);
 		intent.putExtra("ID", _id);
-		this.startActivity(intent);   	
+		this.startActivity(intent);
     }
     
     private void onMenuSavingRemove() {

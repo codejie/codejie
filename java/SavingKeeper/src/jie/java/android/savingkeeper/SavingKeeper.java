@@ -97,7 +97,7 @@ public class SavingKeeper extends Activity {
     		final View v = factory.inflate(R.layout.chgpasswd, null);
     		
     		Builder build = new AlertDialog.Builder(this);
-    		build.setTitle(R.string.title_chgPasswd);
+    		build.setTitle(R.string.title_chgpasswd);
     		build.setView(v);
     		
     		build.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

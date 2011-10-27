@@ -43,7 +43,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 	private int _iID = -1;
 	
 	private int _iYear, _iMonth, _iDay;
-	private int _iCurrency = 0, _iType = 0, _iBank = 0;
+	private int _iCurrency = 0, _iType = 0, _iBank = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +60,6 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 	}		
 	
 	private void initView() {
-		
-		_iYear = Calendar.getInstance().get(Calendar.YEAR);
-		_iMonth = Calendar.getInstance().get(Calendar.MONTH);
-		_iDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-		
-		EditText checkin = (EditText)this.findViewById(R.id.textCheckin);
-		checkin.setText(_iYear + "." + (_iMonth + 1) + "." + _iDay);
 
 		ArrayAdapter<String> adapterCurrency = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.currency));
 		adapterCurrency.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -86,7 +79,6 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			}
 			
 		});
-		currency.setSelection(_iCurrency);
 		
 		ArrayAdapter<String> adapterType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.type));
 		adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -104,7 +96,6 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			public void onNothingSelected(AdapterView<?> parentView) {
 			}
 		});
-		type.setSelection(_iType);
 		
 		Cursor cursor = GLOBAL.DBACCESS.queryBank();
 		
@@ -125,21 +116,6 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			
 		});
 		
-		Button btn = (Button)this.findViewById(R.id.btnAction);
-		
-		switch(_iAction) {
-		case ACTION_ADD: {
-			btn.setText(R.string.str_button_add);
-		}
-		break;
-		case ACTION_EDIT: {
-			btn.setText(R.string.str_button_edit);			
-		}
-		break;
-		default:
-			break;
-		}
-		
 		((Button)this.findViewById(R.id.btnCheckin)).setOnClickListener(this);
 		((Button)this.findViewById(R.id.btnAction)).setOnClickListener(this);
 	}
@@ -152,29 +128,44 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 		
 		_iCurrency = 0;
 		_iType = 0;
-		_iBank = 0;
+		_iBank = -1;
 					
-		String title = "";
+		String title = null;
+		String amount = null;
+		String note = null;
 		
 		int btnTitle = R.string.str_button_add;
 		
-		if(_iAction == ACTION_EDIT) {
-			
+		if(_iAction == ACTION_EDIT) {			
 			Cursor cursor = GLOBAL.DBACCESS.querySaving(_iID);
 			if(cursor.getCount() > 0) {
 				title = cursor.getString(1);
+				amount = cursor.getString(2);
+				_iCurrency = cursor.getInt(3);
 				
-				String checkin = cursor.getString(columnIndex);
+				String checkin = cursor.getString(4);
+				Date ci = TOOLKIT.String2Date(checkin);
+				_iYear = ci.getYear() + 1900;
+				_iMonth = ci.getMonth();
+				_iDay = ci.getDay();
 				
+				_iType = cursor.getInt(5);
+				_iBank = cursor.getInt(6);
 				
+				note = cursor.getString(7);
 				btnTitle = R.string.str_button_edit;
 			}
 			else {
-				//DIALOG_SHOW_ERROR
-			}
+				Toast.makeText(this, "Load saving(" + _iID + ") data from db failed.", Toast.LENGTH_LONG).show();
+				this.finish();
+			}			
 		}
-		
 
+		EditText textTitle = (EditText)this.findViewById(R.id.textTitle);
+		textTitle.setText(title);
+		
+		EditText textAmount = (EditText)this.findViewById(R.id.textAmount);
+		textAmount.setText(amount);		
 		
 		EditText checkin = (EditText)this.findViewById(R.id.textCheckin);
 		checkin.setText(_iYear + "." + (_iMonth + 1) + "." + _iDay);
@@ -185,8 +176,10 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 		Spinner type = ((Spinner)this.findViewById(R.id.listType));
 		type.setSelection(_iType);
 
-		Spinner bank = ((Spinner)this.findViewById(R.id.listBank));
-		bank.setSelection(_iBank);
+		if(_iBank != -1) {
+			Spinner bank = ((Spinner)this.findViewById(R.id.listBank));
+			bank.setSelection(_iBank);
+		}
 		
 		Button btn = (Button)this.findViewById(R.id.btnAction);	
 		btn.setText(btnTitle);
@@ -240,9 +233,6 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 				GLOBAL.DBACCESS.updateSaving(_iID, title, amount, _iCurrency, checkin, _iType, _iBank, note);
 			}
 			
-		}
-		else if(_iAction == ACTION_REMOVE) {
-			GLOBAL.DBACCESS.removeSaving(_iID);
 		}
 		else {
 			

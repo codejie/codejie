@@ -131,7 +131,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 		_iBank = -1;
 					
 		String title = null;
-		String amount = null;
+		String amount = new String("0.00");
 		String note = null;
 		
 		int btnTitle = R.string.str_button_add;

@@ -74,12 +74,14 @@ public class SavingKeeper extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch(item.getItemId()) {
     	case R.id.item1:
+    		this.showDialog(DIALOG_CHG_PASSWD);
     		break;
     	case R.id.item2:
         	GLOBAL.close();
         	System.exit(0);
     		break;
     	case R.id.item3:
+    		this.showDialog(DIALOG_ABOUT);
     		break;
     	default:
     		break;
@@ -104,6 +106,26 @@ public class SavingKeeper extends Activity {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
+					String n = ((EditText)v.findViewById(R.id.editText2)).getText().toString();
+					String r = ((EditText)v.findViewById(R.id.editText3)).getText().toString();
+					if(n.compareTo(r) != 0) {
+						Toast.makeText(SavingKeeper.this, "New password does not match.", Toast.LENGTH_LONG).show();
+					}
+					else {
+						String p = ((EditText)v.findViewById(R.id.editText1)).getText().toString();
+						if(p.compareTo(GLOBAL.DBACCESS.getConfigValue(DBAccess.CONFIG_ID_PASSWD)) != 0) {
+							Toast.makeText(SavingKeeper.this, "Password is incorrect.", Toast.LENGTH_LONG).show();
+						}
+						else {
+							if(GLOBAL.DBACCESS.updateConfigValue(DBAccess.CONFIG_ID_PASSWD, n) != 0) {
+								Toast.makeText(SavingKeeper.this, "Password updated unsuccessfully.", Toast.LENGTH_LONG).show();
+							}
+							else {
+								Toast.makeText(SavingKeeper.this, "Password changes successfully.", Toast.LENGTH_LONG).show();
+								dialog.dismiss();
+							}
+						}
+					}
 				}
 			});
     		
@@ -115,6 +137,8 @@ public class SavingKeeper extends Activity {
 				}
 			});
     		
+    		dlg = build.create();
+    		
     		}
     		break;
     	case DIALOG_ABOUT: {
@@ -122,7 +146,7 @@ public class SavingKeeper extends Activity {
     		final View v = factory.inflate(R.layout.about, null);
     		
     		Builder build = new AlertDialog.Builder(this);
-    		build.setTitle(R.string.title_about);
+    		//build.setTitle(R.string.title_about);
     		build.setView(v);
     		
     		build.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -132,6 +156,8 @@ public class SavingKeeper extends Activity {
 					dialog.dismiss();
 				}
 			});
+    		
+    		dlg = build.create();
     		
     		}
     		break;

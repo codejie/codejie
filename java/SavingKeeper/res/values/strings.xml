@@ -53,4 +53,9 @@
     <string name="menu_about">About</string>
     <string name="title_about">About..</string>
     <string name="title_chgpasswd">Change Password</string>
+    <string name="title_old_passwd">Old Password</string>
+    <string name="title_new_passwd">New Password</string>
+    <string name="title_retype_passwd">Retype Password</string>
+    <string name="str_btn_login">Login</string>
+    <string name="str_version">0.11.10.28</string>
 </resources>

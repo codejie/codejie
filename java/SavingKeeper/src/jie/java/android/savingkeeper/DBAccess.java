@@ -300,7 +300,7 @@ public class DBAccess {
 		
 		values.clear();
 		values.put(TABLE_COLUMN_ID, CONFIG_ID_PASSWD);
-		values.put(TABLE_COLUMN_VALUE, "123");
+		values.put(TABLE_COLUMN_VALUE, "");
 		
 		db.insert(TABLE_NAME_CONFIG, null, values);
 		
@@ -313,5 +313,14 @@ public class DBAccess {
 			return cursor.getString(0);
 		}
 		return new String("");
+	}
+	
+	public int updateConfigValue(int id, final String value) {
+		ContentValues values = new ContentValues();
+		values.put(TABLE_COLUMN_ID, id);
+		values.put(TABLE_COLUMN_VALUE, value);
+		if(db.update(TABLE_NAME_CONFIG, values, TABLE_COLUMN_ID + " = " + id, null) == -1)
+			return -1;
+		return 0;
 	}
 }

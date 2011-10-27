@@ -6,6 +6,6 @@
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:orientation="vertical" android:layout_marginLeft="20dp" android:layout_marginRight="20dp" android:layout_marginTop="30dp">
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/textView2" android:text="Password"></TextView>
         <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/editText1" android:inputType="textPassword"></EditText>
-        <Button android:layout_width="fill_parent" android:text="Button" android:id="@+id/button1" android:layout_height="wrap_content"></Button>
+        <Button android:layout_width="fill_parent" android:id="@+id/button1" android:layout_height="wrap_content" android:text="@string/str_btn_login"></Button>
     </LinearLayout>
 </LinearLayout>

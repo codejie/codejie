@@ -2,5 +2,8 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
+  android:layout_height="fill_parent" android:orientation="vertical">
+    <TextView android:layout_marginTop="20dp" android:layout_height="wrap_content" android:text="SavingKeeper" android:layout_width="fill_parent" android:id="@+id/textView2" android:textSize="30dp" android:layout_gravity="center_horizontal" android:gravity="center_vertical|center_horizontal"></TextView>
+    <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/textView1" android:layout_gravity="center_horizontal" android:gravity="center_vertical|center_horizontal" android:text="@string/str_version"></TextView>
+    <TextView android:gravity="center_vertical|center_horizontal" android:layout_height="wrap_content" android:text="Jie.(codejie@gmail.com)" android:layout_width="fill_parent" android:id="@+id/textView3" android:layout_marginTop="20dp"></TextView>
 </LinearLayout>

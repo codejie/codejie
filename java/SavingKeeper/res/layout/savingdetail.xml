@@ -30,6 +30,6 @@
     <Spinner android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/listBank"></Spinner>
     <TextView android:layout_height="wrap_content" android:text="@string/str_note" android:id="@+id/textView8" android:layout_width="wrap_content" android:layout_weight="1"></TextView>
     <MultiAutoCompleteTextView android:layout_width="fill_parent" android:id="@+id/textNote" android:layout_height="wrap_content" android:layout_weight="1"></MultiAutoCompleteTextView>
-    <Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:layout_marginRight="5dp" android:layout_marginLeft="5dp" android:drawableLeft="@drawable/android:ic_input_add" android:layout_weight="1" android:id="@+id/btnAction"></Button>
+    <Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:layout_marginRight="15dp" android:layout_marginLeft="15dp" android:drawableLeft="@drawable/android:ic_input_add" android:layout_weight="1" android:id="@+id/btnAction"></Button>
 </LinearLayout>
 </ScrollView>

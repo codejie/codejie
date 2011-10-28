@@ -149,12 +149,13 @@ public class DBAccess {
 		return 0;
 	}
 	
-	public final String getBank(int id) {
+	public String getBank(int id) {
 		Cursor cursor = db.query(TABLE_NAME_BANK, new String[] { TABLE_COLUMN_TITLE }, TABLE_COLUMN_ID + "=" + id, null, null, null, null);
-		if(cursor.getCount() == 0)
-			return "Unknown";
-		cursor.moveToFirst();
-		return cursor.getString(0);
+		String ret = "Unknown";
+		if(cursor.moveToFirst())
+			ret = cursor.getString(0);
+		cursor.close();
+		return ret;
 	}
 	
 	public Cursor queryBank() {
@@ -171,22 +172,25 @@ public class DBAccess {
 	
 	public int checkBankUsed(int id) {
 		Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME_SAVING + " WHERE " + TABLE_NAME_BANK + " = " + id, null);
-		cursor.moveToFirst();
-		return cursor.getInt(0);
+		int ret = -1;
+		if(cursor.moveToFirst())
+			ret = cursor.getInt(0);
+		cursor.close();
+		return ret;
 	}
 
 	//
 	public Cursor querySaving() {
 		String col[] = new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_TITLE, TABLE_COLUMN_AMOUNT, TABLE_COLUMN_CURRENCY, TABLE_COLUMN_CHECKIN, TABLE_COLUMN_TYPE, TABLE_COLUMN_BANK, TABLE_COLUMN_NOTE }; 
 		Cursor  cursor = db.query(TABLE_NAME_SAVING, col, null, null, null, null, null, null);//"", new String[] {}, "", "", "", "");
-		cursor.moveToFirst();
+		//cursor.moveToFirst();
 		return cursor;		
 	}
 	
 	public Cursor querySaving(int id) {
 		String col[] = new String[] { TABLE_COLUMN_ID, TABLE_COLUMN_TITLE, TABLE_COLUMN_AMOUNT, TABLE_COLUMN_CURRENCY, TABLE_COLUMN_CHECKIN, TABLE_COLUMN_TYPE, TABLE_COLUMN_BANK, TABLE_COLUMN_NOTE }; 
 		Cursor  cursor = db.query(TABLE_NAME_SAVING, col, TABLE_COLUMN_ID + " = " + id, null, null, null, null, null);
-		cursor.moveToFirst();
+		//cursor.moveToFirst();
 		return cursor;
 	}
 	
@@ -263,21 +267,15 @@ public class DBAccess {
 		return (db.delete(TABLE_NAME_RATE, TABLE_COLUMN_START + "='" + start + "' and " + TABLE_COLUMN_END + "='" + end + "'", null) > 0 ? 0 : -1);
 	}
 	
-	public float getRate(int checkin, int currency, int type) {
-		return 0.0f;
-	}
-	
 	private int initRateData() {
 		Cursor cursor = db.rawQuery("select count(*) from " + TABLE_NAME_RATE, null);
-		cursor.moveToFirst();
-		int c = cursor.getInt(0);
-		
-		Log.d(GLOBAL.APP_TAG, "rate row count:" + c);
-		
-		if(cursor.getInt(0) > 0) {
-			return -1;
+		if(cursor.moveToFirst()) {
+			if(cursor.getInt(0) > 0) {
+				cursor.close();
+				return -1;
+			}
 		}
-		
+		cursor.close();
 		//http://www.abchina.com/cn/PublicPlate/Quotation/bwbll/201012/t20101213_45404.htm
 		
 		return 0;
@@ -285,33 +283,38 @@ public class DBAccess {
 	
 	private int initConfigData() {
 		Cursor cursor = db.rawQuery("select count(*) from " + TABLE_NAME_CONFIG, null);
-		cursor.moveToFirst();
-		
-		if(cursor.getInt(0) > 0) {
-			return -1;
+		if(cursor.moveToFirst()) {
+			
+			if(cursor.getInt(0) > 0) {
+				cursor.close();
+				return -1;
+			}
+			cursor.close();
+			
+			ContentValues values = new ContentValues();
+			values.put(TABLE_COLUMN_ID, CONFIG_ID_VERSION);
+			values.put(TABLE_COLUMN_VALUE, "0.11.10.25");
+			
+			db.insert(TABLE_NAME_CONFIG, null, values);
+			
+			values.clear();
+			values.put(TABLE_COLUMN_ID, CONFIG_ID_PASSWD);
+			values.put(TABLE_COLUMN_VALUE, "");
+			
+			db.insert(TABLE_NAME_CONFIG, null, values);
 		}
-		
-		ContentValues values = new ContentValues();
-		values.put(TABLE_COLUMN_ID, CONFIG_ID_VERSION);
-		values.put(TABLE_COLUMN_VALUE, "0.11.10.25");
-		
-		db.insert(TABLE_NAME_CONFIG, null, values);
-		
-		values.clear();
-		values.put(TABLE_COLUMN_ID, CONFIG_ID_PASSWD);
-		values.put(TABLE_COLUMN_VALUE, "");
-		
-		db.insert(TABLE_NAME_CONFIG, null, values);
-		
+
 		return 0;
 	}
 	
 	public String getConfigValue(int id) {
 		Cursor cursor = db.query(TABLE_NAME_CONFIG, new String[] { TABLE_COLUMN_VALUE }, TABLE_COLUMN_ID + "=" + id, null, null, null, null);
+		String ret = "";
 		if(cursor.moveToFirst()) {
-			return cursor.getString(0);
+			ret = cursor.getString(0);
 		}
-		return new String("");
+		cursor.close();
+		return ret;
 	}
 	
 	public int updateConfigValue(int id, final String value) {

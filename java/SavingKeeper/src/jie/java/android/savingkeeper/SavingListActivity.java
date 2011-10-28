@@ -58,7 +58,7 @@ public class SavingListActivity extends ListActivity {
 			return view;
 		}
 		
-		public void bindView(View view, Context context, Cursor cursor) {
+		public void bindView(View view, Context context, Cursor cursor) {			
 			String title = cursor.getString(1);
 			float amount = cursor.getFloat(2);
 			int currency = cursor.getInt(3);
@@ -70,28 +70,76 @@ public class SavingListActivity extends ListActivity {
 			DataCalculator.CalcResult result = new DataCalculator.CalcResult();
 			GLOBAL.CALCULATOR.calcMoney(checkin, amount, currency, type, result);
 			
-			Log.d(GLOBAL.APP_TAG, "end = " + String.format("%.2f", result.end) + " now = " + result.now);
-			//((SavingListView)view).setTitle(cursor.getString(0), cursor.getString(1));
-
-			((SavingListView)view).setContent(cursor.getInt(0), title, String.format("%.2f", amount), RCLoader.getCurrency(SavingListActivity.this, currency),
-					checkin, RCLoader.getType(SavingListActivity.this, type), GLOBAL.DBACCESS.getBank(bank), note, String.format("%.2f", result.end), String.format("%.2f", result.now));
+			SavingListView v = (SavingListView)view;
+			v.setId(cursor.getInt(0));
+	
+			v.textTitle.setText(title);
+			if(isEnd(type, checkin)) {
+				v.textTitle.setTextColor(Color.YELLOW);
+			}
+			else {
+				v.textTitle.setTextColor(Color.GREEN);
+			}
+			
+			v.textAmount.setText(String.format("%.2f", amount));
+			v.textCurrency.setText(RCLoader.getCurrency(SavingListActivity.this, currency));
+			v.textCheckin.setText(checkin);
+			v.textType.setText(RCLoader.getType(SavingListActivity.this, type));
+			v.textBank.setText(GLOBAL.DBACCESS.getBank(bank));
+			v.textNote.setText(note);
+			v.textEnd.setText(String.format("%.2f", result.end));
+			v.textNow.setText(String.format("%.2f", result.now));			
+		}
+		
+		private boolean isEnd(int type, final String checkin) {
+			if(type == DBAccess.SAVING_TYPE_CURRENT)
+				return false;
+			
+			Date ci = TOOLKIT.String2Date(checkin);
+			
+			switch(type) {
+			case DBAccess.SAVING_TYPE_CURRENT:
+				return false;
+			case DBAccess.SAVING_TYPE_FIXED_3_MONTH:
+				ci.setMonth(ci.getMonth() + 3);
+				return ci.compareTo(GLOBAL.TODAY) <= 0;
+			case DBAccess.SAVING_TYPE_FIXED_6_MONTH:
+				ci.setMonth(ci.getMonth() + 6);
+				return ci.compareTo(GLOBAL.TODAY) <= 0;
+			case DBAccess.SAVING_TYPE_FIXED_1_YEAR:
+				ci.setYear(ci.getYear() + 1);
+				return ci.compareTo(GLOBAL.TODAY) <= 0;
+			case DBAccess.SAVING_TYPE_FIXED_2_YEAR:
+				ci.setYear(ci.getYear() + 2);
+				return ci.compareTo(GLOBAL.TODAY) <= 0;
+			case DBAccess.SAVING_TYPE_FIXED_3_YEAR:
+				ci.setYear(ci.getYear() + 3);
+				return ci.compareTo(GLOBAL.TODAY) <= 0;				
+			case DBAccess.SAVING_TYPE_FIXED_5_YEAR:
+				ci.setYear(ci.getYear() + 5);
+				return ci.compareTo(GLOBAL.TODAY) <= 0;
+			default:
+				break;
+			}
+			
+			return false;
 		}
 	}
 	
 	protected class SavingListView extends LinearLayout {
 		
-		private TextView textTitle;
-		private TextView textAmount;
-		private TextView textEnd;
-		private TextView textNow;
+		public TextView textTitle;
+		public TextView textAmount;
+		public TextView textEnd;
+		public TextView textNow;
 		
-		private LinearLayout tlayout;
+		public LinearLayout tlayout;
 		
-		private TextView textBank;
-		private TextView textCheckin;
-		private TextView textType;
-		private TextView textCurrency;
-		private TextView textNote;
+		public TextView textBank;
+		public TextView textCheckin;
+		public TextView textType;
+		public TextView textCurrency;
+		public TextView textNote;
 		
 		public SavingListView(Context context) {
 			super(context);	
@@ -257,7 +305,7 @@ public class SavingListActivity extends ListActivity {
 			textEnd.setText(end);
 			textNow.setText(now);
 		}
-		
+
 		public void setExpanded() {
 			if(tlayout.getVisibility() == VISIBLE)
 				tlayout.setVisibility(GONE);
@@ -270,6 +318,7 @@ public class SavingListActivity extends ListActivity {
 		}
 		
 		protected boolean isEnd(final String checkin) {
+			
 			Date ci = TOOLKIT.String2Date(checkin);
 			//if(ci > GLOBAL.TODAY)
 				

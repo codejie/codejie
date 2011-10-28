@@ -279,7 +279,6 @@ public class DBAccess {
 		}
 		
 		//http://www.abchina.com/cn/PublicPlate/Quotation/bwbll/201012/t20101213_45404.htm
-		//http://www.icbc.com.cn/icbc/é‡‘èž�ä¿¡æ�¯/å­˜è´·æ¬¾åˆ©çŽ‡è¡¨/äººæ°‘å¸�å­˜æ¬¾åˆ©çŽ‡è¡¨/
 		
 		return 0;
 	}

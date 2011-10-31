@@ -3,6 +3,7 @@ package jie.java.android.savingkeeper;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.Activity;
 import android.util.Log;
 
 public final class GLOBAL {
@@ -18,12 +19,14 @@ public final class GLOBAL {
 	public static DBAccess DBACCESS = null;
 	public static DataCalculator CALCULATOR = null;
 	
-	public static void init() {
+	public static void init(Activity act) {
 		DBACCESS = new DBAccess();
 		DBACCESS.init(DATABASE_NAME);
 		
 		CALCULATOR = new DataCalculator();
 		CALCULATOR.init();
+		
+		DBACCESS.initData(act);
 	}
 	
 	public static void close() {

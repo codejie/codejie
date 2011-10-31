@@ -121,10 +121,6 @@ public class DBAccess {
 		+ ");";
 		db.execSQL(sql);
 		
-		//
-		initConfigData();
-		initRateData();
-		
 		return 0;
 	}
 	
@@ -136,6 +132,14 @@ public class DBAccess {
 		if(db != null) {
 			db.close();
 		}
+	}
+	
+	public int initData(Activity act) {
+		initConfigData();
+		initRateData();
+		initBankData(act);
+		
+		return 0;
 	}
 	
 	public int insertBank(final String title) {		
@@ -177,6 +181,24 @@ public class DBAccess {
 			ret = cursor.getInt(0);
 		cursor.close();
 		return ret;
+	}
+	
+	private int initBankData(Activity act) {
+		Cursor cursor = db.rawQuery("select count(*) from " + TABLE_NAME_BANK, null);
+		if(cursor.moveToFirst()) {
+			if(cursor.getInt(0) > 0) {
+				cursor.close();
+				return -1;
+			}
+		}
+		cursor.close();		
+		
+		String bank[] = act.getResources().getStringArray(R.array.bank);
+		for(String str : bank) {
+			insertBank(str);
+		}
+
+		return 0;
 	}
 
 	//
@@ -227,12 +249,11 @@ public class DBAccess {
 	
 	public int removeSaving(int id) {
 		db.delete(TABLE_NAME_SAVING, TABLE_COLUMN_ID + "=" + id, null);
-		return -1;
+		return 0;
 	}
 
 	//
-	public int insertRate(final String start, final String end, int currency, float rate0, float rate1, float rate2, float rate3, float rate4, float rate5, float rate6) {
-		
+	public int insertRate(final String start, final String end, int currency, float rate0, float rate1, float rate2, float rate3, float rate4, float rate5, float rate6) {		
 		ContentValues values = new ContentValues();
 		values.put(TABLE_COLUMN_START, start);
 		values.put(TABLE_COLUMN_END, end);

@@ -74,12 +74,7 @@ public class SavingListActivity extends ListActivity {
 			v.setId(cursor.getInt(0));
 	
 			v.textTitle.setText(title);
-			if(isEnd(type, checkin)) {
-				v.textTitle.setTextColor(Color.YELLOW);
-			}
-			else {
-				v.textTitle.setTextColor(Color.GREEN);
-			}
+			v.textTitle.setTextColor(getColor(type, checkin));
 			
 			v.textAmount.setText(String.format("%.2f", amount));
 			v.textCurrency.setText(RCLoader.getCurrency(SavingListActivity.this, currency));
@@ -91,38 +86,44 @@ public class SavingListActivity extends ListActivity {
 			v.textNow.setText(String.format("%.2f", result.now));			
 		}
 		
-		private boolean isEnd(int type, final String checkin) {
+		private int getColor(int type, final String checkin) {
 			if(type == DBAccess.SAVING_TYPE_CURRENT)
-				return false;
+				return Color.GREEN;
 			
 			Date ci = TOOLKIT.String2Date(checkin);
-			
+
 			switch(type) {
 			case DBAccess.SAVING_TYPE_CURRENT:
-				return false;
+				return Color.YELLOW;
 			case DBAccess.SAVING_TYPE_FIXED_3_MONTH:
 				ci.setMonth(ci.getMonth() + 3);
-				return ci.compareTo(GLOBAL.TODAY) <= 0;
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return Color.YELLOW;
 			case DBAccess.SAVING_TYPE_FIXED_6_MONTH:
 				ci.setMonth(ci.getMonth() + 6);
-				return ci.compareTo(GLOBAL.TODAY) <= 0;
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return Color.YELLOW;
 			case DBAccess.SAVING_TYPE_FIXED_1_YEAR:
 				ci.setYear(ci.getYear() + 1);
-				return ci.compareTo(GLOBAL.TODAY) <= 0;
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return Color.YELLOW;
 			case DBAccess.SAVING_TYPE_FIXED_2_YEAR:
 				ci.setYear(ci.getYear() + 2);
-				return ci.compareTo(GLOBAL.TODAY) <= 0;
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return Color.YELLOW;
 			case DBAccess.SAVING_TYPE_FIXED_3_YEAR:
 				ci.setYear(ci.getYear() + 3);
-				return ci.compareTo(GLOBAL.TODAY) <= 0;				
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return Color.YELLOW;				
 			case DBAccess.SAVING_TYPE_FIXED_5_YEAR:
 				ci.setYear(ci.getYear() + 5);
-				return ci.compareTo(GLOBAL.TODAY) <= 0;
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return Color.YELLOW;
 			default:
 				break;
 			}
 			
-			return false;
+			return Color.BLUE;
 		}
 	}
 	
@@ -468,7 +469,7 @@ public class SavingListActivity extends ListActivity {
     	case DIALOG_REMOVE_SAVING: {   		
     		Builder build = new AlertDialog.Builder(this);
     		build.setIcon(android.R.drawable.ic_delete);
-    		build.setTitle("Remove " + _title + " ?");
+    		build.setTitle(SavingListActivity.this.getResources().getString(R.string.title_savingremove) + "'" + _title + "' ?");
     		build.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 				
 				@Override

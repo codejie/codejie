@@ -44,6 +44,7 @@
     <string name="str_default_money">0.00</string>
     <string name="title_reteremove">确信删除当前利息数据？</string>
     <string name="title_remove_saving">删除</string>
+    <string name="title_savingremove">确信删除</string>
     <string name="menu_saving_edit">更新</string>
     <string name="menu_saving_remove">删除</string>
     <string name="menu_cancel">取消</string>

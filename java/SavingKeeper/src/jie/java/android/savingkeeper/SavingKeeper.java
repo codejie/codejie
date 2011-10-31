@@ -35,7 +35,7 @@ public class SavingKeeper extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        GLOBAL.init();    	
+        GLOBAL.init(this);    	
        
         btn = (Button)this.findViewById(R.id.button1);
         btn.setOnClickListener(new OnClickListener() {

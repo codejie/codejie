@@ -14,4 +14,13 @@
         <item>3 Years Time deposits</item>
         <item>5 Years Time deposits</item>
     </string-array>
+    <string-array name="bank">
+        <item>Bank of China</item>
+        <item>Industrial Commercial Bank of China</item>
+        <item>China Construction Bank</item>
+        <item>Agricultural Bank of China</item>
+        <item>China Merchants Bank</item>
+        <item>Bank of Communications</item>
+        <item>People’s Bank of China</item>
+    </string-array>
 </resources>

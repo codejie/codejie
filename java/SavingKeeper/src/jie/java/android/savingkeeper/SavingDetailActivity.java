@@ -138,7 +138,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 		
 		if(_iAction == ACTION_EDIT) {			
 			Cursor cursor = GLOBAL.DBACCESS.querySaving(_iID);
-			if(cursor.getCount() > 0) {
+			if(cursor.moveToFirst()) {
 				title = cursor.getString(1);
 				amount = cursor.getString(2);
 				_iCurrency = cursor.getInt(3);

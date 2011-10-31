@@ -6,7 +6,14 @@
     <TextView android:layout_height="wrap_content" android:text="@string/str_title" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_weight="1"></TextView>
     <AutoCompleteTextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/textTitle" android:layout_weight="1"></AutoCompleteTextView>
     <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:layout_weight="1">
-        <TextView android:layout_height="wrap_content" android:id="@+id/textView2" android:layout_width="wrap_content" android:text="@string/str_amount" android:layout_weight="2"></TextView>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.71"
+            android:text="@string/str_amount" >
+</TextView>
         <TextView android:layout_height="wrap_content" android:id="@+id/textView3" android:layout_width="wrap_content" android:text="@string/str_currency" android:layout_weight="1"></TextView>
     </LinearLayout>
     <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout2" android:layout_weight="1">

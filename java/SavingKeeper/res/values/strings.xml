@@ -2,8 +2,7 @@
 <resources>
     <string name="hello">Hello World, SavingKeeper!</string>
     <string name="app_name">SavingKeeper</string>
-    <string name="title_displayactivity">Display List Activity</string>
-    <string name="test_long_text">test_long_text</string>
+    <string name="str_title">Title</string>
     <string name="title_savinglistactivity">SavingList</string>
     <string name="str_bank">Bank</string>
     <string name="str_type">Type</string>
@@ -20,7 +19,6 @@
     <string name="menu_addsaving">Add Saving</string>
     <string name="str_currency">Currency</string>
     <string name="title_add_saving">Add Saving</string>
-    <string name="str_title">Title</string>
     <string name="str_amount">Amount</string>
     <string name="str_rate">Rate</string>
     <string name="str_button_add">Add</string>
@@ -58,4 +56,5 @@
     <string name="title_retype_passwd">Retype Password</string>
     <string name="str_btn_login">Login</string>
     <string name="str_version">0.11.10.28</string>
+    <string name="title_passwd">Password</string>
 </resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="currency">
+        <item>人民币</item>
+        <item>美元</item>
+        <item>欧元</item>
+    </string-array>
+    <string-array name="type">
+        <item>活期</item>
+        <item>三个月定期</item>
+        <item>六个月定期</item>
+        <item>一年定期</item>
+        <item>两年定期</item>
+        <item>三年定期</item>
+        <item>五年定期</item>
+    </string-array>
+</resources>

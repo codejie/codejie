@@ -85,31 +85,31 @@ public class DataCalculator {
 			}
 			
 			if(cursor.getInt(3) == DBAccess.CURRENCY_TYPE_RMB) {
-				data.data[0][0] = cursor.getFloat(4) / 100;
-				data.data[0][1] = cursor.getFloat(5) / 100;
-				data.data[0][2] = cursor.getFloat(6) / 100;
-				data.data[0][3] = cursor.getFloat(7) / 100;
-				data.data[0][4] = cursor.getFloat(8) / 100;
-				data.data[0][5] = cursor.getFloat(9) / 100;
-				data.data[0][6] = cursor.getFloat(10) / 100;
+				data.data[0][0] = cursor.getFloat(4);
+				data.data[0][1] = cursor.getFloat(5);
+				data.data[0][2] = cursor.getFloat(6);
+				data.data[0][3] = cursor.getFloat(7);
+				data.data[0][4] = cursor.getFloat(8);
+				data.data[0][5] = cursor.getFloat(9);
+				data.data[0][6] = cursor.getFloat(10);
 			}
 			else if(cursor.getInt(3) == DBAccess.CURRENCY_TYPE_US) {
-				data.data[1][0] = cursor.getFloat(4) / 100;
-				data.data[1][1] = cursor.getFloat(5) / 100;
-				data.data[1][2] = cursor.getFloat(6) / 100;
-				data.data[1][3] = cursor.getFloat(7) / 100;
-				data.data[1][4] = cursor.getFloat(8) / 100;
-				data.data[1][5] = cursor.getFloat(9) / 100;
-				data.data[1][6] = cursor.getFloat(10) / 100;
+				data.data[1][0] = cursor.getFloat(4);
+				data.data[1][1] = cursor.getFloat(5);
+				data.data[1][2] = cursor.getFloat(6);
+				data.data[1][3] = cursor.getFloat(7);
+				data.data[1][4] = cursor.getFloat(8);
+				data.data[1][5] = cursor.getFloat(9);
+				data.data[1][6] = cursor.getFloat(10);
 			}
 			else if(cursor.getInt(3) == DBAccess.CURRENCY_TYPE_EU) {
-				data.data[2][0] = cursor.getFloat(4) / 100;
-				data.data[2][1] = cursor.getFloat(5) / 100;
-				data.data[2][2] = cursor.getFloat(6) / 100;
-				data.data[2][3] = cursor.getFloat(7) / 100;
-				data.data[2][4] = cursor.getFloat(8) / 100;
-				data.data[2][5] = cursor.getFloat(9) / 100;
-				data.data[2][6] = cursor.getFloat(10) / 100;
+				data.data[2][0] = cursor.getFloat(4);
+				data.data[2][1] = cursor.getFloat(5);
+				data.data[2][2] = cursor.getFloat(6);
+				data.data[2][3] = cursor.getFloat(7);
+				data.data[2][4] = cursor.getFloat(8);
+				data.data[2][5] = cursor.getFloat(9);
+				data.data[2][6] = cursor.getFloat(10);
 			}
 			
 			++ count;

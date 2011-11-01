@@ -52,6 +52,7 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 				tl.setVisibility(View.GONE);
 			}
 		}
+/*	
 		else if(v.getId() == R.id.button02) {
 			View tl = this.findViewById(R.id.tableLayout02);
 			if(tl.getVisibility() == View.GONE) {
@@ -70,6 +71,7 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 				tl.setVisibility(View.GONE);
 			}
 		}
+*/		
 		else if(v.getId() == R.id.btnStartDate) {
 			this.showDialog(DIALOG_SHOWSTARTDATE);
 		}
@@ -134,7 +136,7 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 		float rate5 = Float.valueOf(((EditText)this.findViewById(R.id.EditText16)).getText().toString());
 		float rate6 = Float.valueOf(((EditText)this.findViewById(R.id.EditText17)).getText().toString());
 		
-		GLOBAL.DBACCESS.insertRate(start, end, currency, rate0, rate1, rate2, rate3, rate4, rate5, rate6);
+		GLOBAL.DBACCESS.insertRate(start, end, currency, rate0 / 100, rate1 / 100, rate2 / 100, rate3 / 100, rate4 / 100, rate5 / 100, rate6 / 100);
 		
 		
 		currency = DBAccess.CURRENCY_TYPE_US;
@@ -146,7 +148,7 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 		rate5 = Float.valueOf(((EditText)this.findViewById(R.id.EditText26)).getText().toString());
 		rate6 = Float.valueOf(((EditText)this.findViewById(R.id.EditText27)).getText().toString());
 		
-		GLOBAL.DBACCESS.insertRate(start, end, currency, rate0, rate1, rate2, rate3, rate4, rate5, rate6);
+		GLOBAL.DBACCESS.insertRate(start, end, currency, rate0 / 100, rate1 / 100, rate2 / 100, rate3 / 100, rate4 / 100, rate5 / 100, rate6 / 100);
 		
 		
 		currency = DBAccess.CURRENCY_TYPE_EU;
@@ -158,7 +160,7 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 		rate5 = Float.valueOf(((EditText)this.findViewById(R.id.EditText36)).getText().toString());
 		rate6 = Float.valueOf(((EditText)this.findViewById(R.id.EditText37)).getText().toString());
 		
-		GLOBAL.DBACCESS.insertRate(start, end, currency, rate0, rate1, rate2, rate3, rate4, rate5, rate6);
+		GLOBAL.DBACCESS.insertRate(start, end, currency, rate0 / 100, rate1 / 100, rate2 / 100, rate3 / 100, rate4 / 100, rate5 / 100, rate6 / 100);
 		
 		//this.finish();
 		

@@ -52,9 +52,9 @@
     <string name="menu_about">关于</string>
     <string name="title_about">关于..</string>
     <string name="title_chgpasswd">密码更改</string>
-    <string name="title_old_passwd">当前密码</string>
-    <string name="title_new_passwd">新密码</string>
-    <string name="title_retype_passwd">重新输入密码</string>
+    <string name="title_old_passwd">输入当前密码</string>
+    <string name="title_new_passwd">输入新密码</string>
+    <string name="title_retype_passwd">重新输入新密码</string>
     <string name="str_btn_login">登录</string>
     <string name="str_version">0.11.11.01</string>
     <string name="title_passwd">密码</string>

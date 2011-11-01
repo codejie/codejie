@@ -134,13 +134,13 @@ public class RateListActivity extends ExpandableListActivity {
 				m.put(C_TITLE_5, RCLoader.getType(this, 5));
 				m.put(C_TITLE_6, RCLoader.getType(this, 6));
 				
-				m.put(C_RATE_0, String.format("%.3f%%", cursor.getFloat(4)));
-				m.put(C_RATE_1, String.format("%.3f%%", cursor.getFloat(5)));
-				m.put(C_RATE_2, String.format("%.3f%%", cursor.getFloat(6)));
-				m.put(C_RATE_3, String.format("%.3f%%", cursor.getFloat(7)));
-				m.put(C_RATE_4, String.format("%.3f%%", cursor.getFloat(8)));
-				m.put(C_RATE_5, String.format("%.3f%%", cursor.getFloat(9)));
-				m.put(C_RATE_6, String.format("%.3f%%", cursor.getFloat(10)));
+				m.put(C_RATE_0, String.format("%.3f%%", cursor.getFloat(4) * 100));
+				m.put(C_RATE_1, String.format("%.3f%%", cursor.getFloat(5) * 100));
+				m.put(C_RATE_2, String.format("%.3f%%", cursor.getFloat(6) * 100));
+				m.put(C_RATE_3, String.format("%.3f%%", cursor.getFloat(7) * 100));
+				m.put(C_RATE_4, String.format("%.3f%%", cursor.getFloat(8) * 100));
+				m.put(C_RATE_5, String.format("%.3f%%", cursor.getFloat(9) * 100));
+				m.put(C_RATE_6, String.format("%.3f%%", cursor.getFloat(10) * 100));
 				c.add(m);				
 //				childData.add(c);
 			}
@@ -156,13 +156,13 @@ public class RateListActivity extends ExpandableListActivity {
 				m.put(C_TITLE_5, RCLoader.getType(this, 5));
 				m.put(C_TITLE_6, RCLoader.getType(this, 6));				
 				
-				m.put(C_RATE_0, String.format("%.3f%%", cursor.getFloat(4)));
-				m.put(C_RATE_1, String.format("%.3f%%", cursor.getFloat(5)));
-				m.put(C_RATE_2, String.format("%.3f%%", cursor.getFloat(6)));
-				m.put(C_RATE_3, String.format("%.3f%%", cursor.getFloat(7)));
-				m.put(C_RATE_4, String.format("%.3f%%", cursor.getFloat(8)));
-				m.put(C_RATE_5, String.format("%.3f%%", cursor.getFloat(9)));
-				m.put(C_RATE_6, String.format("%.3f%%", cursor.getFloat(10)));
+				m.put(C_RATE_0, String.format("%.3f%%", cursor.getFloat(4) * 100));
+				m.put(C_RATE_1, String.format("%.3f%%", cursor.getFloat(5) * 100));
+				m.put(C_RATE_2, String.format("%.3f%%", cursor.getFloat(6) * 100));
+				m.put(C_RATE_3, String.format("%.3f%%", cursor.getFloat(7) * 100));
+				m.put(C_RATE_4, String.format("%.3f%%", cursor.getFloat(8) * 100));
+				m.put(C_RATE_5, String.format("%.3f%%", cursor.getFloat(9) * 100));
+				m.put(C_RATE_6, String.format("%.3f%%", cursor.getFloat(10) * 100));
 				c.add(m);
 				
 //				childData.add(c);
@@ -179,13 +179,13 @@ public class RateListActivity extends ExpandableListActivity {
 				m.put(C_TITLE_5, RCLoader.getType(this, 5));
 				m.put(C_TITLE_6, RCLoader.getType(this, 6));
 				
-				m.put(C_RATE_0, String.format("%.3f%%", cursor.getFloat(4)));
-				m.put(C_RATE_1, String.format("%.3f%%", cursor.getFloat(5)));
-				m.put(C_RATE_2, String.format("%.3f%%", cursor.getFloat(6)));
-				m.put(C_RATE_3, String.format("%.3f%%", cursor.getFloat(7)));
-				m.put(C_RATE_4, String.format("%.3f%%", cursor.getFloat(8)));
-				m.put(C_RATE_5, String.format("%.3f%%", cursor.getFloat(9)));
-				m.put(C_RATE_6, String.format("%.3f%%", cursor.getFloat(10)));
+				m.put(C_RATE_0, String.format("%.3f%%", cursor.getFloat(4) * 100));
+				m.put(C_RATE_1, String.format("%.3f%%", cursor.getFloat(5) * 100));
+				m.put(C_RATE_2, String.format("%.3f%%", cursor.getFloat(6) * 100));
+				m.put(C_RATE_3, String.format("%.3f%%", cursor.getFloat(7) * 100));
+				m.put(C_RATE_4, String.format("%.3f%%", cursor.getFloat(8) * 100));
+				m.put(C_RATE_5, String.format("%.3f%%", cursor.getFloat(9) * 100));
+				m.put(C_RATE_6, String.format("%.3f%%", cursor.getFloat(10) * 100));
 				c.add(m);
 				
 //				childData.add(c);

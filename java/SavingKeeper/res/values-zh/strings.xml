@@ -56,6 +56,6 @@
     <string name="title_new_passwd">新密码</string>
     <string name="title_retype_passwd">重新输入密码</string>
     <string name="str_btn_login">登录</string>
-    <string name="str_version">0.11.10.28</string>
+    <string name="str_version">0.11.11.01</string>
     <string name="title_passwd">密码</string>
 </resources>

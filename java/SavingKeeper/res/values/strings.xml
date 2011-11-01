@@ -56,6 +56,6 @@
     <string name="title_new_passwd">New Password</string>
     <string name="title_retype_passwd">Retype Password</string>
     <string name="str_btn_login">Login</string>
-    <string name="str_version">0.11.10.28</string>
+    <string name="str_version">0.11.11.01</string>
     <string name="title_passwd">Password</string>
 </resources>

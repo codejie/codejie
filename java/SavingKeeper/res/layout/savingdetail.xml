@@ -18,7 +18,7 @@
     </LinearLayout>
     <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout2" android:layout_weight="1">
         <EditText android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="2" android:inputType="numberDecimal" android:singleLine="true" android:maxLength="10" android:id="@+id/textAmount" android:text="0.00"></EditText>
-        <Spinner android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:id="@+id/listCurrency"></Spinner>
+        <Spinner android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="1" android:id="@+id/listCurrency" android:clickable="false"></Spinner>
     </LinearLayout>
     <TextView android:text="@string/str_checkin" android:layout_height="wrap_content" android:layout_weight="1" android:layout_width="wrap_content" android:id="@+id/textView7"></TextView>
     <LinearLayout android:layout_weight="1" android:layout_width="fill_parent" android:id="@+id/linearLayout5" android:layout_height="wrap_content">

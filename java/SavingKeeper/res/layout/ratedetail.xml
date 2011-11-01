@@ -53,7 +53,7 @@
             <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
     </TableLayout>
-    <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/button02" android:text="@string/currency_us"></Button>
+    <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/button02" android:text="@string/currency_us" android:clickable="false"></Button>
     <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:visibility="gone" android:id="@+id/tableLayout02" android:layout_marginRight="8dp">
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow21">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView08" android:layout_weight="3" android:text="@string/title_type_current"></TextView>
@@ -91,7 +91,7 @@
             <TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="%"></TextView>
         </TableRow>
     </TableLayout>
-    <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/button03" android:text="@string/currency_eu"></Button>
+    <Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/button03" android:text="@string/currency_eu" android:clickable="false"></Button>
     <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:visibility="gone" android:id="@+id/tableLayout03" android:layout_marginRight="8dp">
         <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TableRow31">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView16" android:layout_weight="3" android:text="@string/title_type_current"></TextView>

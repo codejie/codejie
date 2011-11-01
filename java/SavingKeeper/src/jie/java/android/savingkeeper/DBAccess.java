@@ -76,6 +76,7 @@ public class DBAccess {
 		}
 		catch(SQLiteException e) {
 			Log.w(GLOBAL.APP_TAG, e.toString());
+			
 			return -1;
 		}
 		db.setVersion(DATABASE_VERSION);
@@ -297,7 +298,72 @@ public class DBAccess {
 			}
 		}
 		cursor.close();
-		//http://www.abchina.com/cn/PublicPlate/Quotation/bwbll/201012/t20101213_45404.htm
+		
+		//http://hi.baidu.com/shuangxiuliangzi/blog/item/c3d826faa8c80e8e9e51468f.html
+		//http://www.boc.cn/finadata/lilv/fd33/
+		insertRate("2006.08.19", "2007.03.17", DBAccess.CURRENCY_TYPE_RMB, 0.0072f, 0.0180f, 0.0225f, 0.0252f, 0.0306f, 0.0369f, 0.0414f);
+		insertRate("2006.08.19", "2007.03.17", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2006.08.19", "2007.03.17", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		
+		insertRate("2007.03.18", "2007.05.18", DBAccess.CURRENCY_TYPE_RMB, 0.0072f, 0.0198f, 0.0243f, 0.0279f, 0.0333f, 0.0396f, 0.0441f);
+		insertRate("2007.03.18", "2007.05.18", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2007.03.18", "2007.05.18", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		
+		insertRate("2007.05.19", "2007.07.20", DBAccess.CURRENCY_TYPE_RMB, 0.0072f, 0.0207f, 0.0261f, 0.0306f, 0.0369f, 0.0441f, 0.0495f);
+		insertRate("2007.05.19", "2007.07.20", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2007.05.19", "2007.07.20", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+		insertRate("2007.07.21", "2007.08.21", DBAccess.CURRENCY_TYPE_RMB, 0.0081f, 0.0234f, 0.0288f, 0.0333f, 0.0396f, 0.0468f, 0.0522f);
+		insertRate("2007.07.21", "2007.08.21", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2007.07.21", "2007.08.21", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+		insertRate("2007.08.22", "2007.09.14", DBAccess.CURRENCY_TYPE_RMB, 0.0081f, 0.0261f, 0.0315f, 0.0360f, 0.0423f, 0.0495f, 0.0549f);
+		insertRate("2007.08.22", "2007.09.14", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2007.08.22", "2007.09.14", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+		insertRate("2007.09.15", "2007.12.20", DBAccess.CURRENCY_TYPE_RMB, 0.0081f, 0.0288f, 0.0342f, 0.0387f, 0.0450f, 0.0522f, 0.0576f);
+		insertRate("2007.09.15", "2007.12.20", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2007.09.15", "2007.12.20", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);		
+		
+		insertRate("2007.12.21", "2008.10.08", DBAccess.CURRENCY_TYPE_RMB, 0.0072f, 0.0333f, 0.0378f, 0.0414f, 0.0468f, 0.0540f, 0.0585f);
+		insertRate("2007.12.21", "2008.10.08", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2007.12.21", "2008.10.08", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);	
+	
+		insertRate("2008.10.09", "2008.10.29", DBAccess.CURRENCY_TYPE_RMB, 0.0072f, 0.0315f, 0.0351f, 0.0387f, 0.0441f, 0.0513f, 0.0558f);
+		insertRate("2008.10.09", "2008.10.29", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2008.10.09", "2008.10.29", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+		insertRate("2008.10.30", "2008.11.26", DBAccess.CURRENCY_TYPE_RMB, 0.0072f, 0.0288f, 0.0324f, 0.0360f, 0.0414f, 0.0477f, 0.0513f);
+		insertRate("2008.10.30", "2008.11.26", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2008.10.30", "2008.11.26", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		
+		insertRate("2008.11.27", "2008.12.22", DBAccess.CURRENCY_TYPE_RMB, 0.0036f, 0.0198f, 0.0225f, 0.0252f, 0.0306f, 0.0360f, 0.0387f);
+		insertRate("2008.11.27", "2008.12.22", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2008.11.27", "2008.12.22", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+		insertRate("2008.12.23", "2010.10.19", DBAccess.CURRENCY_TYPE_RMB, 0.0036f, 0.0171f, 0.0198f, 0.0225f, 0.0279f, 0.0333f, 0.0360f);
+		insertRate("2008.12.23", "2010.10.19", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2008.12.23", "2010.10.19", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+		insertRate("2010.10.20", "2010.12.25", DBAccess.CURRENCY_TYPE_RMB, 0.0036f, 0.0191f, 0.0220f, 0.0250f, 0.0325f, 0.0385f, 0.0420f);
+		insertRate("2010.10.20", "2010.12.25", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2010.10.20", "2010.12.25", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+		insertRate("2010.12.26", "2011.02.08", DBAccess.CURRENCY_TYPE_RMB, 0.0036f, 0.0225f, 0.0250f, 0.0275f, 0.0355f, 0.0415f, 0.0455f);
+		insertRate("2010.12.26", "2011.02.08", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2010.12.26", "2011.02.08", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+		insertRate("2011.02.09", "2011.04.05", DBAccess.CURRENCY_TYPE_RMB, 0.0040f, 0.0260f, 0.0280f, 0.0300f, 0.0390f, 0.0450f, 0.0500f);
+		insertRate("2011.02.09", "2011.04.05", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2011.02.09", "2011.04.05", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+		insertRate("2011.04.06", "2011.07.06", DBAccess.CURRENCY_TYPE_RMB, 0.0050f, 0.0285f, 0.0305f, 0.0325f, 0.0415f, 0.0475f, 0.0525f);
+		insertRate("2011.04.06", "2011.07.06", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2011.04.06", "2011.07.06", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+		insertRate("2011.07.07", "9999.12.31", DBAccess.CURRENCY_TYPE_RMB, 0.0050f, 0.0310f, 0.0330f, 0.0350f, 0.0440f, 0.0500f, 0.0550f);
+		insertRate("2011.07.07", "9999.12.31", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2011.07.07", "9999.12.31", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 		
 		return 0;
 	}

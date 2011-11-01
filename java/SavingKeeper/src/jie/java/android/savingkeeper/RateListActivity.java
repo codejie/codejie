@@ -198,7 +198,9 @@ public class RateListActivity extends ExpandableListActivity {
 				c = new ArrayList<Map<String, String>>();
 				count = 0;
 			}
-		}		
+		}
+		
+		cursor.close();
 	}
 	
 	public void refreshList() {

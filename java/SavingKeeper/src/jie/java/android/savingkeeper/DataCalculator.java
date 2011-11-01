@@ -121,6 +121,8 @@ public class DataCalculator {
 			}			
 		}
 		
+		cursor.close();
+		
 		return 0;
 	}
 	

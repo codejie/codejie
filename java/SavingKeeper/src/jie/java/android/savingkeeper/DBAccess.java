@@ -268,7 +268,7 @@ public class DBAccess {
 		values.put(TABLE_COLUMN_RATE_6, rate6);
 		
 		if(db.insert(TABLE_NAME_RATE, null, values) == -1) {
-			Log.w(GLOBAL.APP_TAG, "insert rate data failed.");
+			//Log.w(GLOBAL.APP_TAG, "insert rate data failed.");
 			return -1;
 		}
 		
@@ -285,7 +285,7 @@ public class DBAccess {
 	}
 	
 	public int removeRate(final String start, final String end) {
-		Log.d(GLOBAL.APP_TAG, "start:" + start + "end:" + end);
+		//Log.d(GLOBAL.APP_TAG, "start:" + start + "end:" + end);
 		return (db.delete(TABLE_NAME_RATE, TABLE_COLUMN_START + "='" + start + "' and " + TABLE_COLUMN_END + "='" + end + "'", null) > 0 ? 0 : -1);
 	}
 	
@@ -361,9 +361,9 @@ public class DBAccess {
 		insertRate("2011.04.06", "2011.07.06", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 		insertRate("2011.04.06", "2011.07.06", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
-		insertRate("2011.07.07", "9999.12.31", DBAccess.CURRENCY_TYPE_RMB, 0.0050f, 0.0310f, 0.0330f, 0.0350f, 0.0440f, 0.0500f, 0.0550f);
-		insertRate("2011.07.07", "9999.12.31", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-		insertRate("2011.07.07", "9999.12.31", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2011.07.07", "2999.12.31", DBAccess.CURRENCY_TYPE_RMB, 0.0050f, 0.0310f, 0.0330f, 0.0350f, 0.0440f, 0.0500f, 0.0550f);
+		insertRate("2011.07.07", "2999.12.31", DBAccess.CURRENCY_TYPE_US, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+		insertRate("2011.07.07", "2999.12.31", DBAccess.CURRENCY_TYPE_EU, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 		
 		return 0;
 	}

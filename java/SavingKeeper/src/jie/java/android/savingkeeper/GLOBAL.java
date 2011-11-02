@@ -39,6 +39,6 @@ public final class GLOBAL {
 			DBACCESS.release();
 		}
 		
-		Log.d(APP_TAG, "GLOBAL close.");
+		//Log.d(APP_TAG, "GLOBAL close.");
 	}
 }

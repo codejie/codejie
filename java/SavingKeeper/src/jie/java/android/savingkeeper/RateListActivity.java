@@ -114,7 +114,7 @@ public class RateListActivity extends ExpandableListActivity {
 		Map<String, String> m = null;
 		while(cursor.moveToNext()) {
 			
-			Log.d(GLOBAL.APP_TAG, "start : " + cursor.getString(1) + " currency : " + cursor.getString(3));
+			//Log.d(GLOBAL.APP_TAG, "start : " + cursor.getString(1) + " currency : " + cursor.getString(3));
 			if(count == 0)
 			{
 				m = new HashMap<String, String>();
@@ -248,8 +248,8 @@ public class RateListActivity extends ExpandableListActivity {
 	
 	public void onItemLongClick(AdapterView<?> parent, View child, int position, long id) {
 		if(parent == this.getExpandableListView()) {
-			Log.d(GLOBAL.APP_TAG, "position:" + position + " id:" + id);
-			Log.d(GLOBAL.APP_TAG, "CHILD:" + child.toString() + "text:" + ((TextView)child).getText().toString());
+			//Log.d(GLOBAL.APP_TAG, "position:" + position + " id:" + id);
+			//Log.d(GLOBAL.APP_TAG, "CHILD:" + child.toString() + "text:" + ((TextView)child).getText().toString());
 			String str = ((TextView)child).getText().toString();
 			_startDate = str.substring(0, str.indexOf('-') - 1);
 			_endDate = str.substring(str.indexOf('-') + 2);

@@ -41,7 +41,7 @@ public class DataCalculator {
 			return -1;
 		
 		splitRateData();
-		
+/*		
 		for(RateData data : _rateData) {
 			Log.d(GLOBAL.APP_TAG, "rate record: " + data.begin.toString() + " - " + data.end.toGMTString() + " - " + data.data[0][0]);
 		}
@@ -49,7 +49,7 @@ public class DataCalculator {
 		for(RateData data : _rateSplitData) {
 			Log.d(GLOBAL.APP_TAG, "splitrate record: " + data.begin.toString() + " - " + data.end.toGMTString() + " - " + data.data[0][0]);
 		}
-		
+*/		
 		return 0;
 	}
 	
@@ -130,7 +130,7 @@ public class DataCalculator {
 		for(RateData data : _rateData) {
 			
 			Date cd = new Date(data.begin.getYear(), 5, 30);
-			Log.d(GLOBAL.APP_TAG, "close date(0):" + cd.toString());
+			//Log.d(GLOBAL.APP_TAG, "close date(0):" + cd.toString());
 			
 			if(data.begin.compareTo(cd) <= 0 && data.end.compareTo(cd) <= 0) {
 				_rateSplitData.add(data);
@@ -139,7 +139,7 @@ public class DataCalculator {
 			
 			if(data.begin.compareTo(cd) > 0) {
 				cd.setYear(cd.getYear() + 1);
-				Log.d(GLOBAL.APP_TAG, "close date(1):" + cd.toString());
+				//Log.d(GLOBAL.APP_TAG, "close date(1):" + cd.toString());
 				
 				if(data.begin.compareTo(cd) <= 0 && data.end.compareTo(cd) <= 0) {
 					_rateSplitData.add(data);
@@ -152,7 +152,7 @@ public class DataCalculator {
 			d.begin = data.begin;
 			d.data = data.data;
 			
-			Log.d(GLOBAL.APP_TAG, "Today:" + GLOBAL.TODAY.toString());
+			//Log.d(GLOBAL.APP_TAG, "Today:" + GLOBAL.TODAY.toString());
 			while(GLOBAL.TODAY.compareTo(cd) >= 0) {
 				d.end = cd;
 				_rateSplitData.add(d);
@@ -162,7 +162,7 @@ public class DataCalculator {
 
 				cd = new Date(cd.getYear() + 1, 5, 30);
 				//d.begin = cd;
-				Log.d(GLOBAL.APP_TAG, "close date(2):" + cd.toString());
+				//Log.d(GLOBAL.APP_TAG, "close date(2):" + cd.toString());
 			}
 			
 			d.end = data.end;
@@ -171,11 +171,11 @@ public class DataCalculator {
 	}
 	
 	public int calcMoney(final String checkin, float amount, int currency, int type, CalcResult result) {
-		
+/*		
 		for(RateData data : _rateData) {
 			Log.d(GLOBAL.APP_TAG, "begin: " + data.begin.toString() + " end:" + data.end.toString() + " data: " + data.data[0][1]);
 		}
-		
+*/		
 		Date ci = TOOLKIT.String2Date(checkin);
 	
 		return calcMoney(ci, amount, currency, type, result);
@@ -242,7 +242,7 @@ public class DataCalculator {
 			break;
 		}
 		
-		Date t = new Date(checkin.getYear(), checkin.getMonth(), checkin.getDay());
+		Date t = checkin;//new Date(checkin.getYear(), checkin.getMonth(), checkin.getDay());
 		t.setMonth(t.getMonth() + months);
 		
 		if(t.compareTo(GLOBAL.TODAY) > 0) {
@@ -256,7 +256,7 @@ public class DataCalculator {
 		while(t.compareTo(GLOBAL.TODAY) <= 0) {
 			float rate = getFixedRate(t, currency, type);
 			rate = rate / 12;
-			result.end = result.end * (1 + rate);
+			result.end = result.end * (1 + rate * months);
 			
 			t.setMonth(t.getMonth() + months);
 		}
@@ -299,7 +299,7 @@ public class DataCalculator {
 		result.now = amount;
 		while(t.compareTo(GLOBAL.TODAY) <= 0) {
 			float rate = getFixedRate(t, currency, type);
-			result.end = result.end * (1 + rate);
+			result.end = result.end * (1 + rate * years);
 			
 			t.setYear(t.getYear() + years);
 		}
@@ -314,7 +314,7 @@ public class DataCalculator {
 	private int calcMoney(Date checkin, float amount, int currency, int type, CalcResult result) {		
 		//Date endDate =null;//Calendar.getInstance().getTime();
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
-			Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
+			//Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());
 			float r = getCurrentAmount(checkin, amount, currency);
 			result.end = r;
 			result.now = r;

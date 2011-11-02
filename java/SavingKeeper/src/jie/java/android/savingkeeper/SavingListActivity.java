@@ -285,27 +285,6 @@ public class SavingListActivity extends ListActivity {
 		
 			this.addView(tlayout, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		}
-		
-		public void setContent(int id, final String title, final String amount, final String currency, final String checkin, final String type, final String bank, final String note, final String end, final String now) {
-			this.setId(id);
-			
-			textTitle.setText(title);
-			if(isEnd(checkin)) {
-				textTitle.setTextColor(Color.YELLOW);
-			}
-			else {
-				textTitle.setTextColor(Color.GREEN);
-			}
-			
-			textAmount.setText(amount);
-			textCurrency.setText(currency);
-			textCheckin.setText(checkin);
-			textType.setText(type);
-			textBank.setText(bank);
-			textNote.setText(note);
-			textEnd.setText(end);
-			textNow.setText(now);
-		}
 
 		public void setExpanded() {
 			if(tlayout.getVisibility() == VISIBLE)
@@ -316,14 +295,6 @@ public class SavingListActivity extends ListActivity {
 		
 		public String getTitle() {
 			return this.textTitle.getText().toString();
-		}
-		
-		protected boolean isEnd(final String checkin) {
-			
-			Date ci = TOOLKIT.String2Date(checkin);
-			//if(ci > GLOBAL.TODAY)
-				
-			return false;
 		}
 	}
 
@@ -375,8 +346,8 @@ public class SavingListActivity extends ListActivity {
     	_id = (int) info.id;
     	_title = ((SavingListView)info.targetView).getTitle();
     	
-    	Log.d(GLOBAL.APP_TAG, "VIEW: " + _id);
-    	Log.d(GLOBAL.APP_TAG, "Saving title:" + _title);
+    	//Log.d(GLOBAL.APP_TAG, "VIEW: " + _id);
+    	//Log.d(GLOBAL.APP_TAG, "Saving title:" + _title);
     	
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.savinglist_context, menu);

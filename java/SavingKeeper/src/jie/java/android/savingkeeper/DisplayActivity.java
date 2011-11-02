@@ -40,7 +40,7 @@ public class DisplayActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(GLOBAL.APP_TAG, "DISPLAY ACTIVITY");
+		//Log.d(GLOBAL.APP_TAG, "DISPLAY ACTIVITY");
 		
 		this.setContentView(R.layout.diaplay_activity);// android.R.layout.activity_list_item);
 	}

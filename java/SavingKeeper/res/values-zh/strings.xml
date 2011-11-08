@@ -56,6 +56,17 @@
     <string name="title_new_passwd">输入新密码</string>
     <string name="title_retype_passwd">重新输入新密码</string>
     <string name="str_btn_login">登录</string>
-    <string name="str_version">0.11.11.01</string>
+    <string name="str_version">11.11.08</string>
     <string name="title_passwd">密码</string>
+    <string name="menu_showtotal">存单总计</string>
+    <string name="str_total_savings">存单总计</string>
+    <string name="str_total_current_savings">活期存单</string>
+    <string name="str_total_maturity_savings">已到期定期存单</string>
+    <string name="str_total_nonmaturity_savings">未到期定期存单</string>
+    <string name="str_savings_total">存单数量</string>
+    <string name="str_savings_amount">存入金额</string>
+    <string name="str_savings_amount_now">当前金额</string>
+    <string name="str_savings_amount_end">到期金额</string>
+    <string name="title_savings_total">存单总计</string>
+    <string name="str_back">返回</string>
 </resources>

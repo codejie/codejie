@@ -18,5 +18,6 @@
         </activity>
         <activity android:name="RateListActivity" android:label="@string/title_ratelist"></activity>
         <activity android:name="RateDetailActivity" android:label="@string/title_addrate"></activity>
+        <activity android:name="SavingTotalActivity" android:label="@string/title_savings_total"></activity>
     </application>
 </manifest>

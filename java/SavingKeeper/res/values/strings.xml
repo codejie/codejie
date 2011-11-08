@@ -58,4 +58,15 @@
     <string name="str_btn_login">Login</string>
     <string name="str_version">0.11.11.01</string>
     <string name="title_passwd">Password</string>
+    <string name="menu_showtotal">Total</string>
+    <string name="str_total_savings">Total Savings</string>
+    <string name="str_total_current_savings">Total Current Savings</string>
+    <string name="str_total_maturity_savings">Total Maturity Fixed Savings</string>
+    <string name="str_total_nonmaturity_savings">Total Non-maturity Fixed Savings</string>
+    <string name="str_savings_total">Saving Sum</string>
+    <string name="str_savings_amount">Total Amount</string>
+    <string name="str_savings_amount_now">Current Amount</string>
+    <string name="str_savings_amount_end">Maturity Amount</string>
+    <string name="title_savings_total">Savings Statistic</string>
+    <string name="str_back">Back</string>
 </resources>

@@ -182,6 +182,9 @@ public class DataCalculator {
 	}
 
 	private long getDays(Date begin, Date end) {
+		if(end.compareTo(begin) <= 0)
+			return 0;
+		
 		long d = ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24));
 		if(d <= 0) {
 			Log.e(GLOBAL.APP_TAG, "error: " + d + " end:" + end.toString() + " begin:" + begin.toString());
@@ -229,6 +232,17 @@ public class DataCalculator {
 		return 0.0f;
 	}
 	
+	private float getFixedMonthEstimateFixedAmount(Date checkin, int months, float amount, int currency, int type) {
+		float rate = getFixedRate(checkin, currency, type);
+		rate = rate / 12;
+		return amount * (1 + rate * months);
+	}
+	
+	private float getFixedYearEstimateFixedAmount(Date checkin, int years, float amount, int currency, int type) {
+		float rate = getFixedRate(checkin, currency, type);
+		return amount * (1 + rate * years);
+	}
+	
 	private int getFixedMonthAmount(Date checkin, float amount, int currency, int type, CalcResult result) {
 		int months = 0;
 		switch(type) {
@@ -242,12 +256,12 @@ public class DataCalculator {
 			break;
 		}
 		
-		Date t = checkin;//new Date(checkin.getYear(), checkin.getMonth(), checkin.getDay());
+		Date t = new Date(checkin.getYear(), checkin.getMonth(), checkin.getDay());
 		t.setMonth(t.getMonth() + months);
 		
 		if(t.compareTo(GLOBAL.TODAY) > 0) {
 			result.now = getCurrentAmount(checkin, amount, currency);
-			result.end = amount;
+			result.end = getFixedMonthEstimateFixedAmount(checkin, months, amount, currency, type);
 			return 0;
 		}
 		
@@ -286,12 +300,12 @@ public class DataCalculator {
 			break;
 		}
 		
-		Date t = checkin;
+		Date t = new Date(checkin.getYear(), checkin.getMonth(), checkin.getDay());//checkin;
 		t.setYear(t.getYear() + years);
 		
 		if(t.compareTo(GLOBAL.TODAY) > 0) {
 			result.now = getCurrentAmount(checkin, amount, currency);
-			result.end = amount;
+			result.end = getFixedYearEstimateFixedAmount(checkin, years, amount, currency, type);//amount;
 			return 0;
 		}
 		
@@ -311,7 +325,7 @@ public class DataCalculator {
 		return 0;
 	}
 	
-	private int calcMoney(Date checkin, float amount, int currency, int type, CalcResult result) {		
+	public int calcMoney(final Date checkin, float amount, int currency, int type, CalcResult result) {		
 		//Date endDate =null;//Calendar.getInstance().getTime();
 		if(type == DBAccess.SAVING_TYPE_CURRENT) {
 			//Log.d(GLOBAL.APP_TAG, "today:" + GLOBAL.TODAY.toString() + " checkin:" + checkin.toString());

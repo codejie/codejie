@@ -68,13 +68,14 @@ public class SavingListActivity extends ListActivity {
 			String note = cursor.getString(7);
 			
 			DataCalculator.CalcResult result = new DataCalculator.CalcResult();
-			GLOBAL.CALCULATOR.calcMoney(checkin, amount, currency, type, result);
+			Date ci = TOOLKIT.String2Date(checkin);
+			GLOBAL.CALCULATOR.calcMoney(ci, amount, currency, type, result);
 			
 			SavingListView v = (SavingListView)view;
 			v.setId(cursor.getInt(0));
 	
 			v.textTitle.setText(title);
-			v.textTitle.setTextColor(getColor(type, checkin));
+			v.textTitle.setTextColor(getColor(type, ci));
 			
 			v.textAmount.setText(String.format("%.2f", amount));
 			v.textCurrency.setText(RCLoader.getCurrency(SavingListActivity.this, currency));
@@ -86,15 +87,13 @@ public class SavingListActivity extends ListActivity {
 			v.textNow.setText(String.format("%.2f", result.now));			
 		}
 		
-		private int getColor(int type, final String checkin) {
-			if(type == DBAccess.SAVING_TYPE_CURRENT)
-				return Color.GREEN;
+		private int getColor(int type, final Date ci) {
+			//if(type == DBAccess.SAVING_TYPE_CURRENT)
+			//	return Color.GREEN;
 			
-			Date ci = TOOLKIT.String2Date(checkin);
-
 			switch(type) {
 			case DBAccess.SAVING_TYPE_CURRENT:
-				return Color.YELLOW;
+				return Color.GREEN;
 			case DBAccess.SAVING_TYPE_FIXED_3_MONTH:
 				ci.setMonth(ci.getMonth() + 3);
 				if(ci.compareTo(GLOBAL.TODAY) <= 0)
@@ -154,7 +153,7 @@ public class SavingListActivity extends ListActivity {
 			
 			LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);					
 			textTitle = new TextView(context);
-			textTitle.setTextSize(32);
+			textTitle.setTextSize(24);
 			params.weight = 1.0f;
 			params.gravity = Gravity.LEFT;
 			layout.addView(textTitle, params);
@@ -357,6 +356,9 @@ public class SavingListActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
     	
     	switch(item.getItemId()) {
+    	case R.id.menu_showtotal:
+    		onMenuShowTotal();
+    		break;
     	case R.id.menu_add_saving:
     		onMenuAddSaving();
     		break;
@@ -476,5 +478,10 @@ public class SavingListActivity extends ListActivity {
     
     private void onMenuSavingRemove() {
     	this.showDialog(DIALOG_REMOVE_SAVING);
+    }
+    
+    private void onMenuShowTotal() {
+    	Intent intent = new Intent(this, SavingTotalActivity.class);
+		this.startActivity(intent);
     }
 }

@@ -34,6 +34,14 @@ import android.widget.LinearLayout.LayoutParams;
 
 public class SavingDetailActivity extends Activity implements OnClickListener {
 	
+	private Cursor cursor = null;
+	
+	@Override
+	public void finish() {
+		cursor.close();
+		super.finish();
+	}
+
 	public static final int ACTION_ADD		=	1;
 	public static final int ACTION_EDIT		=	3;
 	
@@ -97,7 +105,7 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			}
 		});
 		
-		Cursor cursor = GLOBAL.DBACCESS.queryBank();
+		cursor = GLOBAL.DBACCESS.queryBank();
 		
 		SimpleCursorAdapter adapterBank = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, cursor, new String[] { DBAccess.TABLE_COLUMN_TITLE }, new int[] { android.R.id.text1 });
 		adapterBank.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -147,15 +155,18 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 				Date ci = TOOLKIT.String2Date(checkin);
 				_iYear = ci.getYear() + 1900;
 				_iMonth = ci.getMonth();
-				_iDay = ci.getDay();
+				_iDay = ci.getDate();
 				
 				_iType = cursor.getInt(5);
-				_iBank = cursor.getInt(6);
+				_iBank = cursor.getInt(6) - 1;
 				
 				note = cursor.getString(7);
 				btnTitle = R.string.str_button_edit;
+				
+				cursor.close();
 			}
 			else {
+				cursor.close();
 				Toast.makeText(this, "Load saving(" + _iID + ") data from db failed.", Toast.LENGTH_LONG).show();
 				this.finish();
 			}			
@@ -180,6 +191,8 @@ public class SavingDetailActivity extends Activity implements OnClickListener {
 			Spinner bank = ((Spinner)this.findViewById(R.id.listBank));
 			bank.setSelection(_iBank);
 		}
+		
+		((EditText)this.findViewById(R.id.textNote)).setText(note);
 		
 		Button btn = (Button)this.findViewById(R.id.btnAction);	
 		btn.setText(btnTitle);

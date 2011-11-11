@@ -69,4 +69,6 @@
     <string name="str_savings_amount_end">Maturity Amount</string>
     <string name="title_savings_total">Savings Statistic</string>
     <string name="str_back">Back</string>
+    <string name="menu_reset_bank">Reset default list</string>
+    <string name="menu_reset_rate">Reset default list</string>
 </resources>

@@ -222,6 +222,9 @@ public class RateListActivity extends ExpandableListActivity {
 		case R.id.menu_addrate:
 			onMenuAddRate();
 			break;
+		case R.id.menu_reset_rate:
+			onMenuResetRate();
+			break;
 		default:
 			return false;
 		}
@@ -300,5 +303,10 @@ public class RateListActivity extends ExpandableListActivity {
 			}
 		}		
 		return dlg;
+	}
+	
+	protected void onMenuResetRate() {
+		GLOBAL.DBACCESS.resetRateData();
+		refreshList();
 	}
 }

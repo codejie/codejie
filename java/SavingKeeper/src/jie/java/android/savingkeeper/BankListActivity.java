@@ -77,6 +77,9 @@ public class BankListActivity extends ListActivity {
 		case R.id.menu_addbank:
 			onMenuAddBank();
 			break;
+		case R.id.menu_reset_bank:
+			onMenuResetBank();
+			break;
 		default:
 			return false;
 		}
@@ -174,5 +177,10 @@ public class BankListActivity extends ListActivity {
 	
 	protected void onMenuAddBank() {
 		this.showDialog(DIALOG_ADD_BANK);
+	}
+	
+	protected void onMenuResetBank() {
+		GLOBAL.DBACCESS.resetBankData(this);
+		cursor.requery();
 	}
 }

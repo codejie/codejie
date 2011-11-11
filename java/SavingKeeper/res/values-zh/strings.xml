@@ -69,4 +69,6 @@
     <string name="str_savings_amount_end">到期金额</string>
     <string name="title_savings_total">存单总计</string>
     <string name="str_back">返回</string>
+    <string name="menu_reset_bank">恢复缺省列表</string>
+    <string name="menu_reset_rate">恢复缺省列表</string>    
 </resources>

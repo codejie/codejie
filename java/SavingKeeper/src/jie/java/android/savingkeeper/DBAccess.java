@@ -412,4 +412,19 @@ public class DBAccess {
 			return -1;
 		return 0;
 	}
+	
+	public void resetBankData(Activity act) {
+		String sql = "DELETE FROM " + TABLE_NAME_BANK;		
+		db.execSQL(sql);
+		
+		initBankData(act);
+	}
+	
+	public void resetRateData() {
+		String sql = "DELETE FROM " + TABLE_NAME_RATE;
+		db.execSQL(sql);
+		
+		initRateData();
+	}
+	
 }

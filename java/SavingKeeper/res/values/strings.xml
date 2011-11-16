@@ -71,4 +71,7 @@
     <string name="str_back">Back</string>
     <string name="menu_reset_bank">Reset default list</string>
     <string name="menu_reset_rate">Reset default list</string>
+    <string name="menu_export">Export</string>
+    <string name="menu_import_all">Import All</string>
+    <string name="menu_import_part">Import Part</string>
 </resources>

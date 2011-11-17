@@ -1,12 +1,18 @@
 package jie.java.android.savingkeeper;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
 import android.database.Cursor;
+import android.util.Log;
 import android.util.Xml;
 
 /*
@@ -50,6 +56,7 @@ public class BackupManager {
 			file.createNewFile();
 		}
 		catch (IOException e) {
+			Log.e(GLOBAL.APP_TAG, "IOException : " + e.getMessage());
 			return -1;
 		}
 		
@@ -58,6 +65,7 @@ public class BackupManager {
 			os = new FileOutputStream(file);
 		}
 		catch (FileNotFoundException e) {
+			Log.e(GLOBAL.APP_TAG, "FileNotFoundException : " + e.getMessage());
 			return -1;
 		}
 		
@@ -116,7 +124,8 @@ public class BackupManager {
 			
 			os.close();
 		}
-		catch (Exception e) {
+		catch (IOException e) {
+			Log.e(GLOBAL.APP_TAG, "IOException : " + e.getMessage());
 			return -1;
 		}
 		
@@ -125,8 +134,52 @@ public class BackupManager {
 		return 0;
 	}
 	
-	public int importSavingList(final String filename) {
+	public int importSavingList(final String filename, boolean all) {
+		
+		File file = new File(filename);
+		
+		if(!file.exists())
+			return -1;
+		
+		try {
+			FileInputStream is = new FileInputStream(file);
+			
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(true);
+			XmlPullParser xp = factory.newPullParser();
+			xp.setInput(is, "UTF-8");
+			
+			int type = xp.getEventType();
+			while(type != XmlPullParser.END_DOCUMENT) {
+				if(type == XmlPullParser.START_TAG) {
+					if(xp.getName() == TAG_ITEM) {
+						if(getItem(xp, all) != 0) {
+							Log.e(GLOBAL.APP_TAG, "get Item data failed.");
+							return -1;
+						}						
+					}					
+				}
+				type = xp.nextTag();
+			}
+			
+			is.close();			
+		}
+		catch (XmlPullParserException e) {
+			Log.e(GLOBAL.APP_TAG, "XmlPullParserException : " + e.getMessage());
+			return -1;
+		}
+		catch (IOException e) {
+			Log.e(GLOBAL.APP_TAG, "IOException : " + e.getMessage());
+			return -1;
+		}
+		
 		return 0;
 	}
 	
+	private int getItem(XmlPullParser xp, boolean overwrite) {
+		
+		int id = Integer.getInteger(xp.getAttributeValue(0)).intValue();
+		
+		return 0;
+	}
 }

@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -371,6 +372,9 @@ public class SavingListActivity extends ListActivity {
     	case R.id.menu_exit:
     		onMenuExit();
     		break;
+    	case R.id.menu_export:
+    		onMenuExport();
+    		break;
     	default:
     		return false;
     	}
@@ -483,5 +487,11 @@ public class SavingListActivity extends ListActivity {
     private void onMenuShowTotal() {
     	Intent intent = new Intent(this, SavingTotalActivity.class);
 		this.startActivity(intent);
+    }
+    
+    private void onMenuExport() {
+    	if(BackupManager.exportSavingList(Environment.getExternalStorageDirectory() + "/export.xml") != 0) {
+    		Log.e(GLOBAL.APP_TAG, "EXPORT FAILED.");
+    	}
     }
 }

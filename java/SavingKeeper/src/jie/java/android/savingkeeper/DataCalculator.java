@@ -182,12 +182,9 @@ public class DataCalculator {
 	}
 
 	private long getDays(Date begin, Date end) {
-		if(end.compareTo(begin) <= 0)
-			return 0;
-		
 		long d = ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24));
 		if(d <= 0) {
-			Log.e(GLOBAL.APP_TAG, "error: " + d + " end:" + end.toString() + " begin:" + begin.toString());
+			return 0;//Log.e(GLOBAL.APP_TAG, "error: " + d + " end:" + end.toString() + " begin:" + begin.toString());
 		}
 		return d;
 	}	

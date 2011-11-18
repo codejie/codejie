@@ -502,12 +502,16 @@ public class SavingListActivity extends ListActivity {
     }
     
     private void onMenuImportAll() {
-    	if(BackupManager.importSavingList(Environment.getExternalStorageDirectory() + "/export.xml", true) != 0) {
+    	if(BackupManager.importSavingList(Environment.getExternalStorageDirectory() + "/export.xml", false) != 0) {
     		Log.e(GLOBAL.APP_TAG, "IMPORT FAILED.");
     	}
+    	_cursor.requery();
     }
     
     private void onMenuImportPart() {
-    	
+    	if(BackupManager.importSavingList(Environment.getExternalStorageDirectory() + "/export.xml", true) != 0) {
+    		Log.e(GLOBAL.APP_TAG, "IMPORT FAILED.");
+    	}
+    	_cursor.requery();
     }
 }

@@ -134,7 +134,7 @@ public class BackupManager {
 		return 0;
 	}
 	
-	public static int importSavingList(final String filename, boolean all) {
+	public static int importSavingList(final String filename, boolean checkexist) {
 		
 		File file = new File(filename);
 		
@@ -153,7 +153,7 @@ public class BackupManager {
 			while(type != XmlPullParser.END_DOCUMENT) {
 				if(type == XmlPullParser.START_TAG) {
 					if(xp.getName().equals(TAG_ITEM)) {
-						if(getItem(xp, all) != 0) {
+						if(getItem(xp, checkexist) != 0) {
 							Log.e(GLOBAL.APP_TAG, "get Item data failed.");
 							return -1;
 						}						
@@ -176,7 +176,7 @@ public class BackupManager {
 		return 0;
 	}
 	
-	private static int getItem(XmlPullParser xp, boolean overwrite) {
+	private static int getItem(XmlPullParser xp, boolean checkexist) {
 		
 		try {
 			Number n = new Integer(xp.getAttributeValue(0));
@@ -226,7 +226,7 @@ public class BackupManager {
 			type = xp.next();
 			String note = xp.getText();
 			
-			if(overwrite) {
+			if(checkexist) {
 				if(checkSavingExist(title))
 					return 0;
 			}
@@ -247,6 +247,14 @@ public class BackupManager {
 	}
 	
 	private static boolean checkSavingExist(final String title) {
-		return false;
+		
+		Cursor cursor = GLOBAL.DBACCESS.querySaving(title);
+		if(cursor != null) {
+			cursor.close();
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }

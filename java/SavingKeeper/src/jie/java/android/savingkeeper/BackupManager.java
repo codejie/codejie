@@ -134,7 +134,7 @@ public class BackupManager {
 		return 0;
 	}
 	
-	public int importSavingList(final String filename, boolean all) {
+	public static int importSavingList(final String filename, boolean all) {
 		
 		File file = new File(filename);
 		
@@ -152,14 +152,14 @@ public class BackupManager {
 			int type = xp.getEventType();
 			while(type != XmlPullParser.END_DOCUMENT) {
 				if(type == XmlPullParser.START_TAG) {
-					if(xp.getName() == TAG_ITEM) {
+					if(xp.getName().equals(TAG_ITEM)) {
 						if(getItem(xp, all) != 0) {
 							Log.e(GLOBAL.APP_TAG, "get Item data failed.");
 							return -1;
 						}						
 					}					
 				}
-				type = xp.nextTag();
+				type = xp.next();
 			}
 			
 			is.close();			
@@ -176,10 +176,77 @@ public class BackupManager {
 		return 0;
 	}
 	
-	private int getItem(XmlPullParser xp, boolean overwrite) {
+	private static int getItem(XmlPullParser xp, boolean overwrite) {
 		
-		int id = Integer.getInteger(xp.getAttributeValue(0)).intValue();
-		
+		try {
+			Number n = new Integer(xp.getAttributeValue(0));
+			int id = n.intValue();
+			int type = xp.nextTag();
+			//Title
+			type = xp.next();
+			String title = xp.getText();
+			type = xp.nextTag();
+			
+			//Amount
+			type = xp.nextTag();
+			type = xp.next();
+			n = new Float(xp.getText());
+			float amount = n.floatValue();
+			type = xp.nextTag();
+			
+			//Currency
+			type = xp.nextTag();
+			type = xp.next();
+			n = new Integer(xp.getText());
+			int currency = n.intValue();
+			type = xp.nextTag();
+
+			//checkin
+			type = xp.nextTag();
+			type = xp.next();
+			String checkin = xp.getText();
+			type = xp.nextTag();
+
+			//type
+			type = xp.nextTag();
+			type = xp.next();
+			n = new Integer(xp.getText());
+			int t = n.intValue();
+			type = xp.nextTag();
+
+			//bank
+			type = xp.nextTag();
+			type = xp.next();
+			n = new Integer(xp.getText());
+			int bank = n.intValue();
+			type = xp.nextTag();
+
+			//note
+			type = xp.nextTag();			
+			type = xp.next();
+			String note = xp.getText();
+			
+			if(overwrite) {
+				if(checkSavingExist(title))
+					return 0;
+			}
+			
+			if(GLOBAL.DBACCESS.insertSaving(title, amount, currency, checkin, t, bank, note) != 0)
+				return -1;
+			
+		}
+		catch (XmlPullParserException e) {
+			Log.e(GLOBAL.APP_TAG, "XmlPullParserException : " + e.getMessage());
+			return -1;
+		}
+		catch (IOException e) {
+			Log.e(GLOBAL.APP_TAG, "IOException : " + e.getMessage());
+			return -1;
+		}
 		return 0;
+	}
+	
+	private static boolean checkSavingExist(final String title) {
+		return false;
 	}
 }

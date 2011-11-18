@@ -375,6 +375,12 @@ public class SavingListActivity extends ListActivity {
     	case R.id.menu_export:
     		onMenuExport();
     		break;
+    	case R.id.menu_import_all:
+    		onMenuImportAll();
+    		break;
+    	case R.id.menu_import_part:
+    		onMenuImportPart();
+    		break;
     	default:
     		return false;
     	}
@@ -493,5 +499,15 @@ public class SavingListActivity extends ListActivity {
     	if(BackupManager.exportSavingList(Environment.getExternalStorageDirectory() + "/export.xml") != 0) {
     		Log.e(GLOBAL.APP_TAG, "EXPORT FAILED.");
     	}
+    }
+    
+    private void onMenuImportAll() {
+    	if(BackupManager.importSavingList(Environment.getExternalStorageDirectory() + "/export.xml", true) != 0) {
+    		Log.e(GLOBAL.APP_TAG, "IMPORT FAILED.");
+    	}
+    }
+    
+    private void onMenuImportPart() {
+    	
     }
 }

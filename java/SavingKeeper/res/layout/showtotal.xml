@@ -324,16 +324,22 @@
                 android:text="TextView" />
         </TableRow>
     </TableLayout>
+
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" android:layout_gravity="bottom" android:layout_marginTop="20dp">
+        android:layout_height="fill_parent"
+        android:layout_marginTop="20dp" >
+
         <Button
             android:id="@+id/button1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="@string/str_back" android:layout_marginLeft="30dp" android:layout_marginRight="30dp"/>
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:text="@string/str_back" />
     </RelativeLayout>
+
 </LinearLayout>
 </ScrollView>

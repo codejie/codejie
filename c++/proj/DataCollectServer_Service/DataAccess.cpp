@@ -479,7 +479,10 @@ void DataAccess::Show(std::ostream& os) const
 
 int DataAccess::OnPacket(const Packet &packet)
 {
-    if(packet.ST == Packet::PD_ST_21)
+    if(packet.ST == Packet::PD_ST_21
+		|| packet.ST == Packet::PD_ST_22
+		|| packet.ST == Packet::PD_ST_31
+		|| packet.ST == Packet::PD_ST_32)
     {//collect data
         if(packet.CN == Packet::PD_CN_DAILYDATA)
         {

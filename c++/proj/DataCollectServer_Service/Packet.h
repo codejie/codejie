@@ -39,8 +39,11 @@ public:
     static const std::string PD_CP_TAG_DATATIME;
     static const std::string PD_CP_TAG_EXERTN;
 
-    static const std::string PD_ST_21;
+    static const std::string PD_ST_21;//31;22;32;
     static const std::string PD_ST_91;
+	static const std::string PD_ST_22;
+	static const std::string PD_ST_31;
+	static const std::string PD_ST_32;
 
     static const std::string VALUE_DEFAULT_MN;
     static const std::string VALUE_DEFAULT_PW;

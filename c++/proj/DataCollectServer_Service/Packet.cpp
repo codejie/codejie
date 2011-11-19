@@ -21,6 +21,9 @@ const std::string Packet::PD_TAG_CP                 =   "CP";
 
 const std::string Packet::PD_ST_21                   =   "21";
 const std::string Packet::PD_ST_91                   =   "91";
+const std::string Packet::PD_ST_22                   =   "22";
+const std::string Packet::PD_ST_31                   =   "31";
+const std::string Packet::PD_ST_32                   =   "32";
 
 const std::string Packet::PD_CN_RUNTIMEDATA         =   "2011";
 const std::string Packet::PD_CN_DAILYDATA           =   "2031";

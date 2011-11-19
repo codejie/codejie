@@ -4,7 +4,7 @@
 
 #define APP_TITLE   "DataCollectServer"
 #define APP_DESC    "HuanTai Data Collect Service"
-#define APP_VERSION "1.09.17"
+#define APP_VERSION "1.11.19"
 #define SYS_PROMPT	"DCServer>"
 
 const int TASK_APP     			=   1;

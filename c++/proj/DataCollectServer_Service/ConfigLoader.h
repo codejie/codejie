@@ -3,9 +3,14 @@
 
 #include <string>
 #include <iostream>
+#include <utility>
+#include <vector>
 
 class ConfigLoader
 {
+public:
+	typedef std::pair<int, std::string> TDistributeServerDataPair;
+	typedef std::vector<TDistributeServerDataPair> TDistributeServerDataVector;
 public:
     ConfigLoader();
     virtual ~ConfigLoader();
@@ -29,6 +34,8 @@ public:
 
     int m_iRealtimeInterval;
     int m_iPeriodInterval;
+
+	TDistributeServerDataVector m_vctDistributeServerData;
 };
 
 #endif

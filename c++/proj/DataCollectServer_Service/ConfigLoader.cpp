@@ -50,9 +50,6 @@ int ConfigLoader::Load(const std::string& filename)
 	if(ini.get_string_value(key, "CollectAddr", tmp) != 0)
 		return -1;
 	m_strCollectAddr = tmp.c_str();
-	if(ini.get_string_value(key, "ZJCollectAddr", tmp) != 0)
-		return -1;
-	m_strZJCollectAddr = tmp.c_str();
 	if(ini.get_string_value(key, "ControllerAddr", tmp) != 0)
 		return -1;
 	m_strControllerAddr = tmp.c_str();

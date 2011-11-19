@@ -13,8 +13,6 @@ const int TASK_COLLECT_SERVER   =   3;
 const int TASK_COMMAND_SERVER   =   4;
 const int TASK_CONTROLLER_SERVER=	5;
 const int OBJ_DATALOADER        =   6;
-const int TASK_ZJCOLLECT_SERVER =   7;
-
 
 const int FPARAM_SHUTDOWN			=   0;
 const int FPARAM_PACKET				=   1;
@@ -31,6 +29,5 @@ const int FPARAM_STATEDATA          =   10;
 
 const int CLIENTTYPE_TERMINAL		=	1;
 const int CLIENTTYPE_CONTROLLER		=	2;
-const int CLIENTTYPE_ZJTERMINAL		=	3;
 
 #endif

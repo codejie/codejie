@@ -11,12 +11,12 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <vector>
 
 //#include "occi.h"
 #include "ocipp.h"
 
 #include "Packet.h"
-#include "ZJPacket.h"
 
 class DataStatistic
 {
@@ -42,8 +42,15 @@ protected:
 
 class DataAccess
 {
+public:
+	typedef std::vector<int> TStationDistributeIDVector;
 protected:
-	typedef std::map<const std::string, const std::string> TStationIDMap;//stationno + stationid
+	struct StationData
+	{
+		std::string StationID;
+		TStationDistributeIDVector DistributeID;
+	};
+	typedef std::map<const std::string, StationData> TStationDataMap;//stationno + data
 
 	typedef std::map<const std::string, const std::string> TInfectantIDMap;//nationalid + localid
 
@@ -78,9 +85,7 @@ public:
 	int UpdateICFeeAddFlag(const Packet& packet);
 	int UpdateValveRealDataFlag(const Packet& packet);
 
-    int OnZJRuntimeData(const ZJ::TTitleVector& title, const ZJ::TDataVector& data);
-    int OnZJMinuteData(const ZJ::TTitleVector& title, const ZJ::TDataVector& data);
-    int OnZJHourData(const ZJ::TTitleVector& title, const ZJ::TDataVector& data);
+	int SearchStationDistributeData(const std::string& ano, TStationDistributeIDVector& vct) const;
 private:
 	int Connect();
 	void Disconnect();
@@ -90,6 +95,8 @@ private:
 	int LoadDefColumn();
     int LoadDefColumnFromDB();
     int LoadDefColumnFromConfig();
+
+	int AnalyseStationDistributeData(const std::string& dist, TStationDistributeIDVector& vct) const;
 
 	int SearchStationID(const std::string& ano, std::string& station) const;
 	const std::string& SearchInfectantID(const std::string& nid) const;
@@ -123,7 +130,7 @@ private:
     ocipp::Connection* _conn;
     bool _isconnected;
 private:
-	TStationIDMap _mapStationID;
+	TStationDataMap _mapStationData;
 	TInfectantIDMap _mapInfectantID;
     TStationInfectantMap _mapStationInfectant;
     TInfectantMap _mapInfectant;

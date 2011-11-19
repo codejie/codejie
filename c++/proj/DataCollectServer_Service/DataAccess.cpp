@@ -224,21 +224,29 @@ int DataAccess::LoadStationID()
 
 	try
 	{
-		const std::string sql = "select station_id, absoluteno from t_cfg_station_info";
+		const std::string sql = "select station_id, absoluteno, station_code from t_cfg_station_info";
 
 		ocipp::Statement *stmt = _conn->makeStatement(sql);
 
-		std::string sid, ano;
+		std::string sid, ano, dist;
 		stmt->defineString(1, sid);
 		stmt->defineString(2, ano);
+		stmt->defineString(3, dist);
 
 		stmt->execute();
 
 		while(stmt->getNext() == 0)
 		{
-			if(!_mapStationID.insert(std::make_pair(ano, sid)).second)
+			StationData data;
+			data.StationID = sid;
+			if(AnalyseStationDistributeData(dist, data.DistributeID) != 0) 
 			{
-				ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadStationID>Load Station ID failed." << std::endl);
+				ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadStationID>Analyse Station Distribute Data failed." << std::endl);
+			}
+
+			if(!_mapStationData.insert(std::make_pair(ano, data)).second)
+			{
+				ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadStationID>Load Station Data failed." << std::endl);
                 return -1;
 			}
 		}
@@ -250,6 +258,30 @@ int DataAccess::LoadStationID()
 	{
         ACEX_LOG_OS(LM_ERROR, "<DataAccess::LoadStationID>Load Station ID exception - " << e << std::endl);
         return -1;
+	}
+
+	return 0;
+}
+
+int DataAccess::AnalyseStationDistributeData(const std::string& dist, DataAccess::TStationDistributeIDVector& vct) const
+{
+	if(dist.size() == 0)
+		return 0;
+
+	std::string::size_type b = 0;
+	std::string::size_type e = dist.find(",", b);
+	while(e != std::string::npos)
+	{
+		vct.push_back(ACE_OS::atoi(dist.substr(b, e - b).c_str()));
+		b = e + 1;
+		if(b == dist.size())
+			return 0;
+		e = dist.find(",", b);
+	}
+
+	if(b < dist.size())
+	{
+		vct.push_back(ACE_OS::atoi(dist.substr(b).c_str()));		
 	}
 
 	return 0;
@@ -405,10 +437,10 @@ int DataAccess::LoadDefColumnFromConfig()
 
 int DataAccess::SearchStationID(const std::string& ano, std::string &station) const
 {
-	TStationIDMap::const_iterator it = _mapStationID.find(ano);
-	if(it == _mapStationID.end())
+	TStationDataMap::const_iterator it = _mapStationData.find(ano);
+	if(it == _mapStationData.end())
 		return -1;
-	station = it->second;
+	station = it->second.StationID;
 	return 0;
 }
 

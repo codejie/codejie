@@ -96,10 +96,6 @@ int CoreMsgTask::handle_msg(const ACEX_Message& msg)
     {
         return OnCollectServerMsgProc(msg);
     }
-    else if(msg.msg_id() == TASK_ZJCOLLECT_SERVER)
-    {
-        return OnZJCollectServerMsgProc(msg);
-    }
     else if(msg.msg_id() == TASK_CONTROLLER_SERVER)
     {
         return OnControllerServerMsgProc(msg);
@@ -154,12 +150,13 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 	{
 		size_t size = (size_t)(msg.sparam() & 0x0000FFFF);
 		const char* buf = (const char*)msg.data();
+		const std::string stream = std::string(buf, size);
 
 		Packet packet;
-		if(PacketProcessor::Analyse(std::string(buf, size), packet, _crcCheck) == 0)
+		if(PacketProcessor::Analyse(stream, packet, _crcCheck) == 0)
 		{
 			UpdateClientCount(CLIENTTYPE_TERMINAL, msg.sparam() >> 16);
-            OnCollectPacket((msg.sparam() >> 16), packet);
+            OnCollectPacket((msg.sparam() >> 16), packet, stream);
 		}
 		else
 		{
@@ -186,10 +183,17 @@ int CoreMsgTask::OnCollectServerMsgProc(const ACEX_Message& msg)
 	return 0;
 }
 
-int CoreMsgTask::OnCollectPacket(int clientid, const Packet& packet)
+int CoreMsgTask::OnCollectPacket(int clientid, const Packet& packet, const std::string& stream)
 {
 	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnCollectPacket>Get Collect Packet - " << packet << std::endl);
+//Distribute
+	DataAccess::TStationDistributeIDVector vct;
+	if(_objDataAccess->SearchStationDistributeData(packet.MN, vct) == 0)
+	{
+		_objDistributeServerManager->OnStream(stream, vct);
+	}
 
+//Store
     _objDataAccess->OnPacket(packet);
 
 	return 0;
@@ -445,91 +449,3 @@ int CoreMsgTask::OnDataLoaderMsgProc(const ACEX_Message &msg)
     }
     return 0;
 }
-
-///
-
-int CoreMsgTask::OnZJCollectServerMsgProc(const ACEX_Message& msg)
-{
-	if(msg.fparam() == FPARAM_PACKET)
-	{
-        std::auto_ptr<ZJ::Packet> packet(reinterpret_cast<ZJ::Packet*>(msg.data()));
-        
-		UpdateClientCount(CLIENTTYPE_ZJTERMINAL, msg.sparam());
-        OnZJCollectPacket(msg.sparam(), *packet.get());
-	}
-	else if(msg.fparam() == FPARAM_SOCKET_CONNECT)
-	{
-		ACE_INET_Addr* addr =  reinterpret_cast<ACE_INET_Addr*>(msg.data());
-		OnZJCollectConnect(msg.sparam(), addr->get_host_addr(), addr->get_port_number());
-		delete addr;
-	}
-	else if(msg.fparam() == FPARAM_SOCKET_DISCONNECT)
-	{
-		OnZJCollectDisconnect(msg.sparam());
-	}
-	else
-	{
-		ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnZJCollectServerMsgProc>Unknwon fparam - " << msg.fparam() << std::endl);
-	}
-
-	return 0;
-}
-
-int CoreMsgTask::OnZJCollectPacket(int clientid, const ZJ::Packet& packet)
-{
-	ACEX_LOG_OS(LM_DEBUG, "<CoreMsgTask::OnZJCollectPacket>Get Collect Packet from " << clientid << "\n" << packet << std::endl);
-
-    if(packet.m_pDataBuf == NULL || packet.m_uiDataLen == 0)
-    {
-        ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnZJCollectPacket>Packet Data is empty." << std::endl);
-        return 0;
-    }
-
-    ZJ::TTitleVector title;
-    ZJ::TDataVector data;
-    if(packet.Decode(title, data) != 0)
-    {
-        ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnZJCollectPacket>Packet Decode data failed." << std::endl);
-        return -1;
-    }
-
-    if(packet.m_usFuncNo == ZJ::FUNCNO_DATA_RUNTIME)
-    {
-        _objDataAccess->OnZJRuntimeData(title, data);
-    }
-    else if(packet.m_usFuncNo == ZJ::FUNCNO_DATA_MINUTE)
-    {
-        _objDataAccess->OnZJMinuteData(title, data);
-    }
-    else if(packet.m_usFuncNo == ZJ::FUNCNO_DATA_HOUR)
-    {
-        _objDataAccess->OnZJHourData(title, data);
-    }
-    else
-    {
-        ACEX_LOG_OS(LM_WARNING, "<CoreMsgTask::OnZJCollectPacket>Unknown or Unsupport Packet." << std::endl);
-    }
-
-	return 0;
-}
-
-int CoreMsgTask::OnZJCollectConnect(int clientid, const std::string& ip, unsigned int port)
-{
-	ClientData_t data;
-	data.ip = ip;
-	data.port = port;
-	data.update = ACE_OS::time(NULL);
-	data.count = 0;
-
-	_mapClient.insert(std::make_pair(std::make_pair(CLIENTTYPE_ZJTERMINAL, clientid), data));
-
-	return 0;
-}
-
-int CoreMsgTask::OnZJCollectDisconnect(int clientid)
-{
-	_mapClient.erase(std::make_pair(CLIENTTYPE_ZJTERMINAL, clientid));
-
-	return 0;
-}
-

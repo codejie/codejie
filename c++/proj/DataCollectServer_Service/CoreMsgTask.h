@@ -13,9 +13,7 @@
 #include "DataAccess.h"
 #include "DataLoader.h"
 #include "Packet.h"
-#include "ZJPacket.h"
 #include "CollectServerTask.h"
-#include "ZJPacket.h"
 #include "ControllerServerTask.h"
 
 class ConfigLoader;
@@ -65,19 +63,14 @@ protected:
     int OnCollectServerMsgProc(const ACEX_Message& msg);
     int OnControllerServerMsgProc(const ACEX_Message& msg);
     int OnDataLoaderMsgProc(const ACEX_Message& msg);
-    int OnZJCollectServerMsgProc(const ACEX_Message& msg);
 private:
-    int OnCollectPacket(int clientid, const Packet& packet);
+    int OnCollectPacket(int clientid, const Packet& packet, const std::string& stream);
 	int OnCollectConnect(int clientid, const std::string& ip, unsigned int port);
 	int OnCollectDisconnect(int clientid);
 
     int OnControllerPacket(int clientid, const Packet& packet);
 	int OnControllerConnect(int clientid, const std::string& ip, unsigned int port);
 	int OnControllerDisconnect(int clientid);
-
-    int OnZJCollectPacket(int clientid, const ZJ::Packet& packet);
-	int OnZJCollectConnect(int clientid, const std::string& ip, unsigned int port);
-	int OnZJCollectDisconnect(int clientid);
 private:
     int InsertStateData(int clientid, int type, const Packet* packet);
     int RemoveStateData(unsigned int state);

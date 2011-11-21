@@ -7,6 +7,7 @@ DistributeClient::DistributeClient(DistributeServerManager* manager, int id)
 : _objManager(manager)
 , _iID(id)
 , _bConnected(false)
+, _szCount(0)
 {
 }
 
@@ -26,6 +27,8 @@ int DistributeClient::Send(const std::string &stream)
 {
     if(send(stream.c_str(), stream.size()) != ACEX_NB_Tcp_Client_Task::SEND_SUCCESS)
         return -1;
+
+	++ _szCount;
     return 0;
 }
 
@@ -48,8 +51,6 @@ int DistributeClient::handle_close(ACEX_TcpStream& server)
     _objManager->OnDistconnect(_iID, server);
     return 0;
 }
-
-
 
 //
 DistributeServerManager::DistributeServerManager(ACEX_Message_Task *msgtask)
@@ -151,3 +152,8 @@ int DistributeServerManager::OnStream(const std::string &stream, const DataAcces
     }
     return 0;
 }
+
+void DistributeServerManager::Show(std::ostream &os) const
+{
+	
+};

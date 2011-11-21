@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <iostream>
 
 #include "acex/Task.h"
 #include "acex/NB_Tcp_Client.h"
@@ -22,6 +23,7 @@ public:
 	int Send(const std::string& stream);
 
     bool IsConnected() const { return _bConnected; }
+	size_t Count() const { return _szCount; }
 protected:
 	virtual int handle_connecting();
 	virtual int handle_connect(ACEX_TcpStream& server);
@@ -30,6 +32,7 @@ protected:
 protected:
 	int _iID;
 	bool _bConnected;
+	size_t _szCount;
 private:
 	DistributeServerManager* _objManager;
 };
@@ -48,6 +51,8 @@ public:
 	void Final();
 
     int OnStream(const std::string& stream, const DataAccess::TStationDistributeIDVector& vct);
+
+	void Show(std::ostream& os) const;
 public:
 	void OnConnecting(int id);
 	void OnConnected(int id, ACEX_TcpStream& server);

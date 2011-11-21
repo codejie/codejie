@@ -1,0 +1,19 @@
+#include "afxres.h"
+
+#define ICO_MAIN 1000
+#define DLG_MAIN 1000
+#define ID_TEST 1002
+
+ICO_MAIN ICON "Main.ico"
+
+DLG_MAIN DIALOG 0, 0, 320, 200
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "MsgSender"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Install Hook",ID_TEST,260,7,50,14
+    PUSHBUTTON      "EXIT",IDCANCEL,260,23,50,14
+    LTEXT           "TODO: Place dialog controls here.",IDC_STATIC,17,15,200,
+                    8
+END

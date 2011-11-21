@@ -128,6 +128,13 @@ void ConfigLoader::Show(std::ostream& os) const
     os << "\nRealtimeInterval = " << m_iRealtimeInterval;
     os << "\nPeriodInterval = " << m_iPeriodInterval << std::endl;
 
+    os << "\nDistribute Data List = ";
+    for(TDistributeServerDataVector::const_iterator it = m_vctDistributeServerData.begin(); it != m_vctDistributeServerData.end(); ++ it)
+    {
+        os << "\n  ID = " << it->first << " Addr = " << it->second;
+    }
+    
+    os << std::endl;
 }
 
 

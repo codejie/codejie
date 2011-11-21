@@ -5,12 +5,14 @@
 #include <string>
 
 #include "acex/Task.h"
+#include "acex/NB_Tcp_Client.h"
 
 #include "ConfigLoader.h"
+#include "DataAccess.h"
 
 class DistributeServerManager;
 
-class DistributeClient
+class DistributeClient : public ACEX_NB_Tcp_Client_Task
 {
 public:
 	DistributeClient(DistributeServerManager* manager, int id);
@@ -18,7 +20,14 @@ public:
 
 	int Open(const std::string& addr);
 	int Send(const std::string& stream);
-public:
+
+    bool IsConnected() const { return _bConnected; }
+protected:
+	virtual int handle_connecting();
+	virtual int handle_connect(ACEX_TcpStream& server);
+	virtual int handle_close(ACEX_TcpStream& server);
+
+protected:
 	int _iID;
 	bool _bConnected;
 private:
@@ -36,14 +45,15 @@ public:
 	virtual ~DistributeServerManager();
 
 	int Init(const ConfigLoader::TDistributeServerDataVector& data);
+	void Final();
 
-	int Send(int id, const std::string& stream);
+    int OnStream(const std::string& stream, const DataAccess::TStationDistributeIDVector& vct);
 public:
 	void OnConnecting(int id);
-	void OnConnected(int id);
-	void OnDistconnect(int id);
+	void OnConnected(int id, ACEX_TcpStream& server);
+	void OnDistconnect(int id, ACEX_TcpStream& server);
 protected:
-	void Release();
+    int Send(int id, const std::string& stream);
 private:
 	TClientMap _mapClient;
 private:

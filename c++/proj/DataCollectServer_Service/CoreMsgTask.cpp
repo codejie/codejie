@@ -58,6 +58,13 @@ int CoreMsgTask::Init(const ConfigLoader& config)
 		return -1;
 	}
 
+    _objDistributeServerManager.reset(new DistributeServerManager(this));
+    if(_objDistributeServerManager->Init(config.m_vctDistributeServerData) != 0)
+    {
+        ACEX_LOG_OS(LM_ERROR, "<CoreMsgTask::Init>DistributeServerMaanger init failed." << std::endl);
+        return -1;
+    }
+
     _crcCheck = config.m_bCheckCRC;
 
 	return 0;
@@ -65,6 +72,12 @@ int CoreMsgTask::Init(const ConfigLoader& config)
 
 void CoreMsgTask::Final()
 {
+    if(_objDistributeServerManager.get() != NULL)
+    {
+        _objDistributeServerManager->Final();
+        _objDistributeServerManager.reset(NULL);
+    }
+
 	if(_taskControllerServer.get() != NULL)
 	{
 		_taskControllerServer->Final();

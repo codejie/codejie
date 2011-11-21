@@ -263,6 +263,15 @@ int DataAccess::LoadStationID()
 	return 0;
 }
 
+int DataAccess::SearchStationDistributeData(const std::string &ano, DataAccess::TStationDistributeIDVector &vct) const
+{
+    TStationDataMap::const_iterator it = _mapStationData.find(ano);
+    if(it == _mapStationData.end())
+        return -1;
+    vct = it->second.DistributeID;
+    return 0;
+}
+
 int DataAccess::AnalyseStationDistributeData(const std::string& dist, DataAccess::TStationDistributeIDVector& vct) const
 {
 	if(dist.size() == 0)

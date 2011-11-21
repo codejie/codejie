@@ -15,6 +15,7 @@
 #include "Packet.h"
 #include "CollectServerTask.h"
 #include "ControllerServerTask.h"
+#include "DistributeServerManager.h"
 
 class ConfigLoader;
 
@@ -80,6 +81,7 @@ private:
     std::auto_ptr<DataLoader> _objDataLoader;
     std::auto_ptr<CollectServerTask> _taskCollectServer;
     std::auto_ptr<ControllerServerTask> _taskControllerServer;
+    std::auto_ptr<DistributeServerManager> _objDistributeServerManager;
 private:
     bool _crcCheck;
 	TClientMap _mapClient;

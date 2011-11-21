@@ -214,6 +214,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\DistributeServerManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\ocipp.cpp"
 				>
 			</File>

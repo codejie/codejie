@@ -44,6 +44,7 @@ public:
 	void ShowInfectantID(std::ostream& os, const std::string& nid) const;
 	void ShowTerminal(int clienttype, std::ostream& os) const;
 	void ShowStateData(std::ostream& os) const;
+	void ShowDistributeData(std::ostream& os) const;
 
 	int Shutdown();
 private:

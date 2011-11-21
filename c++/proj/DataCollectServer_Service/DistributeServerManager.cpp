@@ -155,5 +155,9 @@ int DistributeServerManager::OnStream(const std::string &stream, const DataAcces
 
 void DistributeServerManager::Show(std::ostream &os) const
 {
-	
+	os << "\nDistribute Server Data = ";
+	for(TClientMap::const_iterator it = _mapClient.begin(); it != _mapClient.end(); ++ it)
+	{
+		os << "\nID = " << it->first << " Connected = " << (it->second->IsConnected() ? "Yes" : "No") << " Count = " << it->second->Count();
+	}
 };

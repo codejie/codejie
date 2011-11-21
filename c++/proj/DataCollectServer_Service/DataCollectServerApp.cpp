@@ -136,6 +136,8 @@ int DataCollectServerApp::regist_command()
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowTerminal().tag() + "' command failed.", __FILE__, __LINE__);
 	if(command_parser()->regist_command(CCmdShowController()) != 0)
 		throw ACEX_Runtime_Exception("Register '" + CCmdShowController().tag() + "' command failed.", __FILE__, __LINE__);
+	if(command_parser()->regist_command(CCmdShowDistribute()) != 0)
+		throw ACEX_Runtime_Exception("Register '" + CCmdShowDistribute().tag() + "' command failed.", __FILE__, __LINE__);
 
 //	if(command_parser()->regist_command(CCmdTest()) != 0)
 //		throw ACEX_Runtime_Exception("Register '" + CCmdTest().tag() + "' command failed.", __FILE__, __LINE__);
@@ -300,6 +302,11 @@ void DataCollectServerApp::ShowTerminal(int clienttype, std::ostream& os) const
 void DataCollectServerApp::ShowStateData(std::ostream& os) const
 {
 	_taskCore.ShowStateData(os);
+}
+
+void DataCollectServerApp::ShowDistributeData(std::ostream& os) const
+{
+	_taskCore.ShowDistributeData(os);
 }
 
 int DataCollectServerApp::Shutdown()

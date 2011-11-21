@@ -288,6 +288,11 @@ void CoreMsgTask::ShowStateData(std::ostream& os) const
 	os << std::endl;
 }
 
+void CoreMsgTask::ShowDistributeData(std::ostream& os) const
+{
+	_objDistributeServerManager->Show(os);
+}
+
 //
 
 int CoreMsgTask::OnControllerServerMsgProc(const ACEX_Message& msg)

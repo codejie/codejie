@@ -54,6 +54,7 @@ public:
 	void ShowInfectantID(std::ostream& os, const std::string& nid) const;
 	void ShowClient(int clienttype, std::ostream& os) const;
 	void ShowStateData(std::ostream& os) const;
+	void ShowDistributeData(std::ostream& os) const;
 protected:
 	void Final();
 	int UpdateClientCount(int collect, int clientid);//collect == 1 is client, else is controller

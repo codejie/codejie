@@ -80,6 +80,17 @@ public:
 	virtual void help_verbose(std::ostream& os) const;
 };
 
+class CCmdShowDistribute : public ACEX_Command
+{
+public:
+	virtual CCmdShowDistribute* clone() const;
+
+	virtual ACEX_Command_Tag tag() const;
+	virtual int execute(std::ostream& os);
+	virtual void help(std::ostream& os) const;
+	virtual void help_verbose(std::ostream& os) const;
+};
+
 class CCmdTest : public ACEX_Command
 {
 public:

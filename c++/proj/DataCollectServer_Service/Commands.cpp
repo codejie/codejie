@@ -280,7 +280,34 @@ void CCmdShowController::help_verbose(std::ostream& os) const
 	os << "\n    Usage:\n\t" << tag() << "[,pac(ket)]";
 	os << "\n    Example:\n\t" << tag() << std::endl;
 }
+////////////////////////////////////////////////////////////////////
+CCmdShowDistribute* CCmdShowDistribute::clone() const
+{
+	return new CCmdShowDistribute(*this);
+}
 
+ACEX_Command_Tag CCmdShowDistribute::tag() const
+{
+	return "showdistribute";
+}
+
+int CCmdShowDistribute::execute(std::ostream& os)
+{
+	theApp.ShowDistributeData(os);
+	return 1;
+}
+
+void CCmdShowDistribute::help(std::ostream& os) const
+{
+	os << "    Show distribute server connection info.";
+}
+
+void CCmdShowDistribute::help_verbose(std::ostream& os) const
+{
+	help(os);
+	os << "\n    Usage:\n\t" << tag() << "[,pac(ket)]";
+	os << "\n    Example:\n\t" << tag() << std::endl;
+}
 //////////////////////////////////////////////////////////////////////////
 CCmdTest* CCmdTest::clone() const
 {

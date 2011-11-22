@@ -12,6 +12,8 @@
 #include "Service.h"
 
 ServiceKeeper::ServiceKeeper()
+: argc_(0)
+, argv_(NULL)
 {
     //reactor (ACE_Reactor::instance ());
 }
@@ -22,7 +24,7 @@ ServiceKeeper::~ServiceKeeper()
 
 void ServiceKeeper::handle_control(DWORD control_code)
 {
-	        ACE_DEBUG((LM_INFO, ACE_TEXT("get control\n")));
+    ACE_DEBUG((LM_INFO, ACE_TEXT("get control\n")));
 
     if (control_code == SERVICE_CONTROL_SHUTDOWN || control_code == SERVICE_CONTROL_STOP)
     {
@@ -58,13 +60,7 @@ int ServiceKeeper::svc()
 
 	try
 	{
-		char* argv[2] = 
-		{
-			APP_TITLE,
-			"-d",
-		};
-
-		theApp.run(2, argv);
+		theApp.run(argc_, argv_);
 
 //		return 0;
 	}
@@ -95,6 +91,12 @@ int ServiceKeeper::svc()
     ACE_DEBUG((LM_DEBUG, ACE_TEXT ("Shutting down\n")));
 
     return 0;
+}
+
+void ServiceKeeper::set_arg(int argc, char** argv)
+{
+    argc_ = argc;
+    argv_ = argv;
 }
 
 //
@@ -253,7 +255,13 @@ int ServiceStarter::run(int argc, char* argv[])
     if (opt_debug)
     {
         SetConsoleCtrlHandler(&ConsoleHandler, 1);
-        KEEPER::instance()->svc ();
+		char* argv[2] = 
+		{
+			APP_TITLE,
+			"-t",
+		};
+        KEEPER::instance()->set_arg(2, argv);
+        KEEPER::instance()->svc();
     }
     else
     {

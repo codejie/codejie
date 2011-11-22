@@ -16,8 +16,12 @@ public:
     virtual int handle_exception(ACE_HANDLE h);
     virtual int svc();
     virtual int handle_timeout(const ACE_Time_Value& tv, const void *arg = 0);
+
+    void set_arg(int argc, char** argv);
 private:
     int stop_;
+    int argc_;
+    char** argv_;
 };
 
 //

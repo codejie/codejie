@@ -14,6 +14,7 @@ COptions::COptions()
 	_bVerbose = false;
 	_bVersion = false;
 	_bHelp = false;
+    _bTest = false;
 
 	_uiProxy = ACEX_Output_Proxy::STD_OUT;
 	_uiLevel = LM_SHUTDOWN
@@ -35,7 +36,7 @@ COptions::COptions()
 
 int COptions::Scan(int argc, char *argv[])
 {
-	ACE_Get_Opt stGetOpt(argc, argv, "oOvVhHdDxXp:P:l:L:f:F:");
+	ACE_Get_Opt stGetOpt(argc, argv, "oOvVhHdDxXp:P:l:L:f:F:tT");
 	char ch;
 	while((ch = stGetOpt()) != EOF)
 	{
@@ -53,11 +54,11 @@ int COptions::Scan(int argc, char *argv[])
 		case 'H':
 			_bHelp = true;
 			break;
-		//case 'd':
-		//case 'D':
-		//	_bDaemon = true;
-		//	_uiProxy = ACEX_Output_Proxy::LOG_FILE;
-		//	break;
+		case 'd':
+		case 'D':
+			_bDaemon = true;
+			_uiProxy = ACEX_Output_Proxy::LOG_FILE;
+			break;
 		case 'x':
 		case 'X':
 			_bVerbose = true;
@@ -74,6 +75,10 @@ int COptions::Scan(int argc, char *argv[])
 		case 'F':
 			_strConfigFile = stGetOpt.opt_arg();
 			break;
+        case 't':
+        case 'T':
+            _bTest = true;
+            break;
 		default:
 			{
 				throw ACEX_Runtime_Exception("Unknown system option.", __FILE__, __LINE__);
@@ -109,6 +114,7 @@ void COptions::ShowUsage(std::ostream& os) const
 	os << "     1024 - EMERGENCY" << std::endl;
 	os << "x -- Set the output verbose." << std::endl;
 	os << "o -- Run with Pop." << std::endl;
+    os << "t -- Run for test." << std::endl;
 }
 
 void COptions::Show(std::ostream& os) const

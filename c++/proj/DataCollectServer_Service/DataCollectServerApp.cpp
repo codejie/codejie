@@ -80,14 +80,15 @@ int DataCollectServerApp::init(int argc, char* argv[])
     {
         exit(0);
     }
-/*
-	if(!_stOptions.DaemonOpt() && !_stOptions.PopStart())
+
+	//if(!_stOptions.DaemonOpt() && !_stOptions.PopStart())
+    if(_stOptions.TestOpt())
 	{
 		ACEX_LOG_OS(LM_STARTUP, "Standard input task start..." << std::endl);
 		std_in_task()->activate();
 		ACEX_LOG_OS(LM_STARTUP, std::setw(40) << "[OK]" << std::endl);
 	}
-*/
+
 //	if(_stOptions.PopStart())
 //	{
 //		char c = EOF;

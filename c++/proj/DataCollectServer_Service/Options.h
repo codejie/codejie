@@ -18,6 +18,7 @@ public:
 	bool HelpOpt() const { return _bHelp; }
 	unsigned int ProxyOpt() const { return _uiProxy; }
 	unsigned int LevelOpt() const { return _uiLevel; }
+    bool TestOpt() const { return _bTest; }
 
 	std::string ConfigureFile() const { return _strConfigFile; }
 
@@ -33,6 +34,7 @@ private:
 	bool _bHelp;
 	unsigned int _uiProxy;
 	unsigned int _uiLevel;
+    bool _bTest;
 
 	std::string _strConfigFile;
 

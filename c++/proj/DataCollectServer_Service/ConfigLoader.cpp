@@ -84,30 +84,29 @@ int ConfigLoader::Load(const std::string& filename)
 		return -1;
     m_iPeriodInterval = ACE_OS::atoi(tmp.c_str());
 
-	if(ini.open_section(root, "DistributeServer", 0, key) != 0)
-		return -1;
-	
-	int index = 0;
-	ACE_TString name;
-	while(ini.enumerate_sections(key, index, name) == 0)
-	{
-		ACE_Configuration_Section_Key k;
-		if(ini.open_section(key, name.c_str(), 0, k) != 0)
-			return -1;
+	if(ini.open_section(root, "DistributeServer", 0, key) == 0)
+    {
+	    int index = 0;
+	    ACE_TString name;
+	    while(ini.enumerate_sections(key, index, name) == 0)
+	    {
+		    ACE_Configuration_Section_Key k;
+		    if(ini.open_section(key, name.c_str(), 0, k) != 0)
+			    return -1;
 
-		TDistributeServerDataPair data;
-		if(ini.get_string_value(k, "ID", tmp) != 0)
-			return -1;
-		data.first = ACE_OS::atoi(tmp.c_str());
-		if(ini.get_string_value(k, "Addr", tmp) != 0)
-			return -1;
-		data.second = tmp.c_str();
+		    TDistributeServerDataPair data;
+		    if(ini.get_string_value(k, "ID", tmp) != 0)
+			    return -1;
+		    data.first = ACE_OS::atoi(tmp.c_str());
+		    if(ini.get_string_value(k, "Addr", tmp) != 0)
+			    return -1;
+		    data.second = tmp.c_str();
 
-		m_vctDistributeServerData.push_back(data);
+		    m_vctDistributeServerData.push_back(data);
 
-		++ index;
-	}
-
+		    ++ index;
+	    }
+    }
 	return 0;
 }
 

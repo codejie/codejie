@@ -160,4 +160,5 @@ void DistributeServerManager::Show(std::ostream &os) const
 	{
 		os << "\nID = " << it->first << " Connected = " << (it->second->IsConnected() ? "Yes" : "No") << " Count = " << it->second->Count();
 	}
+    os << std::endl;
 };

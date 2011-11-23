@@ -141,6 +141,10 @@ public class BackupManager {
 		if(!file.exists())
 			return -1;
 		
+		if(!checkexist) {
+			GLOBAL.DBACCESS.clearSaving();
+		}
+		
 		try {
 			FileInputStream is = new FileInputStream(file);
 			
@@ -250,8 +254,14 @@ public class BackupManager {
 		
 		Cursor cursor = GLOBAL.DBACCESS.querySaving(title);
 		if(cursor != null) {
-			cursor.close();
-			return true;
+			if(cursor.getCount() > 0) {
+				cursor.close();
+				return true;
+			}
+			else {
+				cursor.close();
+				return false;
+			}
 		}
 		else {
 			return false;

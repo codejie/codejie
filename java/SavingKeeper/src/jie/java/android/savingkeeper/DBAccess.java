@@ -259,6 +259,11 @@ public class DBAccess {
 		db.delete(TABLE_NAME_SAVING, TABLE_COLUMN_ID + "=" + id, null);
 		return 0;
 	}
+	
+	public int clearSaving() {
+		db.delete(TABLE_NAME_SAVING, null, null);
+		return 0;
+	}
 
 	//
 	public int insertRate(final String start, final String end, int currency, float rate0, float rate1, float rate2, float rate3, float rate4, float rate5, float rate6) {		

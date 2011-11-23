@@ -56,7 +56,7 @@
     <string name="title_new_passwd">New Password</string>
     <string name="title_retype_passwd">Retype Password</string>
     <string name="str_btn_login">Login</string>
-    <string name="str_version">11.11.11</string>
+    <string name="str_version">11.11.23</string>
     <string name="title_passwd">Password</string>
     <string name="menu_showtotal">Total</string>
     <string name="str_total_savings">Total Savings</string>
@@ -74,4 +74,6 @@
     <string name="menu_export">Export</string>
     <string name="menu_import_all">Import All</string>
     <string name="menu_import_part">Import Part</string>
+    <string name="title_dir">Directory</string>
+    <string name="str_filename">File</string>
 </resources>

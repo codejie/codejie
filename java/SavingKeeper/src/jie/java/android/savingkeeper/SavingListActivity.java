@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -45,6 +47,12 @@ public class SavingListActivity extends ListActivity {
 	private Cursor _cursor = null;
 	
 	private static final int DIALOG_REMOVE_SAVING		=	1;
+	private static final int DIALOG_FILE_EXPORT			=	2;
+	private static final int DIALOG_FILE_IMPORT_ALL		=	3;
+	private static final int DIALOG_FILE_IMPORT_PART	=	4;
+	
+	private String _backupPath = null;
+	private String _backupFilename = null;
 	
 	protected class DataCursorAdapter extends CursorAdapter {
 
@@ -472,6 +480,108 @@ public class SavingListActivity extends ListActivity {
     		dlg = build.create();
     		break;
     	}
+    	case DIALOG_FILE_EXPORT: {
+    		
+    		Builder build = new AlertDialog.Builder(this);
+    		build.setIcon(android.R.drawable.ic_dialog_info);
+    		String dir = Environment.getExternalStorageDirectory().getPath();
+    		String file = "sk_backup.xml";
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View v = factory.inflate(R.layout.file_dialog, null);
+            final EditText d = (EditText) v.findViewById(R.id.editText1);
+            d.setText(dir);
+            final EditText f = (EditText) v.findViewById(R.id.editText2);
+            f.setText(file);
+    		build.setView(v);
+    		build.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+    			@Override
+    			public void onClick(DialogInterface dialog, int which) {
+    				_backupPath = d.getText().toString();
+    				_backupFilename = f.getText().toString();
+    				exportSavingList();
+    				dialog.dismiss();
+    			}    			
+    		});
+    		build.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();					
+				}
+			});
+    		
+    		dlg = build.create();
+    		break;
+    	}
+    	case DIALOG_FILE_IMPORT_ALL: {
+    		
+    		Builder build = new AlertDialog.Builder(this);
+    		build.setIcon(android.R.drawable.ic_dialog_info);
+    		String dir = Environment.getExternalStorageDirectory().getPath();
+    		String file = "sk_backup.xml";
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View v = factory.inflate(R.layout.file_dialog, null);
+            final EditText d = (EditText) v.findViewById(R.id.editText1);
+            d.setText(dir);
+            final EditText f = (EditText) v.findViewById(R.id.editText2);
+            f.setText(file);
+    		build.setView(v);
+    		build.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+    			@Override
+    			public void onClick(DialogInterface dialog, int which) {
+    				_backupPath = d.getText().toString();
+    				_backupFilename = f.getText().toString();
+    				importSavingList(false);
+    				dialog.dismiss();
+    			}    			
+    		});
+    		build.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();					
+				}
+			});
+    		
+    		dlg = build.create();
+    		break;
+    	}
+    	case DIALOG_FILE_IMPORT_PART: {
+    		
+    		Builder build = new AlertDialog.Builder(this);
+    		build.setIcon(android.R.drawable.ic_dialog_info);
+    		String dir = Environment.getExternalStorageDirectory().getPath();
+    		String file = "sk_backup.xml";
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View v = factory.inflate(R.layout.file_dialog, null);
+            final EditText d = (EditText) v.findViewById(R.id.editText1);
+            d.setText(dir);
+            final EditText f = (EditText) v.findViewById(R.id.editText2);
+            f.setText(file);
+    		build.setView(v);
+    		build.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+    			@Override
+    			public void onClick(DialogInterface dialog, int which) {
+    				_backupPath = d.getText().toString();
+    				_backupFilename = f.getText().toString();
+    				importSavingList(true);
+    				dialog.dismiss();
+    			}    			
+    		});
+    		build.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();					
+				}
+			});
+    		
+    		dlg = build.create();
+    		break;
+    	}    	
     	default:
     		break;
     	}
@@ -496,22 +606,27 @@ public class SavingListActivity extends ListActivity {
     }
     
     private void onMenuExport() {
-    	if(BackupManager.exportSavingList(Environment.getExternalStorageDirectory() + "/export.xml") != 0) {
-    		Log.e(GLOBAL.APP_TAG, "EXPORT FAILED.");
-    	}
+    	this.showDialog(DIALOG_FILE_EXPORT);
     }
     
     private void onMenuImportAll() {
-    	if(BackupManager.importSavingList(Environment.getExternalStorageDirectory() + "/export.xml", false) != 0) {
-    		Log.e(GLOBAL.APP_TAG, "IMPORT FAILED.");
-    	}
-    	_cursor.requery();
+    	this.showDialog(DIALOG_FILE_IMPORT_ALL);
     }
     
     private void onMenuImportPart() {
-    	if(BackupManager.importSavingList(Environment.getExternalStorageDirectory() + "/export.xml", true) != 0) {
-    		Log.e(GLOBAL.APP_TAG, "IMPORT FAILED.");
+    	this.showDialog(DIALOG_FILE_IMPORT_PART);
+    }
+    
+    private void exportSavingList() {
+    	if(BackupManager.exportSavingList(_backupPath + "/" + _backupFilename) != 0) {
+    		Toast.makeText(this, "Export Saving List failed.", Toast.LENGTH_LONG).show();
     	}
-    	_cursor.requery();
+    }
+    
+    private void importSavingList(boolean checkexist) {
+    	if(BackupManager.importSavingList(_backupPath + "/" + _backupFilename, checkexist) != 0) {
+    		Toast.makeText(this, "Import Saving List failed.", Toast.LENGTH_LONG).show();
+    	}
+    	_cursor.requery(); 	
     }
 }

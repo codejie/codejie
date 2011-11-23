@@ -56,7 +56,7 @@
     <string name="title_new_passwd">输入新密码</string>
     <string name="title_retype_passwd">重新输入新密码</string>
     <string name="str_btn_login">登录</string>
-    <string name="str_version">11.11.11</string>
+    <string name="str_version">11.11.23</string>
     <string name="title_passwd">密码</string>
     <string name="menu_showtotal">存单总计</string>
     <string name="str_total_savings">存单总计</string>
@@ -73,5 +73,7 @@
     <string name="menu_reset_rate">恢复缺省列表</string>
     <string name="menu_export">导出</string>
     <string name="menu_import_all">覆盖导入</string>
-    <string name="menu_import_part">比较导入</string>    
+    <string name="menu_import_part">比较导入</string> 
+     <string name="title_dir">目录</string>
+    <string name="str_filename">文件</string>
 </resources>

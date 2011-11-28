@@ -6,6 +6,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.60"
         android:orientation="vertical" >
@@ -61,6 +62,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.40"
         android:orientation="vertical" >

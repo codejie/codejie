@@ -44,6 +44,8 @@ public class FingerDrawView extends View {
 		canvas.drawBitmap(bitmap, 0, 0, paint);
 		canvas.drawPath(path, mPaint);
 		
+		canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), mPaint);
+
 		super.onDraw(canvas);
 	}
 

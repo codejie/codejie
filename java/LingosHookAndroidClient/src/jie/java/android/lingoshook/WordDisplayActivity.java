@@ -20,6 +20,13 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
 	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		DBAccess.release();
+		super.finish();
+	}
+
+	@Override
 	public void onClick(View view) {
 		// TODO Auto-generated method stub
 		switch(view.getId()) {

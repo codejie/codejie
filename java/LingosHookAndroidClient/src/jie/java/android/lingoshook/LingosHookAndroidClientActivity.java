@@ -16,6 +16,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        initObjects();
+        
         setContentView(R.layout.main);
         
         this.findViewById(R.id.relativeLayout1).setOnTouchListener(this);
@@ -31,5 +34,11 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 			this.finish();			
 		}
 		return false;
+	}
+	
+	private int initObjects() {
+		if(DBAccess.init(Global.DATABASE_NAME) != 0)
+			return -1;
+		return 0;
 	}
 }

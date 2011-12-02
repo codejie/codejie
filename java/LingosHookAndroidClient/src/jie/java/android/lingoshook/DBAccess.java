@@ -6,6 +6,10 @@ import android.util.Log;
 
 public final class DBAccess {
 
+	private static final String TABLE_WORD		=	"word";
+	private static final String TABLE_DATA		=	"data";
+	private static final String TABLE_SCORE		=	"score";
+	
 	private static String dbFile = null;
 	private static SQLiteDatabase db = null;
 	
@@ -37,6 +41,10 @@ public final class DBAccess {
 	}
 	
 	private static int initTables() {
+		
+		String sql = "CREATE TABLE " + TABLE_WORD + 
+		
+		
 		return -1;
 	}
 	

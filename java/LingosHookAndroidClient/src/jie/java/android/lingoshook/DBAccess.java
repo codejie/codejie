@@ -35,7 +35,7 @@ public final class DBAccess {
 		
 		if(initTables() != 0)
 			return -1;
-		if(initData() != 0)
+		if(initScore() != 0)
 			return -1;
 		
 		return 0;
@@ -66,7 +66,7 @@ public final class DBAccess {
 			db.execSQL(sql);
 			
 			sql = "CREATE TABLE IF NOT EXISTS " + TABLE_SCORE + " ("
-					+ COLUMN_ID + " INTEGER PRIMARY KEY"
+					+ COLUMN_WORDID + " INTEGER PRIMARY KEY"
 					+ ")";
 			db.execSQL(sql);
 		}
@@ -77,9 +77,26 @@ public final class DBAccess {
 		return 0;
 	}
 	
-	private static int initData() {
+	public static int importData() {
+		return -1;
+	}
+	
+	private static int initScore() {
 
 		return -1;
+	}
+	
+	public static int refreshScore() {
+		return -1;
+	}
+	
+	public static int setScore(long wordid) {
+		return -1;
+	}
+	
+	
+	public static String getHTML(long wordid) {
+		return null;
 	}
 	
 	

@@ -7,5 +7,8 @@ public final class Global {
 	
 	public static int DB_FORMAT_VERSION				=	1;
 	
-	
+	public static void exitApplication() {
+		DBAccess.release();
+		System.exit(0);
+	}
 }

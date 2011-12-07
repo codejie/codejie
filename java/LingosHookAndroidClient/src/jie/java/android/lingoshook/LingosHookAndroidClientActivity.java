@@ -5,14 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 
 public class LingosHookAndroidClientActivity extends Activity implements OnTouchListener {
-    /** Called when the activity is first created. */
+
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +37,33 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		return false;
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		this.getMenuInflater().inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+    @Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		// TODO Auto-generated method stub
+    	switch(item.getItemId()) {
+    	case R.id.menu_exit:
+    		onMenuExit();
+    		break;
+    	default:
+    		break;
+    	}
+		return super.onMenuItemSelected(featureId, item);
+	}
+    
 	private int initObjects() {
 		if(DBAccess.init(Global.DATABASE_NAME) != 0)
 			return -1;
 		return 0;
+	}
+	
+	private void onMenuExit() {
+		Global.exitApplication();
 	}
 }

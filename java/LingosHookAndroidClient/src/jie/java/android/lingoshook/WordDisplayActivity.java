@@ -18,13 +18,6 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		this.setContentView(R.layout.word_display);
         initView();
     }
-    
-	@Override
-	public void finish() {
-		// TODO Auto-generated method stub
-		DBAccess.release();
-		super.finish();
-	}
 
 	@Override
 	public void onClick(View view) {

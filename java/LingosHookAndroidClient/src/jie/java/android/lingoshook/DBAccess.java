@@ -19,6 +19,9 @@ public final class DBAccess {
 	private static final String COLUMN_CHECKIN	=	"checkin";
 	private static final String COLUMN_SCORE	=	"score";
 	
+	public static final int IMPORTTYPE_OVERWRITE	=	0;
+	public static final int IMPORTTYPE_APPEND		=	1;
+	
 	private static String dbFile = null;
 	private static SQLiteDatabase db = null;
 	
@@ -77,8 +80,13 @@ public final class DBAccess {
 		return 0;
 	}
 	
-	public static int importData() {
-		return -1;
+	public static int importData(int type) {
+		if(type == IMPORTTYPE_OVERWRITE) {
+			clearTables();
+			initTables();
+		}
+		
+		return transData();
 	}
 	
 	private static int initScore() {
@@ -99,6 +107,16 @@ public final class DBAccess {
 		return null;
 	}
 	
+	private static void clearTables() {
+		String sql = "DROP TABLE " + TABLE_DATA;
+		db.execSQL(sql);
+		
+		sql = "DROP TABLE " + TABLE_WORD;
+		db.execSQL(sql);
+		
+		sql = "DROP TABLE " + TABLE_SCORE;
+		db.execSQL(sql);
+	}
 	
 	
 }

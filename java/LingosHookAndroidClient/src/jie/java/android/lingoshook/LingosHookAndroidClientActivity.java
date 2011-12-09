@@ -51,6 +51,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     	case R.id.menu_exit:
     		onMenuExit();
     		break;
+    	case R.id.menu_import:
+    		onMenuImport();
+    		break;
     	default:
     		break;
     	}
@@ -65,5 +68,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	
 	private void onMenuExit() {
 		Global.exitApplication();
+	}
+	
+	private void onMenuImport() {
+		DBAccess.importData(DBAccess.IMPORTTYPE_OVERWRITE);
 	}
 }

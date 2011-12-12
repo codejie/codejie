@@ -110,7 +110,7 @@ public class BackupManager {
 				serializer.endTag(null, TAG_BANK);
 				
 				serializer.startTag(null, TAG_NOTE);
-				serializer.text(cursor.getString(7));
+				serializer.text(cursor.getString(7) != null ? cursor.getString(7) : "");
 				serializer.endTag(null, TAG_NOTE);			
 				
 				serializer.endTag(null, TAG_ITEM);				

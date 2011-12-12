@@ -83,7 +83,7 @@ public class SavingListActivity extends ListActivity {
 			SavingListView v = (SavingListView)view;
 			v.setId(cursor.getInt(0));
 	
-			v.textTitle.setText(title);
+			v.textTitle.setText(title + " - " + checkin);
 			v.textTitle.setTextColor(getColor(type, ci));
 			
 			v.textAmount.setText(String.format("%.2f", amount));

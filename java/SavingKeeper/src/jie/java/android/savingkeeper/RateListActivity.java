@@ -250,7 +250,7 @@ public class RateListActivity extends ExpandableListActivity {
 
 	
 	public void onItemLongClick(AdapterView<?> parent, View child, int position, long id) {
-		if(parent == this.getExpandableListView()) {
+		if(parent == this.getExpandableListView() && id > 0) {
 			//Log.d(GLOBAL.APP_TAG, "position:" + position + " id:" + id);
 			//Log.d(GLOBAL.APP_TAG, "CHILD:" + child.toString() + "text:" + ((TextView)child).getText().toString());
 			String str = ((TextView)child).getText().toString();

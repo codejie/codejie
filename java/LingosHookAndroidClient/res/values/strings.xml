@@ -7,5 +7,8 @@
     <string name="menu_about">About</string>
     <string name="menu_options">Options</string>
     <string name="menu_import">Import</string>
+    <string name="title_dir">Directory</string>
+    <string name="title_file">File</string>
+    <string name="title_import_overwrite">Overwrite</string>
 
 </resources>

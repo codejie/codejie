@@ -1,5 +1,7 @@
 package jie.java.android.lingoshook;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -7,17 +9,23 @@ import android.util.Log;
 
 public final class DBAccess {
 
+	private static final String TABLE_INFO		=	"Info";
 	private static final String TABLE_WORD		=	"Word";
 	private static final String TABLE_DATA		=	"Data";
 	private static final String TABLE_SCORE		=	"Score";
 	
 	private static final String COLUMN_ID		=	"_id";
+	private static final String COLUMN_VALUE	=	"value";
 	private static final String COLUMN_WORD		=	"word";
 	private static final String COLUMN_SRCID	=	"srcid";
 	private static final String COLUMN_HTML		=	"html";
 	private static final String COLUMN_WORDID	=	"wordid";
-	private static final String COLUMN_CHECKIN	=	"checkin";
+	private static final String COLUMN_UPDATED	=	"updated";
 	private static final String COLUMN_SCORE	=	"score";
+	
+	private static final int INFOTAG_VERSION	=	1;
+	private static final int INFOTAG_CHECKIN	=	2;
+	private static final String INFOVALUE_VERSION	=	"0.0.1";
 	
 	public static final int IMPORTTYPE_OVERWRITE	=	0;
 	public static final int IMPORTTYPE_APPEND		=	1;
@@ -38,7 +46,7 @@ public final class DBAccess {
 		
 		if(initTables() != 0)
 			return -1;
-		if(initScore() != 0)
+		if(initInfoData() != 0)
 			return -1;
 		
 		return 0;
@@ -54,22 +62,29 @@ public final class DBAccess {
 	private static int initTables() {
 		
 		try {
-			String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_DATA + "("
+			String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_INFO + "("
 					+ COLUMN_ID + " INTEGER PRIMARY KEY,"
-					+ COLUMN_HTML + " TEXT,"
-					+ COLUMN_CHECKIN + " TEXT"
+					+ COLUMN_VALUE + " TEXT"
+					+ ")";
+			db.execSQL(sql);
+			
+			sql = "CREATE TABLE IF NOT EXISTS " + TABLE_DATA + "("
+					+ COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+					+ COLUMN_HTML + " TEXT"
 					+ ")";
 			db.execSQL(sql);		
 			
 			sql = "CREATE TABLE IF NOT EXISTS " + TABLE_WORD + " ("
-					+ COLUMN_ID + " INTEGER PRIMARY KEY,"
+					+ COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ COLUMN_SRCID + " INTEGER,"
 					+ COLUMN_WORD + " TEXT"
 					+ ")";
 			db.execSQL(sql);
 			
 			sql = "CREATE TABLE IF NOT EXISTS " + TABLE_SCORE + " ("
-					+ COLUMN_WORDID + " INTEGER PRIMARY KEY"
+					+ COLUMN_WORDID + " INTEGER PRIMARY KEY,"
+					+ COLUMN_UPDATED + " INTEGER,"
+					+ COLUMN_SCORE + " INTEGER"
 					+ ")";
 			db.execSQL(sql);
 		}
@@ -82,16 +97,29 @@ public final class DBAccess {
 	
 	public static int importData(int type) {
 		if(type == IMPORTTYPE_OVERWRITE) {
-			clearTables();
-			initTables();
+			clearData();
 		}
 		
 		return transData();
 	}
 	
-	private static int initScore() {
-
-		return -1;
+	private static int initInfoData() {
+		
+		Cursor cursor = db.rawQuery("select count(*) from " + TABLE_INFO, null);
+		if(cursor.moveToFirst()) {
+			if(cursor.getInt(0) > 0) {
+				cursor.close();
+				return 0;
+			}
+		}
+		cursor.close();
+	
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_ID, INFOTAG_VERSION);
+		values.put(COLUMN_VALUE, INFOVALUE_VERSION);
+		db.insert(TABLE_INFO, null, values);
+		
+		return 0;
 	}
 	
 	public static int refreshScore() {
@@ -108,7 +136,10 @@ public final class DBAccess {
 	}
 	
 	private static void clearTables() {
-		String sql = "DROP TABLE " + TABLE_DATA;
+		String sql = "DROP TABLE " + TABLE_INFO;
+		db.execSQL(sql);
+		
+		sql = "DROP TABLE " + TABLE_DATA;
 		db.execSQL(sql);
 		
 		sql = "DROP TABLE " + TABLE_WORD;
@@ -116,6 +147,12 @@ public final class DBAccess {
 		
 		sql = "DROP TABLE " + TABLE_SCORE;
 		db.execSQL(sql);
+	}
+	
+	private static void clearData() {
+		db.delete(TABLE_DATA, null, null);
+		db.delete(TABLE_WORD, null, null);
+		db.delete(TABLE_SCORE, null, null);
 	}
 	
 	

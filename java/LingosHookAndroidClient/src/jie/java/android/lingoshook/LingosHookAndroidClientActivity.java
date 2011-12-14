@@ -1,22 +1,20 @@
 package jie.java.android.lingoshook;
 
-import jie.java.android.savingkeeper.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class LingosHookAndroidClientActivity extends Activity implements OnTouchListener {
@@ -81,19 +79,19 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     		String dir = Environment.getExternalStorageDirectory().getPath();
     		String file = "lingoshook.db";
             LayoutInflater factory = LayoutInflater.from(this);
-            final View v = factory.inflate(R.layout.file_dialog, null);
+            final View v = factory.inflate(R.layout.import_dialog, null);
             final EditText d = (EditText) v.findViewById(R.id.editText1);
             d.setText(dir);
             final EditText f = (EditText) v.findViewById(R.id.editText2);
             f.setText(file);
     		build.setView(v);
+    		final CheckBox c = (CheckBox)v.findViewById(R.id.checkBox1);
+    		
     		build.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
     			@Override
     			public void onClick(DialogInterface dialog, int which) {
-    				_backupPath = d.getText().toString();
-    				_backupFilename = f.getText().toString();
-    				exportSavingList();
+    				importData(d.getText().toString(), f.getText().toString(), c.isChecked());
     				dialog.dismiss();
     			}    			
     		});
@@ -109,8 +107,10 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 			
 			}
 			break;
+		default:
+			break;
 		}
-		return super.onCreateDialog(id);
+		return dlg;
 	}    
     
 	private int initObjects() {
@@ -119,17 +119,16 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		return 0;
 	}
 	
+	private void importData(final String dir, final String file, boolean overwrite) {
+		
+	}
+	
 	private void onMenuExit() {
 		Global.exitApplication();
 	}
 	
 	private void onMenuImport() {
-		
-        LayoutInflater factory = LayoutInflater.from(this);
-        final View v = factory.inflate(R.layout.import_dialog, null);
-        
-		
-		DBAccess.importData(DBAccess.IMPORTTYPE_OVERWRITE, );
+		this.showDialog(DIALOG_IMPORT);
 	}
 
 }

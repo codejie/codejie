@@ -95,12 +95,22 @@ public final class DBAccess {
 		return 0;
 	}
 	
-	public static int importData(int type) {
+	public static int importData(final String file, int type) {
 		if(type == IMPORTTYPE_OVERWRITE) {
 			clearData();
 		}
 		
-		return transData();
+		try {
+			
+			SQLiteDatabase src = SQLiteDatabase.openDatabase(file, null, 0);
+
+			
+		}
+		catch (SQLException e) {
+			return -1;
+		}
+		
+		return 0;//transData(file);
 	}
 	
 	private static int initInfoData() {
@@ -155,5 +165,10 @@ public final class DBAccess {
 		db.delete(TABLE_SCORE, null, null);
 	}
 	
+	private static int transData() {
+		
+		
+		return -1;
+	}
 	
 }

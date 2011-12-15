@@ -38,7 +38,7 @@ public final class DBAccess {
 		try {
 			db = SQLiteDatabase.openOrCreateDatabase(file, null);
 			
-			Log.i(Global.APP_TITLE, "db initial.");
+			Log.i(Global.APP_TITLE, "db initial - " + db.getMaximumSize());
 		}
 		catch (SQLiteException e) {
 			return -1;
@@ -101,16 +101,53 @@ public final class DBAccess {
 		}
 		
 		try {
+			long srcid = -1, wordid = -1;
+			long p = -1, n = -1;
+	
+			ContentValues values = new ContentValues();
 			
-			SQLiteDatabase src = SQLiteDatabase.openDatabase(file, null, 0);
-
+			SQLiteDatabase src = SQLiteDatabase.openDatabase(file, null, SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
+			String sql = "SELECT word.srcid, word.word, src.html FROM word, src WHERE word.srcid = src.srcid ORDER BY word.srcid";
 			
+			int offset = 0;
+			while(true) {
+				String s = sql + " LIMIT 10 OFFSET " + offset;
+				
+				Cursor cursor = src.rawQuery(s, null);
+				if(cursor.getCount() == 0)
+					break;
+				while(cursor.moveToNext()) {
+					n = cursor.getInt(0);
+					if(p != n) {
+						p = n;
+						values.clear();
+						values.put(COLUMN_HTML, cursor.getString(2));
+						srcid = db.insert(TABLE_DATA, null, values);
+					}
+					values.clear();
+					values.put(COLUMN_SRCID, srcid);
+					values.put(COLUMN_WORD, cursor.getString(1));
+					wordid = db.insert(TABLE_WORD, null, values);
+					
+					values.clear();
+					values.put(COLUMN_WORDID, wordid);
+					values.put(COLUMN_UPDATED, 0);//
+					values.put(COLUMN_SCORE, 0);
+					db.insert(TABLE_SCORE, null, values);
+				}
+				cursor.close();
+				
+				offset += 10;
+				
+				Log.d(Global.APP_TITLE, "offset:" + offset);
+			}		
 		}
 		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
 			return -1;
 		}
 		
-		return 0;//transData(file);
+		return 0;
 	}
 	
 	private static int initInfoData() {
@@ -164,11 +201,5 @@ public final class DBAccess {
 		db.delete(TABLE_WORD, null, null);
 		db.delete(TABLE_SCORE, null, null);
 	}
-	
-	private static int transData() {
-		
-		
-		return -1;
-	}
-	
+
 }

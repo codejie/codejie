@@ -77,7 +77,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     		Builder build = new AlertDialog.Builder(this);
     		build.setIcon(android.R.drawable.ic_dialog_info);
     		String dir = Environment.getExternalStorageDirectory().getPath();
-    		String file = "lingoshook.db";
+    		String file = "clientdata.db3";
             LayoutInflater factory = LayoutInflater.from(this);
             final View v = factory.inflate(R.layout.import_dialog, null);
             final EditText d = (EditText) v.findViewById(R.id.editText1);
@@ -120,7 +120,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	}
 	
 	private void importData(final String dir, final String file, boolean overwrite) {
-		
+		DBAccess.importData(dir + "/" + file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND));
 	}
 	
 	private void onMenuExit() {

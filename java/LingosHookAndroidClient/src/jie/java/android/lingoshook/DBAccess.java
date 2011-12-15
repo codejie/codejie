@@ -1,5 +1,10 @@
 package jie.java.android.lingoshook;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -97,7 +102,8 @@ public final class DBAccess {
 	
 	public static int importData(final String file, int type) {
 		if(type == IMPORTTYPE_OVERWRITE) {
-			clearData();
+			if(clearData() != 0)
+				return -1;
 		}
 		
 		try {
@@ -147,6 +153,19 @@ public final class DBAccess {
 			return -1;
 		}
 		
+		try {
+			Date today = Calendar.getInstance().getTime();
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+			
+			ContentValues values = new ContentValues();
+			values.put(COLUMN_ID, INFOTAG_CHECKIN);
+			values.put(COLUMN_VALUE, fmt.format(today));
+			db.insert(TABLE_INFO, null, values);
+		}
+		catch (SQLException e) {
+			return -1;
+		}
+		
 		return 0;
 	}
 	
@@ -169,7 +188,27 @@ public final class DBAccess {
 		return 0;
 	}
 	
-	public static int refreshScore() {
+	public static long getDeltaUpdate() {
+		try {
+			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_VALUE }, COLUMN_ID + "=" + INFOTAG_CHECKIN, null, null, null, null);
+			if(cursor == null)
+				return 0;
+			
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+			Date checkin = fmt.parse(cursor.getString(0));
+			Date today = Calendar.getInstance().getTime();
+			return ((today.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24));
+		}
+		catch (SQLiteException e) {
+			return 0;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	public static int loadScore() {
 		return -1;
 	}
 	
@@ -196,10 +235,18 @@ public final class DBAccess {
 		db.execSQL(sql);
 	}
 	
-	private static void clearData() {
-		db.delete(TABLE_DATA, null, null);
-		db.delete(TABLE_WORD, null, null);
-		db.delete(TABLE_SCORE, null, null);
+	private static int clearData() {
+		try {
+			db.delete(TABLE_DATA, null, null);
+			db.delete(TABLE_WORD, null, null);
+			db.delete(TABLE_SCORE, null, null);
+			db.delete(TABLE_INFO, COLUMN_ID + "=" + INFOTAG_CHECKIN, null);
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return -1;
+		}
+		return 0;
 	}
 
 }

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LingosHookAndroidClientActivity extends Activity implements OnTouchListener {
 
@@ -120,7 +121,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	}
 	
 	private void importData(final String dir, final String file, boolean overwrite) {
-		DBAccess.importData(dir + "/" + file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND));
+		if(DBAccess.importData(dir + "/" + file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) != 0) {
+			Toast.makeText(this, "Import data failed.", Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	private void onMenuExit() {

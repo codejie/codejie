@@ -27,7 +27,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        initObjects();
+        Global.initApplication();
         
         setContentView(R.layout.main);
         
@@ -113,12 +113,6 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		}
 		return dlg;
 	}    
-    
-	private int initObjects() {
-		if(DBAccess.init(Global.DATABASE_NAME) != 0)
-			return -1;
-		return 0;
-	}
 	
 	private void importData(final String dir, final String file, boolean overwrite) {
 		if(DBAccess.importData(dir + "/" + file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) != 0) {

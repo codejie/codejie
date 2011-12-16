@@ -7,6 +7,13 @@ public final class Global {
 	
 	public static int DB_FORMAT_VERSION				=	1;
 	
+	public static int initApplication() {
+		DBAccess.init(DATABASE_NAME);
+		Score.init();
+		
+		return 0;
+	}
+	
 	public static void exitApplication() {
 		DBAccess.release();
 		System.exit(0);

@@ -19,7 +19,7 @@ public final class DBAccess {
 	private static final String TABLE_DATA		=	"Data";
 	private static final String TABLE_SCORE		=	"Score";
 	
-	private static final String COLUMN_ID		=	"_id";
+	private static final String COLUMN_ID		=	"id";
 	private static final String COLUMN_VALUE	=	"value";
 	private static final String COLUMN_WORD		=	"word";
 	private static final String COLUMN_SRCID	=	"srcid";
@@ -155,7 +155,7 @@ public final class DBAccess {
 		
 		try {
 			Date today = Calendar.getInstance().getTime();
-			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			
 			ContentValues values = new ContentValues();
 			values.put(COLUMN_ID, INFOTAG_CHECKIN);
@@ -163,6 +163,7 @@ public final class DBAccess {
 			db.insert(TABLE_INFO, null, values);
 		}
 		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
 			return -1;
 		}
 		
@@ -193,29 +194,26 @@ public final class DBAccess {
 			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_VALUE }, COLUMN_ID + "=" + INFOTAG_CHECKIN, null, null, null, null);
 			if(cursor == null)
 				return 0;
+			if(cursor.getCount() == 0)
+				return 0;
+			cursor.moveToFirst();
 			
-			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String s = cursor.getString(0);
 			Date checkin = fmt.parse(cursor.getString(0));
 			Date today = Calendar.getInstance().getTime();
 			return ((today.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24));
 		}
 		catch (SQLiteException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
 			return 0;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(Global.APP_TITLE, "parser exception - " + e.toString());
+			//e.printStackTrace();
 			return 0;
 		}
 	}
-	
-	public static int loadScore() {
-		return -1;
-	}
-	
-	public static int setScore(long wordid) {
-		return -1;
-	}
-	
 	
 	public static String getHTML(long wordid) {
 		return null;
@@ -247,6 +245,24 @@ public final class DBAccess {
 			return -1;
 		}
 		return 0;
+	}
+	
+	public static Cursor getWordData(int type, int limit, int offset) {
+		try {
+			//select Word.srcid, Word.word, Score.updated, Score.score from Word, Score where Word.id = Score.wordid and Score.updated = 0 limit 10 offset 10
+			String sql = "SELECT " + TABLE_WORD + "." + COLUMN_SRCID + "," + TABLE_WORD + "." + COLUMN_WORD + "," + TABLE_SCORE + "." + COLUMN_UPDATED + "," + TABLE_SCORE + "." + COLUMN_SCORE + " FROM " + TABLE_WORD + "," + TABLE_SCORE;
+			sql += " WHERE " + TABLE_WORD + "." + COLUMN_ID + "=" + TABLE_SCORE + "." + COLUMN_WORDID + " AND " + TABLE_SCORE + "." + COLUMN_UPDATED;
+			if(type == Score.WORD_NEW)
+				sql += "=0";
+			else
+				sql += ">0 and " + TABLE_SCORE + "." + COLUMN_UPDATED;
+			sql += " LIMIT " + limit + " OFFSET " + offset; 
+			return db.rawQuery(sql, null);
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return null;
+		}
 	}
 
 }

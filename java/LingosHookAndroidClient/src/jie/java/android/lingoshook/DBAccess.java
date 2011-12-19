@@ -147,6 +147,8 @@ public final class DBAccess {
 				
 				Log.d(Global.APP_TITLE, "offset:" + offset);
 			}		
+			
+			src.close();
 		}
 		catch (SQLException e) {
 			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
@@ -215,8 +217,18 @@ public final class DBAccess {
 		}
 	}
 	
-	public static String getHTML(long wordid) {
-		return null;
+	public static String getHTML(long srcid) {
+		try {
+			Cursor cursor = db.query(TABLE_DATA, new String[] { COLUMN_HTML }, COLUMN_ID + "=" + srcid, null, null, null, null);
+			if(cursor.getCount() == 0)
+				return null;
+			cursor.moveToFirst();
+			return cursor.getString(0);
+			
+		}
+		catch (SQLiteException e) {
+			return null;
+		}
 	}
 	
 	private static void clearTables() {
@@ -250,7 +262,7 @@ public final class DBAccess {
 	public static Cursor getWordData(int type, int limit, int offset) {
 		try {
 			//select Word.srcid, Word.word, Score.updated, Score.score from Word, Score where Word.id = Score.wordid and Score.updated = 0 limit 10 offset 10
-			String sql = "SELECT " + TABLE_WORD + "." + COLUMN_SRCID + "," + TABLE_WORD + "." + COLUMN_WORD + "," + TABLE_SCORE + "." + COLUMN_UPDATED + "," + TABLE_SCORE + "." + COLUMN_SCORE + " FROM " + TABLE_WORD + "," + TABLE_SCORE;
+			String sql = "SELECT " + TABLE_WORD + "." + COLUMN_ID + "," + TABLE_WORD + "." + COLUMN_SRCID + "," + TABLE_WORD + "." + COLUMN_WORD + "," + TABLE_SCORE + "." + COLUMN_UPDATED + "," + TABLE_SCORE + "." + COLUMN_SCORE + " FROM " + TABLE_WORD + "," + TABLE_SCORE;
 			sql += " WHERE " + TABLE_WORD + "." + COLUMN_ID + "=" + TABLE_SCORE + "." + COLUMN_WORDID + " AND " + TABLE_SCORE + "." + COLUMN_UPDATED;
 			if(type == Score.WORD_NEW)
 				sql += "=0";

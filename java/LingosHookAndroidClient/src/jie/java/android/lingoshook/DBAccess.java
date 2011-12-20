@@ -155,20 +155,21 @@ public final class DBAccess {
 			return -1;
 		}
 		
-		try {
-			Date today = Calendar.getInstance().getTime();
-			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			
-			ContentValues values = new ContentValues();
-			values.put(COLUMN_ID, INFOTAG_CHECKIN);
-			values.put(COLUMN_VALUE, fmt.format(today));
-			db.insert(TABLE_INFO, null, values);
-		}
-		catch (SQLException e) {
-			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
-			return -1;
-		}
-		
+		if(type == IMPORTTYPE_OVERWRITE) {
+			try {
+				Date today = Calendar.getInstance().getTime();
+				SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				
+				ContentValues values = new ContentValues();
+				values.put(COLUMN_ID, INFOTAG_CHECKIN);
+				values.put(COLUMN_VALUE, fmt.format(today));
+				db.insert(TABLE_INFO, null, values);
+			}
+			catch (SQLException e) {
+				Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+				return -1;
+			}
+		}		
 		return 0;
 	}
 	
@@ -201,9 +202,11 @@ public final class DBAccess {
 			cursor.moveToFirst();
 			
 			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String s = cursor.getString(0);
+			//String s = cursor.getString(0);
 			Date checkin = fmt.parse(cursor.getString(0));
 			Date today = Calendar.getInstance().getTime();
+			cursor.close();
+			
 			return ((today.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24));
 		}
 		catch (SQLiteException e) {
@@ -223,8 +226,9 @@ public final class DBAccess {
 			if(cursor.getCount() == 0)
 				return null;
 			cursor.moveToFirst();
-			return cursor.getString(0);
-			
+			String ret = cursor.getString(0);
+			cursor.close();
+			return ret;
 		}
 		catch (SQLiteException e) {
 			return null;
@@ -268,12 +272,25 @@ public final class DBAccess {
 				sql += "=0";
 			else
 				sql += ">0 and " + TABLE_SCORE + "." + COLUMN_UPDATED;
-			sql += " LIMIT " + limit + " OFFSET " + offset; 
+			sql += " ORDER BY " + TABLE_SCORE + "." + COLUMN_UPDATED + " LIMIT " + limit + " OFFSET " + offset; 
 			return db.rawQuery(sql, null);
 		}
 		catch (SQLException e) {
 			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
 			return null;
+		}
+	}
+	
+	public static int updateScoreData(long wordid, long updated, int score) {
+		try {
+			ContentValues values = new ContentValues();
+			values.put(COLUMN_UPDATED, updated);
+			values.put(COLUMN_SCORE, score);
+			return ((db.update(TABLE_SCORE, values, COLUMN_WORDID + "=" + wordid, null) > 0) ? 0 : -1);
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return -1;
 		}
 	}
 

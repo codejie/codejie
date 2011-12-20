@@ -10,5 +10,8 @@
     <string name="title_dir">Directory</string>
     <string name="title_file">File</string>
     <string name="title_import_overwrite">Overwrite</string>
+    <string name="title_yes">Yes</string>
+    <string name="title_no">No</string>
+    <string name="str_noword">No Word</string>
 
 </resources>

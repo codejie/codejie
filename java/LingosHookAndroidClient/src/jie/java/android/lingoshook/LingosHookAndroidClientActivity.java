@@ -118,6 +118,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		if(DBAccess.importData(dir + "/" + file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) != 0) {
 			Toast.makeText(this, "Import data failed.", Toast.LENGTH_LONG).show();
 		}
+		else {
+			Score.init();
+		}
 	}
 	
 	private void onMenuExit() {

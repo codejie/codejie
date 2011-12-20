@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:text="Large Text"
+            android:text="@string/str_noword"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="30dp" />
 
@@ -26,8 +26,7 @@
             android:id="@+id/textScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="TextView" />
+            android:layout_gravity="right"/>
 
         <RadioGroup
             android:id="@+id/radioGroup1"

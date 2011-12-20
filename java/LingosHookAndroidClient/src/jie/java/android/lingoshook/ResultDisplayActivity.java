@@ -21,10 +21,14 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.result_display);
 		
-		web = (WebView)this.findViewById(R.id.webView1);
+		web = (WebView)this.findViewById(R.id.webView);
 		
 //		web.setOnTouchListener(this);
-
+		
+		if(WordDisplayActivity.result == null)
+			WordDisplayActivity.result = this;
+		
+		loadData();
 	}
 /*
 	@Override
@@ -43,12 +47,14 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
-		Intent intent = this.getIntent();
+		Log.d(Global.APP_TITLE, "Result Activity count : " + ResultDisplayActivity.getInstanceCount());
 		
-		if(intent != null) {
-			loadData();
-		}
-		
+//		Intent intent = this.getIntent();
+//		
+//		if(intent != null) {
+//			loadData();
+//		}
+//		
 		super.onResume();
 	}
 
@@ -56,7 +62,18 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		Log.d(Global.APP_TITLE, "key - " + keyCode + " event - " + event.getKeyCode());
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			submitResult(Score.JUDGE_YES);
+		}
+		
 		return super.onKeyUp(keyCode, event);
 	}	
 
+	private void submitResult(int judge) {
+			
+		Intent intent = new Intent(this, WordDisplayActivity.class);
+		intent.putExtra(Score.TAG_JUDGE, judge);
+		this.startActivity(intent);
+	}
+	
 }

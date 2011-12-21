@@ -66,6 +66,8 @@ public final class Score {
 	public static int init() {
 		deltaUpdated = DBAccess.getDeltaUpdate();
 		
+		loadNewWord = true;
+		
 		Log.d(Global.APP_TITLE, "score deltaUpdated : " + deltaUpdated);
 		
 		return loadWordData();

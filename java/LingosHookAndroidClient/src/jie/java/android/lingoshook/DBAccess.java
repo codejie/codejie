@@ -175,14 +175,19 @@ public final class DBAccess {
 	
 	private static boolean checkInfoTable(int tag) {
 		// TODO Auto-generated method stub
-		Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_ID }, COLUMN_ID + "=" + tag, null, null, null, null);
-		if(cursor == null)
-			return false;
-		if(cursor.getCount() == 0) {
+		try {
+			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_ID }, COLUMN_ID + "=" + tag, null, null, null, null);
+			if(cursor == null)
+				return false;
+			if(cursor.getCount() == 0) {
+				cursor.close();
+				return false;
+			}
 			cursor.close();
-			return false;
 		}
-		cursor.close();
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db - exception - " + e.toString());
+		}
 		return true;
 	}
 
@@ -249,17 +254,22 @@ public final class DBAccess {
 	}
 	
 	private static void clearTables() {
-		String sql = "DROP TABLE " + TABLE_INFO;
-		db.execSQL(sql);
-		
-		sql = "DROP TABLE " + TABLE_DATA;
-		db.execSQL(sql);
-		
-		sql = "DROP TABLE " + TABLE_WORD;
-		db.execSQL(sql);
-		
-		sql = "DROP TABLE " + TABLE_SCORE;
-		db.execSQL(sql);
+		try {
+			String sql = "DROP TABLE " + TABLE_INFO;
+			db.execSQL(sql);
+			
+			sql = "DROP TABLE " + TABLE_DATA;
+			db.execSQL(sql);
+			
+			sql = "DROP TABLE " + TABLE_WORD;
+			db.execSQL(sql);
+			
+			sql = "DROP TABLE " + TABLE_SCORE;
+			db.execSQL(sql);
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+		}
 	}
 	
 	private static int clearData() {
@@ -271,7 +281,6 @@ public final class DBAccess {
 		}
 		catch (SQLException e) {
 			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
-			return -1;
 		}
 		return 0;
 	}
@@ -305,6 +314,12 @@ public final class DBAccess {
 			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
 			return -1;
 		}
+	}
+
+	public static Cursor getScoreStatData() {
+		// TODO Auto-generated method stub
+		String sql = "select updated, count(updated) from score group by updated";
+		return db.rawQuery(sql, null);
 	}
 
 }

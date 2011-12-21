@@ -24,6 +24,7 @@ public final class Score {
 	public static final int SCORE_1		=	1;
 	public static final int SCORE_2		=	2;
 	public static final int SCORE_3		=	3;
+	public static final int SCORE_UNKNOWN	=	99;
 	
 	public static final int JUDGE_YES	= 0;
 	public static final int JUDGE_NO 	= 1;
@@ -40,8 +41,8 @@ public final class Score {
 	public static final int WORD_NEW	=	0;
 	public static final int WORD_OLD	=	1;
 	
-	private static final int WORD_LIMIT_NEW	=	0;
-	private static final int WORD_LIMIT_OLD	=	30;
+	private static final int WORD_LIMIT_NEW	=	3;
+	private static final int WORD_LIMIT_OLD	=	3;
 
 	public static final long UPDATED_START	=	30; 
 	
@@ -57,6 +58,8 @@ public final class Score {
 		public int score;
 		public String word = new String();
 	}
+	
+	private static boolean loadNewWord = true;
 	
 	private static List<WordData> listWord = new ArrayList<WordData>();
 	
@@ -75,8 +78,16 @@ public final class Score {
 	private static int loadWordData() {
 		listWord.clear();
 		
-		loadNewWordData();
-		loadOldWordData();
+		if(loadNewWord) {
+			if(loadNewWordData() != 0)
+				return -1;
+			loadNewWord = false;
+		}
+		else {		
+			if(loadOldWordData() != 0)
+				return -1;
+		}
+		
 		return 0;
 	}
 	
@@ -92,6 +103,8 @@ public final class Score {
 			data.srcid = cursor.getLong(1);
 			data.updated = cursor.getLong(3);
 			data.score = cursor.getInt(4);
+			if(data.score == SCORE_UNKNOWN)
+				data.score = SCORE_0;
 			data.word = cursor.getString(2);
 			
 			listWord.add(data);
@@ -127,8 +140,14 @@ public final class Score {
 	}
 	
 	public static WordData popWordData() {
-		if(listWord.isEmpty())
-			return null;
+		if(listWord.isEmpty()) {
+			if(loadWordData() != 0) {
+				return null;
+			}
+			if(listWord.isEmpty()) {
+				return null;
+			}
+		}
 		return listWord.remove(0);
 	}
 	
@@ -140,7 +159,7 @@ public final class Score {
 		
 		Log.d(Global.APP_TITLE, data.word + " check : " + check);
 		
-		int result = (int)(((((data.updated != 0) ? (deltaUpdated - data.updated) : UPDATED_START)) * rateTable[data.score][check]));
+		int result = (int)(((((data.updated != 0) ? data.updated : UPDATED_START)) * rateTable[data.score][check]));
 		
 		Log.d(Global.APP_TITLE, data.word + "old score: " + data.score + " new score : " + result);
 		

@@ -86,8 +86,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
 			Log.d(Global.APP_TITLE, "Word - back key.");
-			this.finish();
-			return true;
+			//this.finish();
+			//return true;
 		}
 		return super.onKeyUp(keyCode, event);
 	}
@@ -161,7 +161,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	tv.setText(dataWord.word);
     	
     	tv = (TextView)this.findViewById(R.id.textScore);
-    	tv.setText(String.format("%d", ((dataWord.updated > 0) ? Score.deltaUpdated - dataWord.updated : dataWord.updated)));
+    	//tv.setText(String.format("%d", ((dataWord.updated > 0) ? Score.deltaUpdated - dataWord.updated : dataWord.updated)));
+    	tv.setText(String.format("%d", dataWord.updated));
     	
     	saveSrcData();
     	

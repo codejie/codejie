@@ -36,12 +36,19 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     }
 
 	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		Global.exitApplication();
+		super.finish();
+	}
+
+	@Override
 	public boolean onTouch(View view, MotionEvent event) {
 		// TODO Auto-generated method stub
 		if(event.getAction() == MotionEvent.ACTION_UP) {
 			Intent intent = new Intent(this, WordDisplayActivity.class);
 			this.startActivity(intent);
-			this.finish();			
+			//this.finish();			
 		}
 		return false;
 	}
@@ -57,6 +64,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		// TODO Auto-generated method stub
     	switch(item.getItemId()) {
+    	case R.id.menu_score_list:
+    		onMenuScoreList();
+    		break;
     	case R.id.menu_exit:
     		onMenuExit();
     		break;
@@ -68,7 +78,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     	}
 		return super.onMenuItemSelected(featureId, item);
 	}
-    
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		// TODO Auto-generated method stub
@@ -130,5 +140,10 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	private void onMenuImport() {
 		this.showDialog(DIALOG_IMPORT);
 	}
+	
+	private void onMenuScoreList() {
+		// TODO Auto-generated method stub
+		this.startActivity(new Intent(this, ScoreListActivity.class));
+	} 
 
 }

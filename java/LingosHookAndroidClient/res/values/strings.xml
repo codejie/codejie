@@ -17,4 +17,5 @@
     <string name="str_score_1">Score 1</string>
     <string name="str_score_2">Score 2</string>
     <string name="str_score_3">Score 3</string>
+    <string name="menu_score_list">Score List</string>
 </resources>

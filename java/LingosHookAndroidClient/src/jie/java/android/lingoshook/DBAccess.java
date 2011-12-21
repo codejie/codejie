@@ -138,7 +138,7 @@ public final class DBAccess {
 					values.clear();
 					values.put(COLUMN_WORDID, wordid);
 					values.put(COLUMN_UPDATED, 0);//
-					values.put(COLUMN_SCORE, 0);
+					values.put(COLUMN_SCORE, Score.SCORE_UNKNOWN);
 					db.insert(TABLE_SCORE, null, values);
 				}
 				cursor.close();
@@ -155,7 +155,7 @@ public final class DBAccess {
 			return -1;
 		}
 		
-		if(type == IMPORTTYPE_OVERWRITE) {
+		if(type == IMPORTTYPE_OVERWRITE || (checkInfoTable(INFOTAG_CHECKIN) == false)) {
 			try {
 				Date today = Calendar.getInstance().getTime();
 				SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -173,6 +173,19 @@ public final class DBAccess {
 		return 0;
 	}
 	
+	private static boolean checkInfoTable(int tag) {
+		// TODO Auto-generated method stub
+		Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_ID }, COLUMN_ID + "=" + tag, null, null, null, null);
+		if(cursor == null)
+			return false;
+		if(cursor.getCount() == 0) {
+			cursor.close();
+			return false;
+		}
+		cursor.close();
+		return true;
+	}
+
 	private static int initInfoData() {
 		
 		Cursor cursor = db.rawQuery("select count(*) from " + TABLE_INFO, null);
@@ -269,7 +282,7 @@ public final class DBAccess {
 			String sql = "SELECT " + TABLE_WORD + "." + COLUMN_ID + "," + TABLE_WORD + "." + COLUMN_SRCID + "," + TABLE_WORD + "." + COLUMN_WORD + "," + TABLE_SCORE + "." + COLUMN_UPDATED + "," + TABLE_SCORE + "." + COLUMN_SCORE + " FROM " + TABLE_WORD + "," + TABLE_SCORE;
 			sql += " WHERE " + TABLE_WORD + "." + COLUMN_ID + "=" + TABLE_SCORE + "." + COLUMN_WORDID + " AND " + TABLE_SCORE + "." + COLUMN_UPDATED;
 			if(type == Score.WORD_NEW)
-				sql += "=0";
+				sql += "=0 AND " + TABLE_SCORE + "." + TABLE_SCORE + "=" + Score.SCORE_UNKNOWN;
 			else
 				sql += ">0 and " + TABLE_SCORE + "." + COLUMN_UPDATED;
 			sql += " ORDER BY " + TABLE_SCORE + "." + COLUMN_UPDATED + " LIMIT " + limit + " OFFSET " + offset; 

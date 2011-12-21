@@ -8,11 +8,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.webkit.WebView;
+import android.widget.Button;
 
 public class ResultDisplayActivity extends Activity /*implements OnTouchListener*/ {
 
+	private static final String Button = null;
 	private WebView web = null;
 	
 	@Override
@@ -27,6 +30,24 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 		
 		if(WordDisplayActivity.result == null)
 			WordDisplayActivity.result = this;
+		
+		((Button)this.findViewById(R.id.btnYes)).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				submitResult(Score.JUDGE_YES);
+			}			
+		});
+		
+		((Button)this.findViewById(R.id.btnNo)).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				submitResult(Score.JUDGE_NO);
+			}
+			
+		});
 		
 		loadData();
 	}

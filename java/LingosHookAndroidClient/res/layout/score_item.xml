@@ -2,20 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" android:background="@drawable/grid_bg_selector">
 
     <TextView
         android:id="@+id/textUpdated"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="TextView" />
+        android:text="TextView" android:textSize="20dp"/>
 
     <TextView
         android:id="@+id/textAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="TextView" />
+        android:text="TextView" android:layout_marginLeft="30dp" android:textSize="15dp"/>
 
 </LinearLayout>

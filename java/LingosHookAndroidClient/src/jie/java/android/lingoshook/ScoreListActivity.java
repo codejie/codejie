@@ -7,36 +7,76 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
 public class ScoreListActivity extends Activity {
 
-	private class ScoreCursorApdater extends CursorAdapter {
+	private class ScoreDataAdapter extends BaseAdapter {
 
-		public ScoreCursorApdater(Context context, Cursor c) {
-			super(context, c);
-			// TODO Auto-generated constructor stub
-		}
-
-		@Override
-		public void bindView(View view, Context context, Cursor cursor) {
-			// TODO Auto-generated method stub
-			TextView u = (TextView)view.findViewById(R.id.textUpdated);
-			TextView a = (TextView)view.findViewById(R.id.textAmount);
-			
-			u.setText(cursor.getString(0));
-			a.setText(cursor.getString(1));
-		}
-
-		@Override
-		public View newView(Context context, Cursor cursor, ViewGroup group) {
-			// TODO Auto-generated method stub
-            return getLayoutInflater().inflate(R.layout.score_item, group);
+		private Context _context = null;
+		private Cursor _cursor = null;
+		
+		public ScoreDataAdapter(Context context) {
+			_context = context;
 		}
 		
+		@Override
+		protected void finalize() throws Throwable {
+			// TODO Auto-generated method stub
+			if(_cursor != null)
+				_cursor.close();
+			super.finalize();
+		}
+
+		public int initData() {
+			_cursor = DBAccess.getScoreStatData();
+			if(_cursor == null)
+				return -1;
+			if(_cursor.moveToFirst() == false)
+				return -1;
+			return 0;
+		}
+		
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return _cursor.getCount() ;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// TODO Auto-generated method stub
+			if(convertView == null) {
+				convertView = LayoutInflater.from(_context).inflate(R.layout.score_item, null);
+			}
+			TextView u = (TextView)convertView.findViewById(R.id.textUpdated);
+			TextView a = (TextView)convertView.findViewById(R.id.textAmount);	
+			
+			_cursor.moveToPosition(position);
+			
+			u.setText(_cursor.getString(0));
+			a.setText(_cursor.getString(1));
+			
+			return convertView;
+		}
 	}
+	
+	private ScoreDataAdapter adapter = null;//new ScoreDataAdapter();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +94,12 @@ public class ScoreListActivity extends Activity {
 	}
 	
 	private void loadScoreList() {
+		adapter = new ScoreDataAdapter(this);
+		adapter.initData();
 		
 		GridView grid = (GridView)this.findViewById(R.id.gridScore);
-		Cursor cursor = DBAccess.getScoreStatData();
-		grid.setAdapter(new ScoreCursorApdater(this, cursor));
+		//Cursor cursor = DBAccess.getScoreStatData();
+		grid.setAdapter(adapter);
 		
 		
 	}

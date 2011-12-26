@@ -27,7 +27,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        Global.initApplication();
+        Global.initApplication(this);
         
         setContentView(R.layout.main);
         
@@ -36,10 +36,10 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     }
 
 	@Override
-	public void finish() {
+	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		Global.exitApplication();
-		super.finish();
+		super.onDestroy();
 	}
 
 	@Override

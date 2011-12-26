@@ -28,8 +28,7 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 		
 //		web.setOnTouchListener(this);
 		
-		if(WordDisplayActivity.result == null)
-			WordDisplayActivity.result = this;
+		WordDisplayActivity.setResultDisplay(this);
 		
 		((Button)this.findViewById(R.id.btnYes)).setOnClickListener(new OnClickListener() {
 			@Override
@@ -70,12 +69,6 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 		// TODO Auto-generated method stub
 		Log.d(Global.APP_TITLE, "Result Activity count : " + ResultDisplayActivity.getInstanceCount());
 		
-//		Intent intent = this.getIntent();
-//		
-//		if(intent != null) {
-//			loadData();
-//		}
-//		
 		super.onResume();
 	}
 

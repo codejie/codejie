@@ -23,32 +23,30 @@ import android.widget.Toast;
 
 public class WordDisplayActivity extends Activity implements OnClickListener {
 	
-	private Score.WordData dataWord = null;
-	
-	private ResultDisplayActivity act = null;//new ResultDisplayActivity();
-	
-	public static ResultDisplayActivity result = null;
+	private Score.WordData _dataWord = null;
+	private static ResultDisplayActivity _result = null;
 	
 	private int scoreWord	= -1;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
 		this.setContentView(R.layout.word_display);
+		
         initView();
         
 		Log.d(Global.APP_TITLE, "Word Activity count : " + WordDisplayActivity.getInstanceCount());
     }
 
 	@Override
-	public void finish() {
-		// TODO Auto-generated method stub
-		if(result != null)
-			result.finish();
-		Global.exitApplication();
-		
-		super.finish();
+	protected void onDestroy() {
+		// TODO Auto-generated method stub	
+		if(_result != null)
+			_result.finish();
+	
+		super.onDestroy();
 	}
 
 	@Override
@@ -106,6 +104,10 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		super.onNewIntent(intent);
 	}
 
+	public static void setResultDisplay(Activity activity) {
+		_result = (ResultDisplayActivity) activity;
+	}
+	
 	private void initView() {
     	LinearLayout ll = (LinearLayout)this.findViewById(R.id.linearLayout2);
     	addFingerDrawView(this, ll);
@@ -129,7 +131,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
     private void onRadioClick(int score) {
-    	if(dataWord == null)
+    	if(_dataWord == null)
     		return;
     	
     	scoreWord = score;
@@ -145,8 +147,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
     private int loadWordData() {
-    	dataWord = Score.popWordData();
-    	if(dataWord == null)
+    	_dataWord = Score.popWordData();
+    	if(_dataWord == null)
     	{
     		Toast.makeText(this, "No any word in db now.", Toast.LENGTH_LONG).show();
     		return -1;
@@ -158,16 +160,18 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	((RadioButton)this.findViewById(R.id.radio4)).setChecked(false);
     	
     	TextView tv = (TextView)this.findViewById(R.id.textWord);
-    	tv.setText(dataWord.word);
+    	tv.setText(_dataWord.word);
     	
     	tv = (TextView)this.findViewById(R.id.textScore);
     	//tv.setText(String.format("%d", ((dataWord.updated > 0) ? Score.deltaUpdated - dataWord.updated : dataWord.updated)));
-    	tv.setText(String.format("%d", dataWord.updated));
+    	tv.setText(String.format("%d", _dataWord.updated));
+    	
+    	speakWord(_dataWord.word);
     	
     	saveSrcData();
     	
-    	if(result != null) {
-    		result.loadData();
+    	if(_result != null) {
+    		_result.loadData();
     	}
     	
     	return 0;
@@ -179,7 +183,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 			File file = new File(Environment.getExternalStorageDirectory() + Score.CACHE_FILE);
     		BufferedWriter bw = new BufferedWriter(new FileWriter(file), 4096);
     		
-    		bw.write(DBAccess.getHTML(dataWord.srcid));
+    		bw.write(DBAccess.getHTML(_dataWord.srcid));
     		
     		bw.close();
     	}
@@ -192,6 +196,10 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
     private int updateWordData(int judge) {
-    	return Score.updateWordData(dataWord, scoreWord, judge);   	
+    	return Score.updateWordData(_dataWord, scoreWord, judge);   	
+    }
+    
+    private void speakWord(final String word) {
+    	Speaker.speak(word);
     }
 }

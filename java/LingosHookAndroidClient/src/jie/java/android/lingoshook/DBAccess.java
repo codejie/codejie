@@ -316,10 +316,39 @@ public final class DBAccess {
 		}
 	}
 
-	public static Cursor getScoreStatData() {
+	public static Cursor getScoreStat() {
 		// TODO Auto-generated method stub
-		String sql = "select updated, count(updated) from score group by updated";
-		return db.rawQuery(sql, null);
+		try {
+			String sql = "SELECT " + COLUMN_UPDATED + ", COUNT(" + COLUMN_UPDATED + ") FROM " + TABLE_SCORE + " GROUP BY " + COLUMN_UPDATED;
+			return db.rawQuery(sql, null);
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return null;	
+		}
+	}
+	
+	public static int getScoreCount(boolean newword) {
+		try {
+			String sql = "SELECT COUNT(" + COLUMN_SCORE + ") FROM " + TABLE_SCORE;
+			if(newword) {
+				sql += " WHERE " + COLUMN_SCORE + "=" + Score.SCORE_UNKNOWN;
+			}
+			else {
+				sql += " WHERE " + COLUMN_SCORE + "<>" + Score.SCORE_UNKNOWN;
+			}
+			Cursor cursor = db.rawQuery(sql, null);
+			if(cursor == null)
+				return -1;
+			cursor.moveToFirst();
+			int ret = cursor.getInt(0);
+			cursor.close();
+			return ret;
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return -1;	
+		}
 	}
 
 }

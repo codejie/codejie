@@ -18,4 +18,7 @@
     <string name="str_score_2">Score 2</string>
     <string name="str_score_3">Score 3</string>
     <string name="menu_score_list">Score List</string>
+    <string name="title_score_total">Total Words:</string>
+    <string name="title_score_new">New Words:</string>
+    <string name="title_score_old">Old Words:</string>
 </resources>

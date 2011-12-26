@@ -22,17 +22,14 @@ public class ScoreListActivity extends Activity {
 		public ScoreDataAdapter(Context context) {
 			_context = context;
 		}
-		
-		@Override
-		protected void finalize() throws Throwable {
-			// TODO Auto-generated method stub
+
+		public void close() {
 			if(_cursor != null)
 				_cursor.close();
-			super.finalize();
 		}
-
+		
 		public int initData() {
-			_cursor = DBAccess.getScoreStatData();
+			_cursor = DBAccess.getScoreStat();
 			if(_cursor == null)
 				return -1;
 			if(_cursor.moveToFirst() == false)
@@ -84,13 +81,27 @@ public class ScoreListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		this.setContentView(R.layout.score_list);
-		
+
 		loadTotalData();
 		loadScoreList();
 	}
 	
-	private void loadTotalData() {
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		if(adapter != null)
+			adapter.close();
 		
+		super.finish();
+	}
+	
+	private void loadTotalData() {
+		int n = DBAccess.getScoreCount(true);
+		int o = DBAccess.getScoreCount(false);
+		
+		((TextView)this.findViewById(R.id.textView1)).setText(String.format("%d", (n + o)));
+		((TextView)this.findViewById(R.id.textView2)).setText(String.format("%d", n));
+		((TextView)this.findViewById(R.id.textView3)).setText(String.format("%d", o));		
 	}
 	
 	private void loadScoreList() {

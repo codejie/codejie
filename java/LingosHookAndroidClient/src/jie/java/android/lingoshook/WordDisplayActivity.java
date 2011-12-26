@@ -2,8 +2,6 @@ package jie.java.android.lingoshook;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -12,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,7 +25,10 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	private Score.WordData _dataWord = null;
 	private static ResultDisplayActivity _result = null;
 	
-	private int scoreWord	= -1;
+	private int _scoreWord	= -1;
+	
+	private Handler _handler = null;
+	private Runnable _runnable = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +39,26 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		
         initView();
         
+        _runnable = new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				test();
+			}
+        };
+        
+        _handler = new Handler();
+        
+        _handler.postDelayed(_runnable, 1000);
+        
 		Log.d(Global.APP_TITLE, "Word Activity count : " + WordDisplayActivity.getInstanceCount());
     }
+	
+	private void test() {
+		Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+        _handler.postDelayed(_runnable, 3000);
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -64,6 +84,9 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.radio4:
 			onRadioClick(Score.SCORE_3);
+			break;
+		case R.id.textWord:
+			onWordClick();
 			break;
 		default:
 			break;
@@ -117,6 +140,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	this.findViewById(R.id.radio2).setOnClickListener(this);
     	this.findViewById(R.id.radio3).setOnClickListener(this);
     	this.findViewById(R.id.radio4).setOnClickListener(this);
+    	
+    	this.findViewById(R.id.textWord).setOnClickListener(this);
     }
     
     private void addFingerDrawView(Context context, LinearLayout parent) {
@@ -134,7 +159,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	if(_dataWord == null)
     		return;
     	
-    	scoreWord = score;
+    	_scoreWord = score;
     	
     	Intent intent = new Intent(this, ResultDisplayActivity.class);
 //    	intent.putExtra(Score.TAG_WORDID, dataWord.wordid);
@@ -145,6 +170,13 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	
     	this.startActivity(intent);    	
     }
+    
+	private void onWordClick() {
+		// TODO Auto-generated method stub
+		if(_dataWord == null)
+			return;
+		speakWord(_dataWord.word);
+	}
     
     private int loadWordData() {
     	_dataWord = Score.popWordData();
@@ -165,14 +197,14 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	tv = (TextView)this.findViewById(R.id.textScore);
     	//tv.setText(String.format("%d", ((dataWord.updated > 0) ? Score.deltaUpdated - dataWord.updated : dataWord.updated)));
     	tv.setText(String.format("%d", _dataWord.updated));
-    	
-    	speakWord(_dataWord.word);
-    	
+    	 	
     	saveSrcData();
     	
     	if(_result != null) {
     		_result.loadData();
     	}
+    	
+    	speakWord(_dataWord.word);
     	
     	return 0;
     }
@@ -196,7 +228,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
     private int updateWordData(int judge) {
-    	return Score.updateWordData(_dataWord, scoreWord, judge);   	
+    	return Score.updateWordData(_dataWord, _scoreWord, judge);   	
     }
     
     private void speakWord(final String word) {

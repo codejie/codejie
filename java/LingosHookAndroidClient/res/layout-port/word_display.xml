@@ -2,77 +2,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" android:baselineAligned="false">
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
+    android:baselineAligned="false"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0"
+        android:text="@string/str_noword"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/textScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0" android:layout_gravity="right"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroup1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_weight="0" >
 
-       <TextView
-            android:id="@+id/textWord"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:text="@string/str_noword"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="30dp" />
-
-
-
-        <TextView
-            android:id="@+id/textScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"/>
-
-        <RadioGroup
-            android:id="@+id/radioGroup1"
+        <RadioButton
+            android:id="@+id/radio1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/str_score_0" />
 
+        <RadioButton
+            android:id="@+id/radio2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/str_score_1" />
 
-            <RadioButton
-                android:id="@+id/radio1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/str_score_0"/>
+        <RadioButton
+            android:id="@+id/radio3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/str_score_2" />
 
+        <RadioButton
+            android:id="@+id/radio4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/str_score_3" />
+    </RadioGroup>
 
-            <RadioButton
-                android:id="@+id/radio2"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/str_score_1" />
-
-
-            <RadioButton
-                android:id="@+id/radio3"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/str_score_2" />
-
-
-            <RadioButton
-                android:id="@+id/radio4"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/str_score_3" />
-
-        </RadioGroup>        
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <jie.java.android.lingoshook.FingerDrawView
+        android:id="@+id/fingerDrawView1"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.40"
-        android:orientation="vertical" >
+        android:layout_height="180dp"
+        android:layout_weight="0" />
 
-    </LinearLayout>
+    <jie.java.android.lingoshook.AdPanelView
+        android:id="@+id/adPanelView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="0"
+        android:text="AdPanelView" />
 
 </LinearLayout>

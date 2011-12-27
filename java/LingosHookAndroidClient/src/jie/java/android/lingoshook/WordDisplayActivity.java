@@ -5,22 +5,31 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.xmlpull.v1.XmlPullParser;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class WordDisplayActivity extends Activity implements OnClickListener {
+	
+	private FingerDrawView _viewDraw = null;
 	
 	private Score.WordData _dataWord = null;
 	private static ResultDisplayActivity _result = null;
@@ -29,6 +38,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	
 	private Handler _handler = null;
 	private Runnable _runnable = null;
+	private boolean _isDisplay = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,24 +50,27 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
         initView();
         
         _runnable = new Runnable() {
-
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				test();
+				runRunnable();
 			}
         };
         
         _handler = new Handler();
-        
         _handler.postDelayed(_runnable, 1000);
         
-		Log.d(Global.APP_TITLE, "Word Activity count : " + WordDisplayActivity.getInstanceCount());
+		//Log.d(Global.APP_TITLE, "Word Activity count : " + WordDisplayActivity.getInstanceCount());
     }
 	
-	private void test() {
-		Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
-        _handler.postDelayed(_runnable, 3000);
+	private void runRunnable() {
+		if(_isDisplay) {
+			//Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+			
+			_viewDraw.clearCanvas();
+			
+			_handler.postDelayed(_runnable, 3000);
+		}
 	}
 
 	@Override
@@ -95,11 +108,23 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 		loadWordData();
+
+		_isDisplay = true;
+		_handler.post(_runnable);
 		
 		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		
+		_handler.removeCallbacks(_runnable);
+		_isDisplay = false;
+		
+		super.onPause();
 	}
 
 	@Override
@@ -132,7 +157,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	}
 	
 	private void initView() {
-    	LinearLayout ll = (LinearLayout)this.findViewById(R.id.linearLayout2);
+    	LinearLayout ll = null;//(LinearLayout)this.findViewById(R.id.linearLayout2);
+
     	addFingerDrawView(this, ll);
     	addAdPanelView(this, ll);
     	
@@ -145,14 +171,33 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
     private void addFingerDrawView(Context context, LinearLayout parent) {
-    	   	
-    	//LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);    	
-    	parent.addView(new FingerDrawView(context));//, params);
+    	
+    	//XmlPullParser parser = this.getResources().getXml(R.layout.fingerdrawview);
+    	//AttributeSet attributes = Xml.asAttributeSet(parser);
+    	//LayoutParams params = new LinearLayout.LayoutParams(this, attributes);
+    	
+    	
+    	//LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    	
+    	
+    	_viewDraw = (FingerDrawView)this.findViewById(R.id.fingerDrawView1);// new FingerDrawView(context);
+    	//parent.addView(_viewDraw, params);
     }
     
     private void addAdPanelView(Context context, LinearLayout parent) {
-    	//LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);  
-    	parent.addView(new AdPanelView(context));//, params);    	    	
+    	//LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+/*    	
+        <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+</LinearLayout>
+*/
+    	//LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+		//parent.addView(new AdPanelView(context), params);    	    	
     }
     
     private void onRadioClick(int score) {

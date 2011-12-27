@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.EmbossMaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -20,6 +21,26 @@ public class FingerDrawView extends View {
 	
 	private float mX, mY;
 	
+	private boolean pressed = false;
+	
+	public FingerDrawView(Context context,AttributeSet paramAttributeSet) {
+	  super(context,paramAttributeSet);
+	  
+	      mPaint = new Paint();
+	      mPaint.setAntiAlias(true);
+	      mPaint.setDither(true);
+	      mPaint.setColor(0xFFFFFFFF);
+	      mPaint.setStyle(Paint.Style.STROKE);
+	      mPaint.setStrokeJoin(Paint.Join.ROUND);
+	      mPaint.setStrokeCap(Paint.Cap.ROUND);
+	      mPaint.setStrokeWidth(6);
+	      mPaint.setMaskFilter(new EmbossMaskFilter(new float[] { 1, 1, 1 },0.4f, 6, 3.5f));
+		
+		path = new Path();
+		paint = new Paint(Paint.DITHER_FLAG);
+	  
+	}
+/*	
 	public FingerDrawView(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -30,20 +51,18 @@ public class FingerDrawView extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(12);
+        mPaint.setStrokeWidth(6);
         mPaint.setMaskFilter(new EmbossMaskFilter(new float[] { 1, 1, 1 },0.4f, 6, 3.5f));
 		
 		path = new Path();
 		paint = new Paint(Paint.DITHER_FLAG);
 	}
-
+*/
 	@Override
 	protected void onDraw(Canvas canvas) {
 		// TODO Auto-generated method stub
-		canvas.drawColor(0xFF000000);
-		canvas.drawBitmap(bitmap, 0, 0, paint);
-		canvas.drawPath(path, mPaint);
-		
+
+		canvas.drawPath(path, mPaint);		
 		canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), mPaint);
 
 		super.onDraw(canvas);
@@ -54,6 +73,10 @@ public class FingerDrawView extends View {
 		
 		bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 		canvas = new Canvas(bitmap);
+		
+		canvas.drawColor(0xFF000000);
+		canvas.drawBitmap(bitmap, 0, 0, paint);
+		
 		// TODO Auto-generated method stub
 		super.onSizeChanged(w, h, oldw, oldh);		
 	}
@@ -85,7 +108,9 @@ public class FingerDrawView extends View {
 	}
 	
 	private void touchStart(float x, float y) {
-		path.reset();
+//		path.reset();
+		pressed = true;
+		
 		path.moveTo(x, y);
 		mX = x;
 		mY = y;
@@ -94,7 +119,7 @@ public class FingerDrawView extends View {
 	private void touchMove(float x, float y) {
 		float dx = Math.abs(x - mX);
 		float dy = Math.abs(y - mY);
-		if(dx >= 4 || dy >= 4) {
+		if(dx >= 2 || dy >= 2) {
 			path.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
 			mX = x;
 			mY = y;
@@ -103,7 +128,18 @@ public class FingerDrawView extends View {
 	
 	private void touchUp() {
 		path.lineTo(mX, mY);
-		canvas.drawPath(path, mPaint);
+		//canvas.drawPath(path, mPaint);
+		
+		pressed = false;
+	}
+	
+	public void clearCanvas() {
+		if(pressed == false) {
+			if(path.isEmpty())
+				return;
+			path.reset();
+			invalidate();
+		}
 	}
 
 }

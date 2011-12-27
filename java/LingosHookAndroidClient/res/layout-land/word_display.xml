@@ -6,9 +6,9 @@
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="325dp"
+        android:layout_width="300dp"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical" android:layout_gravity="left">
 
         <TextView
             android:id="@+id/textWord"
@@ -59,14 +59,25 @@
         </RadioGroup>
 
     </LinearLayout>
-
+
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="right"
         android:orientation="vertical" >
+
+        <jie.java.android.lingoshook.FingerDrawView
+            android:id="@+id/fingerDrawView1"
+            android:layout_width="fill_parent"
+            android:layout_height="225dp"
+            android:layout_gravity="top" />
 
+        <jie.java.android.lingoshook.AdPanelView
+            android:id="@+id/adPanelView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="AdPanelView" android:layout_gravity="bottom"/>
 
     </LinearLayout>
 

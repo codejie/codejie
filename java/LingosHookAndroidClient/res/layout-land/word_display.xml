@@ -66,18 +66,18 @@
         android:layout_height="fill_parent"
         android:layout_gravity="right"
         android:orientation="vertical" >
+
+        <jie.java.android.lingoshook.AdPanelView
+            android:id="@+id/adPanelView1"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:text="AdPanelView" />
 
         <jie.java.android.lingoshook.FingerDrawView
             android:id="@+id/fingerDrawView1"
             android:layout_width="fill_parent"
-            android:layout_height="225dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="top" />
-
-        <jie.java.android.lingoshook.AdPanelView
-            android:id="@+id/adPanelView1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="AdPanelView" android:layout_gravity="bottom"/>
 
     </LinearLayout>
 

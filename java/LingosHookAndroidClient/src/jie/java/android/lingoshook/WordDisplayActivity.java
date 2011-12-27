@@ -5,23 +5,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.xmlpull.v1.XmlPullParser;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;

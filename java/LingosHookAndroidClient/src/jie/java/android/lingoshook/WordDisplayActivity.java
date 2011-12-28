@@ -102,6 +102,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub	
+		_viewDraw.clearCanvas();
+		
 		loadWordData();
 
 		_isDisplay = true;
@@ -150,11 +152,9 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	}
 	
 	private void initView() {
-    	LinearLayout ll = null;//(LinearLayout)this.findViewById(R.id.linearLayout2);
-
-    	addFingerDrawView(this, ll);
-    	addAdPanelView(this, ll);
     	
+		_viewDraw = (FingerDrawView)this.findViewById(R.id.fingerDrawView1);
+		
     	this.findViewById(R.id.radio1).setOnClickListener(this);
     	this.findViewById(R.id.radio2).setOnClickListener(this);
     	this.findViewById(R.id.radio3).setOnClickListener(this);
@@ -162,38 +162,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	
     	this.findViewById(R.id.textWord).setOnClickListener(this);
     }
-    
-    private void addFingerDrawView(Context context, LinearLayout parent) {
-    	
-    	//XmlPullParser parser = this.getResources().getXml(R.layout.fingerdrawview);
-    	//AttributeSet attributes = Xml.asAttributeSet(parser);
-    	//LayoutParams params = new LinearLayout.LayoutParams(this, attributes);
-    	
-    	
-    	//LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-    	
-    	
-    	_viewDraw = (FingerDrawView)this.findViewById(R.id.fingerDrawView1);// new FingerDrawView(context);
-    	//parent.addView(_viewDraw, params);
-    }
-    
-    private void addAdPanelView(Context context, LinearLayout parent) {
-    	//LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-/*    	
-        <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-</LinearLayout>
-*/
-    	//LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-
-		//parent.addView(new AdPanelView(context), params);    	    	
-    }
-    
-    private void onRadioClick(int score) {
+ 
+	private void onRadioClick(int score) {
     	if(_dataWord == null)
     		return;
     	

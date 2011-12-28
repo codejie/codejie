@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/menu_score_list" android:title="@string/menu_score_list"></item><item android:id="@+id/menu_import" android:title="@string/menu_import"></item>
-    <item android:id="@+id/menu_options" android:title="@string/menu_options"></item>
+    <item android:id="@+id/menu_setting" android:title="@string/menu_setting"></item>
     <item android:id="@+id/menu_about" android:title="@string/menu_about"></item>
     <item android:id="@+id/menu_exit" android:title="@string/menu_exit"></item>
     

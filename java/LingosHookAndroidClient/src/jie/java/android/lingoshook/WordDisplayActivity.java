@@ -102,24 +102,23 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub	
+		super.onResume();
+		
 		_viewDraw.clearCanvas();
 		
 		loadWordData();
 
 		_isDisplay = true;
 		_handler.post(_runnable);
-		
-		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
+		super.onPause();
 		
 		_handler.removeCallbacks(_runnable);
 		_isDisplay = false;
-		
-		super.onPause();
 	}
 
 	@Override

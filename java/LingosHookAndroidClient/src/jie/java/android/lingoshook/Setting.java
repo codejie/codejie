@@ -1,6 +1,6 @@
 package jie.java.android.lingoshook;
 
-public final class Config {
+public final class Setting {
 
 	public static int numLoadNewWord	=	3;
 	public static int numLoadOldWord	=	3;

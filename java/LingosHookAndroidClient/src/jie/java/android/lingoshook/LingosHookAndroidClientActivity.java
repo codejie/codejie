@@ -73,6 +73,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     	case R.id.menu_import:
     		onMenuImport();
     		break;
+    	case R.id.menu_setting:
+    		onMenuSetting();
+    		break;
     	default:
     		break;
     	}
@@ -144,6 +147,10 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	private void onMenuScoreList() {
 		// TODO Auto-generated method stub
 		this.startActivity(new Intent(this, ScoreListActivity.class));
-	} 
+	}
+	
+	private void onMenuSetting() {
+		this.startActivity(new Intent(this, SettingActivity.class));
+	}
 
 }

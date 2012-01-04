@@ -38,6 +38,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
+		this.getPreferences(MODE_PRIVATE).getBoolean("r_checkbox", true);
+		
 		this.setContentView(R.layout.word_display);
 		
         initView();
@@ -163,6 +165,9 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
  
 	private void onRadioClick(int score) {
+		
+		Toast.makeText(this, "preference test: " + Setting.isResultDisplay, Toast.LENGTH_SHORT).show();
+		
     	if(_dataWord == null)
     		return;
     	
@@ -175,7 +180,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 //    	intent.putExtra(Score.TAG_PRESCORE, dataWord.score);
 //    	intent.putExtra(Score.TAG_SCORE, score);
     	
-    	this.startActivity(intent);    	
+    	this.startActivity(intent);
     }
     
 	private void onWordClick() {

@@ -10,6 +10,7 @@ public final class Setting {
 	
 	
 	public static int init(final String conf) {
+		
 		return -1;
 	}
 	

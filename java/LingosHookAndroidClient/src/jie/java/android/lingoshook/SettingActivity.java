@@ -19,24 +19,25 @@ public class SettingActivity extends PreferenceActivity implements
 		
 		this.addPreferencesFromResource(R.xml.setting);
 		
-		_checkbox = (CheckBoxPreference)this.getPreferenceScreen().findPreference("r_checkbox");
+		//_checkbox = (CheckBoxPreference)this.getPreferenceScreen().findPreference("r_checkbox");
+		//_checkbox.setOnPreferenceChangeListener(this);
 		//Setting.isResultDisplay = _checkbox.isChecked();
-		this.getPreferenceScreen().setOnPreferenceChangeListener(this);
-		this.getPreferenceScreen().setOnPreferenceClickListener(this);
+		//this.getPreferenceScreen().setOnPreferenceChangeListener(this);
+		//this.getPreferenceScreen().setOnPreferenceClickListener(this);
 	}
 
 	@Override
-	public boolean onPreferenceClick(Preference arg0) {
+	public boolean onPreferenceClick(Preference preference) {
 		// TODO Auto-generated method stub
-		Setting.isResultDisplay = _checkbox.isChecked();
+		//Setting.isResultDisplay = _checkbox.isChecked();
 		return false;
 	}
 
 	@Override
-	public boolean onPreferenceChange(Preference arg0, Object arg1) {
+	public boolean onPreferenceChange(Preference preference, Object value) {
 		// TODO Auto-generated method stub
-		Setting.isResultDisplay = _checkbox.isChecked();
-		return false;
+		//Setting.isResultDisplay = _checkbox.isChecked();
+		return true;
 	}
 
 }

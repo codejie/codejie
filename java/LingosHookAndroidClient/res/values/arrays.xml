@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="setting_word_numloadnew">
+        <item >10</item>
+        <item >20</item>
+        <item >30</item>
+        <item >40</item>
+    </string-array>
+    <string-array name="setting_word_numloadnew_value">
+        <item >10</item>
+        <item >20</item>
+        <item >30</item>
+        <item >40</item>
+    </string-array>
+    
+</resources>

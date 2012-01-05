@@ -166,8 +166,6 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
  
 	private void onRadioClick(int score) {
 		
-		Toast.makeText(this, "preference test: " + Setting.isResultDisplay, Toast.LENGTH_SHORT).show();
-		
     	if(_dataWord == null)
     		return;
     	
@@ -191,6 +189,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	}
     
     private int loadWordData() {
+    	
     	_dataWord = Score.popWordData();
     	if(_dataWord == null)
     	{

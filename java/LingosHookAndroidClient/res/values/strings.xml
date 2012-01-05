@@ -21,4 +21,5 @@
     <string name="title_score_total">Total Words:</string>
     <string name="title_score_new">New Words:</string>
     <string name="title_score_old">Old Words:</string>
+    <string name="set_title_word">Word Preferences</string>
 </resources>

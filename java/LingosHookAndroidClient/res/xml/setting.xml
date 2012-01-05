@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
     <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-        <PreferenceCategory android:title="test">
-            <CheckBoxPreference android:summary="this is a checkbox" android:title="my checkbox" android:key="r_checkbox"/>
+        <PreferenceCategory android:title="@string/set_title_word">
+            <ListPreference android:entryValues="@array/setting_word_numloadnew_value" android:entries="@array/setting_word_numloadnew"/>
         </PreferenceCategory>
     </PreferenceScreen>

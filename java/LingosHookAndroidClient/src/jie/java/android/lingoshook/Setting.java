@@ -6,6 +6,7 @@ public final class Setting {
 	public static int numLoadOldWord	=	3;
 	public static boolean loadMistakeWord	=	true;	
 	public static boolean loadResultDisplay	=	true;
+	public static boolean loadSpeaker		=	true;
 	
 	public static boolean refeshFingerPanel	=	true;
 	public static int intervalFingerPanel	=	5;

@@ -12,5 +12,20 @@
         <item >30</item>
         <item >40</item>
     </string-array>
+    <string-array name="setting_word_numloadold">
+        <item>No Limited</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+    </string-array>
+    <string-array name="setting_word_numloadold_value">
+        <item>0</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        
+    </string-array>
     
 </resources>

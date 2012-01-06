@@ -7,4 +7,10 @@
             <CheckBoxPreference android:defaultValue="true" android:summaryOn="@string/set_summary_on_word_loadresult" android:key="@string/set_key_word_loadresult" android:title="@string/set_title_word_loadresult" android:summaryOff="@string/set_summary_off_word_loadresult"/><CheckBoxPreference android:defaultValue="true" android:summaryOff="@string/set_summary_off_word_loadspeaker" android:summaryOn="@string/set_summary_on_word_loadspeaker" android:key="@string/set_key_word_loadspeaker" android:title="@string/set_title_word_loadspeaker"/>
             
         </PreferenceCategory>
+        <PreferenceCategory android:title="@string/set_title_fingerpanel">
+            <CheckBoxPreference android:key="@string/set_key_finger_refresh" android:title="@string/set_title_finger_refresh"/>
+            <ListPreference android:dependency="@string/set_key_finger_refresh" android:key="@string/set_key_finger_interval" android:title="@string/set_title_finger_interval"/>
+            <ListPreference android:key="@string/set_key_finger_pencolor" android:title="@string/set_title_finger_pencolor" android:entryValues="@array/setting_finger_pencolor_value" android:entries="@array/setting_finger_pencolor"/>
+            <ListPreference android:key="@string/set_key_finger_penwidth" android:title="@string/set_title_finger_penwidth" android:entryValues="@array/setting_finger_penwidth_value" android:entries="@array/setting_finger_penwidth"/>
+        </PreferenceCategory>
     </PreferenceScreen>

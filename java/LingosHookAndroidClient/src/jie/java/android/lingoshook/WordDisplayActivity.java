@@ -55,6 +55,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
         _handler = new Handler();
         _handler.postDelayed(_runnable, 1000);
         
+        this.getPreferences(MODE_PRIVATE);
+        
 		//Log.d(Global.APP_TITLE, "Word Activity count : " + WordDisplayActivity.getInstanceCount());
     }
 	

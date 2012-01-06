@@ -30,8 +30,8 @@
     <string name="set_summary_word_numloadold">Choose the number of old words that app every loads</string>
     <string name="set_key_word_loadmistake">set_key_word_loadmistake</string>
     <string name="set_title_word_loadmistake">Reload Mistake Words</string>
-    <string name="set_summary_on_word_loadmistake">Loads misktake words after finish old words</string>
-    <string name="set_summary_off_word_loadmistake">Not loads misktake words after finish old words</string>
+    <string name="set_summary_on_word_loadmistake">Loads mistake words after finish old words</string>
+    <string name="set_summary_off_word_loadmistake">Not loads mistake words after finish old words</string>
     <string name="set_key_word_loadresult">set_key_word_loadresult</string>
     <string name="set_title_word_loadresult">Display Result Data</string>
     <string name="set_summary_on_word_loadresult">Display the result of word after check</string>
@@ -39,5 +39,14 @@
     <string name="set_key_word_loadspeaker">set_key_word_loadspeaker</string>
     <string name="set_title_word_loadspeaker">Load Speaker</string>
     <string name="set_summary_on_word_loadspeaker">Load speaker when display a word</string>
-    <string name="set_summary_off_word_loadspeaker">Not load speaker when display a word</string>    
+    <string name="set_summary_off_word_loadspeaker">Not load speaker when display a word</string>
+    <string name="set_title_fingerpanel">Finger Panel Preferences</string>
+    <string name="set_key_finger_refresh">set_key_finger_refresh</string>
+    <string name="set_title_finger_refresh">Automatic Refresh</string>
+    <string name="set_key_finger_interval">set_key_finger_interval</string>
+    <string name="set_title_finger_interval">Refresh Interval</string>
+    <string name="set_key_finger_pencolor">set_key_finger_pencolor</string>
+    <string name="set_title_finger_pencolor">Pen Color</string>
+    <string name="set_key_finger_penwidth">set_key_finger_penwidth</string>
+    <string name="set_title_finger_penwidth">Pen Width</string>    
 </resources>

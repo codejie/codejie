@@ -10,7 +10,8 @@ public final class Global {
 	public static int DB_FORMAT_VERSION				=	1;
 	
 	public static int initApplication(Context context) {
-		DBAccess.init(DATABASE_NAME);		
+		DBAccess.init(DATABASE_NAME);
+		Setting.init(context);
 		Speaker.init(context);		
 		Score.init();
 		
@@ -19,6 +20,7 @@ public final class Global {
 	
 	public static void exitApplication() {
 		Speaker.release();
+		Setting.release();
 		DBAccess.release();
 		System.exit(0);
 	}

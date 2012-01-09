@@ -1,6 +1,7 @@
 package jie.java.android.lingoshook;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 public final class Global {
 	public static final String DATABASE_NAME		=	"/data/data/jie.java.android.lingoshook/LingosHook.db";
@@ -9,9 +10,9 @@ public final class Global {
 	
 	public static int DB_FORMAT_VERSION				=	1;
 	
-	public static int initApplication(Context context) {
+	public static int initApplication(Context context, SharedPreferences sharedPreferences) {
 		DBAccess.init(DATABASE_NAME);
-		Setting.init(context);
+		Setting.init(context, sharedPreferences);
 		Speaker.init(context);		
 		Score.init();
 		

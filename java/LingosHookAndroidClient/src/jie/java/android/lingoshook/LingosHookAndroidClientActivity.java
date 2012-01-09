@@ -27,7 +27,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        Global.initApplication(this);
+        Global.initApplication(this, this.getPreferences(MODE_PRIVATE));
         
         setContentView(R.layout.main);
         

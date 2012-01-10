@@ -41,8 +41,8 @@ public final class Score {
 	public static final int WORD_NEW	=	0;
 	public static final int WORD_OLD	=	1;
 	
-	private static final int WORD_LIMIT_NEW	=	3;
-	private static final int WORD_LIMIT_OLD	=	3;
+	//private static final int WORD_LIMIT_NEW	=	3;
+	//private static final int WORD_LIMIT_OLD	=	3;
 
 	public static final long UPDATED_START	=	30; 
 	

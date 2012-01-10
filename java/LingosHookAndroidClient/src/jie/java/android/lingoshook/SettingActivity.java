@@ -9,9 +9,6 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 
 public class SettingActivity extends PreferenceActivity implements OnPreferenceChangeListener {
-
-	//private CheckBoxPreference _checkbox = null;
-	private ListPreference _list = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +27,6 @@ public class SettingActivity extends PreferenceActivity implements OnPreferenceC
 		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_finger_interval)).setOnPreferenceChangeListener(this);
 		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_finger_pencolor)).setOnPreferenceChangeListener(this);
 		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_finger_penwidth)).setOnPreferenceChangeListener(this);
-		
-		
-		//_list = (ListPreference)this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_word_numloadnew));
-		//_list.setOnPreferenceChangeListener(this);
-		//_checkbox = (CheckBoxPreference)this.getPreferenceScreen().findPreference("r_checkbox");
-		//_checkbox.setOnPreferenceChangeListener(this);
-		//Setting.isResultDisplay = _checkbox.isChecked();
-		//this.getPreferenceScreen().setOnPreferenceChangeListener(this);
-		//this.getPreferenceScreen().setOnPreferenceClickListener(this);
 	}
 
 	@Override
@@ -75,8 +63,7 @@ public class SettingActivity extends PreferenceActivity implements OnPreferenceC
 		}
 		
 		preference.getEditor().commit();
-		// TODO Auto-generated method stub
-		//Setting.isResultDisplay = _checkbox.isChecked();
+
 		return true;
 	}
 

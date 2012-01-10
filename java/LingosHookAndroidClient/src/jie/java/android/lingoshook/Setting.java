@@ -2,6 +2,7 @@ package jie.java.android.lingoshook;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public final class Setting {
 
@@ -16,10 +17,20 @@ public final class Setting {
 	public static int colorFingerPanelPen	=	0;
 	public static int widthFingerPanelPen	=	0;
 	
-	public static int init(Context context, SharedPreferences sharedPreferences) {
+	public static int init(Context context) {
 		
-		String key = context.getString(R.string.set_key_word_numloadnew);
-		numLoadNewWord = sharedPreferences.getInt(key, 0);	
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+		numLoadNewWord = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_word_numloadnew), "2"));
+		numLoadOldWord = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_word_numloadold), "0"));
+		loadMistakeWord = preferences.getBoolean(context.getString(R.string.set_key_word_loadmistake), true);
+		loadResultDisplay = preferences.getBoolean(context.getString(R.string.set_key_word_loadresult), true);
+		loadSpeaker = preferences.getBoolean(context.getString(R.string.set_key_word_loadspeaker), true);
+		
+		refeshFingerPanel = preferences.getBoolean(context.getString(R.string.set_key_finger_refresh), true);
+		intervalFingerPanel = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_interval), "1"));
+		colorFingerPanelPen = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_pencolor), "1"));
+		widthFingerPanelPen = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_penwidth), "2"));
 		
 		return 0;
 	}

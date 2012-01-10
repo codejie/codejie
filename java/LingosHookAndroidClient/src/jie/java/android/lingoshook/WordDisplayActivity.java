@@ -38,7 +38,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		this.getPreferences(MODE_PRIVATE).getBoolean("r_checkbox", true);
+		//this.getPreferences(MODE_PRIVATE).getBoolean("r_checkbox", true);
 		
 		this.setContentView(R.layout.word_display);
 		

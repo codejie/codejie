@@ -51,5 +51,17 @@
         <item >2</item>
         <item >3</item>
     </string-array>
+    <string-array name="set_finger_interval">
+        <item >Never</item>
+        <item >2 seconds</item>
+        <item >3 seconds</item>
+        <item >5 seconds</item>
+    </string-array>
+    <string-array name="set_finger_interval_value">
+        <item >0</item>
+        <item >2</item>
+        <item >3</item>
+        <item >5</item>
+    </string-array>
     
 </resources>

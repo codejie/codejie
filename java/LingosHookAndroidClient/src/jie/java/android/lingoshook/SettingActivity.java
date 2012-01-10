@@ -2,15 +2,16 @@ package jie.java.android.lingoshook;
 
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 
-public class SettingActivity extends PreferenceActivity implements
-		OnPreferenceChangeListener, OnPreferenceClickListener {
+public class SettingActivity extends PreferenceActivity implements OnPreferenceChangeListener {
 
-	private CheckBoxPreference _checkbox = null;
+	//private CheckBoxPreference _checkbox = null;
+	private ListPreference _list = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,20 @@ public class SettingActivity extends PreferenceActivity implements
 		
 		this.addPreferencesFromResource(R.xml.setting);
 		
+		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_word_numloadnew)).setOnPreferenceChangeListener(this);
+		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_word_numloadold)).setOnPreferenceChangeListener(this);
+		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_word_loadmistake)).setOnPreferenceChangeListener(this);
+		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_word_loadresult)).setOnPreferenceChangeListener(this);
+		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_word_loadspeaker)).setOnPreferenceChangeListener(this);
+		
+		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_finger_refresh)).setOnPreferenceChangeListener(this);
+		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_finger_interval)).setOnPreferenceChangeListener(this);
+		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_finger_pencolor)).setOnPreferenceChangeListener(this);
+		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_finger_penwidth)).setOnPreferenceChangeListener(this);
+		
+		
+		//_list = (ListPreference)this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_word_numloadnew));
+		//_list.setOnPreferenceChangeListener(this);
 		//_checkbox = (CheckBoxPreference)this.getPreferenceScreen().findPreference("r_checkbox");
 		//_checkbox.setOnPreferenceChangeListener(this);
 		//Setting.isResultDisplay = _checkbox.isChecked();
@@ -27,14 +42,39 @@ public class SettingActivity extends PreferenceActivity implements
 	}
 
 	@Override
-	public boolean onPreferenceClick(Preference preference) {
-		// TODO Auto-generated method stub
-		//Setting.isResultDisplay = _checkbox.isChecked();
-		return false;
-	}
-
-	@Override
 	public boolean onPreferenceChange(Preference preference, Object value) {
+		if(preference.getKey().equals(this.getString(R.string.set_key_word_numloadnew))) {
+			Setting.numLoadNewWord = Integer.parseInt((String)value);
+		}
+		else if(preference.getKey().equals(this.getString(R.string.set_key_word_numloadold))) {
+			Setting.numLoadOldWord = Integer.parseInt((String)value);
+		}
+		else if(preference.getKey().equals(this.getString(R.string.set_key_word_loadmistake))) {
+			Setting.loadMistakeWord = (Boolean)value;
+		}
+		else if(preference.getKey().equals(this.getString(R.string.set_key_word_loadresult))) {
+			Setting.loadResultDisplay = (Boolean)value;
+		}
+		else if(preference.getKey().equals(this.getString(R.string.set_key_word_loadspeaker))) {
+			Setting.loadSpeaker = (Boolean)value;
+		}
+		else if(preference.getKey().equals(this.getString(R.string.set_key_finger_refresh))) {
+			Setting.refeshFingerPanel = (Boolean)value;
+		}		
+		else if(preference.getKey().equals(this.getString(R.string.set_key_finger_interval))) {
+			Setting.intervalFingerPanel = Integer.parseInt((String)value);
+		}
+		else if(preference.getKey().equals(this.getString(R.string.set_key_finger_pencolor))) {
+			Setting.colorFingerPanelPen = Integer.parseInt((String)value);
+		}
+		else if(preference.getKey().equals(this.getString(R.string.set_key_finger_penwidth))) {
+			Setting.widthFingerPanelPen = Integer.parseInt((String)value);
+		}
+		else {
+			return false;
+		}
+		
+		preference.getEditor().commit();
 		// TODO Auto-generated method stub
 		//Setting.isResultDisplay = _checkbox.isChecked();
 		return true;

@@ -10,10 +10,10 @@ public final class Global {
 	
 	public static int DB_FORMAT_VERSION				=	1;
 	
-	public static int initApplication(Context context, SharedPreferences sharedPreferences) {
+	public static int initApplication(Context context) {
 		DBAccess.init(DATABASE_NAME);
-		Setting.init(context, sharedPreferences);
-		Speaker.init(context);		
+		Setting.init(context);
+		Speaker.init(context);
 		Score.init();
 		
 		return 0;

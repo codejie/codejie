@@ -24,15 +24,19 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	
 	private FingerDrawView _viewDraw = null;
 	
+	private int _typeWord = 0;//0: new; 1: old; 2: mistake
 	private Score.WordData _dataWord = null;
 	private static ResultDisplayActivity _result = null;
 	
 	private int _scoreWord	= -1;
 	
+	private long _numNewWord = -1;
+	private long _numOldWord = -1;	
+	
 	private Handler _handler = null;
 	private Runnable _runnable = null;
 	private boolean _isDisplay = true;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -54,11 +58,16 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
         
         _handler = new Handler();
         _handler.postDelayed(_runnable, 1000);
-        
-        this.getPreferences(MODE_PRIVATE);
+
+        initWordData();
         
 		//Log.d(Global.APP_TITLE, "Word Activity count : " + WordDisplayActivity.getInstanceCount());
     }
+	
+	private void initWordData() {
+		_numNewWord = DBAccess.getScoreCount(true);
+		_numOldWord = DBAccess.getScoreCount(false);
+	}
 	
 	private void runRunnable() {
 		if(_isDisplay) {
@@ -191,7 +200,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	}
     
     private int loadWordData() {
-    	
+    	 	
     	_dataWord = Score.popWordData();
     	if(_dataWord == null)
     	{
@@ -210,7 +219,10 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	tv = (TextView)this.findViewById(R.id.textScore);
     	//tv.setText(String.format("%d", ((dataWord.updated > 0) ? Score.deltaUpdated - dataWord.updated : dataWord.updated)));
     	tv.setText(String.format("%d", _dataWord.updated));
-    	 	
+    	
+    	tv = (TextView)this.findViewById(R.id.textType);
+    	tv.setText(String.format("%d", (-- _numNewWord)));
+    	
     	saveSrcData();
     	
     	if(_result != null) {

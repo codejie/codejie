@@ -59,6 +59,12 @@ public final class Score {
 		public String word = new String();
 	}
 	
+	public static enum WordType {
+		NULL, NEW, OLD, MISTAKE
+	}
+	
+	private static WordType _typeWord = WordType.NULL;
+	
 	private static boolean loadNewWord = true;
 	
 	private static List<WordData> listWord = new ArrayList<WordData>();
@@ -78,7 +84,7 @@ public final class Score {
 	}
 	
 	private static int loadWordData() {
-		listWord.clear();
+		//listWord.clear();
 		
 		if(loadNewWord) {
 			if(loadNewWordData() != 0)
@@ -94,7 +100,7 @@ public final class Score {
 	}
 	
 	private static int loadNewWordData() {
-		Cursor cursor = DBAccess.getWordData(Score.WORD_NEW, WORD_LIMIT_NEW, offsetNewWord);
+		Cursor cursor = DBAccess.getWordData(Score.WORD_NEW, Setting.numLoadNewWord, offsetNewWord);
 		if(cursor == null)
 			return -1;
 		
@@ -119,7 +125,7 @@ public final class Score {
 	}
 	
 	private static int loadOldWordData() {
-		Cursor cursor = DBAccess.getWordData(Score.WORD_OLD, WORD_LIMIT_OLD, offsetOldWord);
+		Cursor cursor = DBAccess.getWordData(Score.WORD_OLD, Setting.numLoadOldWord, offsetOldWord);
 		if(cursor == null)
 			return -1;
 		
@@ -140,6 +146,45 @@ public final class Score {
 		
 		return 0;		
 	}
+	
+	private static int loadMistakeWordData() {
+		return -1;
+	}
+	
+	public static WordType popWordData(WordData data) {
+		if(listWord.isEmpty()) {
+			if(_typeWord == WordType.NULL) {
+				if(loadNewWordData() == 0) {
+					_typeWord = WordType.NEW;
+				}
+				else {
+					return WordType.NULL;
+				}
+			}
+			else if(_typeWord == WordType.NEW) {
+				if(loadOldWordData() == 0) {
+					_typeWord = WordType.OLD;
+				}
+				else {
+					return WordType.NULL;
+				}
+			}
+			else if(_typeWord == WordType.OLD) {
+				if(loadMistakeWordData() == 0) {
+					_typeWord = WordType.MISTAKE;
+				}
+				else {
+					return WordType.NULL;
+				}
+			}
+		}
+		if(listWord.isEmpty())
+			return WordType.NULL;
+		
+		data = listWord.remove(0);
+		return _typeWord;
+	}
+	
 	
 	public static WordData popWordData() {
 		if(listWord.isEmpty()) {

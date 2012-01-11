@@ -76,7 +76,7 @@ public final class Score {
 		
 		Log.d(Global.APP_TITLE, "score deltaUpdated : " + deltaUpdated);
 		
-		return loadWordData();
+		return 0;//loadWordData();
 	}
 	
 	public static void setDeltaUpdated(long delta) {

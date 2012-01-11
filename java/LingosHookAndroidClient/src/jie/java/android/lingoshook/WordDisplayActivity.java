@@ -201,7 +201,10 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     
     private int loadWordData() {
     	 	
-    	_dataWord = Score.popWordData();
+    	//_dataWord = Score.popWordData();
+    	//_dataWord = new Score.WordData();
+    	
+    	Score.popWordData(_dataWord);
     	if(_dataWord == null)
     	{
     		Toast.makeText(this, "No any word in db now.", Toast.LENGTH_LONG).show();
@@ -221,7 +224,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	tv.setText(String.format("%d", _dataWord.updated));
     	
     	tv = (TextView)this.findViewById(R.id.textType);
-    	tv.setText(String.format("%d", (-- _numNewWord)));
+    	tv.setText(String.format("%d", _numNewWord));
     	
     	saveSrcData();
     	
@@ -253,6 +256,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
     private int updateWordData(int judge) {
+    	-- _numNewWord;
     	return Score.updateWordData(_dataWord, _scoreWord, judge);   	
     }
     

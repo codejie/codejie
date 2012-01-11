@@ -52,11 +52,22 @@ public final class Score {
 	private static int offsetOldWord = 0;		
 	
 	public static final class WordData {
+		public WordData(WordData data) {
+			this.wordid = data.wordid;
+			this.srcid = data.srcid;
+			this.updated = data.updated;
+			this.score = data.score;
+			this.word = data.word;
+		}
+		
+		public WordData() {
+			word = new String();		
+		}
 		public long wordid;
 		public long srcid;
 		public long updated;
 		public int score;
-		public String word = new String();
+		public String word = null;
 	}
 	
 	public static enum WordType {
@@ -151,6 +162,10 @@ public final class Score {
 		return -1;
 	}
 	
+	public static WordData popWordData(WordType type) {
+		
+	}
+	
 	public static WordType popWordData(WordData data) {
 		if(listWord.isEmpty()) {
 			if(_typeWord == WordType.NULL) {
@@ -181,7 +196,8 @@ public final class Score {
 		if(listWord.isEmpty())
 			return WordType.NULL;
 		
-		data = listWord.remove(0);
+		//data = new WordData();
+		data = new WordData(listWord.remove(0));
 		return _typeWord;
 	}
 	

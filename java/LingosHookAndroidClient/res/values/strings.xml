@@ -48,5 +48,8 @@
     <string name="set_key_finger_pencolor">set_key_finger_pencolor</string>
     <string name="set_title_finger_pencolor">Pen Color</string>
     <string name="set_key_finger_penwidth">set_key_finger_penwidth</string>
-    <string name="set_title_finger_penwidth">Pen Width</string>    
+    <string name="set_title_finger_penwidth">Pen Width</string>
+    <string name="str_newword">N:</string>
+    <string name="str_oldword">O:</string>
+    <string name="str_mistakeword">M:</string>    
 </resources>

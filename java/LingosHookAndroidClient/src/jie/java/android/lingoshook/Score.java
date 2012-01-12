@@ -8,6 +8,24 @@ import android.util.Log;
 
 public final class Score {
 
+	public static final class WordData {
+		public long wordid;
+		public long srcid;
+		public long updated;
+		public int score;
+		public String word;
+	}
+	
+	public static enum WordType {
+		NULL, NEW, OLD, MISTAKE
+	}
+		
+	public static final class WordDisplayData {
+		public WordType type = WordType.NULL;
+		public WordData data = null;
+		public int rest = -1;
+	}	
+		
 	private static final float rateTable[][] = {
 			{ 1.75f, 0.80f, 0.45f, 0.17f },
 			{ 1.50f, 1.25f, 0.55f, 0.20f },
@@ -44,46 +62,22 @@ public final class Score {
 	//private static final int WORD_LIMIT_NEW	=	3;
 	//private static final int WORD_LIMIT_OLD	=	3;
 
-	public static final long UPDATED_START	=	30; 
+	public static final long UPDATED_START		=	30;
+	public static final int DEFAULT_LIMIT_OLD	=	30;
 	
 	public static long deltaUpdated = 0;
 	
 	private static int offsetNewWord = 0;
 	private static int offsetOldWord = 0;		
 	
-	public static final class WordData {
-		public WordData(WordData data) {
-			this.wordid = data.wordid;
-			this.srcid = data.srcid;
-			this.updated = data.updated;
-			this.score = data.score;
-			this.word = data.word;
-		}
-		
-		public WordData() {
-			word = new String();		
-		}
-		public long wordid;
-		public long srcid;
-		public long updated;
-		public int score;
-		public String word = null;
-	}
-	
-	public static enum WordType {
-		NULL, NEW, OLD, MISTAKE
-	}
-	
-	private static WordType _typeWord = WordType.NULL;
-	
-	private static boolean loadNewWord = true;
-	
+	private static WordType typeWord = WordType.NULL;	
+	private static int numRestWord = -1;
 	private static List<WordData> listWord = new ArrayList<WordData>();
+	private static List<WordData> listMistakeWord = new ArrayList<WordData>();
+	
 	
 	public static int init() {
 		deltaUpdated = DBAccess.getDeltaUpdate();
-		
-		loadNewWord = true;
 		
 		Log.d(Global.APP_TITLE, "score deltaUpdated : " + deltaUpdated);
 		
@@ -93,25 +87,10 @@ public final class Score {
 	public static void setDeltaUpdated(long delta) {
 		deltaUpdated = delta;
 	}
-	
-	private static int loadWordData() {
-		//listWord.clear();
-		
-		if(loadNewWord) {
-			if(loadNewWordData() != 0)
-				return -1;
-			loadNewWord = false;
-		}
-		else {		
-			if(loadOldWordData() != 0)
-				return -1;
-		}
-		
-		return 0;
-	}
-	
-	private static int loadNewWordData() {
-		Cursor cursor = DBAccess.getWordData(Score.WORD_NEW, Setting.numLoadNewWord, offsetNewWord);
+
+	private static int loadNewWordData(int limit) {
+		numRestWord = DBAccess.getScoreCount(true);
+		Cursor cursor = DBAccess.getWordData(WORD_NEW, limit, offsetNewWord);
 		if(cursor == null)
 			return -1;
 		
@@ -135,8 +114,10 @@ public final class Score {
 		return 0;
 	}
 	
-	private static int loadOldWordData() {
-		Cursor cursor = DBAccess.getWordData(Score.WORD_OLD, Setting.numLoadOldWord, offsetOldWord);
+	private static int loadOldWordData(int limit) {
+		numRestWord = DBAccess.getScoreCount(false);
+		
+		Cursor cursor = DBAccess.getWordData(WORD_OLD, limit, offsetOldWord);
 		if(cursor == null)
 			return -1;
 		
@@ -159,62 +140,66 @@ public final class Score {
 	}
 	
 	private static int loadMistakeWordData() {
-		return -1;
+		listWord = listMistakeWord;
+		return 0;
 	}
 	
-	public static WordData popWordData(WordType type) {
+	private static int loadWordData() {
+		if(typeWord == WordType.NULL) {
+			if(loadNewWordData(Setting.numLoadNewWord) == 0) {
+				typeWord = WordType.NEW;
+			}
+			else {
+				return -1;
+			}
+			if(listWord.isEmpty())
+				return loadWordData();
+		}
+		else if(typeWord == WordType.NEW) {
+			if(loadOldWordData(Setting.numLoadOldWord) == 0) {
+				typeWord = WordType.OLD;
+			}
+			else {
+				return -1;
+			}
+		}
+		else if(typeWord == WordType.OLD) {
+			if(Setting.numLoadOldWord == 0) {
+				if(loadOldWordData(DEFAULT_LIMIT_OLD) != 0)
+					return -1;
+			}
+			else if(loadMistakeWordData() == 0) {
+				typeWord = WordType.MISTAKE;
+			}
+			else {
+				return -1;
+			}
+		}
 		
+		return 0;
 	}
 	
-	public static WordType popWordData(WordData data) {
+	public static int popWordData(WordDisplayData data) {
 		if(listWord.isEmpty()) {
-			if(_typeWord == WordType.NULL) {
-				if(loadNewWordData() == 0) {
-					_typeWord = WordType.NEW;
-				}
-				else {
-					return WordType.NULL;
-				}
-			}
-			else if(_typeWord == WordType.NEW) {
-				if(loadOldWordData() == 0) {
-					_typeWord = WordType.OLD;
-				}
-				else {
-					return WordType.NULL;
-				}
-			}
-			else if(_typeWord == WordType.OLD) {
-				if(loadMistakeWordData() == 0) {
-					_typeWord = WordType.MISTAKE;
-				}
-				else {
-					return WordType.NULL;
-				}
-			}
+			if(loadWordData() != 0)
+				return -1;
 		}
 		if(listWord.isEmpty())
-			return WordType.NULL;
+			return -1;
 		
 		//data = new WordData();
-		data = new WordData(listWord.remove(0));
-		return _typeWord;
-	}
-	
-	
-	public static WordData popWordData() {
-		if(listWord.isEmpty()) {
-			if(loadWordData() != 0) {
-				return null;
-			}
-			if(listWord.isEmpty()) {
-				return null;
-			}
-		}
-		return listWord.remove(0);
+
+		data.data = listWord.remove(0);
+		data.type = typeWord;
+		data.rest = numRestWord --;
+		return 0;
 	}
 	
 	public static int updateWordData(final WordData data, int score, int judge) {
+		
+		if(judge == JUDGE_NO) {
+			listMistakeWord.add(data);
+		}
 		
 		Log.d(Global.APP_TITLE, data.word + " old score : " + data.score + " new score : " + score + " judge : " + judge);
 		

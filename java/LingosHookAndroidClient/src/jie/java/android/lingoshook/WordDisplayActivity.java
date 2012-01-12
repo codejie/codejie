@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,7 +14,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,15 +21,12 @@ import android.widget.Toast;
 public class WordDisplayActivity extends Activity implements OnClickListener {
 	
 	private FingerDrawView _viewDraw = null;
+		
+	private Score.WordDisplayData _dataWord = null;
 	
-	private int _typeWord = 0;//0: new; 1: old; 2: mistake
-	private Score.WordData _dataWord = null;
 	private static ResultDisplayActivity _result = null;
 	
 	private int _scoreWord	= -1;
-	
-	private long _numNewWord = -1;
-	private long _numOldWord = -1;	
 	
 	private Handler _handler = null;
 	private Runnable _runnable = null;
@@ -58,16 +53,9 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
         
         _handler = new Handler();
         _handler.postDelayed(_runnable, 1000);
-
-        initWordData();
         
 		//Log.d(Global.APP_TITLE, "Word Activity count : " + WordDisplayActivity.getInstanceCount());
     }
-	
-	private void initWordData() {
-		_numNewWord = DBAccess.getScoreCount(true);
-		_numOldWord = DBAccess.getScoreCount(false);
-	}
 	
 	private void runRunnable() {
 		if(_isDisplay) {
@@ -119,8 +107,10 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		
 		_viewDraw.clearCanvas();
 		
-		loadWordData();
-
+		if(loadWordData() != 0) {
+			enableViews(false);
+		}
+		
 		_isDisplay = true;
 		_handler.post(_runnable);
 	}
@@ -158,6 +148,25 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 				
 		super.onNewIntent(intent);
 	}
+	
+	private void enableViews(boolean enable) {
+		if(enable) {
+	    	this.findViewById(R.id.radio1).setOnClickListener(this);
+	    	this.findViewById(R.id.radio2).setOnClickListener(this);
+	    	this.findViewById(R.id.radio3).setOnClickListener(this);
+	    	this.findViewById(R.id.radio4).setOnClickListener(this);
+	    	
+	    	this.findViewById(R.id.textWord).setOnClickListener(this);
+		}
+		else {
+		   	this.findViewById(R.id.radio1).setOnClickListener(null);
+	    	this.findViewById(R.id.radio2).setOnClickListener(null);
+	    	this.findViewById(R.id.radio3).setOnClickListener(null);
+	    	this.findViewById(R.id.radio4).setOnClickListener(null);
+	    	
+	    	this.findViewById(R.id.textWord).setOnClickListener(null);			
+		}			
+	}
 
 	public static void setResultDisplay(Activity activity) {
 		_result = (ResultDisplayActivity) activity;
@@ -167,12 +176,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	
 		_viewDraw = (FingerDrawView)this.findViewById(R.id.fingerDrawView1);
 		
-    	this.findViewById(R.id.radio1).setOnClickListener(this);
-    	this.findViewById(R.id.radio2).setOnClickListener(this);
-    	this.findViewById(R.id.radio3).setOnClickListener(this);
-    	this.findViewById(R.id.radio4).setOnClickListener(this);
-    	
-    	this.findViewById(R.id.textWord).setOnClickListener(this);
+		enableViews(true);
     }
  
 	private void onRadioClick(int score) {
@@ -196,16 +200,13 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		if(_dataWord == null)
 			return;
-		speakWord(_dataWord.word);
+		speakWord(_dataWord.data.word);
 	}
     
     private int loadWordData() {
     	 	
-    	//_dataWord = Score.popWordData();
-    	//_dataWord = new Score.WordData();
-    	
-    	Score.popWordData(_dataWord);
-    	if(_dataWord == null)
+    	_dataWord = new Score.WordDisplayData();
+    	if(Score.popWordData(_dataWord) != 0)
     	{
     		Toast.makeText(this, "No any word in db now.", Toast.LENGTH_LONG).show();
     		return -1;
@@ -217,14 +218,25 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	((RadioButton)this.findViewById(R.id.radio4)).setChecked(false);
     	
     	TextView tv = (TextView)this.findViewById(R.id.textWord);
-    	tv.setText(_dataWord.word);
+    	tv.setText(_dataWord.data.word);
     	
     	tv = (TextView)this.findViewById(R.id.textScore);
     	//tv.setText(String.format("%d", ((dataWord.updated > 0) ? Score.deltaUpdated - dataWord.updated : dataWord.updated)));
-    	tv.setText(String.format("%d", _dataWord.updated));
+    	tv.setText(String.format("%d", _dataWord.data.updated));
     	
     	tv = (TextView)this.findViewById(R.id.textType);
-    	tv.setText(String.format("%d", _numNewWord));
+    	if(_dataWord.type == Score.WordType.NEW) {
+    		tv.setText(this.getString(R.string.str_newword) + String.format("%d", _dataWord.rest));
+    	}
+    	else if(_dataWord.type == Score.WordType.OLD) {
+    		tv.setText(this.getString(R.string.str_oldword) + String.format("%d", _dataWord.rest));
+    	}
+    	else if(_dataWord.type == Score.WordType.MISTAKE) {
+    		tv.setText(this.getString(R.string.str_mistakeword) + String.format("%d", _dataWord.rest));
+    	}
+    	else {
+    		tv.setText("NULL");
+    	}
     	
     	saveSrcData();
     	
@@ -232,7 +244,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     		_result.loadData();
     	}
     	
-    	speakWord(_dataWord.word);
+    	speakWord(_dataWord.data.word);
     	
     	return 0;
     }
@@ -243,7 +255,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 			File file = new File(Environment.getExternalStorageDirectory() + Score.CACHE_FILE);
     		BufferedWriter bw = new BufferedWriter(new FileWriter(file), 4096);
     		
-    		bw.write(DBAccess.getHTML(_dataWord.srcid));
+    		bw.write(DBAccess.getHTML(_dataWord.data.srcid));
     		
     		bw.close();
     	}
@@ -256,8 +268,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
     private int updateWordData(int judge) {
-    	-- _numNewWord;
-    	return Score.updateWordData(_dataWord, _scoreWord, judge);   	
+    	return Score.updateWordData(_dataWord.data, _scoreWord, judge);   	
     }
     
     private void speakWord(final String word) {

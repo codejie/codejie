@@ -64,13 +64,6 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 		//web.loadUrl("file:///sdcard/t.html");
 	}
 	
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		Log.d(Global.APP_TITLE, "Result Activity count : " + ResultDisplayActivity.getInstanceCount());
-		
-		super.onResume();
-	}
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {

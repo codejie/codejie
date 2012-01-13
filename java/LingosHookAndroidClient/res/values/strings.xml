@@ -51,5 +51,6 @@
     <string name="set_title_finger_penwidth">Pen Width</string>
     <string name="str_newword">N:</string>
     <string name="str_oldword">O:</string>
-    <string name="str_mistakeword">M:</string>    
+    <string name="str_mistakeword">M:</string>
+    <string name="str_version">1.0 alpha</string>    
 </resources>

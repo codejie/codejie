@@ -111,6 +111,8 @@ public final class Score {
 		}
 		cursor.close();
 		
+		typeWord = WordType.NEW;
+
 		return 0;
 	}
 	
@@ -136,44 +138,51 @@ public final class Score {
 		}
 		cursor.close();
 		
+		typeWord = WordType.OLD;
+		
 		return 0;		
 	}
 	
-	private static int loadMistakeWordData() {
+	public static int loadMistakeWordData() {
+		if(!listWord.isEmpty())
+			listWord.clear();
+		
 		listWord = listMistakeWord;
+		//listMistakeWord.clear();
+		
+		typeWord = WordType.MISTAKE;
+		
 		return 0;
 	}
 	
 	private static int loadWordData() {
 		if(typeWord == WordType.NULL) {
-			if(loadNewWordData(Setting.numLoadNewWord) == 0) {
-				typeWord = WordType.NEW;
-			}
-			else {
+			if(loadNewWordData(Setting.numLoadNewWord) != 0) {
 				return -1;
 			}
 			if(listWord.isEmpty())
 				return loadWordData();
 		}
 		else if(typeWord == WordType.NEW) {
-			if(loadOldWordData(Setting.numLoadOldWord) == 0) {
-				typeWord = WordType.OLD;
-			}
-			else {
+			if(loadOldWordData(Setting.numLoadOldWord) != 0) {
 				return -1;
 			}
+			if(listWord.isEmpty())
+				return loadWordData();
 		}
 		else if(typeWord == WordType.OLD) {
 			if(Setting.numLoadOldWord == 0) {
 				if(loadOldWordData(DEFAULT_LIMIT_OLD) != 0)
 					return -1;
 			}
-			else if(loadMistakeWordData() == 0) {
-				typeWord = WordType.MISTAKE;
+			else if(Setting.loadMistakeWord) { 
+				if(loadMistakeWordData() != 0) {
+					return -1;
+				}
 			}
-			else {
-				return -1;
-			}
+		}
+		else {
+			return -1;
 		}
 		
 		return 0;
@@ -213,4 +222,19 @@ public final class Score {
 		
 		return DBAccess.updateScoreData(data.wordid, data.updated + result, check);
 	}
+	
+	public static int getMistakeWordCount() {
+		return listMistakeWord.size();
+	}
+	
+	public static void refreshData() {
+		offsetNewWord = 0;
+		offsetOldWord = 0;		
+		
+		typeWord = WordType.NULL;	
+		numRestWord = -1;
+		listWord.clear();
+		listMistakeWord.clear();		
+	}
+
 }

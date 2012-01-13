@@ -34,7 +34,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+		
 		super.onCreate(savedInstanceState);
 		
 		//this.getPreferences(MODE_PRIVATE).getBoolean("r_checkbox", true);
@@ -46,7 +46,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
         _runnable = new Runnable() {
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
+				
 				runRunnable();
 			}
         };
@@ -69,7 +69,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub	
+			
 		if(_result != null)
 			_result.finish();
 	
@@ -78,7 +78,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		// TODO Auto-generated method stub
+		
 		switch(view.getId()) {
 		case R.id.radio1:
 			onRadioClick(Score.SCORE_0);
@@ -102,7 +102,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub	
+			
 		super.onResume();
 		
 		_viewDraw.clearCanvas();
@@ -117,7 +117,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
+		
 		super.onPause();
 		
 		_handler.removeCallbacks(_runnable);
@@ -126,9 +126,16 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
+		
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
 			Log.d(Global.APP_TITLE, "Word - back key.");
+			if(Setting.loadMistakeWord && Score.getMistakeWordCount() > 0) {
+				Toast.makeText(this, "mistake word list", Toast.LENGTH_SHORT).show();
+				Score.loadMistakeWordData();
+				onResume();
+				return false;
+			}
+			
 			//this.finish();
 			//return true;
 		}
@@ -137,7 +144,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		// TODO Auto-generated method stub
+		
 		//Intent intent = this.getIntent();
 		if(intent != null) {
 			int judge = intent.getIntExtra(Score.TAG_JUDGE, -1);
@@ -197,7 +204,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
 	private void onWordClick() {
-		// TODO Auto-generated method stub
+		
 		if(_dataWord == null)
 			return;
 		speakWord(_dataWord.data.word);

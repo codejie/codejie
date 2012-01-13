@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 public class LingosHookAndroidClientActivity extends Activity implements OnTouchListener {
 
 	private static final int DIALOG_IMPORT		=	1;
+	private static final int DIALOG_ABOUT 		=	2;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -76,6 +79,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     	case R.id.menu_setting:
     		onMenuSetting();
     		break;
+    	case R.id.menu_about:
+    		onMenuAbout();
+    		break;
     	default:
     		break;
     	}
@@ -88,8 +94,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		Dialog dlg = null;
 		switch(id) {
 		case DIALOG_IMPORT: {
-    		Builder build = new AlertDialog.Builder(this);
-    		build.setIcon(android.R.drawable.ic_dialog_info);
+    		final Builder builder = new AlertDialog.Builder(this);
+    		builder.setIcon(android.R.drawable.ic_dialog_info);
     		String dir = Environment.getExternalStorageDirectory().getPath();
     		String file = "clientdata.db3";
             LayoutInflater factory = LayoutInflater.from(this);
@@ -98,18 +104,45 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
             d.setText(dir);
             final EditText f = (EditText) v.findViewById(R.id.editText2);
             f.setText(file);
-    		build.setView(v);
+    		builder.setView(v);
     		final CheckBox c = (CheckBox)v.findViewById(R.id.checkBox1);
     		
-    		build.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+    		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
     			@Override
-    			public void onClick(DialogInterface dialog, int which) {
-    				importData(d.getText().toString(), f.getText().toString(), c.isChecked());
-    				dialog.dismiss();
+    			public void onClick(final DialogInterface dialog, int which) {
+    				v.findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
+    				
+    				final Handler handler = new Handler() {
+
+						@Override
+						public void handleMessage(Message msg) {
+							dialog.dismiss();
+							//super.handleMessage(msg);
+						}    					
+    				};
+
+    				Runnable r = new Runnable() {
+
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							importData(d.getText().toString(), f.getText().toString(), c.isChecked());
+							handler.sendEmptyMessage(0);
+						}
+    					
+    				};
+    				
+    				handler.post(r);
+
+    				
+    				//v.findViewById(R.id.progressBar1).refreshDrawableState();
+    				//v.forceLayout();
+    				//importData(d.getText().toString(), f.getText().toString(), c.isChecked());
+//    				dialog.dismiss();
     			}    			
     		});
-    		build.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+    		builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -117,8 +150,22 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 				}
 			});
     		
-    		dlg = build.create();
+    		dlg = builder.create();
 			
+			}
+			break;
+		case DIALOG_ABOUT: {
+			Builder builder = new AlertDialog.Builder(this);
+			builder.setView(LayoutInflater.from(this).inflate(R.layout.about_dialog, null));
+			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			
+			dlg = builder.create();
 			}
 			break;
 		default:
@@ -145,7 +192,6 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	}
 	
 	private void onMenuScoreList() {
-		// TODO Auto-generated method stub
 		this.startActivity(new Intent(this, ScoreListActivity.class));
 	}
 	
@@ -153,4 +199,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		this.startActivity(new Intent(this, SettingActivity.class));
 	}
 
+	private void onMenuAbout() {
+		this.showDialog(DIALOG_ABOUT);		
+	}
 }

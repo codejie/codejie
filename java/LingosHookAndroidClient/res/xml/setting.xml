@@ -8,9 +8,9 @@
             
         </PreferenceCategory>
         <PreferenceCategory android:title="@string/set_title_fingerpanel">
-            <CheckBoxPreference android:key="@string/set_key_finger_refresh" android:title="@string/set_title_finger_refresh" android:defaultValue="true"/>
-            <ListPreference android:dependency="@string/set_key_finger_refresh" android:key="@string/set_key_finger_interval" android:title="@string/set_title_finger_interval" android:entryValues="@array/set_finger_interval_value" android:entries="@array/set_finger_interval" android:defaultValue="3"/>
-            <ListPreference android:key="@string/set_key_finger_pencolor" android:title="@string/set_title_finger_pencolor" android:entryValues="@array/setting_finger_pencolor_value" android:entries="@array/setting_finger_pencolor" android:defaultValue="0"/>
-            <ListPreference android:key="@string/set_key_finger_penwidth" android:title="@string/set_title_finger_penwidth" android:entryValues="@array/setting_finger_penwidth_value" android:entries="@array/setting_finger_penwidth" android:defaultValue="0"/>
+            <CheckBoxPreference android:key="@string/set_key_finger_refresh" android:title="@string/set_title_finger_refresh" android:defaultValue="true" android:summary="@string/set_summary_finger_refresh"/>
+            <ListPreference android:dependency="@string/set_key_finger_refresh" android:key="@string/set_key_finger_interval" android:title="@string/set_title_finger_interval" android:entryValues="@array/set_finger_interval_value" android:entries="@array/set_finger_interval" android:defaultValue="3" android:summary="@string/set_summary_finger_interval"/>
+            <ListPreference android:key="@string/set_key_finger_pencolor" android:title="@string/set_title_finger_pencolor" android:entryValues="@array/setting_finger_pencolor_value" android:entries="@array/setting_finger_pencolor" android:defaultValue="0" android:summary="@string/set_summary_finger_pencolor"/>
+            <ListPreference android:key="@string/set_key_finger_penwidth" android:title="@string/set_title_finger_penwidth" android:entryValues="@array/setting_finger_penwidth_value" android:entries="@array/setting_finger_penwidth" android:defaultValue="0" android:summary="@string/set_summary_finger_penwidth"/>
         </PreferenceCategory>
     </PreferenceScreen>

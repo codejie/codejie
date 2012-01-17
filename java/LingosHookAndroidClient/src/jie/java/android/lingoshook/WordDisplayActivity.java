@@ -30,7 +30,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	
 	private Handler _handler = null;
 	private Runnable _runnable = null;
-	private boolean _isDisplay = true;
+	//private boolean _isDisplay = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +52,19 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
         };
         
         _handler = new Handler();
-        _handler.postDelayed(_runnable, 1000);
+        
+        enableRefreshFingerView(true);
         
 		//Log.d(Global.APP_TITLE, "Word Activity count : " + WordDisplayActivity.getInstanceCount());
     }
 	
 	private void runRunnable() {
-		if(_isDisplay) {
-			//Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+		if(Setting.refeshFingerPanel) {
+			Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
 			
 			_viewDraw.clearCanvas();
 			
-			_handler.postDelayed(_runnable, 3000);
+			_handler.postDelayed(_runnable, Setting.intervalFingerPanel);
 		}
 	}
 
@@ -104,15 +105,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	protected void onResume() {
 			
 		super.onResume();
-		
-		_viewDraw.clearCanvas();
-		
-		if(loadWordData() != 0) {
-			enableViews(false);
-		}
-		
-		_isDisplay = true;
-		_handler.post(_runnable);
+				
+		showWord();
 	}
 
 	@Override
@@ -120,8 +114,9 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		
 		super.onPause();
 		
-		_handler.removeCallbacks(_runnable);
-		_isDisplay = false;
+		enableRefreshFingerView(false);
+		//_handler.removeCallbacks(_runnable);
+		//_isDisplay = false;
 	}
 
 	@Override
@@ -156,6 +151,17 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		super.onNewIntent(intent);
 	}
 	
+	private void enableRefreshFingerView(boolean enable) {
+		if(enable) {
+			//_isDisplay = true;
+			_handler.postDelayed(_runnable, Setting.intervalFingerPanel);
+		}
+		else {
+			//_isDisplay = false;
+			_handler.removeCallbacks(_runnable);
+		}
+	}
+	
 	private void enableViews(boolean enable) {
 		if(enable) {
 	    	this.findViewById(R.id.radio1).setOnClickListener(this);
@@ -185,6 +191,17 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		
 		enableViews(true);
     }
+	
+	private void showWord() {
+		
+		_viewDraw.clearCanvas();
+		
+		if(loadWordData() != 0) {
+			enableViews(false);
+		}
+		
+		enableRefreshFingerView(true);		
+	}
  
 	private void onRadioClick(int score) {
 		
@@ -193,14 +210,15 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	
     	_scoreWord = score;
     	
-    	Intent intent = new Intent(this, ResultDisplayActivity.class);
-//    	intent.putExtra(Score.TAG_WORDID, dataWord.wordid);
-//    	intent.putExtra(Score.TAG_SRCID, dataWord.srcid);
-//    	intent.putExtra(Score.TAG_UPDATED, dataWord.updated);
-//    	intent.putExtra(Score.TAG_PRESCORE, dataWord.score);
-//    	intent.putExtra(Score.TAG_SCORE, score);
-    	
-    	this.startActivity(intent);
+    	if(Setting.loadResultDisplay) {
+    		Intent intent = new Intent(this, ResultDisplayActivity.class);   	
+    		this.startActivity(intent);
+    	}
+    	else {
+    		updateWordData(Score.JUDGE_YES);
+    		
+    		showWord();
+    	}
     }
     
 	private void onWordClick() {
@@ -218,45 +236,49 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     		Toast.makeText(this, "No any word in db now.", Toast.LENGTH_LONG).show();
     		return -1;
     	}
-
-    	((RadioButton)this.findViewById(R.id.radio1)).setChecked(false);
-    	((RadioButton)this.findViewById(R.id.radio2)).setChecked(false);
-    	((RadioButton)this.findViewById(R.id.radio3)).setChecked(false);
-    	((RadioButton)this.findViewById(R.id.radio4)).setChecked(false);
     	
-    	TextView tv = (TextView)this.findViewById(R.id.textWord);
-    	tv.setText(_dataWord.data.word);
+    	showWordData(_dataWord);
     	
-    	tv = (TextView)this.findViewById(R.id.textScore);
-    	//tv.setText(String.format("%d", ((dataWord.updated > 0) ? Score.deltaUpdated - dataWord.updated : dataWord.updated)));
-    	tv.setText(String.format("%d", _dataWord.data.updated));
-    	
-    	tv = (TextView)this.findViewById(R.id.textType);
-    	if(_dataWord.type == Score.WordType.NEW) {
-    		tv.setText(this.getString(R.string.str_newword) + String.format("%d", _dataWord.rest));
-    	}
-    	else if(_dataWord.type == Score.WordType.OLD) {
-    		tv.setText(this.getString(R.string.str_oldword) + String.format("%d", _dataWord.rest));
-    	}
-    	else if(_dataWord.type == Score.WordType.MISTAKE) {
-    		tv.setText(this.getString(R.string.str_mistakeword) + String.format("%d", _dataWord.rest));
-    	}
-    	else {
-    		tv.setText("NULL");
-    	}
-    	
-    	saveSrcData();
-    	
-    	if(_result != null) {
-    		_result.loadData();
-    	}
+    	showSrcData();
     	
     	speakWord(_dataWord.data.word);
     	
     	return 0;
     }
     
-    private int saveSrcData() {
+    private void showWordData(Score.WordDisplayData data) {
+    	
+    	((RadioButton)this.findViewById(R.id.radio1)).setChecked(false);
+    	((RadioButton)this.findViewById(R.id.radio2)).setChecked(false);
+    	((RadioButton)this.findViewById(R.id.radio3)).setChecked(false);
+    	((RadioButton)this.findViewById(R.id.radio4)).setChecked(false);
+    	
+    	TextView tv = (TextView)this.findViewById(R.id.textWord);
+    	tv.setText(data.data.word);
+    	
+    	tv = (TextView)this.findViewById(R.id.textScore);
+    	//tv.setText(String.format("%d", ((dataWord.updated > 0) ? Score.deltaUpdated - dataWord.updated : dataWord.updated)));
+    	tv.setText(String.format("%d", data.data.updated));
+    	
+    	tv = (TextView)this.findViewById(R.id.textType);
+    	if(data.type == Score.WordType.NEW) {
+    		tv.setText(this.getString(R.string.str_newword) + String.format("%d", data.rest));
+    	}
+    	else if(data.type == Score.WordType.OLD) {
+    		tv.setText(this.getString(R.string.str_oldword) + String.format("%d", data.rest));
+    	}
+    	else if(data.type == Score.WordType.MISTAKE) {
+    		tv.setText(this.getString(R.string.str_mistakeword) + String.format("%d", data.rest));
+    	}
+    	else {
+    		tv.setText("NULL");
+    	}    	
+    }
+    
+    private int showSrcData() {
+    	
+    	if(!Setting.loadResultDisplay)
+    		return 0;
     	
 		try {
 			File file = new File(Environment.getExternalStorageDirectory() + Score.CACHE_FILE);
@@ -270,6 +292,10 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     		Log.e(Global.APP_TITLE, "io exception - " + e.toString());
     		return -1;
     	}
+		
+    	if(_result != null) {
+    		_result.loadData();
+    	}
     	
     	return 0;		
     }
@@ -279,6 +305,10 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
     private void speakWord(final String word) {
+    	
+    	if(!Setting.loadSpeaker)
+    		return;
+    	
     	Speaker.speak(word);
     }
 }

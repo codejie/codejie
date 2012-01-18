@@ -104,6 +104,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
             d.setText(dir);
             final EditText f = (EditText) v.findViewById(R.id.editText2);
             f.setText(file);
+            v.findViewById(R.id.progressBar1).setVisibility(View.GONE);
     		builder.setView(v);
     		final CheckBox c = (CheckBox)v.findViewById(R.id.checkBox1);
     		

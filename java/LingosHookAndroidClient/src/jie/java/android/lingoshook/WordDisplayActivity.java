@@ -6,7 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -20,6 +25,8 @@ import android.widget.Toast;
 
 public class WordDisplayActivity extends Activity implements OnClickListener {
 	
+	private static final int DIALOG_LOADMISTAKEWORD = 0;
+
 	private FingerDrawView _viewDraw = null;
 		
 	private Score.WordDisplayData _dataWord = null;
@@ -126,8 +133,9 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 			Log.d(Global.APP_TITLE, "Word - back key.");
 			if(Setting.loadMistakeWord && Score.getMistakeWordCount() > 0) {
 				Toast.makeText(this, "mistake word list", Toast.LENGTH_SHORT).show();
-				Score.loadMistakeWordData();
-				onResume();
+				this.showDialog(DIALOG_LOADMISTAKEWORD);
+//				Score.loadMistakeWordData();
+//				onResume();
 				return false;
 			}
 			
@@ -151,6 +159,40 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		super.onNewIntent(intent);
 	}
 	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog dlg = null;
+		switch(id) {
+		case DIALOG_LOADMISTAKEWORD: {
+			Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.str_loadmistakeword);
+			builder.setIcon(android.R.drawable.ic_dialog_info);
+			builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			
+			}
+			break;
+		default:
+			break;
+			
+		}
+		return super.onCreateDialog(id);
+	}
+
 	private void enableRefreshFingerView(boolean enable) {
 		if(enable) {
 			//_isDisplay = true;

@@ -23,6 +23,6 @@ public final class Global {
 		Speaker.release();
 		Setting.release();
 		DBAccess.release();
-		System.exit(0);
+		//System.exit(0);
 	}
 }

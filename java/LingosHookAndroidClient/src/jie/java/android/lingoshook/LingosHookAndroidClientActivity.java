@@ -35,8 +35,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
         
         setContentView(R.layout.main);
         
-        this.findViewById(R.id.relativeLayout1).setOnTouchListener(this);
-        this.findViewById(R.id.relativeLayout1).setLongClickable(true);
+        this.findViewById(R.id.linearLayout1).setOnTouchListener(this);
+        this.findViewById(R.id.linearLayout1).setLongClickable(true);
     }
 
 	@Override
@@ -176,6 +176,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 					dialog.dismiss();
 				}
 			});
+			dlg = builder.create();
 			break;
 		default:
 			break;

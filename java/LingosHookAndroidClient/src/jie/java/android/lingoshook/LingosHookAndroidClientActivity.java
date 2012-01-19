@@ -24,6 +24,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 
 	private static final int DIALOG_IMPORT		=	1;
 	private static final int DIALOG_ABOUT 		=	2;
+	private static final int DIALOG_NOWORD		=	3;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -40,18 +41,20 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		Global.exitApplication();
 		super.onDestroy();
 	}
 
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
-		// TODO Auto-generated method stub
 		if(event.getAction() == MotionEvent.ACTION_UP) {
-			Intent intent = new Intent(this, WordDisplayActivity.class);
-			this.startActivity(intent);
-			//this.finish();			
+			if(DBAccess.checkWord()) {
+				Intent intent = new Intent(this, WordDisplayActivity.class);
+				this.startActivity(intent);
+			}
+			else {
+				this.showDialog(DIALOG_NOWORD);
+			}
 		}
 		return false;
 	}
@@ -130,17 +133,10 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 							// TODO Auto-generated method stub
 							importData(d.getText().toString(), f.getText().toString(), c.isChecked());
 							handler.sendEmptyMessage(0);
-						}
-    					
+						}    					
     				};
     				
     				handler.post(r);
-
-    				
-    				//v.findViewById(R.id.progressBar1).refreshDrawableState();
-    				//v.forceLayout();
-    				//importData(d.getText().toString(), f.getText().toString(), c.isChecked());
-//    				dialog.dismiss();
     			}    			
     		});
     		builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -168,6 +164,18 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 			
 			dlg = builder.create();
 			}
+			break;
+		case DIALOG_NOWORD:
+			Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.str_nowordindb);
+			builder.setIcon(android.R.drawable.ic_dialog_info);
+			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
 			break;
 		default:
 			break;

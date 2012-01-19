@@ -35,7 +35,6 @@ public final class DBAccess {
 	public static final int IMPORTTYPE_OVERWRITE	=	0;
 	public static final int IMPORTTYPE_APPEND		=	1;
 	
-	private static String dbFile = null;
 	private static SQLiteDatabase db = null;
 	
 	public static int init(final String file) {
@@ -174,7 +173,6 @@ public final class DBAccess {
 	}
 	
 	private static boolean checkInfoTable(int tag) {
-		// TODO Auto-generated method stub
 		try {
 			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_ID }, COLUMN_ID + "=" + tag, null, null, null, null);
 			if(cursor == null)
@@ -317,7 +315,6 @@ public final class DBAccess {
 	}
 
 	public static Cursor getScoreStat() {
-		// TODO Auto-generated method stub
 		try {
 			String sql = "SELECT " + COLUMN_UPDATED + ", COUNT(" + COLUMN_UPDATED + ") FROM " + TABLE_SCORE + " GROUP BY " + COLUMN_UPDATED;
 			return db.rawQuery(sql, null);
@@ -349,6 +346,25 @@ public final class DBAccess {
 			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
 			return -1;	
 		}
+	}
+
+	public static boolean checkWord() {
+		try {
+			String sql = "SELECT COUNT(" + COLUMN_SCORE + ") FROM " + TABLE_SCORE;
+			Cursor cursor = db.rawQuery(sql, null);
+			if(cursor == null)
+				return false;
+			cursor.moveToFirst();
+			int ret = cursor.getInt(0);
+			cursor.close();
+			if(ret == 0)
+				return false;
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return false;	
+		}
+		return true;
 	}
 
 }

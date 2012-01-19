@@ -67,7 +67,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	
 	private void runRunnable() {
 		if(Setting.refeshFingerPanel) {
-			Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
 			
 			_viewDraw.clearCanvas();
 			
@@ -134,13 +134,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 			if(Setting.loadMistakeWord && Score.getMistakeWordCount() > 0) {
 				Toast.makeText(this, "mistake word list", Toast.LENGTH_SHORT).show();
 				this.showDialog(DIALOG_LOADMISTAKEWORD);
-//				Score.loadMistakeWordData();
-//				onResume();
-				return false;
+				return true;
 			}
-			
-			//this.finish();
-			//return true;
 		}
 		return super.onKeyUp(keyCode, event);
 	}
@@ -171,7 +166,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
+					onDialogClick(DIALOG_LOADMISTAKEWORD, android.R.id.button1);
+					dialog.dismiss();
 					
 				}
 			});
@@ -179,18 +175,35 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					
+					onDialogClick(DIALOG_LOADMISTAKEWORD, android.R.id.button2);
+					dialog.dismiss();					
 				}
 			});
-			
+			dlg = builder.create();
 			}
 			break;
 		default:
 			break;
 			
 		}
-		return super.onCreateDialog(id);
+		return dlg;
+	}
+
+	protected void onDialogClick(int id, int which) {
+		switch(id)
+		{
+		case DIALOG_LOADMISTAKEWORD:
+			if(which == android.R.id.button1) {
+				Score.loadMistakeWordData();
+				onResume();
+			}
+			else {
+				this.finish();
+			}
+			break;
+		default:
+			break;
+		}		
 	}
 
 	private void enableRefreshFingerView(boolean enable) {
@@ -275,7 +288,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	_dataWord = new Score.WordDisplayData();
     	if(Score.popWordData(_dataWord) != 0)
     	{
-    		Toast.makeText(this, "No any word in db now.", Toast.LENGTH_LONG).show();
+    		Toast.makeText(this, this.getString(R.string.str_nomoreword), Toast.LENGTH_LONG).show();
     		return -1;
     	}
     	

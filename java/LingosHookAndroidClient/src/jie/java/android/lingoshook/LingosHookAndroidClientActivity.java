@@ -31,6 +31,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        //Toast.makeText(this, "state:" + (savedInstanceState != null ? "yes" : "no"), Toast.LENGTH_SHORT).show();
+        
         Global.initApplication(this);
         
         setContentView(R.layout.main);

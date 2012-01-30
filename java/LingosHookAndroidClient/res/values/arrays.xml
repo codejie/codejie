@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="setting_word_numloadnew">
-        <item >1</item>
-        <item >20</item>
-        <item >30</item>
-        <item >40</item>
+        <item >10 words</item>
+        <item >20 words</item>
+        <item >30 words</item>
+        <item >40 words</item>
     </string-array>
     <string-array name="setting_word_numloadnew_value">
-        <item >1</item>
+        <item >10</item>
         <item >20</item>
         <item >30</item>
         <item >40</item>
     </string-array>
     <string-array name="setting_word_numloadold">
         <item>No Limited</item>
-        <item>1</item>
-        <item>20</item>
-        <item>30</item>
-        <item>40</item>
+        <item>10 words</item>
+        <item>20 words</item>
+        <item>30 words</item>
+        <item>40 words</item>
     </string-array>
     <string-array name="setting_word_numloadold_value">
         <item>0</item>
-        <item>1</item>
+        <item>10</item>
         <item>20</item>
         <item>30</item>
-        <item>40</item>
-        
+        <item>40</item>        
     </string-array>
     <string-array name="setting_finger_pencolor">
         <item >White</item>

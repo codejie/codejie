@@ -62,6 +62,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
         
         enableRefreshFingerView(true);
         
+		Score.refreshData();
+
 		//Log.d(Global.APP_TITLE, "Word Activity count : " + WordDisplayActivity.getInstanceCount());
     }
 	
@@ -280,6 +282,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		
 		if(_dataWord == null)
 			return;
+   	
 		speakWord(_dataWord.data.word);
 	}
     
@@ -296,7 +299,9 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	
     	showSrcData();
     	
-    	speakWord(_dataWord.data.word);
+    	if(Setting.loadSpeaker) {
+    		speakWord(_dataWord.data.word);
+    	}
     	
     	return 0;
     }
@@ -360,10 +365,6 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     }
     
     private void speakWord(final String word) {
-    	
-    	if(!Setting.loadSpeaker)
-    		return;
-    	
     	Speaker.speak(word);
     }
 }

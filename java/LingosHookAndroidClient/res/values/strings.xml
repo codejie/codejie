@@ -13,10 +13,10 @@
     <string name="title_yes">Yes</string>
     <string name="title_no">No</string>
     <string name="str_noword">No Word</string>
-    <string name="str_score_0">Score 0</string>
-    <string name="str_score_1">Score 1</string>
-    <string name="str_score_2">Score 2</string>
-    <string name="str_score_3">Score 3</string>
+    <string name="str_score_0">Very easy.</string>
+    <string name="str_score_1">I know it.</string>
+    <string name="str_score_2">Fuzzy..</string>
+    <string name="str_score_3">What\'s it?!</string>
     <string name="menu_score_list">Score List</string>
     <string name="title_score_total">Total Words:</string>
     <string name="title_score_new">New Words:</string>

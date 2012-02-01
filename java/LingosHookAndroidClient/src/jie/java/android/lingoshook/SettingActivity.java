@@ -53,7 +53,7 @@ public class SettingActivity extends PreferenceActivity implements OnPreferenceC
 			Setting.intervalFingerPanel = Integer.parseInt((String)value);
 		}
 		else if(preference.getKey().equals(this.getString(R.string.set_key_finger_pencolor))) {
-			Setting.colorFingerPanelPen = Integer.parseInt((String)value);
+			Setting.colorFingerPanelPen = Integer.parseInt((String)value, 16);
 		}
 		else if(preference.getKey().equals(this.getString(R.string.set_key_finger_penwidth))) {
 			Setting.widthFingerPanelPen = Integer.parseInt((String)value);

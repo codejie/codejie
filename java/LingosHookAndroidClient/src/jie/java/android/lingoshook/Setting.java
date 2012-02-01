@@ -29,8 +29,8 @@ public final class Setting {
 		
 		refeshFingerPanel = preferences.getBoolean(context.getString(R.string.set_key_finger_refresh), true);
 		intervalFingerPanel = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_interval), "2000"));
-		colorFingerPanelPen = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_pencolor), "1"));
-		widthFingerPanelPen = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_penwidth), "2"));
+		colorFingerPanelPen = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_pencolor), "FFFFFF"), 16);
+		widthFingerPanelPen = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_penwidth), "6"));
 		
 		return 0;
 	}

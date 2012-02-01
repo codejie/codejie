@@ -24,17 +24,17 @@ public class FingerDrawView extends View {
 	private boolean pressed = false;
 	
 	public FingerDrawView(Context context,AttributeSet paramAttributeSet) {
-	  super(context,paramAttributeSet);
+		super(context,paramAttributeSet);
 	  
-	      mPaint = new Paint();
-	      mPaint.setAntiAlias(true);
-	      mPaint.setDither(true);
-	      mPaint.setColor(0xFFFFFFFF);
-	      mPaint.setStyle(Paint.Style.STROKE);
-	      mPaint.setStrokeJoin(Paint.Join.ROUND);
-	      mPaint.setStrokeCap(Paint.Cap.ROUND);
-	      mPaint.setStrokeWidth(6);
-	      mPaint.setMaskFilter(new EmbossMaskFilter(new float[] { 1, 1, 1 },0.4f, 6, 3.5f));
+		mPaint = new Paint();
+		mPaint.setAntiAlias(true);
+		mPaint.setDither(true);
+		mPaint.setColor(Setting.colorFingerPanelPen);// 0xFFFFFFFF);
+		mPaint.setStyle(Paint.Style.STROKE);
+		mPaint.setStrokeJoin(Paint.Join.ROUND);
+		mPaint.setStrokeCap(Paint.Cap.ROUND);
+		mPaint.setStrokeWidth(Setting.widthFingerPanelPen);
+		mPaint.setMaskFilter(new EmbossMaskFilter(new float[] { 1, 1, 1 },0.4f, 6, 3.5f));
 		
 		path = new Path();
 		paint = new Paint(Paint.DITHER_FLAG);

@@ -11,7 +11,6 @@ import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -132,9 +131,9 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			Log.d(Global.APP_TITLE, "Word - back key.");
+			//Log.d(Global.APP_TITLE, "Word - back key.");
 			if(Setting.loadMistakeWord && Score.getMistakeWordCount() > 0) {
-				Toast.makeText(this, "mistake word list", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(this, "mistake word list", Toast.LENGTH_SHORT).show();
 				this.showDialog(DIALOG_LOADMISTAKEWORD);
 				return true;
 			}

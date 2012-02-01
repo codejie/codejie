@@ -29,7 +29,7 @@ public class FingerDrawView extends View {
 		mPaint = new Paint();
 		mPaint.setAntiAlias(true);
 		mPaint.setDither(true);
-		mPaint.setColor(Setting.colorFingerPanelPen);// 0xFFFFFFFF);
+		mPaint.setColor(Setting.colorFingerPanelPen | 0xFF000000);// 0xFFFFFFFF);
 		mPaint.setStyle(Paint.Style.STROKE);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 		mPaint.setStrokeCap(Paint.Cap.ROUND);

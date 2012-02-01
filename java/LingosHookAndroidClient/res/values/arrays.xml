@@ -33,10 +33,10 @@
         <item >Red</item>
     </string-array>
     <string-array name="setting_finger_pencolor_value">
-        <item >FFFFFFFF</item>
-        <item >0xFF00FFFF</item>
-        <item >FF0000FF</item>
-        <item >0xFFFF0000</item>
+        <item >FFFFFF</item>
+        <item >FFFF00</item>
+        <item >0000FF</item>
+        <item >FF0000</item>
     </string-array>
     <string-array name="setting_finger_penwidth">
         <item >1 ap</item>

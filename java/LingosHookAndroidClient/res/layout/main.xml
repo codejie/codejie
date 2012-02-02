@@ -3,28 +3,35 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical" android:layout_weight="1.00">
+
+        <jie.java.android.lingoshook.AdPanelView
+            android:id="@+id/adPanelView1"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp" />
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="80dp"
             android:text="@string/app_name"
-            android:textAppearance="?android:attr/textAppearanceLarge" android:layout_gravity="center_horizontal"/>
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="14dp"
             android:text="alpha version"
-            android:textAppearance="?android:attr/textAppearanceMedium" android:layout_gravity="center_horizontal"/>
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
 </LinearLayout>

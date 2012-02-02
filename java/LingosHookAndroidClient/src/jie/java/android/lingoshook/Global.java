@@ -20,6 +20,9 @@ public final class Global {
 	}
 	
 	public static void exitApplication() {
+		
+		AdPanelView.release();
+		
 		Speaker.release();
 		Setting.release();
 		DBAccess.release();

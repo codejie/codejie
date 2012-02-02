@@ -26,25 +26,33 @@ public class AdPanelView extends TextView {
 }
 */
 
-public class AdPanelView extends View implements AdListener {
+public class AdPanelView implements AdListener {
 
 	private static String APP_AD_ID		=	"123456789012345678901234567890AB";
 	private static boolean IS_TESTING	=	true;
 	private static int[] AD_TYPE = null;
-	
+
+	private ImpressionAdView ad = null;
+/*	
 	public AdPanelView(Context context, AttributeSet paramAttributeSet) {
 		super(context, paramAttributeSet);
 		// TODO Auto-generated constructor stub
 		
 		initWoobooAdView();
 	}
-
+*/	
+	public AdPanelView(Context context, View parent, int x, int y) {
+		ad = new ImpressionAdView(context, APP_AD_ID, parent, x, y, 0xFFFFFF, IS_TESTING, AD_TYPE);
+		ad.show(40);
+		ad.setAdListener(this);			
+	}
+/*
 	private void initWoobooAdView() {
-		ImpressionAdView ad = new ImpressionAdView(this.getContext(), APP_AD_ID, this, this.getTop(), this.getLeft(), 0xFFFFFF, IS_TESTING, AD_TYPE);
+		ImpressionAdView ad = new ImpressionAdView(this.getContext(), APP_AD_ID, this, 0, this.getLeft(), 0xFFFFFF, IS_TESTING, AD_TYPE);
 		ad.show(40);
 		ad.setAdListener(this);		
 	}
-	
+*/	
 	private static void freeWoobooAdView() {
 		ImpressionAdView.close();
 	}

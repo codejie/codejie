@@ -1,5 +1,7 @@
 package jie.java.android.lingoshook;
 
+import com.wooboo.adlib_android.ImpressionAdView;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class LingosHookAndroidClientActivity extends Activity implements OnTouchListener {
@@ -39,11 +42,23 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
         
         this.findViewById(R.id.linearLayout1).setOnTouchListener(this);
         this.findViewById(R.id.linearLayout1).setLongClickable(true);
+        
+        intiAdView();
     }
+
+	private void intiAdView() {
+		// TODO Auto-generated method stub
+		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout1);
+		new AdPanelView(this, ll, 0, 100);
+		//ImpressionAdView ad = new ImpressionAdView(this, "123456789012345678901234567890ab", ll, 0, 100, 0xFFFFFF, true, null);
+		//ad.show(40);
+		//ad.setAdListener(this);		
+	}
 
 	@Override
 	protected void onDestroy() {
 		Global.exitApplication();
+		//AdPanelView.release();
 		super.onDestroy();
 	}
 

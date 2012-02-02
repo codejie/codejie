@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import com.wooboo.adlib_android.ImpressionAdView;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,6 +85,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		if(_result != null)
 			_result.finish();
 	
+		//AdPanelView.release();
 		super.onDestroy();
 	}
 
@@ -243,6 +247,11 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	
 	private void initView() {
     	
+		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout2);
+		new AdPanelView(this, ll, 0, 10000);
+		//ImpressionAdView ad = new ImpressionAdView(this, "123456789012345678901234567890ab", ll, 0, 0, 0xFFFFFF, true, null);
+		//ad.show(40);
+		
 		_viewDraw = (FingerDrawView)this.findViewById(R.id.fingerDrawView1);
 		
 		enableViews(true);

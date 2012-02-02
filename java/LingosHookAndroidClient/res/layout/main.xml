@@ -3,17 +3,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" android:layout_weight="1.00">
-
-        <jie.java.android.lingoshook.AdPanelView
-            android:id="@+id/adPanelView1"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp" />
+        android:layout_weight="1.00"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textView1"

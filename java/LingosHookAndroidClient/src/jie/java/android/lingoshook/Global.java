@@ -21,7 +21,7 @@ public final class Global {
 	
 	public static void exitApplication() {
 		
-		AdPanelView.release();
+		//AdPanelView.release();
 		
 		Speaker.release();
 		Setting.release();

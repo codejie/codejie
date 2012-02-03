@@ -15,7 +15,11 @@ import android.widget.Button;
 
 public class ResultDisplayActivity extends Activity /*implements OnTouchListener*/ {
 
-	private static final String Button = null;
+	public static String ACTION		=	"action";
+	public static int ACTION_WORD	=	1;
+	public static int ACTION_HELP	=	2;
+	
+	private boolean isWord			=	true;
 	private WebView web = null;
 	
 	@Override
@@ -28,8 +32,23 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 		
 //		web.setOnTouchListener(this);
 		
-		WordDisplayActivity.setResultDisplay(this);
+//		WordDisplayActivity.setResultDisplay(this);
 		
+		Intent intent = this.getIntent();
+		if(intent != null) {
+			int act = intent.getExtras().getInt(ACTION);
+			if(act == ACTION_WORD) {
+				isWord = true;
+				loadData();
+			}
+			else {
+				isWord = false;
+				loadHelp();
+			}
+		}
+		
+		initButtons(isWord);
+/*		
 		((Button)this.findViewById(R.id.btnYes)).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -47,9 +66,27 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 			}
 			
 		});
-		
-		loadData();
+*/		
+		//loadData();
 	}
+/*	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		
+		if(intent != null) {
+			int act = intent.getExtras().getInt(ACTION);
+			if(act == ACTION_WORD) {
+				loadData();
+			}
+			else {
+				web.loadUrl("file://android_asset/info.html");
+			}
+		}
+		
+		super.onNewIntent(intent);
+	}
+*/
 /*
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
@@ -59,7 +96,39 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 	}
 */
 	
+	private void loadHelp() {
+		web.loadUrl("file:////ContentRoot/assets/info.html");
+	}
+
+	private void initButtons(boolean display) {
+		if(display) {
+			((Button)this.findViewById(R.id.btnYes)).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					submitResult(Score.JUDGE_YES);
+				}			
+			});
+			
+			((Button)this.findViewById(R.id.btnNo)).setOnClickListener(new OnClickListener() {
+	
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					submitResult(Score.JUDGE_NO);
+				}
+				
+			});
+		}
+		else {
+			this.findViewById(R.id.btnYes).setVisibility(View.GONE);
+			this.findViewById(R.id.btnNo).setVisibility(View.GONE);
+		}
+	}
+
 	public void loadData() {
+		//web.loadUrl("file://android_asset/info.html");
+		//web.loadUrl("file://" + Environment.getExternalStorageDirectory() + "/info.html");
 		web.loadUrl("file://" + Environment.getExternalStorageDirectory() + Score.CACHE_FILE);
 		//web.loadUrl("file:///sdcard/t.html");
 	}
@@ -69,8 +138,11 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		Log.d(Global.APP_TITLE, "key - " + keyCode + " event - " + event.getKeyCode());
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			submitResult(Score.JUDGE_YES);
+		
+		if(isWord) {
+			if(keyCode == KeyEvent.KEYCODE_BACK) {
+				submitResult(Score.JUDGE_YES);
+			}
 		}
 		
 		return super.onKeyUp(keyCode, event);

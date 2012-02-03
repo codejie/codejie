@@ -33,7 +33,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		
 	private Score.WordDisplayData _dataWord = null;
 	
-	private static ResultDisplayActivity _result = null;
+//	private static ResultDisplayActivity _result = null;
 	
 	private int _scoreWord	= -1;
 	
@@ -82,10 +82,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 			
-		if(_result != null)
-			_result.finish();
-	
-		//AdPanelView.release();
+//		if(_result != null)
+//			_result.finish();
 		super.onDestroy();
 	}
 
@@ -242,15 +240,10 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	}
 
 	public static void setResultDisplay(Activity activity) {
-		_result = (ResultDisplayActivity) activity;
+//		_result = (ResultDisplayActivity) activity;
 	}
 	
 	private void initView() {
-    	
-		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout2);
-		new AdPanelView(this, ll, 0, 10000);
-		//ImpressionAdView ad = new ImpressionAdView(this, "123456789012345678901234567890ab", ll, 0, 0, 0xFFFFFF, true, null);
-		//ad.show(40);
 		
 		_viewDraw = (FingerDrawView)this.findViewById(R.id.fingerDrawView1);
 		
@@ -276,7 +269,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	_scoreWord = score;
     	
     	if(Setting.loadResultDisplay) {
-    		Intent intent = new Intent(this, ResultDisplayActivity.class);   	
+    		Intent intent = new Intent(this, ResultDisplayActivity.class);
+    		intent.putExtra(ResultDisplayActivity.ACTION, ResultDisplayActivity.ACTION_WORD);
     		this.startActivity(intent);
     	}
     	else {
@@ -361,9 +355,9 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     		return -1;
     	}
 		
-    	if(_result != null) {
-    		_result.loadData();
-    	}
+//    	if(_result != null) {
+//    		_result.loadData();
+//    	}
     	
     	return 0;		
     }

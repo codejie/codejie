@@ -1,7 +1,5 @@
 package jie.java.android.lingoshook;
 
-import com.wooboo.adlib_android.ImpressionAdView;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -49,10 +47,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	private void intiAdView() {
 		// TODO Auto-generated method stub
 		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout1);
-		new AdPanelView(this, ll, 0, 100);
-		//ImpressionAdView ad = new ImpressionAdView(this, "123456789012345678901234567890ab", ll, 0, 100, 0xFFFFFF, true, null);
-		//ad.show(40);
-		//ad.setAdListener(this);		
+		new AdPanelView(this, ll, 0, 60);
 	}
 
 	@Override
@@ -176,6 +171,18 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
+				}
+			});
+			
+			builder.setNeutralButton("Help", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+		    		Intent intent = new Intent(LingosHookAndroidClientActivity.this, ResultDisplayActivity.class);
+		    		intent.putExtra(ResultDisplayActivity.ACTION, ResultDisplayActivity.ACTION_HELP);
+		    		LingosHookAndroidClientActivity.this.startActivity(intent);					
+					dialog.dismiss();
+					
 				}
 			});
 			

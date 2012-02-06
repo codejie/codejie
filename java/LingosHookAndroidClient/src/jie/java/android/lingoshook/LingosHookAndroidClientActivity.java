@@ -219,6 +219,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	
 	private void onMenuExit() {
 		Global.exitApplication();
+		this.finish();
 	}
 	
 	private void onMenuImport() {

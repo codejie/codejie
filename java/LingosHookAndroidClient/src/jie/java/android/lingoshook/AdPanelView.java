@@ -26,6 +26,7 @@ public class AdPanelView extends TextView {
 
 public class AdPanelView implements AdListener {
 
+	private static boolean IS_AD_SHOW	=	true;
 	private static String APP_AD_ID		=	"3ad1d9569acb45969e4d85864727e67d";
 	private static boolean IS_TESTING	=	false;
 	private static int[] AD_TYPE 		=	null;
@@ -40,9 +41,11 @@ public class AdPanelView implements AdListener {
 	}
 */	
 	public AdPanelView(Context context, View parent, int x, int y) {
-		ad = new ImpressionAdView(context, APP_AD_ID, parent, x, y, 0xFFFFFF, IS_TESTING, AD_TYPE);
-		ad.show(40);
-		ad.setAdListener(this);			
+		if(IS_AD_SHOW) {
+			ad = new ImpressionAdView(context, APP_AD_ID, parent, x, y, 0xFFFFFF, IS_TESTING, AD_TYPE);
+			ad.show(40);
+			ad.setAdListener(this);
+		}
 	}
 /*
 	private void initWoobooAdView() {

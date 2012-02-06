@@ -32,7 +32,7 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 		
 //		web.setOnTouchListener(this);
 		
-//		WordDisplayActivity.setResultDisplay(this);
+		WordDisplayActivity.setResultDisplay(this);
 		
 		Intent intent = this.getIntent();
 		if(intent != null) {
@@ -97,7 +97,7 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 */
 	
 	private void loadHelp() {
-		web.loadUrl("file:////ContentRoot/assets/info.html");
+		web.loadUrl("file:///android_asset/info.html");
 	}
 
 	private void initButtons(boolean display) {

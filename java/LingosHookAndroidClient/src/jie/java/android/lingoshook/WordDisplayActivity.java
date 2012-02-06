@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.wooboo.adlib_android.ImpressionAdView;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -20,7 +18,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +30,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 		
 	private Score.WordDisplayData _dataWord = null;
 	
-//	private static ResultDisplayActivity _result = null;
+	private static ResultDisplayActivity _result = null;
 	
 	private int _scoreWord	= -1;
 	
@@ -82,8 +79,8 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 			
-//		if(_result != null)
-//			_result.finish();
+		if(_result != null)
+			_result.finish();
 		super.onDestroy();
 	}
 
@@ -240,7 +237,7 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
 	}
 
 	public static void setResultDisplay(Activity activity) {
-//		_result = (ResultDisplayActivity) activity;
+		_result = (ResultDisplayActivity) activity;
 	}
 	
 	private void initView() {

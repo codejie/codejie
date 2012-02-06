@@ -52,12 +52,13 @@
     <string name="str_newword">N:</string>
     <string name="str_oldword">O:</string>
     <string name="str_mistakeword">M:</string>
-    <string name="str_version">1.0 alpha</string>
+    <string name="str_version">Beta Version</string>
     <string name="set_summary_finger_refresh">Automate to refresh finger input panel</string>
     <string name="set_summary_finger_interval">Refresh interval of finger panel</string>
     <string name="set_summary_finger_pencolor">Choose pen color of finger panel</string>
     <string name="set_summary_finger_penwidth">Choose pen width of finger panel</string>
     <string name="str_loadmistakeword">Would you like load the mistake words now?</string>
     <string name="str_nowordindb">No any word in local db, please use \'import\' cmd to load first.</string>
-    <string name="str_nomoreword">No more words now.</string>    
+    <string name="str_nomoreword">No more words now.</string> 
+    <string name="title_ad_version">Wooboo 2.2</string>   
 </resources>

@@ -47,7 +47,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	private void intiAdView() {
 		// TODO Auto-generated method stub
 		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout1);
-		new AdPanelView(this, ll, 0, 60);
+		new AdPanelView(this, ll, 0, 80);
 	}
 
 	@Override

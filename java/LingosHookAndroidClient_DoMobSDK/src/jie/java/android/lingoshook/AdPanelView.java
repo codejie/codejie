@@ -1,11 +1,17 @@
 package jie.java.android.lingoshook;
 
-import com.wooboo.adlib_android.AdListener;
-import com.wooboo.adlib_android.ImpressionAdView;
+import cn.domob.android.ads.DomobAdListener;
+import cn.domob.android.ads.DomobAdManager;
+import cn.domob.android.ads.DomobAdView;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 
 /*
 public class AdPanelView extends TextView {
@@ -24,14 +30,13 @@ public class AdPanelView extends TextView {
 }
 */
 
-public class AdPanelView implements AdListener {
+public class AdPanelView implements DomobAdListener {
 
 	private static boolean IS_AD_SHOW	=	true;
-	private static String APP_AD_ID		=	"3ad1d9569acb45969e4d85864727e67d";
-	private static boolean IS_TESTING	=	false;
+	private static String APP_AD_ID		=	"56OJyNcouMGCCFOyTJ";
+	private static boolean IS_TESTING	=	true;
 	private static int[] AD_TYPE 		=	null;
 
-	private ImpressionAdView ad = null;
 /*	
 	public AdPanelView(Context context, AttributeSet paramAttributeSet) {
 		super(context, paramAttributeSet);
@@ -40,44 +45,43 @@ public class AdPanelView implements AdListener {
 		initWoobooAdView();
 	}
 */	
-	public AdPanelView(Context context, View parent, int x, int y) {
+	public AdPanelView(Activity activity, LinearLayout parent, int x, int y) {
 		if(IS_AD_SHOW) {
-			ad = new ImpressionAdView(context, APP_AD_ID, parent, x, y, 0xFFFFFF, IS_TESTING, AD_TYPE);
-			ad.show(40);
-			ad.setAdListener(this);
+			
+			DomobAdView ad = new DomobAdView(activity);
+			DomobAdManager.setPublisherId(APP_AD_ID);
+			ad.setRequestInterval(20);
+			parent.addView(ad, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+			DomobAdManager.setIsTestMode(IS_TESTING);
 		}
 	}
-/*
-	private void initWoobooAdView() {
-		ImpressionAdView ad = new ImpressionAdView(this.getContext(), APP_AD_ID, this, 0, this.getLeft(), 0xFFFFFF, IS_TESTING, AD_TYPE);
-		ad.show(40);
-		ad.setAdListener(this);		
-	}
-*/	
-	private static void freeWoobooAdView() {
-		ImpressionAdView.close();
-	}
-	
-	@Override
-	public void onFailedToReceiveAd(Object arg0) {
-		// TODO Auto-generated method stub
-		Log.d(Global.APP_TITLE, "AD load failed.");
-	}
 
-	@Override
-	public void onPlayFinish() {
-		// TODO Auto-generated method stub
-		Log.d(Global.APP_TITLE, "AD play over.");
-	}
-
-	@Override
-	public void onReceiveAd(Object arg0) {
-		// TODO Auto-generated method stub
-		Log.d(Global.APP_TITLE, "AD received.");
-	}
-	
 	public static void release() {
-		freeWoobooAdView();
+
+	}
+
+	@Override
+	public void onFailedToReceiveFreshAd(DomobAdView arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onLandingPageClose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onLandingPageOpening() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onReceivedFreshAd(DomobAdView arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -29,10 +29,8 @@
         <activity android:name="ResultDisplayActivity" android:launchMode="singleInstance"></activity>
         <activity android:name="ScoreListActivity"></activity>
         <activity android:name="SettingActivity"></activity>
-        <meta-data android:value="3ad1d9569acb45969e4d85864727e67d" android:name="Wooboo_PID"/>
-        <meta-data android:value="1" android:name="Market_ID"/>
-		<activity android:name="com.wooboo.adlib_android.AdActivity" android:configChanges="orientation|keyboardHidden" />
-		<activity android:name="com.wooboo.adlib_android.FullActivity" android:configChanges="orientation|keyboardHidden" android:launchMode="singleTask"/>        
+		<activity android:name="cn.domob.android.ads.DomobActivity" android:theme="@android:style/Theme.Translucent"/>        
+		<meta-data android:value="56OJyNcouMGCCFOyTJ" android:name="DOMOB_PID"/>        
     </application>
 
 </manifest>

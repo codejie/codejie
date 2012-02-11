@@ -6,7 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public class BCScreen extends Stage implements Screen, InputProcessor {
+public class BCScreen extends Stage implements Screen {
 
 	protected BCGame game = null;
 	

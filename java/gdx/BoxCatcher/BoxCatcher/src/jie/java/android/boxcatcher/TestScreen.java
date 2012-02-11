@@ -2,12 +2,18 @@ package jie.java.android.boxcatcher;
 
 public class TestScreen extends BCScreen {
 
-	private TestStage stage = null;
+	// TestStage stage = null;
 	
 	public TestScreen(BCGame game) {
 		super(game);
 		
-		stage = new TestStage();
+		//stage = new TestStage();
+	}
+
+	@Override
+	public void show() {
+		this.addActor(new TestStage());
+		super.show();
 	}
 
 	@Override
@@ -15,7 +21,8 @@ public class TestScreen extends BCScreen {
 		// TODO Auto-generated method stub
 		super.render(delta);
 		
-		stage.draw();
+		this.draw();
+		//stage.draw();
 	}
 
 

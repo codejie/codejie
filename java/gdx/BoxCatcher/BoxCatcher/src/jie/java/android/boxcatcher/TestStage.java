@@ -1,5 +1,6 @@
 package jie.java.android.boxcatcher;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -14,29 +15,29 @@ public class TestStage extends BCStage {
 	private WorldDebugRenderer renderer = null;
 	
 	public TestStage() {
-		super("test");
 		
 		initWorld();
 		initBoxes();
 	}
 
 	@Override
-	public void dispose() {
+	public void clear() {
 		world.dispose();
-		super.dispose();
+		super.clear();
 	}
 
 	@Override
-	public void draw() {
-		super.draw();
+	public void draw(SpriteBatch batch, float parentAlpha) {
 		world.step((1.0f/ 60.0f), 3, 3);
 		renderer.render(world);
+		super.draw(batch, parentAlpha);
 	}
 
 	private void initBoxes() {
 		
 		BodyDef def = new BodyDef();
 		def.type = BodyType.StaticBody;
+		def.angle = 1/360f;
 		
 		PolygonShape shape = new PolygonShape();
 
@@ -55,7 +56,7 @@ public class TestStage extends BCStage {
 
 		BodyDef d = new BodyDef();
 		d.type = BodyType.DynamicBody;
-		d.angle = 120.0f;
+		//d.angle = 120.0f;
 		d.position.set(100/Global.WORLD_SCALE, 300/Global.WORLD_SCALE);
 		
 		CircleShape s = new CircleShape();

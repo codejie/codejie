@@ -29,6 +29,7 @@ public class BCScreen extends Stage implements Screen {
 		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(0,0,0,0);
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
 	}
 
 	@Override

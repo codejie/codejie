@@ -33,7 +33,7 @@ public class ImageScreen extends BCScreen {
 		}
 		
 		//animation = new Animation(0.1f, new TextureRegion(texture, 0, 0, 112, 112), new TextureRegion(texture, 56, 0, 112, 112));
-		animation = new Animation(1.0f, list);
+		animation = new Animation(1/30f, list);
 		image = new Image();
 		image.x = 0;
 		image.y = 0;

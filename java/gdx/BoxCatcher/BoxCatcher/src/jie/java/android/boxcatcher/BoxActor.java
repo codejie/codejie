@@ -3,6 +3,10 @@ package jie.java.android.boxcatcher;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -10,6 +14,14 @@ public class BoxActor extends Actor {
 
 	public enum BoxType {
 		BT_BOX, BT_CIRCLE, BT_TRIANGLE
+	}
+	
+	public static Vector2 toWorld(final Vector2 vct) {
+		return new Vector2(vct.x / Global.WORLD_SCALE, vct.y / Global.WORLD_SCALE);
+	}
+	
+	public static float toWorld(final float v) {
+		return v /Global.WORLD_SCALE;
 	}
 	
 	public final static class Parameter {
@@ -36,6 +48,17 @@ public class BoxActor extends Actor {
 		y = param.position.y;
 		width = param.width;
 		height = param.height;
+		
+		BodyDef def = new BodyDef();
+		def.type = BodyType.StaticBody;//.DynamicBody;
+		def.position.set((x + width/ 2) / Global.WORLD_SCALE, (y + height /2 ) / Global.WORLD_SCALE);
+		
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(width / Global.WORLD_SCALE / 2, height / Global.WORLD_SCALE  / 2);
+		
+		Body body = world.createBody(def);
+		body.createFixture(shape, 1.0f);
+		
 	}
 	
 	public void setRegion(TextureRegion region) {

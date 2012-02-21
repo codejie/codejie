@@ -55,8 +55,4 @@ public class ImageScreen extends BCScreen {
 		
 		super.draw();
 	}
-	
-	
-	
-
 }

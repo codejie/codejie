@@ -57,11 +57,11 @@ public class WorldScreen extends BCScreen {
 	private void initBoxes() {
 		texture = new Texture(Gdx.files.internal("data/1.png"));
 		BoxActor.Parameter param = new BoxActor.Parameter();
-		param.position = new Vector2(100, 20);
+		param.position = new Vector2(100, 600);
 		param.height = 32;
 		param.width = 32;
 		param.name = "box";
-		BoxActor actor = new BoxActor(world, param);
+		BoxActor actor = new RectangleBox(world, param);
 		actor.setRegion(new TextureRegion(texture,0, 0, 32, 32));
 		this.addActor(actor);
 	}

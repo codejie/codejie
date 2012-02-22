@@ -4,16 +4,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class BoxActor extends Actor {
+public abstract class BoxActor extends Actor {
 
 	public enum BoxType {
-		BT_BOX, BT_CIRCLE, BT_TRIANGLE
+		BT_STATIC, BT_DYNAMIC
+	}
+	
+	public enum BoxShape {
+		BS_BOX, BS_CIRCLE, BS_TRIANGLE
 	}
 	
 	public static Vector2 toWorld(final Vector2 vct) {
@@ -29,48 +30,29 @@ public class BoxActor extends Actor {
 		public BoxType type;
 		public Vector2 position;
 		public float width, height;
+		public float rotation;
 		//
 	}
 	
-	private World world = null;
-	private TextureRegion region = null;
+	protected World world = null;
+	protected Parameter parameter = null;
+	protected TextureRegion region = null;
+	protected Body body = null;
 	
 	public BoxActor(World world, final Parameter param) {
 		super(param.name);
 		
 		this.world = world;
+		this.parameter = param;		
 		
-		makeBox(param);
-	}	
-	
-	private void makeBox(Parameter param) {
-		x = param.position.x;
-		y = param.position.y;
-		width = param.width;
-		height = param.height;
-		
-		BodyDef def = new BodyDef();
-		def.type = BodyType.StaticBody;//.DynamicBody;
-		def.position.set((x + width/ 2) / Global.WORLD_SCALE, (y + height /2 ) / Global.WORLD_SCALE);
-		
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / Global.WORLD_SCALE / 2, height / Global.WORLD_SCALE  / 2);
-		
-		Body body = world.createBody(def);
-		body.createFixture(shape, 1.0f);
-		
+		makeBox();
 	}
 	
-	public void setRegion(TextureRegion region) {
-		if(this.region == region)
-			return;
-		
-		this.region = region;
-	}
-
 	@Override
 	public void act(float delta) {
 		// TODO Auto-generated method stub
+		world.step(delta, 3, 3);
+		update(delta);
 		super.act(delta);
 	}
 
@@ -91,6 +73,16 @@ public class BoxActor extends Actor {
 	@Override
 	public Actor hit(float x, float y) {
 		return x > 0 && x < width && y > 0 && y < height ? this : null;
-	}
+	}	
+
+	public void setRegion(TextureRegion region) {
+		if(this.region == region)
+			return;
+		
+		this.region = region;
+	}	
+	
+	abstract protected void makeBox();
+	abstract protected void update(float delta);
 
 }

@@ -1,5 +1,7 @@
 package jie.java.android.boxcatcher;
 
+import jie.java.android.boxcatcher.BoxActor.BoxType;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,21 +20,20 @@ public class WorldScreen extends BCScreen {
 	
 	public WorldScreen(BCGame game) {
 		super(game);
-		
-//		float x = this.camera.position.x;
-//		float y = this.camera.position.y;
-//		float z = this.camera.position.z;
-//		
-//		this.camera.position.set(1, 1, 0.01f);
-//		
-//		x = this.camera.position.x;
-//		y = this.camera.position.y;
-//		z = this.camera.position.z;		
-		//Matrix4 matrix = new Matrix4();//this.camera.combined;
-		//this.camera.combined.set(matrix);		
+			
 		initWorld();
 		initBoxes();
 	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		if(world != null) {
+			world.dispose();
+		}
+		super.finalize();
+	}
+
+
 
 	@Override
 	public void render(float delta) {
@@ -61,9 +62,24 @@ public class WorldScreen extends BCScreen {
 		param.height = 32;
 		param.width = 32;
 		param.name = "box";
+		param.type = BoxType.BT_DYNAMIC;
+		param.restitution = 0.3f;// .friction = 0.1f;
 		BoxActor actor = new RectangleBox(world, param);
 		actor.setRegion(new TextureRegion(texture,0, 0, 32, 32));
 		this.addActor(actor);
+		
+		param.position = new Vector2(110, 550);
+		BoxActor other = new RectangleBox(world, param);
+		this.addActor(other);
+		
+		param = new BoxActor.Parameter();
+		param.position = new Vector2(10, 10);
+		param.height = 10;
+		param.width = 300;
+		param.name = "ground";
+		param.type = BoxType.BT_STATIC;
+		BoxActor ground = new RectangleBox(world, param);
+		this.addActor(ground);
 	}
 
 	private void initWorld() {

@@ -1,7 +1,10 @@
 package jie.java.android.boxcatcher;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -10,32 +13,48 @@ public class RectangleBox extends BoxActor {
 
 	public RectangleBox(World world, Parameter param) {
 		super(world, param);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	protected void makeBox() {
-		x = parameter.position.x;
-		y = parameter.position.y;
-		width = parameter.width;
-		height = parameter.height;
-		
+	protected void makeBox() {		
 		BodyDef def = new BodyDef();
-		def.type = BodyType.DynamicBody;
-		def.position.set((x + width/ 2) / Global.WORLD_SCALE, (y + height /2 ) / Global.WORLD_SCALE);
+		def.type = (parameter.type == BoxType.BT_DYNAMIC ? BodyType.DynamicBody : BodyType.StaticBody);
+		def.position.set(getCenter());
 		
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / Global.WORLD_SCALE / 2, height / Global.WORLD_SCALE  / 2);
+		shape.setAsBox(getWidth(), getHeight());
+		
+		FixtureDef fd = new FixtureDef();
+		fd.shape = shape;
+		fd.restitution = parameter.restitution;
+		fd.density = parameter.density;
+		fd.friction = parameter.friction;		
 		
 		body = world.createBody(def);
-		body.createFixture(shape, 1.0f);
+		body.createFixture(fd);
+		
+		shape.dispose();
 	}
 
 	@Override
 	protected void update(float delta) {	
 		Gdx.app.log("tag", "x = " + body.getPosition().x + " y = " + body.getPosition().y);
-		x = body.getPosition().x * Global.WORLD_SCALE - width /2;
-		y = body.getPosition().y * Global.WORLD_SCALE - height /2;
+		x = body.getPosition().x * Global.WORLD_SCALE - parameter.width /2;
+		y = body.getPosition().y * Global.WORLD_SCALE - parameter.height /2;
+		
+		rotation = MathUtils.radiansToDegrees * body.getAngle();
 	}
 
+	private Vector2 getCenter() {
+		return new Vector2((parameter.position.x + parameter.width / 2) / Global.WORLD_SCALE
+				, (parameter.position.y + parameter.height / 2) / Global.WORLD_SCALE);
+	}
+	
+	private float getWidth() {
+		return parameter.width / Global.WORLD_SCALE / 2;
+	}
+	
+	private float getHeight() {
+		return parameter.height / Global.WORLD_SCALE / 2;
+	}
 }

@@ -2,6 +2,7 @@ package jie.java.android.boxcatcher;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -30,7 +31,10 @@ public abstract class BoxActor extends Actor {
 		public BoxType type;
 		public Vector2 position;
 		public float width, height;
-		public float rotation;
+		public float angle = 0.0f;
+		public float density = 1.0f;
+		public float restitution = 0.0f;
+		public float friction = 0.5f;
 		//
 	}
 	
@@ -45,7 +49,16 @@ public abstract class BoxActor extends Actor {
 		this.world = world;
 		this.parameter = param;		
 		
+		init();
 		makeBox();
+	}
+	
+	protected void init() {
+		x = parameter.position.x;
+		y = parameter.position.y;
+		width = parameter.width;
+		height = parameter.height;
+		rotation = MathUtils.radiansToDegrees * parameter.angle;	
 	}
 	
 	@Override

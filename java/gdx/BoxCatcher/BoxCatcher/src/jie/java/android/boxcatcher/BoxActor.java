@@ -1,5 +1,6 @@
 package jie.java.android.boxcatcher;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -58,7 +59,9 @@ public abstract class BoxActor extends Actor {
 		y = parameter.position.y;
 		width = parameter.width;
 		height = parameter.height;
-		rotation = MathUtils.radiansToDegrees * parameter.angle;	
+		rotation = MathUtils.radiansToDegrees * parameter.angle;
+		originX = width / 2.0f;
+		originY = height / 2.0f;
 	}
 	
 	@Override
@@ -72,9 +75,10 @@ public abstract class BoxActor extends Actor {
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		// TODO Auto-generated method stub
+		//update(0.01f);
 		batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 		if(region != null) {
-			if(scaleX == 1 && scaleY ==1 && rotation == 0) {
+			if(scaleX == 1 && scaleY == 1 && rotation == 0) {
 				batch.draw(region, x, y, width, height);
 			}
 			else {

@@ -37,12 +37,16 @@ public class RectangleBox extends BoxActor {
 	}
 
 	@Override
-	protected void update(float delta) {	
-		Gdx.app.log("tag", "x = " + body.getPosition().x + " y = " + body.getPosition().y);
-		x = body.getPosition().x * Global.WORLD_SCALE - parameter.width /2;
-		y = body.getPosition().y * Global.WORLD_SCALE - parameter.height /2;
-		
+	protected void update(float delta) {
 		rotation = MathUtils.radiansToDegrees * body.getAngle();
+		
+		float angle = body.getAngle();
+		//Gdx.app.log("tag", "x = " + body.getPosition().x + " y = " + body.getPosition().y);
+		Gdx.app.log("tag", "rotation = " + rotation + " angle = " + angle);
+		x = body.getPosition().x * Global.WORLD_SCALE - parameter.width / 2;// * MathUtils.cos(rotation);
+		y = body.getPosition().y * Global.WORLD_SCALE - parameter.height / 2;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
+		
+
 	}
 
 	private Vector2 getCenter() {

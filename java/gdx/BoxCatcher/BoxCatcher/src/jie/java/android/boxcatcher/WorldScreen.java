@@ -49,16 +49,15 @@ public class WorldScreen extends BCScreen {
 		this.draw();
 		
 		Matrix4 matrix = this.camera.combined;
-		matrix.scale(100, 100, 1);
-		
-
-		renderer.render(world, matrix);//this.camera.combined);
+		matrix.scale(Global.WORLD_SCALE,Global.WORLD_SCALE, 1);
+		renderer.render(world, matrix);
+		//renderer.render(world, this.camera.combined.scale(100, 100, 1));
 	}
 
 	private void initBoxes() {
 		texture = new Texture(Gdx.files.internal("data/1.png"));
 		BoxActor.Parameter param = new BoxActor.Parameter();
-		param.position = new Vector2(100, 100);
+		param.position = new Vector2(100, 300);
 		param.height = 32;
 		param.width = 32;
 		param.name = "box";
@@ -66,9 +65,37 @@ public class WorldScreen extends BCScreen {
 		param.restitution = 0.3f;// .friction = 0.1f;
 		BoxActor actor = new RectangleBox(world, param);
 		actor.setRegion(new TextureRegion(texture,0, 0, 32, 32));
+		
+		actor.setContactListener(new BoxContactListener() {
+
+			@Override
+			public void onAsSourceBeginContact(BoxActor target) {
+				// TODO Auto-generated method stub
+				Gdx.app.log("tag", "begin contact as source");
+			}
+
+			@Override
+			public void onAsTargetBeginContact(BoxActor source) {
+				// TODO Auto-generated method stub
+				Gdx.app.log("tag", "begin contact as targe");
+			}
+
+			@Override
+			public void onAsSourceEndContact(BoxActor target) {
+				// TODO Auto-generated method stub
+				Gdx.app.log("tag", "end contact as source");
+			}
+
+			@Override
+			public void onAsTargetEndContact(BoxActor source) {
+				// TODO Auto-generated method stub
+				Gdx.app.log("tag", "end contact as target");
+			}
+			
+		});
 		this.addActor(actor);
 		
-		param.position = new Vector2(120, 30);
+		param.position = new Vector2(120, 130);
 		BoxActor other = new RectangleBox(world, param);
 		this.addActor(other);
 		
@@ -85,6 +112,7 @@ public class WorldScreen extends BCScreen {
 	private void initWorld() {
 		// TODO Auto-generated method stub
 		world = new World(Global.WORLD_GRAVITY, true);
+		world.setContactListener(new WorldContactListener());
 		
 		renderer = new Box2DDebugRenderer();
 	}

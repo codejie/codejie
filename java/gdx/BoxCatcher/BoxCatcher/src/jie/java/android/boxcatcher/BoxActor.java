@@ -44,6 +44,8 @@ public abstract class BoxActor extends Actor {
 	protected TextureRegion region = null;
 	protected Body body = null;
 	
+	public BoxContactListener contactListener = null;
+	
 	public BoxActor(World world, final Parameter param) {
 		super(param.name);
 		
@@ -52,6 +54,9 @@ public abstract class BoxActor extends Actor {
 		
 		init();
 		makeBox();
+		if(body != null) {
+			body.setUserData(this);
+		}
 	}
 	
 	protected void init() {
@@ -62,6 +67,7 @@ public abstract class BoxActor extends Actor {
 		rotation = MathUtils.radiansToDegrees * parameter.angle;
 		originX = width / 2.0f;
 		originY = height / 2.0f;
+		//scaleX = 1.0f;
 	}
 	
 	@Override
@@ -78,7 +84,7 @@ public abstract class BoxActor extends Actor {
 		//update(0.01f);
 		batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 		if(region != null) {
-			if(scaleX == 1 && scaleY == 1 && rotation == 0) {
+			if(scaleX == 1.0f && scaleY == 1.0f && rotation == 0.0f) {
 				batch.draw(region, x, y, width, height);
 			}
 			else {
@@ -97,8 +103,12 @@ public abstract class BoxActor extends Actor {
 			return;
 		
 		this.region = region;
-	}	
+	}
 	
+	public void setContactListener(BoxContactListener listener) {
+		contactListener = listener;
+	}
+		
 	abstract protected void makeBox();
 	abstract protected void update(float delta);
 

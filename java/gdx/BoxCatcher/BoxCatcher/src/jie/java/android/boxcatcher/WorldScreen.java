@@ -39,7 +39,7 @@ public class WorldScreen extends BCScreen {
 	public void render(float delta) {
 		super.render(delta);
 		
-		GL10 gl = Gdx.graphics.getGL10();// .gl10;
+		//GL10 gl = Gdx.graphics.getGL10();// .gl10;
 		
 
 //        this.camera.update();//cam.update();
@@ -48,10 +48,10 @@ public class WorldScreen extends BCScreen {
 		this.act(delta);
 		this.draw();
 		
-		Matrix4 matrix = this.camera.combined;
-		matrix.scale(Global.WORLD_SCALE,Global.WORLD_SCALE, 1);
-		renderer.render(world, matrix);
-		//renderer.render(world, this.camera.combined.scale(100, 100, 1));
+		//Matrix4 matrix = this.camera.combined;
+		//matrix.scale(Global.WORLD_SCALE,Global.WORLD_SCALE, 1);
+		//renderer.render(world, matrix);
+		renderer.render(world, this.camera.combined.scale(100, 100, 1));
 	}
 
 	private void initBoxes() {
@@ -71,7 +71,7 @@ public class WorldScreen extends BCScreen {
 			@Override
 			public void onAsSourceBeginContact(BoxActor target) {
 				// TODO Auto-generated method stub
-				Gdx.app.log("tag", "begin contact as source");
+				Gdx.app.log("tag", "begin contact as source - target = " + target.name);
 			}
 
 			@Override

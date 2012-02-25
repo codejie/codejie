@@ -97,7 +97,7 @@ public abstract class BoxActor extends Actor {
 	public Actor hit(float x, float y) {
 		return x > 0 && x < width && y > 0 && y < height ? this : null;
 	}	
-
+	
 	public void setRegion(TextureRegion region) {
 		if(this.region == region)
 			return;

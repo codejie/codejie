@@ -44,6 +44,17 @@ public class RectangleBox extends BoxActor {
 		y = body.getPosition().y * Global.WORLD_SCALE - parameter.height / 2;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
 	}
 
+	@Override
+	public boolean touchDown(float x, float y, int pointer) {
+		// TODO Auto-generated method stub
+		Gdx.app.log("tag", "touchDown");
+		
+		//this.body.ap
+		
+		return super.touchDown(x, y, pointer);
+	}
+	
+	
 	private Vector2 getCenter() {
 		return new Vector2((parameter.position.x + parameter.width / 2) / Global.WORLD_SCALE
 				, (parameter.position.y + parameter.height / 2) / Global.WORLD_SCALE);

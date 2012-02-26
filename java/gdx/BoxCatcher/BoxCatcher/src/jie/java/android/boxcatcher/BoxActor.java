@@ -105,6 +105,12 @@ public abstract class BoxActor extends Actor {
 		this.region = region;
 	}
 	
+	public void applyForce(Vector2 force, Vector2 point) {
+		if(body != null) {
+			body.applyForce(force, point);
+		}
+	}
+	
 	public void setContactListener(BoxContactListener listener) {
 		contactListener = listener;
 	}

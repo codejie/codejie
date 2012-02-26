@@ -62,22 +62,23 @@ public class WorldScreen extends BCScreen {
 		param.width = 32;
 		param.name = "box";
 		param.type = BoxType.BT_DYNAMIC;
-		param.restitution = 0.3f;// .friction = 0.1f;
-		BoxActor actor = new RectangleBox(world, param);
+		param.restitution = 1.0f;// .friction = 0.1f;
+		final BoxActor actor = new RectangleBox(world, param);
 		actor.setRegion(new TextureRegion(texture,0, 0, 32, 32));
 		
 		actor.setContactListener(new BoxContactListener() {
 
+			//final BoxActor a = actor;
 			@Override
 			public void onAsSourceBeginContact(BoxActor target) {
 				// TODO Auto-generated method stub
-				Gdx.app.log("tag", "begin contact as source - target = " + target.name);
+				Gdx.app.log("tag", actor.name + " begin contact as source - target = " + target.name);
 			}
 
 			@Override
 			public void onAsTargetBeginContact(BoxActor source) {
 				// TODO Auto-generated method stub
-				Gdx.app.log("tag", "begin contact as targe");
+				Gdx.app.log("tag", actor.name + " begin contact as targe");
 			}
 
 			@Override

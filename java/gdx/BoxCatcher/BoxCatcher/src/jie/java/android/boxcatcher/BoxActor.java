@@ -1,22 +1,19 @@
 package jie.java.android.boxcatcher;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class BoxActor extends Actor {
 
-	public enum BoxType {
-		BT_STATIC, BT_DYNAMIC
-	}
-	
 	public enum BoxShape {
-		BS_BOX, BS_CIRCLE, BS_TRIANGLE
+		BS_RECTANGLE, BS_CIRCLE, BS_TRIANGLE
 	}
 	
 	public static Vector2 toWorld(final Vector2 vct) {
@@ -29,7 +26,7 @@ public abstract class BoxActor extends Actor {
 	
 	public final static class Parameter {
 		public String name;
-		public BoxType type;
+		public BodyType type;
 		public Vector2 position;
 		public float width, height;
 		public float angle = 0.0f;
@@ -108,6 +105,17 @@ public abstract class BoxActor extends Actor {
 	public void applyForce(Vector2 force, Vector2 point) {
 		if(body != null) {
 			body.applyForce(force, point);
+		}
+	}
+	
+	public void applyForceToCenter(Vector2 force) {
+		if(body != null) {
+			body.applyForceToCenter(force);
+		}
+	}
+	public void applyForceToCenter(float forceX, float forceY) {
+		if(body != null) {
+			body.applyForceToCenter(forceX, forceY);
 		}
 	}
 	

@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class RectangleBox extends BoxActor {
 
@@ -18,7 +19,7 @@ public class RectangleBox extends BoxActor {
 	@Override
 	protected void makeBox() {		
 		BodyDef def = new BodyDef();
-		def.type = (parameter.type == BoxType.BT_DYNAMIC ? BodyType.DynamicBody : BodyType.StaticBody);
+		def.type = parameter.type;// BodyType.KinematicBody;// (parameter.type == BoxType.BT_DYNAMIC ? BodyType.DynamicBody : BodyType.StaticBody);
 		def.position.set(getCenter());
 		
 		PolygonShape shape = new PolygonShape();
@@ -49,6 +50,11 @@ public class RectangleBox extends BoxActor {
 		// TODO Auto-generated method stub
 		Gdx.app.log("tag", "touchDown");
 		
+		
+		applyForceToCenter(new Vector2(1, 0));
+		
+		//body.setLinearVelocity(0.01001f, 0.0f);
+		
 		//this.body.ap
 		
 		return super.touchDown(x, y, pointer);
@@ -67,4 +73,5 @@ public class RectangleBox extends BoxActor {
 	private float getHeight() {
 		return parameter.height / Global.WORLD_SCALE / 2;
 	}
+
 }

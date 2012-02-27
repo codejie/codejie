@@ -1,13 +1,12 @@
 package jie.java.android.boxcatcher;
 
-import jie.java.android.boxcatcher.BoxActor.BoxType;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -61,7 +60,7 @@ public class WorldScreen extends BCScreen {
 		param.height = 32;
 		param.width = 32;
 		param.name = "box";
-		param.type = BoxType.BT_DYNAMIC;
+		param.type = BodyType.DynamicBody;
 		param.restitution = 1.0f;// .friction = 0.1f;
 		final BoxActor actor = new RectangleBox(world, param);
 		actor.setRegion(new TextureRegion(texture,0, 0, 32, 32));
@@ -105,7 +104,7 @@ public class WorldScreen extends BCScreen {
 		param.height = 10;
 		param.width = 300;
 		param.name = "ground";
-		param.type = BoxType.BT_STATIC;
+		param.type = BodyType.StaticBody;
 		BoxActor ground = new RectangleBox(world, param);
 		this.addActor(ground);
 	}

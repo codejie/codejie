@@ -32,7 +32,7 @@ public abstract class BoxActor extends Actor {
 		public float angle = 0.0f;
 		public float density = 1.0f;
 		public float restitution = 0.0f;
-		public float friction = 0.5f;
+		public float friction = 0.0f;
 		//
 	}
 	
@@ -124,6 +124,13 @@ public abstract class BoxActor extends Actor {
 	}
 		
 	abstract protected void makeBox();
-	abstract protected void update(float delta);
+	
+	protected void update(float delta) {
+		rotation = MathUtils.radiansToDegrees * body.getAngle();
+
+		x = body.getPosition().x * Global.WORLD_SCALE - parameter.width / 2;// * MathUtils.cos(rotation);
+		y = body.getPosition().y * Global.WORLD_SCALE - parameter.height / 2;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
+		
+	}
 
 }

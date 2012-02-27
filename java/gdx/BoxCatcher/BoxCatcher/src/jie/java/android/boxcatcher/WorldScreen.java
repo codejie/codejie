@@ -58,10 +58,11 @@ public class WorldScreen extends BCScreen {
 		BoxActor.Parameter param = new BoxActor.Parameter();
 		param.position = new Vector2(100, 300);
 		param.height = 32;
-		param.width = 32;
+		param.width = 100;
 		param.name = "box";
 		param.type = BodyType.DynamicBody;
 		param.restitution = 1.0f;// .friction = 0.1f;
+		param.friction = 0.1f;
 		final BoxActor actor = new RectangleBox(world, param);
 		actor.setRegion(new TextureRegion(texture,0, 0, 32, 32));
 		
@@ -95,6 +96,7 @@ public class WorldScreen extends BCScreen {
 		});
 		this.addActor(actor);
 		
+		param.width = 100;
 		param.position = new Vector2(120, 130);
 		BoxActor other = new RectangleBox(world, param);
 		this.addActor(other);
@@ -102,11 +104,30 @@ public class WorldScreen extends BCScreen {
 		param = new BoxActor.Parameter();
 		param.position = new Vector2(10, 10);
 		param.height = 10;
-		param.width = 300;
+		param.width = 460;
 		param.name = "ground";
 		param.type = BodyType.StaticBody;
 		BoxActor ground = new RectangleBox(world, param);
 		this.addActor(ground);
+		
+		BoxActor.Parameter lp = new BoxActor.Parameter();
+		lp.position = new Vector2(0, 10);
+		lp.height = 500;
+		lp.width = 10;
+		lp.name = "left";
+		lp.type = BodyType.StaticBody;
+		BoxActor left = new RectangleBox(world, lp);
+		this.addActor(left);
+
+		BoxActor.Parameter rp = new BoxActor.Parameter();
+		rp.position = new Vector2(470, 10);
+		rp.height = 500;
+		rp.width = 10;
+		rp.name = "left";
+		rp.type = BodyType.StaticBody;
+		BoxActor right = new RectangleBox(world, rp);
+		this.addActor(right);
+
 	}
 
 	private void initWorld() {

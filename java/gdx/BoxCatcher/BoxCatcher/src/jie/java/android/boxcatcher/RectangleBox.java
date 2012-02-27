@@ -39,27 +39,10 @@ public class RectangleBox extends BoxActor {
 
 	@Override
 	protected void update(float delta) {
-		rotation = MathUtils.radiansToDegrees * body.getAngle();
-
-		x = body.getPosition().x * Global.WORLD_SCALE - parameter.width / 2;// * MathUtils.cos(rotation);
-		y = body.getPosition().y * Global.WORLD_SCALE - parameter.height / 2;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
-	}
-
-	@Override
-	public boolean touchDown(float x, float y, int pointer) {
-		// TODO Auto-generated method stub
-		Gdx.app.log("tag", "touchDown");
+		super.update(delta);
 		
-		
-		applyForceToCenter(new Vector2(1, 0));
-		
-		//body.setLinearVelocity(0.01001f, 0.0f);
-		
-		//this.body.ap
-		
-		return super.touchDown(x, y, pointer);
-	}
-	
+		//Gdx.app.log("tag", "orgx = " + this.originX);		
+	}	
 	
 	private Vector2 getCenter() {
 		return new Vector2((parameter.position.x + parameter.width / 2) / Global.WORLD_SCALE
@@ -72,6 +55,67 @@ public class RectangleBox extends BoxActor {
 	
 	private float getHeight() {
 		return parameter.height / Global.WORLD_SCALE / 2;
+	}
+
+	private float ox = -1.0f, oy = -1.0f;
+	private boolean pressed = false;
+	@Override
+	public boolean touchDown(float x, float y, int pointer) {
+		// TODO Auto-generated method stub
+		Gdx.app.log("tag", "touchDown" + " x = " + x + " orgX = " + this.originX);
+		
+		ox = x;
+		oy = y;
+		
+		if(hit(x, y) == this)
+			pressed = true;
+		//applyForceToCenter(new Vector2(1, 0));
+		
+		//body.setLinearVelocity(0.01001f, 0.0f);
+		
+		//this.body.ap
+		
+		return super.touchDown(x, y, pointer);
+	}	
+	
+	@Override
+	public void touchUp(float x, float y, int pointer) {
+		// TODO Auto-generated method stub
+		Gdx.app.log("tag", "touchUp");
+		pressed = false;
+		ox = -1.0f;
+		oy = -1.0f;
+		super.touchUp(x, y, pointer);
+	}
+
+	@Override
+	public void touchDragged(float x, float y, int pointer) {
+		// TODO Auto-generated method stub
+		//if(ox != -1.0f && oy != -1.0f)
+			//applyForceToCenter(new Vector2(x - ox, y - oy));
+		Gdx.app.log("tag", "touchDragged");
+		super.touchDragged(x, y, pointer);
+	}
+
+	@Override
+	public boolean touchMoved(float x, float y) {
+		// TODO Auto-generated method stub
+		//if(ox != -1.0f && oy != -1.0f)
+			//applyForceToCenter(new Vector2(x - ox, y - oy));
+		Vector2 tmp = new Vector2(x , y);
+		tmp = body.getWorldVector(tmp);
+		if(hit(x, y) == this) {
+			Gdx.app.log("tag", "x = " + x + "  tmp.x= " + tmp.x + " p.x = " + body.getPosition().x + " (x - c.x) = " + (tmp.x / Global.WORLD_SCALE - body.getPosition().x));
+			applyForceToCenter((x / Global.WORLD_SCALE - width / (2 * Global.WORLD_SCALE)) * 1, 0);
+			
+			
+			
+		//if(pressed == true) {
+			//Gdx.app.log("tag", "x = " + x + " tmp.x = " + tmp.x + " this.x = " + this.x);
+			//applyForceToCenter(tmp.x - this.x / Global.WORLD_SCALE, 0);
+		}
+		
+		return super.touchMoved(x, y);
 	}
 
 }

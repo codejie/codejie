@@ -63,14 +63,15 @@ public class WorldScreen extends BCScreen {
 		param.type = BodyType.DynamicBody;
 		param.restitution = 1.0f;// .friction = 0.1f;
 		param.friction = 0.1f;
-		final BoxActor actor = new RectangleBox(world, param);
+		param.shape = BoxActor.BoxShape.BS_RECTANGLE;
+		final BoxActor actor = new BoxActor(world, param);
 		actor.setRegion(new TextureRegion(texture,0, 0, 32, 32));
 		
 		actor.setContactListener(new BoxContactListener() {
 
 			//final BoxActor a = actor;
 			@Override
-			public void onAsSourceBeginContact(BoxActor target) {
+			public void onBeginContactAsSource(BoxActor target) {
 				// TODO Auto-generated method stub
 				Gdx.app.log("tag", actor.name + " begin contact as source - target = " + target.name);
 				//if(target.name == "left") {
@@ -79,29 +80,32 @@ public class WorldScreen extends BCScreen {
 			}
 
 			@Override
-			public void onAsTargetBeginContact(BoxActor source) {
+			public void onBeginContactAsTarget(BoxActor source) {
 				// TODO Auto-generated method stub
 				Gdx.app.log("tag", actor.name + " begin contact as targe");
 			}
 
 			@Override
-			public void onAsSourceEndContact(BoxActor target) {
+			public void onEndContactAsSource(BoxActor target) {
 				// TODO Auto-generated method stub
 				Gdx.app.log("tag", "end contact as source");
 			}
 
 			@Override
-			public void onAsTargetEndContact(BoxActor source) {
+			public void onEndContactAsTarget(BoxActor source) {
 				// TODO Auto-generated method stub
 				Gdx.app.log("tag", "end contact as target");
 			}
 			
 		});
+		
+		actor.SetTouchListener(new TouchDownDestroyListener(actor));
 		this.addActor(actor);
 		
 		param.width = 100;
 		param.position = new Vector2(120, 130);
-		BoxActor other = new RectangleBox(world, param);
+		BoxActor other = new BoxActor(world, param);
+		other.SetTouchListener(new TouchDownDestroyListener(other));
 		this.addActor(other);
 		
 		//triangle
@@ -111,9 +115,23 @@ public class WorldScreen extends BCScreen {
 		tp.width = 50;
 		tp.name = "triangle";
 		tp.type = BodyType.DynamicBody;
-		BoxActor triangle = new TriangleBox(world, tp);
+		tp.shape = BoxActor.BoxShape.BS_TRIANGLE;
+		BoxActor triangle = new BoxActor(world, tp);
 		this.addActor(triangle);
 		
+		//circle
+		BoxActor.Parameter cp = new BoxActor.Parameter();
+		cp.width = 20;
+		cp.position = new Vector2(200, 200);
+		cp.name = "circle";
+		cp.shape = BoxActor.BoxShape.BS_CIRCLE;
+		cp.type = BodyType.DynamicBody;
+		cp.angle = 20.0f;
+		cp.restitution = 0.9f;
+		cp.friction = 0.9f;
+		cp.density = 1.0f;
+		BoxActor circle = new BoxActor(world, cp);
+		this.addActor(circle);
 		
 		//ground
 		param = new BoxActor.Parameter();
@@ -122,7 +140,10 @@ public class WorldScreen extends BCScreen {
 		param.width = 460;
 		param.name = "ground";
 		param.type = BodyType.StaticBody;
-		BoxActor ground = new RectangleBox(world, param);
+		param.shape = BoxActor.BoxShape.BS_RECTANGLE;
+		param.restitution = 1.9f;
+		param.friction = 0.9f;
+		BoxActor ground = new BoxActor(world, param);
 		this.addActor(ground);
 		
 		BoxActor.Parameter lp = new BoxActor.Parameter();
@@ -131,7 +152,8 @@ public class WorldScreen extends BCScreen {
 		lp.width = 10;
 		lp.name = "left";
 		lp.type = BodyType.StaticBody;
-		BoxActor left = new RectangleBox(world, lp);
+		lp.shape = BoxActor.BoxShape.BS_RECTANGLE;
+		BoxActor left = new BoxActor(world, lp);
 		this.addActor(left);
 
 		BoxActor.Parameter rp = new BoxActor.Parameter();
@@ -140,7 +162,8 @@ public class WorldScreen extends BCScreen {
 		rp.width = 10;
 		rp.name = "left";
 		rp.type = BodyType.StaticBody;
-		BoxActor right = new RectangleBox(world, rp);
+		rp.shape = BoxActor.BoxShape.BS_RECTANGLE;
+		BoxActor right = new BoxActor(world, rp);
 		this.addActor(right);
 
 	}

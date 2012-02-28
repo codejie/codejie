@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -14,20 +15,12 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public abstract class BoxActor extends Actor {
+public class BoxActor extends Actor {
 
 	public enum BoxShape {
 		BS_RECTANGLE, BS_CIRCLE, BS_TRIANGLE
 	}
-	
-	public static Vector2 toWorld(final Vector2 vct) {
-		return new Vector2(vct.x / Global.WORLD_SCALE, vct.y / Global.WORLD_SCALE);
-	}
-	
-	public static float toWorld(final float v) {
-		return v /Global.WORLD_SCALE;
-	}
-	
+		
 	public final static class Parameter {
 		public String name;
 		public BodyType type;
@@ -36,7 +29,7 @@ public abstract class BoxActor extends Actor {
 		public float width, height;
 		public float angle = 0.0f;
 		public float density = 1.0f;
-		public float restitution = 0.0f;
+		public float restitution = 0.9f;
 		public float friction = 0.0f;
 	}
 	
@@ -45,7 +38,9 @@ public abstract class BoxActor extends Actor {
 	protected TextureRegion region = null;
 	protected Body body = null;
 	
-	public BoxContactListener contactListener = null;
+	protected BoxContactListener contactListener = null;
+	protected BoxDestroyListener destroyListener = null;
+	protected BoxTouchListener touchListener = null;
 	
 	public BoxActor(World world, final Parameter param) {
 		super(param.name);
@@ -68,7 +63,6 @@ public abstract class BoxActor extends Actor {
 		rotation = MathUtils.radiansToDegrees * parameter.angle;
 		originX = width / 2.0f;
 		originY = height / 2.0f;
-		//scaleX = 1.0f;
 	}
 	
 	//
@@ -111,8 +105,9 @@ public abstract class BoxActor extends Actor {
 			return shape;
 		}
 		case BS_CIRCLE: {
-		
-			return null;
+			CircleShape shape = new CircleShape();
+			shape.setRadius(parameter.width / Global.WORLD_SCALE);
+			return shape;
 		}
 		default:
 			return null;
@@ -127,6 +122,9 @@ public abstract class BoxActor extends Actor {
 	@Override
 	public void act(float delta) {
 		if(this.isMarkedToRemove()) {
+			if(destroyListener != null && !destroyListener.onDestory()) {
+					return;
+			}
 			this.destroy();
 			return;
 		}
@@ -138,8 +136,6 @@ public abstract class BoxActor extends Actor {
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		// TODO Auto-generated method stub
-		//update(0.01f);
 		batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 		if(region != null) {
 			if(scaleX == 1.0f && scaleY == 1.0f && rotation == 0.0f) {
@@ -154,6 +150,42 @@ public abstract class BoxActor extends Actor {
 	@Override
 	public Actor hit(float x, float y) {
 		return x > 0 && x < width && y > 0 && y < height ? this : null;
+	}	
+
+	@Override
+	public boolean touchDown(float x, float y, int pointer) {
+		if(touchListener != null) {
+			touchListener.onTouchDown(x, y, pointer);
+		}
+			
+		return super.touchDown(x, y, pointer);
+	}
+
+	@Override
+	public void touchUp(float x, float y, int pointer) {
+		if(touchListener != null) {
+			touchListener.onTouchUp(x, y, pointer);
+		}
+
+		super.touchUp(x, y, pointer);
+	}
+
+	@Override
+	public void touchDragged(float x, float y, int pointer) {
+		if(touchListener != null) {
+			touchListener.onTouchDragged(x, y, pointer);
+		}
+
+		super.touchDragged(x, y, pointer);
+	}
+
+	@Override
+	public boolean touchMoved(float x, float y) {
+		if(touchListener != null) {
+			touchListener.onTouchMoved(x, y);
+		}
+
+		return super.touchMoved(x, y);
 	}	
 	
 	public void setRegion(TextureRegion region) {
@@ -180,8 +212,28 @@ public abstract class BoxActor extends Actor {
 		}
 	}
 	
+	public void applyVelocity(Vector2 vel) {
+		if(body != null) {
+			body.setLinearVelocity(vel);
+		}
+	}
+	
+	public void applyVelocity(float x, float y) {
+		if(body != null) {
+			body.setLinearVelocity(x, y);
+		}
+	}
+	
 	public void setContactListener(BoxContactListener listener) {
 		contactListener = listener;
+	}
+	
+	public void setDestroyListener(BoxDestroyListener listener) {
+		destroyListener = listener;
+	}
+	
+	public void SetTouchListener(BoxTouchListener listener) {
+		touchListener = listener;
 	}
 
 	protected void update(float delta) {
@@ -202,6 +254,5 @@ public abstract class BoxActor extends Actor {
 		super.remove();
 		//super.markToRemove(true);
 	}
-	
 	
 }

@@ -2,8 +2,8 @@ package jie.java.android.boxcatcher;
 
 public interface BoxContactListener {
 
-	public void onAsSourceBeginContact(BoxActor target);
-	public void onAsTargetBeginContact(BoxActor source);
-	public void onAsSourceEndContact(BoxActor target);
-	public void onAsTargetEndContact(BoxActor source);
+	public void onBeginContactAsSource(BoxActor target);
+	public void onBeginContactAsTarget(BoxActor source);
+	public void onEndContactAsSource(BoxActor target);
+	public void onEndContactAsTarget(BoxActor source);
 }

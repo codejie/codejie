@@ -73,6 +73,9 @@ public class WorldScreen extends BCScreen {
 			public void onAsSourceBeginContact(BoxActor target) {
 				// TODO Auto-generated method stub
 				Gdx.app.log("tag", actor.name + " begin contact as source - target = " + target.name);
+				//if(target.name == "left") {
+				//	actor.markToRemove(true);
+				//}
 			}
 
 			@Override
@@ -101,6 +104,18 @@ public class WorldScreen extends BCScreen {
 		BoxActor other = new RectangleBox(world, param);
 		this.addActor(other);
 		
+		//triangle
+		BoxActor.Parameter tp = new BoxActor.Parameter();
+		tp.position = new Vector2(200, 120);
+		tp.height = 100;
+		tp.width = 50;
+		tp.name = "triangle";
+		tp.type = BodyType.DynamicBody;
+		BoxActor triangle = new TriangleBox(world, tp);
+		this.addActor(triangle);
+		
+		
+		//ground
 		param = new BoxActor.Parameter();
 		param.position = new Vector2(10, 10);
 		param.height = 10;

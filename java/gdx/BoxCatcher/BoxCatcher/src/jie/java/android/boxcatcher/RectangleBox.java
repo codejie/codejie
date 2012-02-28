@@ -36,13 +36,6 @@ public class RectangleBox extends BoxActor {
 		
 		shape.dispose();
 	}
-
-	@Override
-	protected void update(float delta) {
-		super.update(delta);
-		
-		//Gdx.app.log("tag", "orgx = " + this.originX);		
-	}	
 	
 	private Vector2 getCenter() {
 		return new Vector2((parameter.position.x + parameter.width / 2) / Global.WORLD_SCALE
@@ -57,23 +50,19 @@ public class RectangleBox extends BoxActor {
 		return parameter.height / Global.WORLD_SCALE / 2;
 	}
 
-	private float ox = -1.0f, oy = -1.0f;
-	private boolean pressed = false;
 	@Override
 	public boolean touchDown(float x, float y, int pointer) {
 		// TODO Auto-generated method stub
 		Gdx.app.log("tag", "touchDown" + " x = " + x + " orgX = " + this.originX);
-		
-		ox = x;
-		oy = y;
-		
-		if(hit(x, y) == this)
-			pressed = true;
+
 		//applyForceToCenter(new Vector2(1, 0));
 		
 		//body.setLinearVelocity(0.01001f, 0.0f);
 		
 		//this.body.ap
+		
+		Gdx.app.log("tag", "actor size = " + this.getStage().getActors().size());
+		this.destroy();
 		
 		return super.touchDown(x, y, pointer);
 	}	
@@ -82,9 +71,7 @@ public class RectangleBox extends BoxActor {
 	public void touchUp(float x, float y, int pointer) {
 		// TODO Auto-generated method stub
 		Gdx.app.log("tag", "touchUp");
-		pressed = false;
-		ox = -1.0f;
-		oy = -1.0f;
+
 		super.touchUp(x, y, pointer);
 	}
 

@@ -54,6 +54,13 @@ public class WorldScreen extends BCScreen {
 	}
 
 	private void initBoxes() {
+		
+		initFrame();
+		initActors();
+	}
+
+	private void initActors() {
+		
 		texture = new Texture(Gdx.files.internal("data/1.png"));
 		BoxActor.Parameter param = new BoxActor.Parameter();
 		param.position = new Vector2(100, 300);
@@ -61,43 +68,13 @@ public class WorldScreen extends BCScreen {
 		param.width = 100;
 		param.name = "box";
 		param.type = BodyType.DynamicBody;
-		param.restitution = 1.0f;// .friction = 0.1f;
+		param.restitution = 0.1f;// .friction = 0.1f;
 		param.friction = 0.1f;
 		param.shape = BoxActor.BoxShape.BS_RECTANGLE;
 		final BoxActor actor = new BoxActor(world, param);
 		actor.setRegion(new TextureRegion(texture,0, 0, 32, 32));
 		
-		actor.setContactListener(new BoxContactListener() {
-
-			//final BoxActor a = actor;
-			@Override
-			public void onBeginContactAsSource(BoxActor target) {
-				// TODO Auto-generated method stub
-				Gdx.app.log("tag", actor.name + " begin contact as source - target = " + target.name);
-				//if(target.name == "left") {
-				//	actor.markToRemove(true);
-				//}
-			}
-
-			@Override
-			public void onBeginContactAsTarget(BoxActor source) {
-				// TODO Auto-generated method stub
-				Gdx.app.log("tag", actor.name + " begin contact as targe");
-			}
-
-			@Override
-			public void onEndContactAsSource(BoxActor target) {
-				// TODO Auto-generated method stub
-				Gdx.app.log("tag", "end contact as source");
-			}
-
-			@Override
-			public void onEndContactAsTarget(BoxActor source) {
-				// TODO Auto-generated method stub
-				Gdx.app.log("tag", "end contact as target");
-			}
-			
-		});
+		actor.setContactListener(new DefaultBoxContactListener(actor));
 		
 		actor.SetTouchListener(new TouchDownDestroyListener(actor));
 		this.addActor(actor);
@@ -127,21 +104,23 @@ public class WorldScreen extends BCScreen {
 		cp.shape = BoxActor.BoxShape.BS_CIRCLE;
 		cp.type = BodyType.DynamicBody;
 		cp.angle = 20.0f;
-		cp.restitution = 0.9f;
+		//cp.restitution = 0.9f;
 		cp.friction = 0.9f;
 		cp.density = 1.0f;
 		BoxActor circle = new BoxActor(world, cp);
 		this.addActor(circle);
-		
+	}
+
+	private void initFrame() {
 		//ground
-		param = new BoxActor.Parameter();
+		BoxActor.Parameter param = new BoxActor.Parameter();
 		param.position = new Vector2(10, 10);
 		param.height = 10;
 		param.width = 460;
 		param.name = "ground";
 		param.type = BodyType.StaticBody;
 		param.shape = BoxActor.BoxShape.BS_RECTANGLE;
-		param.restitution = 1.9f;
+		//param.restitution = 1.9f;
 		param.friction = 0.9f;
 		BoxActor ground = new BoxActor(world, param);
 		this.addActor(ground);
@@ -164,8 +143,7 @@ public class WorldScreen extends BCScreen {
 		rp.type = BodyType.StaticBody;
 		rp.shape = BoxActor.BoxShape.BS_RECTANGLE;
 		BoxActor right = new BoxActor(world, rp);
-		this.addActor(right);
-
+		this.addActor(right);	
 	}
 
 	private void initWorld() {

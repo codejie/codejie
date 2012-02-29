@@ -29,7 +29,7 @@ public class BoxActor extends Actor {
 		public float width, height;
 		public float angle = 0.0f;
 		public float density = 1.0f;
-		public float restitution = 0.9f;
+		public float restitution = 0.0f;
 		public float friction = 0.0f;
 	}
 	

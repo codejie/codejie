@@ -1,6 +1,7 @@
 package jie.java.android.boxcatcher;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -78,12 +79,13 @@ public class BoxActor extends Actor {
 		fd.shape = shape;
 		fd.restitution = parameter.restitution;
 		fd.density = parameter.density;
-		fd.friction = parameter.friction;		
+		fd.friction = parameter.friction;
 		
 		body = world.createBody(def);
 		body.createFixture(fd);
 		
 		shape.dispose();
+		Gdx.app.log("tag", this.name + " body mass = " + body.getMass());		
 	}
  
 	private Shape makeShape(BoxShape shapetype) {

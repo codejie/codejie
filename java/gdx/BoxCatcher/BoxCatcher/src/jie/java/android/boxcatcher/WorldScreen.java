@@ -50,7 +50,7 @@ public class WorldScreen extends BCScreen {
 		//Matrix4 matrix = this.camera.combined;
 		//matrix.scale(Global.WORLD_SCALE,Global.WORLD_SCALE, 1);
 		//renderer.render(world, matrix);
-		renderer.render(world, this.camera.combined.scale(100, 100, 1));
+		renderer.render(world, this.camera.combined.scale(Global.WORLD_SCALE, Global.WORLD_SCALE, 1));
 	}
 
 	private void initBoxes() {
@@ -63,9 +63,9 @@ public class WorldScreen extends BCScreen {
 		
 		texture = new Texture(Gdx.files.internal("data/1.png"));
 		BoxActor.Parameter param = new BoxActor.Parameter();
-		param.position = new Vector2(100, 300);
+		param.position = new Vector2(100, 500);
 		param.height = 32;
-		param.width = 100;
+		param.width = 32;
 		param.name = "box";
 		param.type = BodyType.DynamicBody;
 		param.restitution = 0.1f;// .friction = 0.1f;
@@ -78,37 +78,54 @@ public class WorldScreen extends BCScreen {
 		
 		actor.SetTouchListener(new TouchDownDestroyListener(actor));
 		this.addActor(actor);
-		
-		param.width = 100;
-		param.position = new Vector2(120, 130);
-		BoxActor other = new BoxActor(world, param);
-		other.SetTouchListener(new TouchDownDestroyListener(other));
-		this.addActor(other);
+////		
+//		param.width = 100;
+//		param.position = new Vector2(120, 130);
+//		BoxActor other = new BoxActor(world, param);
+//		other.SetTouchListener(new TouchDownDestroyListener(other));
+//		this.addActor(other);
 		
 		//triangle
 		BoxActor.Parameter tp = new BoxActor.Parameter();
-		tp.position = new Vector2(200, 120);
-		tp.height = 100;
-		tp.width = 50;
+		tp.position = new Vector2(200, 420);
+		tp.height = 64;
+		tp.width = 64;
 		tp.name = "triangle";
 		tp.type = BodyType.DynamicBody;
 		tp.shape = BoxActor.BoxShape.BS_TRIANGLE;
+		tp.restitution = 0.9f;
 		BoxActor triangle = new BoxActor(world, tp);
 		this.addActor(triangle);
 		
 		//circle
 		BoxActor.Parameter cp = new BoxActor.Parameter();
-		cp.width = 20;
-		cp.position = new Vector2(200, 200);
+		cp.width = 64;
+		cp.position = new Vector2(200, 500);
 		cp.name = "circle";
 		cp.shape = BoxActor.BoxShape.BS_CIRCLE;
 		cp.type = BodyType.DynamicBody;
 		cp.angle = 20.0f;
-		//cp.restitution = 0.9f;
+		cp.restitution = 0.9f;
 		cp.friction = 0.9f;
 		cp.density = 1.0f;
 		BoxActor circle = new BoxActor(world, cp);
 		this.addActor(circle);
+		
+		
+		//bar
+		BoxActor.Parameter bp = new BoxActor.Parameter();
+		bp.width = 300;
+		bp.height = 64;
+		bp.position = new Vector2(90,40);
+		bp.name = "bar";
+		bp.friction = 0.5f;
+		bp.type = BodyType.KinematicBody;
+		bp.shape = BoxActor.BoxShape.BS_RECTANGLE;
+		BoxActor bar = new BoxActor(world, bp);
+		
+		bar.SetTouchListener(new TouchDownDestroyListener(bar));
+		
+		this.addActor(bar);
 	}
 
 	private void initFrame() {
@@ -120,7 +137,7 @@ public class WorldScreen extends BCScreen {
 		param.name = "ground";
 		param.type = BodyType.StaticBody;
 		param.shape = BoxActor.BoxShape.BS_RECTANGLE;
-		//param.restitution = 1.9f;
+		param.restitution = 0.19f;
 		param.friction = 0.9f;
 		BoxActor ground = new BoxActor(world, param);
 		this.addActor(ground);
@@ -143,7 +160,7 @@ public class WorldScreen extends BCScreen {
 		rp.type = BodyType.StaticBody;
 		rp.shape = BoxActor.BoxShape.BS_RECTANGLE;
 		BoxActor right = new BoxActor(world, rp);
-		this.addActor(right);	
+		this.addActor(right);
 	}
 
 	private void initWorld() {

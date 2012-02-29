@@ -14,7 +14,7 @@ public class TouchDownDestroyListener implements BoxTouchListener {
 		Gdx.app.log("tag", actor.name + " touchdown.");
 		if(actor != null) {
 			Gdx.app.log("tag", actor.name + " touchdown.");
-			actor.destroy();
+			//actor.destroy();
 		}
 		return false;
 	}
@@ -27,13 +27,13 @@ public class TouchDownDestroyListener implements BoxTouchListener {
 
 	@Override
 	public boolean onTouchDragged(float x, float y, int pointer) {
-		// TODO Auto-generated method stub
+		Gdx.app.log("tag", actor.name + " touchdragged.");
 		return false;
 	}
 
 	@Override
 	public boolean onTouchMoved(float x, float y) {
-		// TODO Auto-generated method stub
+		Gdx.app.log("tag", actor.name + " touchMoved.");
 		return false;
 	}
 

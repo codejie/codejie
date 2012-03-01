@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -19,14 +20,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class BoxActor extends Actor {
 
 	public enum BoxShape {
-		BS_RECTANGLE, BS_CIRCLE, BS_TRIANGLE
+		BS_RECTANGLE, BS_CIRCLE, BS_TRIANGLE, BS_LINE
 	}
 		
 	public final static class Parameter {
 		public String name;
 		public BodyType type;
 		public BoxShape shape;
-		public Vector2 position;
+		public float x, y;
 		public float width, height;
 		public float angle = 0.0f;
 		public float density = 1.0f;
@@ -57,8 +58,8 @@ public class BoxActor extends Actor {
 	}
 	
 	protected void init() {
-		x = parameter.position.x;
-		y = parameter.position.y;
+		x = parameter.x;
+		y = parameter.y;
 		width = parameter.width;
 		height = parameter.height;
 		rotation = MathUtils.radiansToDegrees * parameter.angle;
@@ -113,14 +114,25 @@ public class BoxActor extends Actor {
 			shape.setRadius(parameter.width / Global.WORLD_SCALE);
 			return shape;
 		}
+		case BS_LINE: {
+			EdgeShape shape = new EdgeShape();
+			shape.set(parameter.x / Global.WORLD_SCALE, parameter.y / Global.WORLD_SCALE
+					, parameter.width / Global.WORLD_SCALE, parameter.height / Global.WORLD_SCALE); 
+			return shape;
+		}
 		default:
 			return null;
 		}
 	}
 
 	protected Vector2 getCenter() {
-		return new Vector2((parameter.position.x + parameter.width / 2) / Global.WORLD_SCALE
-				, (parameter.position.y + parameter.height / 2) / Global.WORLD_SCALE);
+		if(parameter.shape != BoxShape.BS_LINE) {
+			return new Vector2((parameter.x + parameter.width / 2) / Global.WORLD_SCALE
+					, (parameter.y + parameter.height / 2) / Global.WORLD_SCALE);
+		}
+		else {
+			return new Vector2();
+		}
 	}	
 	
 	@Override

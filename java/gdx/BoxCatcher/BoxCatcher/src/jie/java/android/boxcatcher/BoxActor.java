@@ -64,6 +64,8 @@ public class BoxActor extends Actor {
 		rotation = MathUtils.radiansToDegrees * parameter.angle;
 		originX = width / 2.0f;
 		originY = height / 2.0f;
+		scaleX = 1.0f;
+		scaleY = 1.0f;
 	}
 	
 	//
@@ -151,7 +153,11 @@ public class BoxActor extends Actor {
 
 	@Override
 	public Actor hit(float x, float y) {
-		return x > 0 && x < width && y > 0 && y < height ? this : null;
+		
+		Vector2 tmp = new Vector2(x, y);
+		//this.toLocalCoordinates(tmp);
+		
+		return (x > 0 && x < width && y > 0 && y < height) ? this : null;
 	}	
 
 	@Override
@@ -160,7 +166,7 @@ public class BoxActor extends Actor {
 			touchListener.onTouchDown(x, y, pointer);
 		}
 			
-		return super.touchDown(x, y, pointer);
+		return true;// super.touchDown(x, y, pointer);
 	}
 
 	@Override
@@ -184,7 +190,9 @@ public class BoxActor extends Actor {
 	@Override
 	public boolean touchMoved(float x, float y) {
 		if(touchListener != null) {
-			touchListener.onTouchMoved(x, y);
+			if(hit(x, y) != null) {
+				touchListener.onTouchMoved(x, y);
+			}
 		}
 
 		return super.touchMoved(x, y);

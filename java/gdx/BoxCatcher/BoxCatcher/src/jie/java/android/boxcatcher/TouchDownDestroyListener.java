@@ -11,29 +11,35 @@ public class TouchDownDestroyListener implements BoxTouchListener {
 	}
 	@Override
 	public boolean onTouchDown(float x, float y, int pointer) {
-		Gdx.app.log("tag", actor.name + " touchdown.");
+//		Gdx.app.log("tag", actor.name + " touchdown.");
 		if(actor != null) {
 			Gdx.app.log("tag", actor.name + " touchdown.");
 			//actor.destroy();
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onTouchUp(float x, float y, int pointer) {
+		if(actor != null) {
+			Gdx.app.log("tag", actor.name + " touchup.");
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onTouchDragged(float x, float y, int pointer) {
+		if(actor != null) {
+			Gdx.app.log("tag", actor.name + " touchdragged.");
 		}
 		return false;
 	}
 
 	@Override
-	public boolean onTouchUp(float x, float y, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onTouchDragged(float x, float y, int pointer) {
-		Gdx.app.log("tag", actor.name + " touchdragged.");
-		return false;
-	}
-
-	@Override
 	public boolean onTouchMoved(float x, float y) {
-		Gdx.app.log("tag", actor.name + " touchMoved.");
+		if(actor != null) {
+			Gdx.app.log("tag", actor.name + " touchMoved.");
+		}
 		return false;
 	}
 

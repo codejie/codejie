@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class WorldScreen extends BCScreen {
 
@@ -22,6 +24,8 @@ public class WorldScreen extends BCScreen {
 			
 		initWorld();
 		initBoxes();
+		
+//		Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
@@ -55,13 +59,24 @@ public class WorldScreen extends BCScreen {
 
 	private void initBoxes() {
 		
-		initFrame();
+//		initFrame();
 		initActors();
 	}
 
 	private void initActors() {
-		
+/*		
 		texture = new Texture(Gdx.files.internal("data/1.png"));
+		
+		Image image = new Image();
+		image.height = 32;
+		image.width = 32;
+		image.x = 100;
+		image.y = 200;
+		image.touchable = true;
+		image.setRegion(new TextureRegion(texture,0, 0, 32, 32));
+		this.addActor(image);
+*/
+/*
 		BoxActor.Parameter param = new BoxActor.Parameter();
 		param.position = new Vector2(100, 500);
 		param.height = 32;
@@ -74,9 +89,9 @@ public class WorldScreen extends BCScreen {
 		final BoxActor actor = new BoxActor(world, param);
 		actor.setRegion(new TextureRegion(texture,0, 0, 32, 32));
 		
-		actor.setContactListener(new DefaultBoxContactListener(actor));
+		//actor.setContactListener(new DefaultBoxContactListener(actor));
 		
-		actor.SetTouchListener(new TouchDownDestroyListener(actor));
+		//actor.SetTouchListener(new TouchDownDestroyListener(actor));
 		this.addActor(actor);
 ////		
 //		param.width = 100;
@@ -110,9 +125,10 @@ public class WorldScreen extends BCScreen {
 		cp.density = 1.0f;
 		BoxActor circle = new BoxActor(world, cp);
 		this.addActor(circle);
-		
+*/		
 		
 		//bar
+		
 		BoxActor.Parameter bp = new BoxActor.Parameter();
 		bp.width = 300;
 		bp.height = 64;
@@ -122,10 +138,12 @@ public class WorldScreen extends BCScreen {
 		bp.type = BodyType.KinematicBody;
 		bp.shape = BoxActor.BoxShape.BS_RECTANGLE;
 		BoxActor bar = new BoxActor(world, bp);
+		bar.touchable = true;
 		
 		bar.SetTouchListener(new TouchDownDestroyListener(bar));
 		
 		this.addActor(bar);
+		
 	}
 
 	private void initFrame() {
@@ -170,5 +188,21 @@ public class WorldScreen extends BCScreen {
 		
 		renderer = new Box2DDebugRenderer();
 	}
-
+/*
+	@Override
+	public boolean touchUp(int x, int y, int pointer, int button) {
+		// TODO Auto-generated method stub
+		//return super.touchUp(x, y, pointer, button);
+			
+		boolean touch = super.touchUp(x, y, pointer, button);
+		
+		Actor actor = this.getLastTouchedChild();
+		if(actor != null)
+			Gdx.app.log("tag", "touch - " + actor.name);		
+		
+		Gdx.app.log("tag", "x = " + x + " y = " + y + " world touchUp - " + touch);
+		
+		return touch;
+	}
+*/
 }

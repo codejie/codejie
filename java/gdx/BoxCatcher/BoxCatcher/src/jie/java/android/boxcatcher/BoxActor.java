@@ -33,6 +33,7 @@ public class BoxActor extends Actor {
 		public float density = 1.0f;
 		public float restitution = 0.0f;
 		public float friction = 0.0f;
+		public short filterBits = 0x7FFF; 
 	}
 	
 	protected World world = null;
@@ -83,10 +84,12 @@ public class BoxActor extends Actor {
 		fd.restitution = parameter.restitution;
 		fd.density = parameter.density;
 		fd.friction = parameter.friction;
+		fd.filter.categoryBits = parameter.filterBits;
+		fd.filter.maskBits = parameter.filterBits;
 		
 		body = world.createBody(def);
 		body.createFixture(fd);
-		
+
 		shape.dispose();
 		Gdx.app.log("tag", this.name + " body mass = " + body.getMass());		
 	}

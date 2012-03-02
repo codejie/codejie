@@ -9,6 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -63,6 +66,8 @@ public class WorldScreen extends BCScreen {
 		initActors();
 	}
 
+	BoxActor ground = null;
+	
 	private void initActors() {
 	
 		texture = new Texture(Gdx.files.internal("data/1.png"));
@@ -84,16 +89,16 @@ public class WorldScreen extends BCScreen {
 		param.width = 32;
 		param.name = "box";
 		param.type = BodyType.DynamicBody;
-		param.restitution = 0.1f;// .friction = 0.1f;
+		param.restitution = 0.0f;// .friction = 0.1f;
 		param.friction = 0.1f;
 		param.shape = BoxActor.BoxShape.BS_RECTANGLE;
-		final BoxActor actor = new BoxActor(world, param);
-		actor.setRegion(new TextureRegion(texture,0, 0, 32, 32));
+		final BoxActor box = new BoxActor(world, param);
+		box.setRegion(new TextureRegion(texture,0, 0, 32, 32));
 		
-		actor.setContactListener(new DefaultBoxContactListener(actor));
+		box.setContactListener(new DefaultBoxContactListener(box));
 		
-		actor.SetTouchListener(new TouchDownDestroyListener(actor));
-		this.addActor(actor);
+		box.SetTouchListener(new TouchDownDestroyListener(box));
+		this.addActor(box);
 		
 ////		
 //		param.width = 100;
@@ -105,14 +110,15 @@ public class WorldScreen extends BCScreen {
 		
 		//triangle
 		BoxActor.Parameter tp = new BoxActor.Parameter();
-		tp.x = 200;
+		tp.x = 360;
 		tp.y = 420;
 		tp.height = 64;
 		tp.width = 64;
 		tp.name = "triangle";
 		tp.type = BodyType.DynamicBody;
 		tp.shape = BoxActor.BoxShape.BS_TRIANGLE;
-		tp.restitution = 0.9f;
+		tp.restitution = 0.0f;
+		tp.density = 1.0f;
 		BoxActor triangle = new BoxActor(world, tp);
 		this.addActor(triangle);
 		
@@ -125,7 +131,7 @@ public class WorldScreen extends BCScreen {
 		cp.shape = BoxActor.BoxShape.BS_CIRCLE;
 		cp.type = BodyType.DynamicBody;
 		cp.angle = 20.0f;
-		cp.restitution = 0.9f;
+		cp.restitution = 0.0f;
 		cp.friction = 0.9f;
 		cp.density = 1.0f;
 		BoxActor circle = new BoxActor(world, cp);
@@ -135,20 +141,49 @@ public class WorldScreen extends BCScreen {
 		
 		BoxActor.Parameter bp = new BoxActor.Parameter();
 		bp.width = 300;
-		bp.height = 64;
+		bp.height = 48;
 		bp.x = 90;
 		bp.y = 40;
 		bp.name = "bar";
 		bp.friction = 0.5f;
-		bp.density = 0.0f;
+		bp.density = 5.0f;
 		bp.type = BodyType.DynamicBody;
 		bp.shape = BoxActor.BoxShape.BS_RECTANGLE;
+		bp.filterBits = 0x0010;
 		BoxActor bar = new BoxActor(world, bp);
-		bar.touchable = true;
-		
+
 		bar.SetTouchListener(new TestTouchListener(bar));
 		
 		this.addActor(bar);
+		
+		PrismaticJointDef jdef = new PrismaticJointDef();
+		jdef.initialize(box.body, circle.body, box.body.getPosition(), new Vector2(10, 10));
+		jdef.lowerTranslation = 1.0f;
+		jdef.upperTranslation = 1.0f;
+		jdef.enableLimit = false;
+		jdef.motorSpeed = 1.0f;
+		jdef.maxMotorForce = 1.0f;
+		jdef.enableMotor = true;
+		
+		world.createJoint(jdef);
+		
+		BoxActor.Parameter gp = new BoxActor.Parameter();
+		gp.width = 10;
+		gp.height = 10;
+		gp.x = 12;
+		gp.y = 10;
+		gp.name = "gbar";
+		gp.friction = 1.0f;
+		gp.density = 0.0f;
+		gp.type = BodyType.DynamicBody;
+		gp.shape = BoxActor.BoxShape.BS_RECTANGLE;
+		BoxActor gbar = new BoxActor(world, gp);
+		this.addActor(gbar);
+		
+		
+		DistanceJointDef ddef = new DistanceJointDef();
+		ddef.initialize(bar.body, gbar.body, new Vector2(0,0), new Vector2(0,0));
+		world.createJoint(ddef);
 		
 	}
 
@@ -161,7 +196,8 @@ public class WorldScreen extends BCScreen {
 		gp.height = 10;
 		gp.type = BodyType.StaticBody;
 		gp.shape = BoxActor.BoxShape.BS_LINE;
-		BoxActor ground = new BoxActor(world, gp);
+		gp.filterBits = 0x0001;
+		ground = new BoxActor(world, gp);
 		this.addActor(ground);
 		
 		gp.width = 10;

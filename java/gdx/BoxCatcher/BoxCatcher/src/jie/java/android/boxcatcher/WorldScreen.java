@@ -95,7 +95,7 @@ public class WorldScreen extends BCScreen {
 		final BoxActor box = new BoxActor(world, param);
 		box.setRegion(new TextureRegion(texture,0, 0, 32, 32));
 		
-		box.setContactListener(new DefaultBoxContactListener(box));
+		//box.setContactListener(new DefaultBoxContactListener(box));
 		
 		box.SetTouchListener(new TouchDownDestroyListener(box));
 		this.addActor(box);
@@ -135,6 +135,15 @@ public class WorldScreen extends BCScreen {
 		cp.friction = 0.9f;
 		cp.density = 1.0f;
 		BoxActor circle = new BoxActor(world, cp);
+		circle.setDestroyListener(new BoxDestroyListener() {
+
+			@Override
+			public boolean onDestory() {
+				Gdx.app.log("tag", "circle will be destroyed");
+				return true;
+			}
+			
+		});
 		this.addActor(circle);	
 		
 		//bar
@@ -143,18 +152,20 @@ public class WorldScreen extends BCScreen {
 		bp.width = 300;
 		bp.height = 48;
 		bp.x = 90;
-		bp.y = 40;
+		bp.y = 10;
 		bp.name = "bar";
 		bp.friction = 0.5f;
-		bp.density = 5.0f;
+		bp.density = 0.1f;
 		bp.type = BodyType.DynamicBody;
 		bp.shape = BoxActor.BoxShape.BS_RECTANGLE;
-		bp.filterBits = 0x0010;
+		bp.filterBits = 0x0011;
 		BoxActor bar = new BoxActor(world, bp);
+		//bar.touchable = false;
 
 		bar.SetTouchListener(new TestTouchListener(bar));
 		
 		this.addActor(bar);
+/*		
 		
 		PrismaticJointDef jdef = new PrismaticJointDef();
 		jdef.initialize(box.body, circle.body, box.body.getPosition(), new Vector2(10, 10));
@@ -184,6 +195,7 @@ public class WorldScreen extends BCScreen {
 		DistanceJointDef ddef = new DistanceJointDef();
 		ddef.initialize(bar.body, gbar.body, new Vector2(0,0), new Vector2(0,0));
 		world.createJoint(ddef);
+*/		
 		
 	}
 
@@ -196,12 +208,17 @@ public class WorldScreen extends BCScreen {
 		gp.height = 10;
 		gp.type = BodyType.StaticBody;
 		gp.shape = BoxActor.BoxShape.BS_LINE;
-		gp.filterBits = 0x0001;
+		gp.filterBits = 0x0010;
+		gp.name = "ground";
 		ground = new BoxActor(world, gp);
+		ground.setContactListener(new DefaultBoxContactListener(ground));
 		this.addActor(ground);
+		
 		
 		gp.width = 10;
 		gp.height = Global.SCREEN_HEIGHT - 10;
+		gp.name = "left";
+		gp.filterBits = 0x0001;
 		BoxActor left = new BoxActor(world, gp);
 		this.addActor(left);
 		
@@ -209,8 +226,46 @@ public class WorldScreen extends BCScreen {
 		gp.y = 10;
 		gp.width = Global.SCREEN_WIDTH  - 10;
 		gp.height = Global.SCREEN_HEIGHT - 10;
+		gp.name = "right";
+		gp.filterBits = 0x0001;
 		BoxActor right = new BoxActor(world, gp);
+		
+		//floor
+		gp.x = 10;
+		gp.y = 58;
+		gp.width = Global.SCREEN_WIDTH - 10;
+		gp.height = 58;
+		gp.name = "floor";
+		gp.filterBits = 0x0010;
+		BoxActor floor = new BoxActor(world, gp);
+		this.addActor(floor);
 
+		//dead line
+		gp.x = 0;
+		gp.y = -20;
+		gp.width = Global.SCREEN_WIDTH;
+		gp.height = -20;
+		gp.name = "dead";
+		gp.filterBits = 0x0001;
+		BoxActor deadline = new BoxActor(world, gp);
+		deadline.setContactListener(new BoxContactListener() {
+
+			@Override
+			public void onBeginContact(BoxActor other) {
+				Gdx.app.log("tag", "dead line begin contact with " + other.name);
+				other.markToRemove(true);
+			}
+
+			@Override
+			public void onEndContact(BoxActor other) {
+				Gdx.app.log("tag", "dead line end contact with " + other.name);
+				other.markToRemove(true);
+				
+			}
+			
+		});
+		
+		this.addActor(deadline);
 	}
 
 	private void initWorld() {

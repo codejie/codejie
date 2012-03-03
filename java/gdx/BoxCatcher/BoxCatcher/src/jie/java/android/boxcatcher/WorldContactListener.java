@@ -13,10 +13,10 @@ public class WorldContactListener implements ContactListener {
 		BoxActor b = (BoxActor)(contact.getFixtureB().getBody().getUserData());
 		
 		if(a.contactListener != null) {
-			a.contactListener.onBeginContactAsSource(b);
+			a.contactListener.onBeginContact(b);
 		}
 		if(b.contactListener != null) {
-			b.contactListener.onBeginContactAsTarget(a);
+			b.contactListener.onBeginContact(a);
 		}
 	}
 
@@ -26,10 +26,10 @@ public class WorldContactListener implements ContactListener {
 		BoxActor b = (BoxActor)(contact.getFixtureB().getBody().getUserData());
 		
 		if(a.contactListener != null) {
-			a.contactListener.onEndContactAsSource(b);
+			a.contactListener.onEndContact(b);
 		}
 		if(b.contactListener != null) {
-			b.contactListener.onEndContactAsTarget(a);
+			b.contactListener.onEndContact(a);
 		}
 	}
 

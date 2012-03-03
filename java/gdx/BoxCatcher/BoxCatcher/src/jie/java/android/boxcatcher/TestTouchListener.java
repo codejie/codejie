@@ -29,7 +29,7 @@ public class TestTouchListener implements BoxTouchListener {
 	@Override
 	public boolean onTouchDragged(float x, float y, int pointer) {
 		if(pressed) {
-			actor.applyVelocity((x - px) / Global.WORLD_SCALE, 0);// (x / Global.WORLD_SCALE - actor.width / (2 * Global.WORLD_SCALE)) , 0);
+			actor.applyVelocity(((x - px) / Global.WORLD_SCALE), 0);// (x / Global.WORLD_SCALE - actor.width / (2 * Global.WORLD_SCALE)) , 0);
 		}
 		return true;
 	}

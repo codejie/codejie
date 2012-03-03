@@ -11,25 +11,19 @@ public class DefaultBoxContactListener implements BoxContactListener {
 	}
 	
 	@Override
-	public void onBeginContactAsSource(BoxActor target) {
-		Gdx.app.log("tag", actor.name + " begin contact as source with " + target.name);
+	public void onBeginContact(BoxActor other) {
+		Gdx.app.log("tag", actor.name + " begin contact with " + other.name);
+//		if(target.name == "ground") {
+	//		actor.markToRemove(true);
+		//}
 	}
 
 	@Override
-	public void onBeginContactAsTarget(BoxActor source) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onEndContactAsSource(BoxActor target) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onEndContactAsTarget(BoxActor source) {
-		// TODO Auto-generated method stub
+	public void onEndContact(BoxActor other) {
+		Gdx.app.log("tag", actor.name + " end contact with " + other.name);
+//		if(target.name == "ground") {
+	//		actor.markToRemove(true);
+		//}
 
 	}
 

@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class BCScreen extends Stage implements Screen {
 
+	public enum ScreenOrientation { UNSPECIFIED, PORTRAIT, LANDSCAPE }
+	
 	protected BCGame game = null;
 	
 	public BCScreen(BCGame game, float width, float height, boolean stretch) {

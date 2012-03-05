@@ -19,7 +19,7 @@ public abstract class WorldScreen extends BCScreen {
 		initWorld();
 		initBoxes();		
 	}
-
+	
 	@Override
 	public void dispose() {
 		
@@ -59,6 +59,11 @@ public abstract class WorldScreen extends BCScreen {
 	}
 	
 //
+	private void loadData() {
+		// TODO Auto-generated method stub
+		
+	}	
+	
 	private void initBoxes() {
 		// TODO Auto-generated method stub
 		

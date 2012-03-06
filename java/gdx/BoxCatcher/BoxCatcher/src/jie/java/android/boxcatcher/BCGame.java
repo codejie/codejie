@@ -9,7 +9,9 @@ public class BCGame extends Game {
 	public void create() {
 		// TODO Auto-generated method stub
 		//this.setScreen(new ImageScreen(this));
-		this.setScreen(new TestWorldScreen(this));
+		//this.setScreen(new TestWorldScreen(this));
+		this.setScreen(new WorldScreen(this, 0));
+		
 	}
 	@Override
 	public void setScreen(Screen screen) {

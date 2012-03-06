@@ -3,18 +3,18 @@ package jie.java.android.boxcatcher;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
-public abstract class WorldScreen extends BCScreen {
+public class WorldScreen extends BCScreen {
 
-	private int screenid = -1;
+	private StageData stage = null;
 	private World world = null;
 	private Box2DDebugRenderer renderer = null;
 	
-	public WorldScreen(BCGame game, int screenid) {
+	private float stateTime = 0.0f;
+	
+	public WorldScreen(BCGame game, int stageid) {
 		super(game);
 		
-		this.screenid = screenid;
-		
-		loadData();
+		loadData(stageid);
 		
 		initWorld();
 		initBoxes();		
@@ -36,8 +36,18 @@ public abstract class WorldScreen extends BCScreen {
 
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
 		super.render(delta);
+		
+		world.step(1/60f, 3, 3);
+		
+		stateTime += delta;
+		
+		initBox(stateTime);
+		
+		act(delta);
+		draw();		
+		
+		renderer.render(world, this.camera.combined.scale(Global.WORLD_SCALE, Global.WORLD_SCALE, 1));
 	}
 
 	@Override
@@ -59,22 +69,30 @@ public abstract class WorldScreen extends BCScreen {
 	}
 	
 //
-	private void loadData() {
-		// TODO Auto-generated method stub
+	private int loadData(int stageid) {
+		stage = new StageData(stageid);
 		
+		return stage.load();
 	}	
 	
-	private void initBoxes() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private void initWorld() {
-		//world
-		//frame
+		world = new World(stage.world.gravity, true);
+		world.setContactListener(new WorldContactListener());
+		
+		renderer = new Box2DDebugRenderer();
 	}
 	
-	
+	private void initBoxes() {
+		initBox(0.0f);
+	}
 
+	private void initBox(float stateTime) {
+		StageData.Box box = stage.getFirstBox(stateTime);
+		while(box != null) {
+			this.addActor(new BoxActor(world, box));
+			
+			box = stage.getNextBox();
+		}
+	}
 	
 }

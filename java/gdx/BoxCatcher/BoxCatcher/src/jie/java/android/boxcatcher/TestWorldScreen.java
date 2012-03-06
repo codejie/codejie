@@ -54,6 +54,7 @@ public class TestWorldScreen extends BCScreen {
 
 //        this.camera.update();//cam.update();
 //        this.camera.apply(gl);//cam.apply(gl);
+		world.step(delta, 6, 2);
 		
 		this.act(delta);
 		this.draw();
@@ -86,7 +87,7 @@ public class TestWorldScreen extends BCScreen {
 		this.addActor(image);
 */
 
-		BoxActor.Parameter param = new BoxActor.Parameter();
+		StageData.Box param = new StageData.Box();
 		param.x = 100;
 		param.y = 500;
 		param.height = 32;
@@ -95,9 +96,9 @@ public class TestWorldScreen extends BCScreen {
 		param.type = BodyType.DynamicBody;
 		param.restitution = 0.0f;// .friction = 0.1f;
 		param.friction = 0.1f;
-		param.shape = BoxActor.BoxShape.BS_RECTANGLE;
+		param.shape = BoxActor.BoxShape.RECTANGLE;
 		final BoxActor box = new BoxActor(world, param);
-		box.setRegion(new TextureRegion(texture,0, 0, 32, 32));
+		//box.setRegion(new TextureRegion(texture,0, 0, 32, 32));
 		
 		//box.setContactListener(new DefaultBoxContactListener(box));
 		
@@ -113,27 +114,27 @@ public class TestWorldScreen extends BCScreen {
 //		this.addActor(other);
 		
 		//triangle
-		BoxActor.Parameter tp = new BoxActor.Parameter();
+		StageData.Box tp = new StageData.Box();
 		tp.x = 360;
 		tp.y = 420;
 		tp.height = 64;
 		tp.width = 64;
 		tp.name = "triangle";
 		tp.type = BodyType.DynamicBody;
-		tp.shape = BoxActor.BoxShape.BS_TRIANGLE;
-		tp.restitution = 0.0f;
+		tp.shape = BoxActor.BoxShape.TRIANGLE;
+		tp.restitution = 1.0f;
 		tp.density = 1.0f;
 		tp.friction = 1.0f;
 		BoxActor triangle = new BoxActor(world, tp);
 		this.addActor(triangle);
 		
 		//circle
-		BoxActor.Parameter cp = new BoxActor.Parameter();
+		StageData.Box cp = new StageData.Box();
 		cp.width = 32;
 		cp.x = 200;
 		cp.y = 500;
 		cp.name = "circle";
-		cp.shape = BoxActor.BoxShape.BS_CIRCLE;
+		cp.shape = BoxActor.BoxShape.CIRCLE;
 		cp.type = BodyType.DynamicBody;
 		cp.angle = 20.0f;
 		cp.restitution = 0.0f;
@@ -153,7 +154,7 @@ public class TestWorldScreen extends BCScreen {
 		
 		//bar
 		
-		BoxActor.Parameter bp = new BoxActor.Parameter();
+		StageData.Box bp = new StageData.Box();
 		bp.width = 300;
 		bp.height = 64;
 		bp.x = 90;
@@ -162,7 +163,7 @@ public class TestWorldScreen extends BCScreen {
 		bp.friction = 1.0f;
 		bp.density = 0.1f;
 		bp.type = BodyType.DynamicBody;
-		bp.shape = BoxActor.BoxShape.BS_RECTANGLE;
+		bp.shape = BoxActor.BoxShape.RECTANGLE;
 		bp.filterBits = 0x0011;
 		BoxActor bar = new BoxActor(world, bp);
 		//bar.touchable = false;
@@ -183,7 +184,7 @@ public class TestWorldScreen extends BCScreen {
 		
 		world.createJoint(jdef);
 		
-		BoxActor.Parameter gp = new BoxActor.Parameter();
+		StageData.Box gp = new StageData.Box();
 		gp.width = 10;
 		gp.height = 10;
 		gp.x = 12;
@@ -206,13 +207,13 @@ public class TestWorldScreen extends BCScreen {
 
 	private void initFrame() {
 		//ground
-		BoxActor.Parameter gp = new BoxActor.Parameter();
+		StageData.Box gp = new StageData.Box();
 		gp.x = 10;
 		gp.y = 10;
 		gp.width = Global.SCREEN_WIDTH - 10;
 		gp.height = 10;
 		gp.type = BodyType.StaticBody;
-		gp.shape = BoxActor.BoxShape.BS_LINE;
+		gp.shape = BoxActor.BoxShape.LINE;
 		gp.filterBits = 0x0010;
 		gp.name = "ground";
 		ground = new BoxActor(world, gp);

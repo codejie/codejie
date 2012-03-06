@@ -2,6 +2,7 @@ package jie.java.android.boxcatcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import jie.java.android.boxcatcher.BoxActor.BoxShape;
 
@@ -12,14 +13,23 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class StageData {
 
-	public final static class Screen {
-		public int width	=	0;
-		public int height	=	0;
-	}
+//	public final static class Screen {
+//		public int width	=	0;
+//		public int height	=	0;
+//		
+//		public Screen(int width, int height) {
+//			this.width = width;
+//			this.height = height;
+//		}
+//	}
 	
 	public final static class World {
 		//public float scale		=	1.0f;
-		public Vector2 gravity	=	new Vector2(0, 0);
+		public Vector2 gravity	=	null;
+		
+		public World(Vector2 gravity) {
+			this.gravity = gravity;
+		}
 	}
 	
 	public final static class Box {
@@ -41,12 +51,13 @@ public class StageData {
 		//Sound
 	}
 	
-	public Screen screen = null;
+	//public Screen screen = null;
 	public World world = null;
-	public HashMap<Float, ArrayList<Box>> boxes = new HashMap<Float, ArrayList<Box>>();
+	public HashMap<Integer, ArrayList<Box>> boxes = new HashMap<Integer, ArrayList<Box>>();
 	
 	private int stageID = -1;
-	private float deltaStep = 0.0f;
+	private Integer currentKey = -1;
+	private Iterator<Box> boxIterator = null;
 	
 	public StageData(int id) {
 		stageID = id;
@@ -58,15 +69,65 @@ public class StageData {
 	}
 	
 	public int load() {
-		return -1;
+		//screen = new Screen(800, 480);
+		world = new World(Global.WORLD_GRAVITY);// new Vector2(0, -9.8f));
+		
+		ArrayList<Box> abox = new ArrayList<Box>();
+		Box b = new Box();
+		b.name = "b";
+		b.x = 300;
+		b.y = 350;
+		b.height = 32;
+		b.width = 32;
+		b.shape = BoxActor.BoxShape.CIRCLE;
+		b.type = BodyType.DynamicBody;
+	
+		abox.add(b);
+		
+		
+		Box c = new Box();
+		c.name = "c";
+		c.x = 10;
+		c.y = 10;
+		c.height = 10;
+		c.width = 790;
+		c.shape = BoxActor.BoxShape.LINE;
+		c.type = BodyType.StaticBody;		
+		
+		abox.add(c);
+		
+		boxes.put(0, abox);
+		
+		
+		
+		return 0;
 	}
 	
-	public Box getNextBox(float delta) {
-		return null;
+	public Box getFirstBox(float stateTime) {
+		Integer key = (int)stateTime;
+		if(key == currentKey)
+			return null;
+				
+		ArrayList<Box> abox = boxes.get(key);
+		if(abox == null)
+			return null;
+		
+		currentKey = key;
+		
+        boxIterator = abox.iterator();
+        
+        if(!boxIterator.hasNext())
+        	return null;
+        
+        return boxIterator.next();
 	}
 	
-	public TextureRegion getNextRegion(float delta) {
-		return null;
+	public Box getNextBox() {
+		if(boxIterator == null)
+			return null;
+		if(!boxIterator.hasNext())
+			return null;
+		return boxIterator.next();
 	}
-	
+
 }

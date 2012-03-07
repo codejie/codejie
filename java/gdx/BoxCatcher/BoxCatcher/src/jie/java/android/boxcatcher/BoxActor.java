@@ -2,6 +2,7 @@ package jie.java.android.boxcatcher;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -40,6 +41,7 @@ public class BoxActor extends Actor {
 	protected World world = null;
 	protected StageData.Box box = null;
 	protected TextureRegion texture = null;
+	protected Animation animation = null;	
 	protected Body body = null;
 	
 	protected BoxContactListener contactListener = null;
@@ -56,9 +58,7 @@ public class BoxActor extends Actor {
 		
 		init();
 		makeBox();
-		if(body != null) {
-			body.setUserData(this);
-		}
+		makeTexture();
 	}
 	
 	protected void init() {
@@ -94,7 +94,18 @@ public class BoxActor extends Actor {
 		body.createFixture(fd);
 
 		shape.dispose();
-		Gdx.app.log("tag", this.name + " body mass = " + body.getMass());		
+		Gdx.app.log("tag", this.name + " body mass = " + body.getMass());
+		
+		body.setUserData(this);
+	}
+	
+	protected void makeTexture() {
+		if(box.texture != -1) {
+			texture = Global.TEXTURE.getRegion(box.texture); 
+		}
+		else if(box.animation != -1) {
+			animation = Global.TEXTURE.getAnimation(box.animation);
+		}
 	}
  
 	private Shape makeShape(BoxShape shapetype) {
@@ -151,7 +162,7 @@ public class BoxActor extends Actor {
 			return;
 		}
 
-		//world.step(delta, 3, 3);
+		//world.step(1/30f, 3, 3);
 		
 		stateTime += delta;
 		
@@ -277,14 +288,11 @@ public class BoxActor extends Actor {
 		x = body.getPosition().x * Global.WORLD_SCALE - box.width / 2;// * MathUtils.cos(rotation);
 		y = body.getPosition().y * Global.WORLD_SCALE - box.height / 2;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
 		
-		if(box.texture != null) {
-			setTexture(box.texture);
-		}
-		else if(box.animation != null) {
-			setTexture(box.animation.getKeyFrame(stateTime, true));
+		if(animation != null) {
+			setTexture(animation.getKeyFrame(stateTime, true));
 		}
 		
-		Gdx.app.log("tag", "body x = " + body.getPosition().x + " y = " + body.getPosition().y);
+		//Gdx.app.log("tag", "body x = " + body.getPosition().x + " y = " + body.getPosition().y);
 	}
 	
 	protected void destroy() {

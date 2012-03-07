@@ -45,8 +45,8 @@ public class StageData {
 		public short filterBits = 0x00FF;
 		
 		//Texture
-		public TextureRegion texture = null;
-		public Animation animation = null;
+		public int texture = -1;
+		public int animation = -1;
 		
 		//Sound
 	}
@@ -73,18 +73,18 @@ public class StageData {
 		world = new World(Global.WORLD_GRAVITY);// new Vector2(0, -9.8f));
 		
 		ArrayList<Box> abox = new ArrayList<Box>();
-		Box b = new Box();
-		b.name = "b";
-		b.x = 300;
-		b.y = 350;
-		b.height = 32;
-		b.width = 32;
-		b.shape = BoxActor.BoxShape.CIRCLE;
-		b.type = BodyType.DynamicBody;
-	
-		abox.add(b);
-		
-		
+//		
+//		Box b = new Box();
+//		b.name = "b";
+//		b.x = 300;
+//		b.y = 350;
+//		b.height = 32;
+//		b.width = 32;
+//		b.shape = BoxActor.BoxShape.CIRCLE;
+//		b.type = BodyType.DynamicBody;
+//		abox.add(b);
+//		
+//		
 		Box c = new Box();
 		c.name = "c";
 		c.x = 10;
@@ -93,11 +93,37 @@ public class StageData {
 		c.width = 790;
 		c.shape = BoxActor.BoxShape.LINE;
 		c.type = BodyType.StaticBody;		
-		
 		abox.add(c);
+//		
+		Box d = new Box();
+		d.name = "d";
+		d.x = 400;
+		d.y = 350;
+		d.height = 112;
+		d.width = 112;
+		d.shape = BoxActor.BoxShape.RECTANGLE;
+		d.type = BodyType.DynamicBody;
+		d.restitution = 0.5f;
+		d.texture = 1;//Global.TEXTURE.getRegion(1);
+		d.animation = 1;//Global.TEXTURE.getAnimation(1);
+		abox.add(d);
 		
 		boxes.put(0, abox);
 		
+		
+//		ArrayList<Box> nbox = new ArrayList<Box>();
+//		Box nb = new Box();
+//		nb.name = "nb";
+//		nb.x = 100;
+//		nb.y = 350;
+//		nb.height = 32;
+//		nb.width = 32;
+//		nb.shape = BoxActor.BoxShape.TRIANGLE;
+//		nb.type = BodyType.DynamicBody;
+//	
+//		nbox.add(nb);
+//		
+//		boxes.put(2, nbox);
 		
 		
 		return 0;

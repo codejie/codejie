@@ -7,7 +7,8 @@ public class WorldScreen extends BCScreen {
 
 	private StageData stage = null;
 	private World world = null;
-	private Box2DDebugRenderer renderer = null;
+	//private Box2DDebugRenderer renderer = null;
+	private WorldDebugRenderer debugRenderer = new WorldDebugRenderer();
 	
 	private float stateTime = 0.0f;
 	
@@ -17,15 +18,13 @@ public class WorldScreen extends BCScreen {
 		loadData(stageid);
 		
 		initWorld();
-		initBoxes();		
+		initBoxes();
+		
+		debugRenderer.setDebug(false);
 	}
 	
 	@Override
 	public void dispose() {
-		
-		if(renderer != null) {
-			renderer.dispose();
-		}
 		
 		if(world != null) {
 			world.dispose();
@@ -38,7 +37,7 @@ public class WorldScreen extends BCScreen {
 	public void render(float delta) {
 		super.render(delta);
 		
-		world.step(1/60f, 3, 3);
+		world.step(1/60f, 8, 3);
 		
 		stateTime += delta;
 		
@@ -47,7 +46,7 @@ public class WorldScreen extends BCScreen {
 		act(delta);
 		draw();		
 		
-		renderer.render(world, this.camera.combined.scale(Global.WORLD_SCALE, Global.WORLD_SCALE, 1));
+		debugRenderer.render(world, camera);
 	}
 
 	@Override
@@ -78,8 +77,6 @@ public class WorldScreen extends BCScreen {
 	private void initWorld() {
 		world = new World(stage.world.gravity, true);
 		world.setContactListener(new WorldContactListener());
-		
-		renderer = new Box2DDebugRenderer();
 	}
 	
 	private void initBoxes() {

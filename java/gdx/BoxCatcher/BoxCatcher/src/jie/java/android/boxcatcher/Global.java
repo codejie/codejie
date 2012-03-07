@@ -8,6 +8,7 @@ public final class Global {
 	public static final int SCREEN_HEIGHT		=	480;//800;//Gdx.graphics.getHeight();
 	
 	public static final float WORLD_SCALE		=	10.0f;
-	public static final Vector2 WORLD_GRAVITY 	= 	new Vector2(0.0f, -0.98f);
+	public static final Vector2 WORLD_GRAVITY 	= 	new Vector2(0.0f, -9.8f);
 
+	public static final TextureData TEXTURE		=	new TextureData();
 }

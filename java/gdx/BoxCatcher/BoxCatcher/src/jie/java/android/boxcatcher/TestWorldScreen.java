@@ -54,7 +54,8 @@ public class TestWorldScreen extends BCScreen {
 
 //        this.camera.update();//cam.update();
 //        this.camera.apply(gl);//cam.apply(gl);
-		world.step(delta, 6, 2);
+		//world.step(delta, 6, 2);
+		world.step(1/60f, 8, 3);
 		
 		this.act(delta);
 		this.draw();

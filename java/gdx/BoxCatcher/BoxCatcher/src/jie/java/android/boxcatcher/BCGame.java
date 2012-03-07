@@ -10,6 +10,9 @@ public class BCGame extends Game {
 		// TODO Auto-generated method stub
 		//this.setScreen(new ImageScreen(this));
 		//this.setScreen(new TestWorldScreen(this));
+		
+		Global.TEXTURE.load();
+		
 		this.setScreen(new WorldScreen(this, 0));
 		
 	}

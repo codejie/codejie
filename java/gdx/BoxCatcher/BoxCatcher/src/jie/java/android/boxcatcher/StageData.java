@@ -105,7 +105,7 @@ public class StageData {
 		d.type = BodyType.DynamicBody;
 		d.restitution = 0.5f;
 		d.texture = 1;//Global.TEXTURE.getRegion(1);
-		d.animation = 1;//Global.TEXTURE.getAnimation(1);
+		d.animation = -1;//Global.TEXTURE.getAnimation(1);
 		abox.add(d);
 		
 		boxes.put(0, abox);

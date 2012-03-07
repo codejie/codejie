@@ -50,7 +50,7 @@ public class BoxActor extends Actor {
 	
 	protected float stateTime = 0.0f;
 	
-	public BoxActor(World world, final StageData.Box box) {
+	public BoxActor(World world, StageData.Box box) {
 		super(box.name);
 		
 		this.world = world;

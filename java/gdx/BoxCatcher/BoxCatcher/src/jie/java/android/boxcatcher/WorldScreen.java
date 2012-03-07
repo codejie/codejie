@@ -1,5 +1,6 @@
 package jie.java.android.boxcatcher;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -16,15 +17,17 @@ public class WorldScreen extends BCScreen {
 		super(game);
 		
 		loadData(stageid);
-		
-		initWorld();
-		initBoxes();
-		
-		debugRenderer.setDebug(false);
+//		
+//		initWorld();
+//		initBoxes();
+//		
+//		debugRenderer.setDebug(false);
 	}
 	
 	@Override
 	public void dispose() {
+		
+		Gdx.app.log("tag", "WorldScreen - dispose().");
 		
 		if(world != null) {
 			world.dispose();
@@ -35,6 +38,7 @@ public class WorldScreen extends BCScreen {
 
 	@Override
 	public void render(float delta) {
+		//Gdx.app.log("tag", "WorldScreen - render()");
 		super.render(delta);
 		
 		world.step(1/60f, 8, 3);
@@ -51,19 +55,24 @@ public class WorldScreen extends BCScreen {
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		Gdx.app.log("tag", "WorldScreen - show()");
+		
+		initWorld();
+		initBoxes();
+		stateTime = 0.0f;
+		
 		super.show();
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
+		Gdx.app.log("tag", "WorldScreen - pause()");
 		super.pause();
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
+		Gdx.app.log("tag", "WorldScreen - resume()");
 		super.resume();
 	}
 	
@@ -75,6 +84,9 @@ public class WorldScreen extends BCScreen {
 	}	
 	
 	private void initWorld() {
+		if(world != null)
+			return;
+		
 		world = new World(stage.world.gravity, true);
 		world.setContactListener(new WorldContactListener());
 	}

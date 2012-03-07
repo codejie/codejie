@@ -56,7 +56,9 @@ public class TextureData {
 		super.finalize();
 	}
 
-	private void dispose() {
+	public void dispose() {
+		
+		Gdx.app.log("tag", "TextureData - dispose().");
 		
 		region.clear();
 		animation.clear();
@@ -66,6 +68,10 @@ public class TextureData {
 			it.next().getValue().dispose();
 		}
 		texture.clear();
+		
+		textureIndex.clear();
+		regionIndex.clear();
+		animationIndex.clear();
 	}
 	
 	public int load() {
@@ -80,24 +86,27 @@ public class TextureData {
 	}
 	
 	public Texture getTexture(int index) {
-		if(texture.get(index) == null) {
+		Texture tt = texture.get(index);
+		if(tt == null) {
 			return loadTexture(index);
 		}
-		return null;
+		return tt;
 	}
 	
 	public TextureRegion getRegion(int index) {
-		if(region.get(index) == null) {
+		TextureRegion tr = region.get(index); 
+		if(tr == null) {
 			return loadRegion(index);
 		}
-		return null;
+		return tr;
 	}
 
 	public Animation getAnimation(int index) {
-		if(animation.get(index) == null) {
+		Animation ani = animation.get(index); 
+		if(ani == null) {
 			return loadAnimation(index);
 		}
-		return null;
+		return ani;
 	}
 	
 	private Texture loadTexture(int index) {
@@ -146,10 +155,10 @@ public class TextureData {
 			}
 		}
 		
-		Animation a = new Animation(data.duration, list);
-		animation.put(index, a);
+		Animation ani = new Animation(data.duration, list);
+		animation.put(index, ani);
 		
-		return a;
+		return ani;
 	}
 	
 	

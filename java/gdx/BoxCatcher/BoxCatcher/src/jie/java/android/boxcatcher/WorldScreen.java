@@ -1,5 +1,8 @@
 package jie.java.android.boxcatcher;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -96,12 +99,22 @@ public class WorldScreen extends BCScreen {
 	}
 
 	private void initBox(float stateTime) {
+		
+		ArrayList<StageData.Box> abox = stage.getBox(stateTime);
+		if(abox != null) {
+			Iterator<StageData.Box> box = abox.iterator();
+			while(box.hasNext()) {
+				this.addActor(new BoxActor(world, box.next()));
+			}
+		}
+/*		
 		StageData.Box box = stage.getFirstBox(stateTime);
 		while(box != null) {
 			this.addActor(new BoxActor(world, box));
 			
 			box = stage.getNextBox();
 		}
+*/		
 	}
 	
 }

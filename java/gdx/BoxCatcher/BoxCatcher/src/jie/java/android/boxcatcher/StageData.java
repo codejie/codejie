@@ -33,6 +33,7 @@ public class StageData {
 	}
 	
 	public final static class Box {
+		public int race = -1;		
 		public String name;
 		public BodyType type;
 		public BoxShape shape;
@@ -74,15 +75,15 @@ public class StageData {
 		
 		ArrayList<Box> abox = new ArrayList<Box>();
 //		
-//		Box b = new Box();
-//		b.name = "b";
-//		b.x = 300;
-//		b.y = 350;
-//		b.height = 32;
-//		b.width = 32;
-//		b.shape = BoxActor.BoxShape.CIRCLE;
-//		b.type = BodyType.DynamicBody;
-//		abox.add(b);
+		Box b = new Box();
+		b.name = "b";
+		b.x = 300;
+		b.y = 350;
+		b.height = 32;
+		b.width = 32;
+		b.shape = BoxActor.BoxShape.CIRCLE;
+		b.type = BodyType.DynamicBody;
+		abox.add(b);
 //		
 //		
 		Box c = new Box();
@@ -111,19 +112,19 @@ public class StageData {
 		boxes.put(0, abox);
 		
 		
-//		ArrayList<Box> nbox = new ArrayList<Box>();
-//		Box nb = new Box();
-//		nb.name = "nb";
-//		nb.x = 100;
-//		nb.y = 350;
-//		nb.height = 32;
-//		nb.width = 32;
-//		nb.shape = BoxActor.BoxShape.TRIANGLE;
-//		nb.type = BodyType.DynamicBody;
-//	
-//		nbox.add(nb);
-//		
-//		boxes.put(2, nbox);
+		ArrayList<Box> nbox = new ArrayList<Box>();
+		Box nb = new Box();
+		nb.name = "nb";
+		nb.x = 100;
+		nb.y = 350;
+		nb.height = 32;
+		nb.width = 32;
+		nb.shape = BoxActor.BoxShape.TRIANGLE;
+		nb.type = BodyType.DynamicBody;
+	
+		nbox.add(nb);
+		
+		boxes.put(1, nbox);
 		
 		
 		return 0;
@@ -156,4 +157,14 @@ public class StageData {
 		return boxIterator.next();
 	}
 
+	public ArrayList<Box> getBox(float stateTime) {
+		Integer key = (int)stateTime;
+		if(key == currentKey)
+			return null;
+		
+		currentKey = key;
+		
+		return  boxes.get(key);
+	}
+	
 }

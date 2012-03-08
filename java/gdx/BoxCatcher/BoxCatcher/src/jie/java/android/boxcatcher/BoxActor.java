@@ -48,8 +48,6 @@ public class BoxActor extends Actor {
 	protected BoxDestroyListener destroyListener = null;
 	protected BoxTouchListener touchListener = null;
 	
-	protected float stateTime = 0.0f;
-	
 	public BoxActor(World world, StageData.Box box) {
 		super(box.name);
 		
@@ -164,7 +162,7 @@ public class BoxActor extends Actor {
 
 		//world.step(1/30f, 3, 3);
 		
-		stateTime += delta;
+		box.stateTime += delta;
 		
 		update(delta);
 		
@@ -289,7 +287,7 @@ public class BoxActor extends Actor {
 		y = body.getPosition().y * Global.WORLD_SCALE - box.height / 2;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
 		
 		if(animation != null) {
-			setTexture(animation.getKeyFrame(stateTime, true));
+			setTexture(animation.getKeyFrame(box.stateTime, true));
 		}
 		
 		//Gdx.app.log("tag", "body x = " + body.getPosition().x + " y = " + body.getPosition().y);
@@ -304,4 +302,11 @@ public class BoxActor extends Actor {
 		//super.markToRemove(true);
 	}
 	
+	public StageData.Box getBox() {
+		box.x = body.getPosition().x;
+		box.y = body.getPosition().y;
+		box.angle = body.getAngle();
+		
+		return box;
+	}
 }

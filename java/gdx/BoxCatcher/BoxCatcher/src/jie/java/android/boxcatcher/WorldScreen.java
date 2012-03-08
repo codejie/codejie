@@ -7,12 +7,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class WorldScreen extends BCScreen {
+public class WorldScreen extends BCScreen implements Registerable {
 
 	private StageData stage = null;
 	private World world = null;
 	//private Box2DDebugRenderer renderer = null;
 	private WorldDebugRenderer debugRenderer = new WorldDebugRenderer();
+	
+	private WorldScreenRegister register = null;
 	
 	private float stateTime = 0.0f;
 	
@@ -21,8 +23,8 @@ public class WorldScreen extends BCScreen {
 		
 		loadData(stageid);
 //		
-//		initWorld();
-//		initBoxes();
+		initWorld();
+		initFrames();
 //		
 //		debugRenderer.setDebug(false);
 	}
@@ -48,7 +50,7 @@ public class WorldScreen extends BCScreen {
 		
 		stateTime += delta;
 		
-		initBox(stateTime);
+		loadBox(stateTime);
 		
 		act(delta);
 		draw();		
@@ -59,10 +61,8 @@ public class WorldScreen extends BCScreen {
 	@Override
 	public void show() {
 		Gdx.app.log("tag", "WorldScreen - show()");
-		
-		initWorld();
-		initBoxes();
-		stateTime = 0.0f;
+
+		restore();
 		
 		super.show();
 	}
@@ -70,6 +70,9 @@ public class WorldScreen extends BCScreen {
 	@Override
 	public void pause() {
 		Gdx.app.log("tag", "WorldScreen - pause()");
+		
+		shot();
+		
 		super.pause();
 	}
 
@@ -94,13 +97,19 @@ public class WorldScreen extends BCScreen {
 		world.setContactListener(new WorldContactListener());
 	}
 	
-	private void initBoxes() {
-		initBox(0.0f);
+	private void initFrames() {
+		ArrayList<StageData.Box> frames = stage.getFrames();
+		if(frames != null) {
+			Iterator<StageData.Box> box = frames.iterator();
+			while(box.hasNext()) {
+				this.addActor(new BoxActor(world, box.next()));
+			}
+		}		
 	}
 
-	private void initBox(float stateTime) {
+	private void loadBox(float stateTime) {
 		
-		ArrayList<StageData.Box> abox = stage.getBox(stateTime);
+		ArrayList<StageData.Box> abox = stage.getBoxes(stateTime);
 		if(abox != null) {
 			Iterator<StageData.Box> box = abox.iterator();
 			while(box.hasNext()) {
@@ -116,5 +125,43 @@ public class WorldScreen extends BCScreen {
 		}
 */		
 	}
+
+	@Override
+	public int shot() {
+		if(register == null)
+			register = new WorldScreenRegister();
+		
+		register.stateTime = stateTime;
+		while() {
+			register.pushBox();
+		}
+		//register.setBoxes(this.getActors());
+		
+		
+		this.clear();
+		
+		return 0;
+	}
+
+	@Override
+	public int restore() {
+		if(register == null)
+			return 0;
+		
+		initFrames();
+		
+		this.stateTime = register.stateTime;
+		
+		ArrayList<StageData.Box> abox = register.getBoxes();
+		if(abox != null) {
+			Iterator<StageData.Box> box = abox.iterator();
+			while(box.hasNext()) {
+				this.addActor(new BoxActor(world, box.next()));
+			}
+		}
+		
+		return 0;
+	}
+
 	
 }

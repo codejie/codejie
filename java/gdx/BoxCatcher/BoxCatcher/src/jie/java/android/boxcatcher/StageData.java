@@ -50,11 +50,15 @@ public class StageData {
 		public int animation = -1;
 		
 		//Sound
+		
+		//dynamic data
+		public float stateTime = 0.0f;
 	}
 	
 	//public Screen screen = null;
 	public World world = null;
-	public HashMap<Integer, ArrayList<Box>> boxes = new HashMap<Integer, ArrayList<Box>>();
+	private ArrayList<Box> frames = null;
+	private HashMap<Integer, ArrayList<Box>> boxes = new HashMap<Integer, ArrayList<Box>>();
 	
 	private int stageID = -1;
 	private Integer currentKey = -1;
@@ -157,7 +161,7 @@ public class StageData {
 		return boxIterator.next();
 	}
 
-	public ArrayList<Box> getBox(float stateTime) {
+	public ArrayList<Box> getBoxes(float stateTime) {
 		Integer key = (int)stateTime;
 		if(key == currentKey)
 			return null;

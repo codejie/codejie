@@ -1,8 +1,18 @@
 package jie.java.android.boxcatcher;
 
-public class WorldScreenRegister implements Register {
+import java.util.ArrayList;
+import java.util.List;
 
-	public WorldScreenRegister(WorldScreen screen) {
+import jie.java.android.boxcatcher.StageData.Box;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+public final class WorldScreenRegister {
+
+	public float stateTime = 0.0f;
+	private ArrayList<StageData.Box> boxes = null;
+	
+	public WorldScreenRegister() {
 		
 	}
 

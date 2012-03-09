@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import jie.java.android.boxcatcher.BoxActor.BoxShape;
+import jie.java.android.boxcatcher.StageData.Box;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -77,6 +78,18 @@ public class StageData {
 		//screen = new Screen(800, 480);
 		world = new World(Global.WORLD_GRAVITY);// new Vector2(0, -9.8f));
 		
+		frames = new ArrayList<Box>();
+		Box c = new Box();
+		c.name = "c";
+		c.x = 10;
+		c.y = 10;
+		c.height = 10;
+		c.width = 790;
+		c.shape = BoxActor.BoxShape.LINE;
+		c.type = BodyType.StaticBody;		
+		frames.add(c);
+		
+		
 		ArrayList<Box> abox = new ArrayList<Box>();
 //		
 		Box b = new Box();
@@ -90,15 +103,6 @@ public class StageData {
 		abox.add(b);
 //		
 //		
-		Box c = new Box();
-		c.name = "c";
-		c.x = 10;
-		c.y = 10;
-		c.height = 10;
-		c.width = 790;
-		c.shape = BoxActor.BoxShape.LINE;
-		c.type = BodyType.StaticBody;		
-		abox.add(c);
 //		
 		Box d = new Box();
 		d.name = "d";
@@ -113,7 +117,7 @@ public class StageData {
 		d.animation = -1;//Global.TEXTURE.getAnimation(1);
 		abox.add(d);
 		
-		boxes.put(0, abox);
+		boxes.put(1, abox);
 		
 		
 		ArrayList<Box> nbox = new ArrayList<Box>();
@@ -128,7 +132,7 @@ public class StageData {
 	
 		nbox.add(nb);
 		
-		boxes.put(1, nbox);
+		boxes.put(2, nbox);
 		
 		
 		return 0;
@@ -160,8 +164,12 @@ public class StageData {
 			return null;
 		return boxIterator.next();
 	}
-
-	public ArrayList<Box> getBoxes(float stateTime) {
+	
+	public ArrayList<Box> getFrames() {
+		return frames;
+	}	
+	
+		public ArrayList<Box> getBoxes(float stateTime) {
 		Integer key = (int)stateTime;
 		if(key == currentKey)
 			return null;

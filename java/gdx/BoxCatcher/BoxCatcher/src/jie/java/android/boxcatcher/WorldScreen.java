@@ -2,10 +2,12 @@ package jie.java.android.boxcatcher;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class WorldScreen extends BCScreen implements Registerable {
 
@@ -128,15 +130,22 @@ public class WorldScreen extends BCScreen implements Registerable {
 
 	@Override
 	public int shot() {
-		if(register == null)
+		if(register == null) {
 			register = new WorldScreenRegister();
+		}
+		else {
+			register.refresh();
+		}
 		
 		register.stateTime = stateTime;
-		while() {
-			register.pushBox();
-		}
-		//register.setBoxes(this.getActors());
 		
+		List<Actor> actors = this.getActors();
+		if(actors != null) {
+			Iterator<Actor> it = actors.iterator();
+			while(it.hasNext()) {
+				register.addBox(((BoxActor)it.next()).getBox());
+			}
+		}
 		
 		this.clear();
 		
@@ -159,6 +168,7 @@ public class WorldScreen extends BCScreen implements Registerable {
 				this.addActor(new BoxActor(world, box.next()));
 			}
 		}
+
 		
 		return 0;
 	}

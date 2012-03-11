@@ -23,10 +23,12 @@ public class WorldScreen extends BCScreen implements Registerable {
 	public WorldScreen(BCGame game, int stageid) {
 		super(game);
 		
+		Gdx.app.log("tag", "WorldScreen - constructor.");
+		
 		loadData(stageid);
 //		
 		initWorld();
-		initFrames();
+//		initFrames();
 //		
 //		debugRenderer.setDebug(false);
 	}
@@ -154,10 +156,11 @@ public class WorldScreen extends BCScreen implements Registerable {
 
 	@Override
 	public int restore() {
+		initFrames();
+		
 		if(register == null)
 			return 0;
 		
-		initFrames();
 		
 		this.stateTime = register.stateTime;
 		

@@ -47,11 +47,12 @@ public class TextureData {
 	private HashMap<Integer, Animation> animation = new HashMap<Integer, Animation>();
 	
 	public TextureData() {
-		
+		Gdx.app.log("tag", "TextureData - constructor.");
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
+		Gdx.app.log("tag", "TextureData - finialize.");
 		dispose();
 		super.finalize();
 	}

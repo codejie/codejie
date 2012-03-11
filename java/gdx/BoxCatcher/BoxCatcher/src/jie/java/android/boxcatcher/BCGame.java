@@ -1,6 +1,7 @@
 package jie.java.android.boxcatcher;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 public class BCGame extends Game {
@@ -14,6 +15,8 @@ public class BCGame extends Game {
 		Global.TEXTURE.load();
 		
 		this.setScreen(new WorldScreen(this, 0));
+		
+		Gdx.app.log("tag", "BCGame - constructor.");
 		
 	}
 	@Override

@@ -2,6 +2,8 @@ package jie.java.android.boxcatcher;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+
 import jie.java.android.boxcatcher.StageData.Box;
 
 
@@ -11,7 +13,7 @@ public final class WorldScreenRegister implements Register {
 	private ArrayList<StageData.Box> boxes = new ArrayList<StageData.Box>();
 	
 	public WorldScreenRegister() {
-
+		Gdx.app.log("tag", "WorldScreenRegister - constructor.");
 	}
 
 	@Override

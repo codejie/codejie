@@ -117,7 +117,9 @@ public class WorldScreen extends BCScreen implements Registerable {
 		if(abox != null) {
 			Iterator<StageData.Box> box = abox.iterator();
 			while(box.hasNext()) {
-				this.addActor(new BoxActor(world, box.next()));
+				BoxActor actor = new BoxActor(world, box.next());
+				actor.SetTouchListener(new TestTouchListener());
+				this.addActor(actor);
 			}
 		}
 /*		

@@ -4,13 +4,8 @@ import com.badlogic.gdx.Gdx;
 
 public class TouchDownDestroyListener implements BoxTouchListener {
 
-	private BoxActor actor = null;
-	
-	public TouchDownDestroyListener(BoxActor actor) {
-		this.actor = actor;
-	}
 	@Override
-	public boolean onTouchDown(float x, float y, int pointer) {
+	public boolean onTouchDown(BoxActor actor, float x, float y, int pointer) {
 //		Gdx.app.log("tag", actor.name + " touchdown.");
 		if(actor != null) {
 			Gdx.app.log("tag", actor.name + " touchdown.");
@@ -20,27 +15,25 @@ public class TouchDownDestroyListener implements BoxTouchListener {
 	}
 
 	@Override
-	public boolean onTouchUp(float x, float y, int pointer) {
+	public void onTouchUp(BoxActor actor, float x, float y, int pointer) {
 		if(actor != null) {
 			Gdx.app.log("tag", actor.name + " touchup.");
 		}
-		return true;
 	}
 
 	@Override
-	public boolean onTouchDragged(float x, float y, int pointer) {
+	public void onTouchDragged(BoxActor actor, float x, float y, int pointer) {
 		if(actor != null) {
 			Gdx.app.log("tag", actor.name + " touchdragged.");
 		}
-		return false;
 	}
 
 	@Override
-	public boolean onTouchMoved(float x, float y) {
+	public boolean onTouchMoved(BoxActor actor, float x, float y) {
 		if(actor != null) {
 			Gdx.app.log("tag", actor.name + " touchMoved.");
 		}
-		return false;
+		return true;
 	}
 
 }

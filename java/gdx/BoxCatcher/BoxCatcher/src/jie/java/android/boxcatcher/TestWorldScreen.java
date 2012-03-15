@@ -103,7 +103,7 @@ public class TestWorldScreen extends BCScreen {
 		
 		//box.setContactListener(new DefaultBoxContactListener(box));
 		
-		box.SetTouchListener(new TouchDownDestroyListener(box));
+		box.SetTouchListener(new TouchDownDestroyListener());
 		this.addActor(box);
 		
 ////		
@@ -169,7 +169,7 @@ public class TestWorldScreen extends BCScreen {
 		BoxActor bar = new BoxActor(world, bp);
 		//bar.touchable = false;
 
-		bar.SetTouchListener(new TestTouchListener(bar));
+		bar.SetTouchListener(new TestTouchListener());
 		
 		this.addActor(bar);
 /*		

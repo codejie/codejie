@@ -185,7 +185,7 @@ public class BoxActor extends Actor {
 	@Override
 	public Actor hit(float x, float y) {
 		
-		Vector2 tmp = new Vector2(x, y);
+		//Vector2 tmp = new Vector2(x, y);
 		//this.toLocalCoordinates(tmp);
 		
 		return (x > 0 && x < width && y > 0 && y < height) ? this : null;
@@ -194,35 +194,38 @@ public class BoxActor extends Actor {
 	@Override
 	public boolean touchDown(float x, float y, int pointer) {
 		if(touchListener != null) {
-			touchListener.onTouchDown(x, y, pointer);
+			return touchListener.onTouchDown(this, x, y, pointer);
 		}
-			
-		return true;// super.touchDown(x, y, pointer);
+		else {
+			return super.touchDown(x, y, pointer);
+		}
 	}
 
 	@Override
 	public void touchUp(float x, float y, int pointer) {
 		if(touchListener != null) {
-			touchListener.onTouchUp(x, y, pointer);
+			touchListener.onTouchUp(this, x, y, pointer);
 		}
-
-		super.touchUp(x, y, pointer);
+		else {
+			super.touchUp(x, y, pointer);
+		}
 	}
 
 	@Override
 	public void touchDragged(float x, float y, int pointer) {
 		if(touchListener != null) {
-			touchListener.onTouchDragged(x, y, pointer);
+			touchListener.onTouchDragged(this, x, y, pointer);
 		}
-
-		super.touchDragged(x, y, pointer);
+		else {
+			super.touchDragged(x, y, pointer);
+		}
 	}
 
 	@Override
 	public boolean touchMoved(float x, float y) {
 		if(touchListener != null) {
 			if(hit(x, y) != null) {
-				touchListener.onTouchMoved(x, y);
+				return touchListener.onTouchMoved(this, x, y);
 			}
 		}
 

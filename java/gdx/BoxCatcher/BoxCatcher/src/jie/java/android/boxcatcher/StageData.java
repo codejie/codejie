@@ -34,8 +34,9 @@ public class StageData {
 	}
 	
 	public final static class Box {
-		public int race = -1;		
+		public int id = -1;
 		public String name;
+		public int race = -1;
 		public BodyType type;
 		public BoxShape shape;
 		public float x, y;
@@ -80,7 +81,7 @@ public class StageData {
 		
 		frames = new ArrayList<Box>();
 		Box c = new Box();
-		c.name = "c";
+		c.name = "ground";
 		c.x = 10;
 		c.y = 10;
 		c.height = 10;
@@ -93,7 +94,7 @@ public class StageData {
 		ArrayList<Box> abox = new ArrayList<Box>();
 //		
 		Box b = new Box();
-		b.name = "b";
+		b.name = "circle";
 		b.x = 300;
 		b.y = 350;
 		b.height = 32;
@@ -105,7 +106,7 @@ public class StageData {
 //		
 //		
 		Box d = new Box();
-		d.name = "d";
+		d.name = "box";
 		d.x = 400;
 		d.y = 350;
 		d.height = 112;
@@ -122,9 +123,9 @@ public class StageData {
 		
 		ArrayList<Box> nbox = new ArrayList<Box>();
 		Box nb = new Box();
-		nb.name = "nb";
-		nb.x = 100;
-		nb.y = 350;
+		nb.name = "triangle";
+		nb.x = 450;
+		nb.y = 450;
 		nb.height = 32;
 		nb.width = 32;
 		nb.shape = BoxActor.BoxShape.TRIANGLE;

@@ -24,20 +24,6 @@ public class BoxActor extends Actor {
 		RECTANGLE, CIRCLE, TRIANGLE, LINE
 	}
 		
-//	public final static class Parameter {
-//		public String name;
-//		public BodyType type;
-//		public BoxShape shape;
-//		public float x, y;
-//		public float width, height;
-//		public float angle = 0.0f;
-//		public float density = 1.0f;
-//		public float restitution = 0.0f;
-//		public float friction = 0.0f;
-//		public short filterBits = 0x0001; 
-//	}
-
-	
 	protected World world = null;
 	protected StageData.Box box = null;
 	protected TextureRegion texture = null;
@@ -57,7 +43,7 @@ public class BoxActor extends Actor {
 		init();
 		makeBox();
 		makeTexture();
-	}
+	}	
 	
 	protected void init() {
 		x = box.x;
@@ -98,12 +84,14 @@ public class BoxActor extends Actor {
 	}
 	
 	protected void makeTexture() {
+/*		
 		if(box.texture != -1) {
 			texture = Global.TEXTURE.getRegion(box.texture); 
 		}
 		else if(box.animation != -1) {
 			animation = Global.TEXTURE.getAnimation(box.animation);
 		}
+*/		
 	}
  
 	private Shape makeShape(BoxShape shapetype) {
@@ -239,6 +227,12 @@ public class BoxActor extends Actor {
 		this.texture = texture;
 	}
 	
+	public void setAnimation(Animation animation) {
+		if(this.animation == animation)
+			return;
+		this.animation = animation;
+	}
+	
 	public void applyForce(Vector2 force, Vector2 point) {
 		if(body != null) {
 			body.applyForce(force, point);
@@ -311,5 +305,9 @@ public class BoxActor extends Actor {
 		box.angle = body.getAngle();
 		
 		return box;
+	}
+	
+	public int getId() {
+		return box.id;
 	}
 }

@@ -4,31 +4,35 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import jie.java.android.boxcatcher.test.TestTouchListener;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class WorldScreen extends BCScreen implements Registerable {
+public class WorldScreen extends BCScreen {
 
 	private StageData stage = null;
 	private World world = null;
-	//private Box2DDebugRenderer renderer = null;
+
 	private WorldDebugRenderer debugRenderer = new WorldDebugRenderer();
-	
-	private WorldScreenRegister register = null;
+	private BoxListenerManager listenerManager = null;
+	private MaterialManager materialManager = null;
 	
 	private float stateTime = 0.0f;
 	
 	public WorldScreen(BCGame game, int stageid) {
 		super(game);
 		
+		this.materialManager = this.game.getMaterialManager();
+		
 		Gdx.app.log("tag", "WorldScreen - constructor.");
 		
 		loadData(stageid);
 //		
 		initWorld();
-//		initFrames();
+		initFrames();
 //		
 //		debugRenderer.setDebug(false);
 	}
@@ -66,17 +70,13 @@ public class WorldScreen extends BCScreen implements Registerable {
 	public void show() {
 		Gdx.app.log("tag", "WorldScreen - show()");
 
-		restore();
-		
 		super.show();
 	}
 
 	@Override
 	public void pause() {
 		Gdx.app.log("tag", "WorldScreen - pause()");
-		
-		shot();
-		
+			
 		super.pause();
 	}
 
@@ -99,6 +99,8 @@ public class WorldScreen extends BCScreen implements Registerable {
 		
 		world = new World(stage.world.gravity, true);
 		world.setContactListener(new WorldContactListener());
+	
+		listenerManager = new BoxListenerManager(this);
 	}
 	
 	private void initFrames() {
@@ -106,7 +108,11 @@ public class WorldScreen extends BCScreen implements Registerable {
 		if(frames != null) {
 			Iterator<StageData.Box> box = frames.iterator();
 			while(box.hasNext()) {
-				this.addActor(new BoxActor(world, box.next()));
+				BoxActor actor = new BoxActor(world, box.next());
+				makeBoxMaterial(actor);
+				makeBoxListener(actor);
+				//actor.setContactListener(listenerManager.getGroundContactListener());
+				this.addActor(actor);
 			}
 		}		
 	}
@@ -118,64 +124,27 @@ public class WorldScreen extends BCScreen implements Registerable {
 			Iterator<StageData.Box> box = abox.iterator();
 			while(box.hasNext()) {
 				BoxActor actor = new BoxActor(world, box.next());
-				actor.SetTouchListener(new TestTouchListener());
+				makeBoxMaterial(actor);
+				makeBoxListener(actor);
+				
+				//actor.setContactListener(listenerManager.getEachContactListener());
+				//actor.SetTouchListener(listenerManager.getDockTouchListener());
 				this.addActor(actor);
 			}
 		}
-/*		
-		StageData.Box box = stage.getFirstBox(stateTime);
-		while(box != null) {
-			this.addActor(new BoxActor(world, box));
-			
-			box = stage.getNextBox();
-		}
-*/		
 	}
-
-	@Override
-	public int shot() {
-		if(register == null) {
-			register = new WorldScreenRegister();
+	
+	private void makeBoxMaterial(BoxActor actor) {
+		if(actor.getBox().texture != -1) {
+			actor.setTexture(materialManager.getTexture().getRegion(actor.getBox().texture));
 		}
-		else {
-			register.refresh();
-		}
-		
-		register.stateTime = stateTime;
-		
-		List<Actor> actors = this.getActors();
-		if(actors != null) {
-			Iterator<Actor> it = actors.iterator();
-			while(it.hasNext()) {
-				register.addBox(((BoxActor)it.next()).getBox());
-			}
-		}
-		
-		this.clear();
-		
-		return 0;
+		else if(actor.getBox().animation != -1) {
+			actor.setAnimation(materialManager.getTexture().getAnimation(actor.getBox().animation));
+		}		
 	}
-
-	@Override
-	public int restore() {
-		initFrames();
+	
+	private void makeBoxListener(BoxActor actor) {
 		
-		if(register == null)
-			return 0;
-		
-		
-		this.stateTime = register.stateTime;
-		
-		ArrayList<StageData.Box> abox = register.getBoxes();
-		if(abox != null) {
-			Iterator<StageData.Box> box = abox.iterator();
-			while(box.hasNext()) {
-				this.addActor(new BoxActor(world, box.next()));
-			}
-		}
-
-		
-		return 0;
 	}
 
 	

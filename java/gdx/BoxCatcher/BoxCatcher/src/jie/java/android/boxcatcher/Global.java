@@ -1,5 +1,7 @@
 package jie.java.android.boxcatcher;
 
+import jie.java.android.boxcatcher.material.TextureData;
+
 import com.badlogic.gdx.math.Vector2;
 
 
@@ -10,5 +12,4 @@ public final class Global {
 	public static final float WORLD_SCALE		=	10.0f;
 	public static final Vector2 WORLD_GRAVITY 	= 	new Vector2(0.0f, -9.8f);
 
-	public static final TextureData TEXTURE		=	new TextureData();
 }

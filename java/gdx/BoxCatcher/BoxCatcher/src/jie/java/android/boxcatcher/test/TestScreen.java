@@ -1,4 +1,7 @@
-package jie.java.android.boxcatcher;
+package jie.java.android.boxcatcher.test;
+
+import jie.java.android.boxcatcher.BCGame;
+import jie.java.android.boxcatcher.BCScreen;
 
 import com.badlogic.gdx.physics.box2d.World;
 

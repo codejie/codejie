@@ -6,27 +6,57 @@ import com.badlogic.gdx.Screen;
 
 public class BCGame extends Game {
 
+	private MaterialManager materialManager = null;
+	
+	private static Screen screen = null;
 	@Override
 	public void create() {
-		// TODO Auto-generated method stub
-		//this.setScreen(new ImageScreen(this));
-		//this.setScreen(new TestWorldScreen(this));
 		
-		Global.TEXTURE.load();
+		init();
+		
+		//Global.TEXTURE.load();
 		
 		this.setScreen(new WorldScreen(this, 0));
 		
 		Gdx.app.log("tag", "BCGame - constructor.");
-		
+				
 	}
+	
+	public int init() {
+		materialManager = new MaterialManager();
+		materialManager.load();
+		
+		return 0;
+	}
+	
+	@Override
+	public void dispose() {
+		if(materialManager != null) {
+			materialManager.dispose();
+		}
+		super.dispose();
+	}
+	
+	public MaterialManager getMaterialManager() {
+		return materialManager;
+	}
+	
 	@Override
 	public void setScreen(Screen screen) {
-		Screen old = this.getScreen();
-		if(old != null && old != screen) {
-			old.dispose();
+		if(BCGame.screen != null && BCGame.screen != screen) {
+			BCGame.screen.dispose();
 		}
-		super.setScreen(screen);
+		
+		BCGame.screen = screen;
+		
+		super.setScreen(BCGame.screen);
 	}
 
+	public static WorldScreen getWorldScreen() {
+		if(BCGame.screen.getClass() == Screen.class) {
+			return (WorldScreen)BCGame.screen;
+		}
+		return null;
+	}
 
 }

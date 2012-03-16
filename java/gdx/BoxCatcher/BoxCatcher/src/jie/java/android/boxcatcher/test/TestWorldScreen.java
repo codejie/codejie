@@ -1,4 +1,15 @@
-package jie.java.android.boxcatcher;
+package jie.java.android.boxcatcher.test;
+
+import jie.java.android.boxcatcher.BCGame;
+import jie.java.android.boxcatcher.BCScreen;
+import jie.java.android.boxcatcher.BoxActor;
+import jie.java.android.boxcatcher.BoxContactListener;
+import jie.java.android.boxcatcher.BoxDestroyListener;
+import jie.java.android.boxcatcher.Global;
+import jie.java.android.boxcatcher.StageData;
+import jie.java.android.boxcatcher.WorldContactListener;
+import jie.java.android.boxcatcher.BoxActor.BoxShape;
+import jie.java.android.boxcatcher.StageData.Box;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
@@ -218,7 +229,7 @@ public class TestWorldScreen extends BCScreen {
 		gp.filterBits = 0x0010;
 		gp.name = "ground";
 		ground = new BoxActor(world, gp);
-		ground.setContactListener(new DefaultBoxContactListener(ground));
+		ground.setContactListener(new DefaultBoxContactListener());
 		this.addActor(ground);
 		
 		
@@ -258,13 +269,13 @@ public class TestWorldScreen extends BCScreen {
 		deadline.setContactListener(new BoxContactListener() {
 
 			@Override
-			public void onBeginContact(BoxActor other) {
+			public void onBeginContact(BoxActor actor, BoxActor other) {
 				Gdx.app.log("tag", "dead line begin contact with " + other.name);
 				other.markToRemove(true);
 			}
 
 			@Override
-			public void onEndContact(BoxActor other) {
+			public void onEndContact(BoxActor actor, BoxActor other) {
 				Gdx.app.log("tag", "dead line end contact with " + other.name);
 				other.markToRemove(true);
 				

@@ -1,4 +1,4 @@
-package jie.java.android.boxcatcher;
+package jie.java.android.boxcatcher.material;
 
 import java.util.ArrayList;
 import java.util.HashMap;

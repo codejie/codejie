@@ -1,4 +1,7 @@
-package jie.java.android.boxcatcher;
+package jie.java.android.boxcatcher.test;
+
+import jie.java.android.boxcatcher.BoxActor;
+import jie.java.android.boxcatcher.BoxTouchListener;
 
 import com.badlogic.gdx.Gdx;
 

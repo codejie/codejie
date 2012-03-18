@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import jie.java.android.boxcatcher.BoxActor.BoxShape;
 import jie.java.android.boxcatcher.StageData.Box;
+import jie.java.android.boxcatcher.demo.BoxData;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -23,6 +24,8 @@ public class StageData {
 //			this.height = height;
 //		}
 //	}
+	
+	public enum BoxRace { BOX, DOCK, BORDER, DEADLINE };
 	
 	public final static class World {
 		//public float scale		=	1.0f;
@@ -59,7 +62,7 @@ public class StageData {
 	
 	//public Screen screen = null;
 	public World world = null;
-	private ArrayList<Box> frames = null;
+	private ArrayList<Box> frames = new ArrayList<Box>();
 	private HashMap<Integer, ArrayList<Box>> boxes = new HashMap<Integer, ArrayList<Box>>();
 	
 	private int stageID = -1;
@@ -79,7 +82,10 @@ public class StageData {
 		//screen = new Screen(800, 480);
 		world = new World(Global.WORLD_GRAVITY);// new Vector2(0, -9.8f));
 		
-		frames = new ArrayList<Box>();
+		BoxData.loadFrames(frames);
+		BoxData.loadBoxes(boxes);
+/*		
+		//frames = new ArrayList<Box>();
 		Box c = new Box();
 		c.name = "ground";
 		c.x = 10;
@@ -135,7 +141,7 @@ public class StageData {
 		
 		boxes.put(2, nbox);
 		
-		
+*/		
 		return 0;
 	}
 	

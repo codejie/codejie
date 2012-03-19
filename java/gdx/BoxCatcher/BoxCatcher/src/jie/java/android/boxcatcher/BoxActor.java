@@ -213,7 +213,7 @@ public class BoxActor extends Actor {
 			setTexture(animation.getKeyFrame(box.stateTime, true));
 		}
 		
-		if(texture != null) {
+		//if(texture != null) {
 			rotation = MathUtils.radiansToDegrees * body.getAngle();
 			
 			switch(box.shape) {
@@ -243,7 +243,7 @@ public class BoxActor extends Actor {
 			}
 			}
 
-		}
+		//}
 		
 		//Gdx.app.log("tag", "body x = " + body.getPosition().x + " y = " + body.getPosition().y);
 	}	

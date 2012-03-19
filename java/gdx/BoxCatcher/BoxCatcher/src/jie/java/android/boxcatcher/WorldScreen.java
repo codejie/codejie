@@ -53,7 +53,7 @@ public class WorldScreen extends BCScreen {
 		//Gdx.app.log("tag", "WorldScreen - render()");
 		super.render(delta);
 		
-		world.step(1/60f, 8, 3);
+		world.step(1/60f, 6, 2);
 		
 		stateTime += delta;
 		

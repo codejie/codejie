@@ -1,5 +1,7 @@
 package jie.java.android.boxcatcher.boxlistener;
 
+import com.badlogic.gdx.Gdx;
+
 import jie.java.android.boxcatcher.BoxActor;
 import jie.java.android.boxcatcher.BoxListenerManager;
 import jie.java.android.boxcatcher.Global;
@@ -17,15 +19,20 @@ public class DockTouchListener extends BaseTouchListener {
 	@Override
 	public boolean onTouchDown(BoxActor actor, float x, float y, int pointer) {
 		px = x;
+		Gdx.app.log("tag", actor.name + " down - x : " + x + " - px : " + px);
 		return true;
 	}
 
 	@Override
 	public void onTouchUp(BoxActor actor, float x, float y, int pointer) {
+		px = 0;
+		actor.applyVelocity(0, 0);
+		Gdx.app.log("tag", actor.name + " up - x : " + x + " - px : " + px);
 	}
 
 	@Override
 	public void onTouchDragged(BoxActor actor, float x, float y, int pointer) {
+		Gdx.app.log("tag", actor.name + " dragged - x : " + x + " - px : " + px);
 		actor.applyVelocity(((x - px) / Global.WORLD_SCALE), 0);
 	}
 

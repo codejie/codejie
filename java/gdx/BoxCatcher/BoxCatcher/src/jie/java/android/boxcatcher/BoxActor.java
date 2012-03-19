@@ -25,11 +25,14 @@ public class BoxActor extends Actor {
 	}
 		
 	protected World world = null;
+	protected Body body = null;	
 	protected StageData.Box box = null;
-	protected TextureRegion texture = null;
-	protected Animation animation = null;	
-	protected Body body = null;
 	
+	protected TextureRegion texture = null;
+	protected Animation animation = null;
+	protected float textureWidth = 0.0f;
+	protected float textureHeight = 0.0f;
+		
 	protected BoxContactListener contactListener = null;
 	protected BoxDestroyListener destroyListener = null;
 	protected BoxTouchListener touchListener = null;
@@ -42,7 +45,6 @@ public class BoxActor extends Actor {
 		
 		init();
 		makeBox();
-		makeTexture();
 	}	
 	
 	protected void init() {
@@ -51,10 +53,57 @@ public class BoxActor extends Actor {
 		width = box.width;
 		height = box.height;
 		rotation = MathUtils.radiansToDegrees * box.angle;
-		originX = width / 2.0f;
-		originY = height / 2.0f;
+
 		scaleX = 1.0f;
 		scaleY = 1.0f;
+		
+		switch(box.shape) {
+		case RECTANGLE: {
+			originX = box.width / 2.0f;
+			originY = box.height / 2.0f;
+			
+			textureWidth = box.width;
+			textureHeight = box.height;
+
+			break;
+		}
+		case CIRCLE: {
+			originX = box.width / 2.0f;
+			originY = box.width / 2.0f;
+			
+			textureWidth = box.width;
+			textureHeight = box.width;
+
+			break;
+		}
+		case TRIANGLE: {
+			originX = 0;//-box.width / 2.0f;
+			originY = 0;//-box.height;// / 2.0f;// / 2.0f;
+
+			textureWidth = box.width;
+			textureHeight = box.height;
+
+			break;
+		}
+		case LINE: {
+			originX = box.width;
+			originY = box.height;// / 2.0f;			
+			
+			textureWidth = 0.0f;
+			textureHeight = 0.0f;
+			
+			break;
+		}
+		default: {
+			originX = box.width;
+			originY = box.height;// / 2.0f;			
+			
+			textureWidth = 0.0f;
+			textureHeight = 0.0f;
+			
+			break;
+		}
+		}
 	}
 	
 	//
@@ -64,7 +113,7 @@ public class BoxActor extends Actor {
 		def.angle = box.angle;
 		def.position.set(getCenter());
 		
-		Shape shape = makeShape(box.shape);
+		Shape shape = makeShape();
 
 		FixtureDef fd = new FixtureDef();
 		fd.shape = shape;
@@ -82,21 +131,10 @@ public class BoxActor extends Actor {
 		
 		body.setUserData(this);
 	}
-	
-	protected void makeTexture() {
-/*		
-		if(box.texture != -1) {
-			texture = Global.TEXTURE.getRegion(box.texture); 
-		}
-		else if(box.animation != -1) {
-			animation = Global.TEXTURE.getAnimation(box.animation);
-		}
-*/		
-	}
  
-	private Shape makeShape(BoxShape shapetype) {
+	private Shape makeShape() {
 		
-		switch(shapetype) {
+		switch(box.shape) {
 		case RECTANGLE: {
 			PolygonShape shape = new PolygonShape();
 			shape.setAsBox(box.width / Global.WORLD_SCALE / 2, box.height / Global.WORLD_SCALE / 2);
@@ -106,15 +144,15 @@ public class BoxActor extends Actor {
 		case TRIANGLE: {
 			PolygonShape shape = new PolygonShape();
 			
-			shape.set(new Vector2[] { new Vector2(0.0f, 0.0f)
-									, new Vector2(box.width / Global.WORLD_SCALE, 0.0f)
-									, new Vector2((box.width / 2) / Global.WORLD_SCALE, box.height / Global.WORLD_SCALE) } );
+			shape.set(new Vector2[] { new Vector2((box.width / 2) / Global.WORLD_SCALE, box.height / Global.WORLD_SCALE)
+									, new Vector2(0.0f, 0.0f)
+									, new Vector2(box.width / Global.WORLD_SCALE, 0.0f) } );
 			
 			return shape;
 		}
 		case CIRCLE: {
 			CircleShape shape = new CircleShape();
-			shape.setRadius(box.width / Global.WORLD_SCALE);
+			shape.setRadius(box.width / 2 / Global.WORLD_SCALE);
 			return shape;
 		}
 		case LINE: {
@@ -129,12 +167,22 @@ public class BoxActor extends Actor {
 	}
 
 	protected Vector2 getCenter() {
-		if(box.shape != BoxShape.LINE) {
-			return new Vector2((box.x + box.width / 2) / Global.WORLD_SCALE
-					, (box.y + box.height / 2) / Global.WORLD_SCALE);
+		switch(box.shape) {
+		case RECTANGLE: {
+			return new Vector2((box.x + box.width / 2) / Global.WORLD_SCALE, (box.y + box.height / 2) / Global.WORLD_SCALE);
 		}
-		else {
-			return new Vector2();
+		case CIRCLE: {
+			return new Vector2((box.x + box.width / 2) / Global.WORLD_SCALE, (box.y + box.width / 2) / Global.WORLD_SCALE);
+		}
+		case TRIANGLE: {
+			return new Vector2((box.x) / Global.WORLD_SCALE, (box.y) / Global.WORLD_SCALE);
+		}
+		case LINE: {
+			return new Vector2(0, 0);
+		}
+		default: {
+			return new Vector2(0, 0);
+		}
 		}
 	}	
 	
@@ -157,15 +205,58 @@ public class BoxActor extends Actor {
 		super.act(delta);
 	}
 
+	protected void update(float delta) {
+		if(body == null)
+			return;
+
+		if(animation != null) {
+			setTexture(animation.getKeyFrame(box.stateTime, true));
+		}
+		
+		if(texture != null) {
+			rotation = MathUtils.radiansToDegrees * body.getAngle();
+			
+			switch(box.shape) {
+			case RECTANGLE: {
+				x = body.getPosition().x * Global.WORLD_SCALE - box.width / 2;// * MathUtils.cos(rotation);
+				y = body.getPosition().y * Global.WORLD_SCALE - box.height / 2;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
+				break;
+			}
+			case CIRCLE: {
+				x = body.getPosition().x * Global.WORLD_SCALE - box.width / 2;// * 2;// * MathUtils.cos(rotation);
+				y = body.getPosition().y * Global.WORLD_SCALE - box.width / 2;// * 2;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
+				break;
+			}
+			case TRIANGLE: {
+				x = body.getPosition().x * Global.WORLD_SCALE;// - box.width / 2;// * MathUtils.cos(rotation);
+				y = body.getPosition().y * Global.WORLD_SCALE;// - box.height / 2 ;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
+				break;
+			}
+			case LINE: {
+				x = body.getPosition().x * Global.WORLD_SCALE;// - box.width / 2;// * MathUtils.cos(rotation);
+				y = body.getPosition().y * Global.WORLD_SCALE;// - box.height / 2 ;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
+				break;
+			}
+			default: {
+				x = body.getPosition().x * Global.WORLD_SCALE;// - box.width / 2;// * MathUtils.cos(rotation);
+				y = body.getPosition().y * Global.WORLD_SCALE;// - box.height / 2 ;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);				
+			}
+			}
+
+		}
+		
+		//Gdx.app.log("tag", "body x = " + body.getPosition().x + " y = " + body.getPosition().y);
+	}	
+	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 		if(texture != null) {
 			if(scaleX == 1.0f && scaleY == 1.0f && rotation == 0.0f) {
-				batch.draw(texture, x, y, width, height);
+				batch.draw(texture, x, y, textureWidth, textureHeight);
 			}
 			else {
-				batch.draw(texture, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
+				batch.draw(texture, x, y, originX, originY, textureWidth, textureHeight, scaleX, scaleY, rotation);
 			}
 		}
 	}
@@ -272,22 +363,6 @@ public class BoxActor extends Actor {
 	
 	public void SetTouchListener(BoxTouchListener listener) {
 		touchListener = listener;
-	}
-
-	protected void update(float delta) {
-		if(body == null)
-			return;
-		
-		rotation = MathUtils.radiansToDegrees * body.getAngle();
-
-		x = body.getPosition().x * Global.WORLD_SCALE - box.width / 2;// * MathUtils.cos(rotation);
-		y = body.getPosition().y * Global.WORLD_SCALE - box.height / 2;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
-		
-		if(animation != null) {
-			setTexture(animation.getKeyFrame(box.stateTime, true));
-		}
-		
-		//Gdx.app.log("tag", "body x = " + body.getPosition().x + " y = " + body.getPosition().y);
 	}
 	
 	protected void destroy() {

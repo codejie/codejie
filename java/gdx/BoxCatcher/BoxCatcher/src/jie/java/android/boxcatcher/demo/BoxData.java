@@ -3,12 +3,14 @@ package jie.java.android.boxcatcher.demo;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import jie.java.android.boxcatcher.BoxActor;
 import jie.java.android.boxcatcher.Global;
 import jie.java.android.boxcatcher.StageData;
 import jie.java.android.boxcatcher.StageData.Box;
+import jie.java.android.boxcatcher.StageData.BoxRace;
 
 public final class BoxData {
 
@@ -75,36 +77,42 @@ public final class BoxData {
 		//dock		
 		StageData.Box dk = new StageData.Box();
 		dk.width = 300;
-		dk.height = 63;
+		dk.height = 60;
 		dk.x = 90;
-		dk.y = 10;
+		dk.y = 12;
 		dk.name = "bar";
-		dk.friction = 1.0f;
-		dk.density = 0.1f;
+		dk.friction = 0.0f;
+		dk.density = 100.0f;
 		dk.type = BodyType.DynamicBody;
 		dk.shape = BoxActor.BoxShape.RECTANGLE;
 		dk.filterBits = 0x0011;
+		dk.race = BoxRace.DOCK;
 		frames.add(dk);
+
 	}
 	
 	public static void loadBoxes(HashMap<Integer, ArrayList<Box>> boxes) {
+/*		
 		ArrayList<Box> abox = new ArrayList<Box>();
 		Box b = new Box();
 		b.name = "circle";
-		b.x = 300;
+		b.x = 350;
 		b.y = 350;
-		b.height = 32;
-		b.width = 32;
+		b.height = 128;
+		b.width = 128;
 		b.texture = 1;
 		b.shape = BoxActor.BoxShape.CIRCLE;
 		b.type = BodyType.DynamicBody;
+		b.angle = 0;//MathUtils.PI * 1.5f;
+		b.friction = 1.0f;
 		b.filterBits = 0x0001;
+		b.race = BoxRace.BOX;
 		abox.add(b);
 		
 		Box d = new Box();
 		d.name = "box";
-		d.x = 400;
-		d.y = 350;
+		d.x = 200;
+		d.y = 200;
 		d.height = 112;
 		d.width = 112;
 		d.shape = BoxActor.BoxShape.RECTANGLE;
@@ -112,7 +120,9 @@ public final class BoxData {
 		d.restitution = 0.5f;
 		d.texture = -1;//Global.TEXTURE.getRegion(1);
 		d.animation = 1;//Global.TEXTURE.getAnimation(1);
+		d.angle = MathUtils.PI;// . 1.0f;
 		d.filterBits = 0x0001;
+		d.race = BoxRace.BOX;
 		abox.add(d);
 		
 		boxes.put(1, abox);
@@ -124,12 +134,16 @@ public final class BoxData {
 		nb.y = 450;
 		nb.height = 32;
 		nb.width = 32;
+		nb.texture = 1;
 		nb.shape = BoxActor.BoxShape.TRIANGLE;
 		nb.type = BodyType.DynamicBody;
+		nb.friction = 0.5f;
 		nb.filterBits = 0x0001;
+		nb.race = BoxRace.BOX;
 		nbox.add(nb);
 		
 		boxes.put(3, nbox);
+*/		
 	}
 	
 }

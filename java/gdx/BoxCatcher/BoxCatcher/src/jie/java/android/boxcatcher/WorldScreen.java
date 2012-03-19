@@ -2,14 +2,13 @@ package jie.java.android.boxcatcher;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import jie.java.android.boxcatcher.test.TestTouchListener;
+import jie.java.android.boxcatcher.StageData.BoxRace;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+
+
 
 public class WorldScreen extends BCScreen {
 
@@ -144,7 +143,14 @@ public class WorldScreen extends BCScreen {
 	}
 	
 	private void makeBoxListener(BoxActor actor) {
-		
+		if(actor.getBox().race == BoxRace.BOX) {
+			actor.setContactListener(listenerManager.getEachContactListener());
+			//actor.SetTouchListener(listenerManager.getDockTouchListener());
+		}
+		else if(actor.getBox().race == BoxRace.DOCK) {
+			actor.SetTouchListener(listenerManager.getDockTouchListener());
+			//actor.setContactListener(listenerManager.getGroundContactListener());			
+		}
 	}
 
 	

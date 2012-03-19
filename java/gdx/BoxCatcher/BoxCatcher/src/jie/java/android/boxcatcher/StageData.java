@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import jie.java.android.boxcatcher.BoxActor.BoxShape;
 import jie.java.android.boxcatcher.StageData.Box;
+import jie.java.android.boxcatcher.StageData.BoxRace;
 import jie.java.android.boxcatcher.demo.BoxData;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -25,7 +26,9 @@ public class StageData {
 //		}
 //	}
 	
-	public enum BoxRace { BOX, DOCK, BORDER, DEADLINE };
+	public enum BoxRace { 
+		UNKNOWN, BOX, DOCK, BORDER, DEADLINE 
+	}
 	
 	public final static class World {
 		//public float scale		=	1.0f;
@@ -39,7 +42,7 @@ public class StageData {
 	public final static class Box {
 		public int id = -1;
 		public String name;
-		public int race = -1;
+		public BoxRace race = BoxRace.UNKNOWN;
 		public BodyType type;
 		public BoxShape shape;
 		public float x, y;
@@ -59,7 +62,7 @@ public class StageData {
 		//dynamic data
 		public float stateTime = 0.0f;
 	}
-	
+
 	//public Screen screen = null;
 	public World world = null;
 	private ArrayList<Box> frames = new ArrayList<Box>();

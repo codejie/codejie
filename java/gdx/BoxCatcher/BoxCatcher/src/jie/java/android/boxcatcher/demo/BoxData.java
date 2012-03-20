@@ -25,6 +25,7 @@ public final class BoxData {
 		gp.shape = BoxActor.BoxShape.LINE;
 		gp.filterBits = 0x0010;
 		gp.name = "ground";
+		gp.friction = 0.0f;
 		frames.add(gp);
 		
 
@@ -53,13 +54,13 @@ public final class BoxData {
 		//floor
 		Box fr = new Box();
 		fr.x = 10;
-		fr.y = 82;
+		fr.y = 83;
 		fr.width = Global.SCREEN_WIDTH - 10;
-		fr.height = 82;
+		fr.height = 83;
 		fr.type = BodyType.StaticBody;
 		fr.shape = BoxActor.BoxShape.LINE;		
 		fr.name = "floor";
-		fr.friction = 1.0f;
+		fr.friction = 0.0f;
 		fr.filterBits = 0x0010;
 		frames.add(fr);
 
@@ -73,6 +74,7 @@ public final class BoxData {
 		dl.shape = BoxActor.BoxShape.LINE;
 		dl.name = "dead";
 		dl.filterBits = 0x0001;
+		dl.race = BoxRace.DEADLINE;
 		frames.add(dl);
 		
 		//dock		
@@ -82,12 +84,13 @@ public final class BoxData {
 		dk.x = 90;
 		dk.y = 10;
 		dk.name = "bar";
-		dk.friction = 1.0f;
+		dk.friction = 0.9f;
 		dk.density = 1.0f;
-		dk.type = BodyType.DynamicBody;
+		dk.type = BodyType.DynamicBody;//.KinematicBody;//.DynamicBody;
 		dk.shape = BoxActor.BoxShape.RECTANGLE;
 		dk.filterBits = 0x0011;
 		dk.race = BoxRace.DOCK;
+		dk.texture = 4;
 		frames.add(dk);
 
 	}
@@ -99,13 +102,13 @@ public final class BoxData {
 		b.name = "circle";
 		b.x = 350;
 		b.y = 350;
-		b.height = 64;
-		b.width = 64;
+		b.height = 128;
+		b.width = 128;
 		b.texture = 1;
-		b.shape = BoxActor.BoxShape.CIRCLE;
+		b.shape = BoxActor.BoxShape.RECTANGLE;//.CIRCLE;
 		b.type = BodyType.DynamicBody;
 		b.angle = 0;//MathUtils.PI * 1.5f;
-		b.friction = 1.0f;
+		b.friction = 0.1f;
 		b.filterBits = 0x0001;
 		b.density = 1.0f;
 		b.race = BoxRace.BOX;
@@ -120,12 +123,12 @@ public final class BoxData {
 		d.shape = BoxActor.BoxShape.RECTANGLE;
 		d.type = BodyType.DynamicBody;
 		d.restitution = 0.0f;
-		d.texture = -1;//Global.TEXTURE.getRegion(1);
-		d.animation = 1;//Global.TEXTURE.getAnimation(1);
+		d.texture = 2;//Global.TEXTURE.getRegion(1);
+		d.animation = -1;//Global.TEXTURE.getAnimation(1);
 		d.angle = MathUtils.PI;// . 1.0f;
-		d.friction = 1.0f;
+		d.friction = 0.03f;
 		d.filterBits = 0x0001;
-		d.density = 1.0f;
+		d.density = 5.0f;
 		d.race = BoxRace.BOX;
 		abox.add(d);
 		
@@ -138,11 +141,11 @@ public final class BoxData {
 		nb.y = 450;
 		nb.height = 64;
 		nb.width = 64;
-		nb.texture = 1;
-		nb.density = 1.0f;
-		nb.shape = BoxActor.BoxShape.TRIANGLE;
+		nb.texture = 3;
+		nb.density = 10.0f;
+		nb.shape = BoxActor.BoxShape.RECTANGLE;//.TRIANGLE;
 		nb.type = BodyType.DynamicBody;
-		nb.friction = 1.0f;
+		nb.friction = 0.09f;
 		nb.filterBits = 0x0001;
 		nb.race = BoxRace.BOX;
 		nbox.add(nb);

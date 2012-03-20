@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 
 public class BaseStageLayer extends Group {
 
-	private WorldScreen screen = null;
-	private MaterialManager materialManager = null;
+	protected WorldScreen screen = null;
+	protected MaterialManager materialManager = null;
 	
 	public BaseStageLayer(WorldScreen screen, MaterialManager materialManager) {
 		this.screen = screen;

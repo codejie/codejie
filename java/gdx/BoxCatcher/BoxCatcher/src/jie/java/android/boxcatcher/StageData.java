@@ -87,64 +87,7 @@ public class StageData {
 		
 		BoxData.loadFrames(frames);
 		BoxData.loadBoxes(boxes);
-/*		
-		//frames = new ArrayList<Box>();
-		Box c = new Box();
-		c.name = "ground";
-		c.x = 10;
-		c.y = 10;
-		c.height = 10;
-		c.width = 790;
-		c.shape = BoxActor.BoxShape.LINE;
-		c.type = BodyType.StaticBody;		
-		frames.add(c);
-		
-		
-		ArrayList<Box> abox = new ArrayList<Box>();
-//		
-		Box b = new Box();
-		b.name = "circle";
-		b.x = 300;
-		b.y = 350;
-		b.height = 32;
-		b.width = 32;
-		b.shape = BoxActor.BoxShape.CIRCLE;
-		b.type = BodyType.DynamicBody;
-		abox.add(b);
-//		
-//		
-//		
-		Box d = new Box();
-		d.name = "box";
-		d.x = 400;
-		d.y = 350;
-		d.height = 112;
-		d.width = 112;
-		d.shape = BoxActor.BoxShape.RECTANGLE;
-		d.type = BodyType.DynamicBody;
-		d.restitution = 0.5f;
-		d.texture = 1;//Global.TEXTURE.getRegion(1);
-		d.animation = -1;//Global.TEXTURE.getAnimation(1);
-		abox.add(d);
-		
-		boxes.put(1, abox);
-		
-		
-		ArrayList<Box> nbox = new ArrayList<Box>();
-		Box nb = new Box();
-		nb.name = "triangle";
-		nb.x = 450;
-		nb.y = 450;
-		nb.height = 32;
-		nb.width = 32;
-		nb.shape = BoxActor.BoxShape.TRIANGLE;
-		nb.type = BodyType.DynamicBody;
 	
-		nbox.add(nb);
-		
-		boxes.put(2, nbox);
-		
-*/		
 		return 0;
 	}
 	

@@ -112,6 +112,8 @@ public class BoxActor extends Actor {
 		def.type = box.type;
 		def.angle = box.angle;
 		def.position.set(getCenter());
+		//def.angularDamping = 1.0f;
+		def.linearDamping = 0.0f;
 		
 		Shape shape = makeShape();
 

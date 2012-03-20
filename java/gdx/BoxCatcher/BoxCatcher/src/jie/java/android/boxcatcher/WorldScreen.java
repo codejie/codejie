@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import jie.java.android.boxcatcher.StageData.BoxRace;
+import jie.java.android.boxcatcher.stagelayer.ScoreStageLayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
@@ -19,7 +20,11 @@ public class WorldScreen extends BCScreen {
 	private BoxListenerManager listenerManager = null;
 	private MaterialManager materialManager = null;
 	
+	private ScoreStageLayer scoreStageLayer = null;
+	
 	private float stateTime = 0.0f;
+	
+	private int score = 0;
 	
 	public WorldScreen(BCGame game, int stageid) {
 		super(game);
@@ -30,10 +35,12 @@ public class WorldScreen extends BCScreen {
 		
 		loadData(stageid);
 //		
+		initStageLayers();
+		
 		initWorld();
 		initFrames();
 //		
-//		debugRenderer.setDebug(false);
+		debugRenderer.setDebug(false);
 	}
 	
 	@Override
@@ -92,6 +99,12 @@ public class WorldScreen extends BCScreen {
 		return stage.load();
 	}	
 	
+	private void initStageLayers() {
+		scoreStageLayer = new ScoreStageLayer(this, materialManager);
+		
+		this.addActor(scoreStageLayer);
+	}
+	
 	private void initWorld() {
 		if(world != null)
 			return;
@@ -145,13 +158,19 @@ public class WorldScreen extends BCScreen {
 	private void makeBoxListener(BoxActor actor) {
 		if(actor.getBox().race == BoxRace.BOX) {
 			actor.setContactListener(listenerManager.getEachContactListener());
-			//actor.SetTouchListener(listenerManager.getDockTouchListener());
 		}
 		else if(actor.getBox().race == BoxRace.DOCK) {
 			actor.SetTouchListener(listenerManager.getDockTouchListener());
-			//actor.setContactListener(listenerManager.getGroundContactListener());			
+			actor.setContactListener(listenerManager.getGroundContactListener());			
+		}
+		else if(actor.getBox().race == BoxRace.DEADLINE) {
+			actor.setContactListener(listenerManager.getDeadlineContactorListener());
 		}
 	}
 
+	//
+	public void updateScore(int offset) {
+		scoreStageLayer.setScore(score += offset);
+	}
 	
 }

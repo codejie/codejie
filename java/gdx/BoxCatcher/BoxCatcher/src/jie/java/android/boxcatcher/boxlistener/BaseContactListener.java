@@ -7,8 +7,8 @@ import jie.java.android.boxcatcher.WorldScreen;
 
 public abstract class BaseContactListener implements BoxContactListener {
 
-	private WorldScreen screen = null;
-	private BoxListenerManager manager = null;
+	protected WorldScreen screen = null;
+	protected BoxListenerManager manager = null;
 	
 	public BaseContactListener(WorldScreen screen, BoxListenerManager manager) {
 		this.screen = screen;

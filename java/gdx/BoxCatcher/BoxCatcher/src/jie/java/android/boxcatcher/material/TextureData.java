@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class TextureData {
 
-	private final static class RegionData {
+	private final class RegionData {
 		public RegionData(int texture, int x, int y, int width, int height) {
 			this.texture = texture;
 			this.x = x;
@@ -26,7 +26,7 @@ public class TextureData {
 		public int width, height;
 	}
 	
-	private final static class AnimationData {
+	private final class AnimationData {
 		public AnimationData(int texture, int width, int height, float duration) {
 			this.texture = texture;
 			this.width = width;
@@ -50,12 +50,12 @@ public class TextureData {
 		Gdx.app.log("tag", "TextureData - constructor.");
 	}
 
-	@Override
-	protected void finalize() throws Throwable {
-		Gdx.app.log("tag", "TextureData - finialize.");
-		dispose();
-		super.finalize();
-	}
+//	@Override
+//	protected void finalize() throws Throwable {
+//		Gdx.app.log("tag", "TextureData - finialize.");
+//		dispose();
+//		super.finalize();
+//	}
 
 	public void dispose() {
 		
@@ -76,12 +76,15 @@ public class TextureData {
 	}
 	
 	public int load() {
-		textureIndex.put(1, new String("data/1.png"));
-		textureIndex.put(2, new String("data/m0.jpg"));
+		textureIndex.put(1, new String("data/texture/map.png"));
+		//textureIndex.put(2, new String("data/m0.jpg"));
 		
-		regionIndex.put(1, new RegionData(2, 0, 0, 112, 112));
+		regionIndex.put(1, new RegionData(1, 0, 0, 16, 16));
+		regionIndex.put(2, new RegionData(1, 16, 16, 16, 16));
+		regionIndex.put(3, new RegionData(1, 0, 16, 16, 16));
+		regionIndex.put(4, new RegionData(1, 16, 0, 16, 16));
 		
-		animationIndex.put(1, new AnimationData(1, 256/6, 256/5, 1/25f));
+		//animationIndex.put(1, new AnimationData(1, 256/6, 256/5, 1/25f));
 		
 		return 0;
 	}

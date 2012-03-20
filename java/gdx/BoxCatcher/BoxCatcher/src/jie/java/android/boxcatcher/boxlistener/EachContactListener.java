@@ -15,12 +15,14 @@ public class EachContactListener extends BaseContactListener {
 	
 	@Override
 	public void onBeginContact(BoxActor actor, BoxActor other) {
-		Gdx.app.log("tag", actor.name + " begin contact(each) with " + other.name);
+		//Gdx.app.log("tag", actor.name + " begin contact(each) with " + other.name);
 		//actor.setContactListener(null);
 	}
 
 	@Override
 	public void onEndContact(BoxActor actor, BoxActor other) {
-		Gdx.app.log("tag", actor.name + " end contact(each) with " + other.name);	}
+		//Gdx.app.log("tag", actor.name + " end contact(each) with " + other.name);
+		screen.updateScore(5);
+	}
 
 }

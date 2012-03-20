@@ -23,9 +23,7 @@ public class WorldScreen extends BCScreen {
 	private ScoreStageLayer scoreStageLayer = null;
 	
 	private float stateTime = 0.0f;
-	
-	private int score = 0;
-	
+		
 	public WorldScreen(BCGame game, int stageid) {
 		super(game);
 		
@@ -109,7 +107,7 @@ public class WorldScreen extends BCScreen {
 		if(world != null)
 			return;
 		
-		world = new World(stage.world.gravity, true);
+		world = new World(stage.getSetting().gravity, true);
 		world.setContactListener(new WorldContactListener());
 	
 		listenerManager = new BoxListenerManager(this);
@@ -170,7 +168,7 @@ public class WorldScreen extends BCScreen {
 
 	//
 	public void updateScore(int offset) {
-		scoreStageLayer.setScore(score += offset);
+		scoreStageLayer.setScore(stage.getRuntime().score += offset);
 	}
 	
 }

@@ -20,14 +20,14 @@ public class ScoreStageLayer extends BaseStageLayer {
 	
 	private int init() {
 		//LabelStyle style = 
-		level = new Label("level", materialManager.getBitmapFont().getStyle(1));
+		level = new Label("Level", materialManager.getBitmapFont().getStyle(1));
 		level.x = 10;
 		level.y = Global.SCREEN_HEIGHT - 52;
 		
 		addActor(level);
 		
 		
-		score = new Label("score", materialManager.getBitmapFont().getStyle(2));
+		score = new Label("Score", materialManager.getBitmapFont().getStyle(2));
 		score.x = Global.SCREEN_WIDTH - score.getText().length() * 32 - 20;// .getMaxWidth();
 		score.y = Global.SCREEN_HEIGHT - 52;
 		addActor(score);
@@ -43,6 +43,5 @@ public class ScoreStageLayer extends BaseStageLayer {
 		score.setText(String.format("S:%d", value));
 		score.x = Global.SCREEN_WIDTH - score.getText().length() * 32 - 20;
 	}
-	
 
 }

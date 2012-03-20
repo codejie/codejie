@@ -15,30 +15,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class StageData {
-
-//	public final static class Screen {
-//		public int width	=	0;
-//		public int height	=	0;
-//		
-//		public Screen(int width, int height) {
-//			this.width = width;
-//			this.height = height;
-//		}
-//	}
 	
 	public enum BoxRace { 
 		UNKNOWN, BOX, DOCK, BORDER, DEADLINE 
 	}
-	
-	public final static class World {
-		//public float scale		=	1.0f;
-		public Vector2 gravity	=	null;
 		
-		public World(Vector2 gravity) {
-			this.gravity = gravity;
-		}
-	}
-	
 	public final static class Box {
 		public int id = -1;
 		public String name;
@@ -63,32 +44,47 @@ public class StageData {
 		public float stateTime = 0.0f;
 	}
 
-	//public Screen screen = null;
-	public World world = null;
+	public final class Setting {
+		public int id = -1;
+		public String title;
+		public int maxStateTime = -1;
+		
+		public Vector2 gravity = null;
+	}
+	
+	public final class Runtime {
+		public int score = 0;
+	}
+
+	private Setting setting = new Setting();
+	private Runtime runtime = new Runtime();
+	
 	private ArrayList<Box> frames = new ArrayList<Box>();
 	private HashMap<Integer, ArrayList<Box>> boxes = new HashMap<Integer, ArrayList<Box>>();
 	
-	private int stageID = -1;
 	private Integer currentKey = -1;
 	private Iterator<Box> boxIterator = null;
 	
 	public StageData(int id) {
-		stageID = id;
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
+		setting.id = id;
 	}
 	
 	public int load() {
-		//screen = new Screen(800, 480);
-		world = new World(Global.WORLD_GRAVITY);// new Vector2(0, -9.8f));
+		
+		setting.gravity = Global.WORLD_GRAVITY;
 		
 		BoxData.loadFrames(frames);
 		BoxData.loadBoxes(boxes);
 	
 		return 0;
+	}
+	
+	public Setting getSetting() {
+		return setting;
+	}
+	
+	public Runtime getRuntime() {
+		return runtime;
 	}
 	
 	public Box getFirstBox(float stateTime) {
@@ -122,7 +118,7 @@ public class StageData {
 		return frames;
 	}	
 	
-		public ArrayList<Box> getBoxes(float stateTime) {
+	public ArrayList<Box> getBoxes(float stateTime) {
 		Integer key = (int)stateTime;
 		if(key == currentKey)
 			return null;

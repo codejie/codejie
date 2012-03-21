@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 
 public class BCGame extends Game {
 
+	private DBAccess dbAccess = null;
 	private MaterialManager materialManager = null;
 	
 	private static Screen screen = null;
@@ -23,6 +24,9 @@ public class BCGame extends Game {
 	}
 	
 	public int init() {
+		dbAccess = new DBAccess();
+		dbAccess.init();
+		
 		materialManager = new MaterialManager();
 		materialManager.load();
 		
@@ -31,6 +35,10 @@ public class BCGame extends Game {
 	
 	@Override
 	public void dispose() {
+		if(dbAccess != null) {
+			dbAccess.dispose();
+		}
+		
 		if(materialManager != null) {
 			materialManager.dispose();
 		}

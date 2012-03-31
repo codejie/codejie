@@ -17,7 +17,7 @@ public class BCGame extends Game {
 		
 		//Global.TEXTURE.load();
 		
-		this.setScreen(new WorldScreen(this, 0));
+		this.setScreen(new WorldScreen(this, 1));
 		
 		Gdx.app.log("tag", "BCGame - constructor.");
 				
@@ -45,9 +45,14 @@ public class BCGame extends Game {
 		super.dispose();
 	}
 	
+	public DBAccess getDBAccess() {
+		return dbAccess;
+	}
+	
 	public MaterialManager getMaterialManager() {
 		return materialManager;
 	}
+	
 	
 	@Override
 	public void setScreen(Screen screen) {
@@ -66,5 +71,5 @@ public class BCGame extends Game {
 		}
 		return null;
 	}
-
+	
 }

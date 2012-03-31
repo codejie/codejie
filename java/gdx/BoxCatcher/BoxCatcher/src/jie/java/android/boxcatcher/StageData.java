@@ -69,12 +69,16 @@ public class StageData {
 		setting.id = id;
 	}
 	
-	public int load() {
+	public int load(DBAccess db) {
 		
-		setting.gravity = Global.WORLD_GRAVITY;
+		db.loadSetting(setting.id, setting);
+		db.loadFrames(setting.id, frames);
+		db.loadBoxes(setting.id, boxes);
 		
-		BoxData.loadFrames(frames);
-		BoxData.loadBoxes(boxes);
+		//setting.gravity = Global.WORLD_GRAVITY;
+		
+//		BoxData.loadFrames(frames);
+//		BoxData.loadBoxes(boxes);
 	
 		return 0;
 	}

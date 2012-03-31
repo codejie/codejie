@@ -19,6 +19,7 @@ public class WorldScreen extends BCScreen {
 	private WorldDebugRenderer debugRenderer = new WorldDebugRenderer();
 	private BoxListenerManager listenerManager = null;
 	private MaterialManager materialManager = null;
+	private DBAccess dbAccess = null;
 	
 	private ScoreStageLayer scoreStageLayer = null;
 	
@@ -27,7 +28,8 @@ public class WorldScreen extends BCScreen {
 	public WorldScreen(BCGame game, int stageid) {
 		super(game);
 		
-		this.materialManager = this.game.getMaterialManager();
+		dbAccess = this.game.getDBAccess();
+		materialManager = this.game.getMaterialManager();
 		
 		Gdx.app.log("tag", "WorldScreen - constructor.");
 		
@@ -38,7 +40,7 @@ public class WorldScreen extends BCScreen {
 		initWorld();
 		initFrames();
 //		
-		debugRenderer.setDebug(false);
+		debugRenderer.setDebug(true);
 	}
 	
 	@Override
@@ -94,7 +96,7 @@ public class WorldScreen extends BCScreen {
 	private int loadData(int stageid) {
 		stage = new StageData(stageid);
 		
-		return stage.load();
+		return stage.load(dbAccess);
 	}	
 	
 	private void initStageLayers() {

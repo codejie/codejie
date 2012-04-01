@@ -40,7 +40,7 @@ public class WorldScreen extends BCScreen {
 		initWorld();
 		initFrames();
 //		
-		debugRenderer.setDebug(true);
+		debugRenderer.setDebug(true);//false);//true);
 	}
 	
 	@Override
@@ -62,14 +62,30 @@ public class WorldScreen extends BCScreen {
 		
 		world.step(1/60f, 6, 2);
 		
-		stateTime += delta;
-		
-		loadBox(stateTime);
+//		stateTime += delta;
+//		
+//		loadBox(stateTime);
+		checkStateTime(delta);
 		
 		act(delta);
 		draw();		
 		
 		debugRenderer.render(world, camera);
+	}
+
+	private void checkStateTime(float delta) {
+		stateTime += delta;
+		
+		if(stateTime < stage.getSetting().maxStateTime) {
+			loadBox(stateTime);
+		}
+		else {
+			finishStage();
+		}		
+	}
+
+	private void finishStage() {
+		Gdx.app.log("tag", "GAME Over!");
 	}
 
 	@Override

@@ -27,6 +27,7 @@ public class TextureData {
 	}
 	
 	private final class AnimationData {
+		@SuppressWarnings("unused")
 		public AnimationData(int texture, int width, int height, float duration) {
 			this.texture = texture;
 			this.width = width;
@@ -50,12 +51,6 @@ public class TextureData {
 		Gdx.app.log("tag", "TextureData - constructor.");
 	}
 
-//	@Override
-//	protected void finalize() throws Throwable {
-//		Gdx.app.log("tag", "TextureData - finialize.");
-//		dispose();
-//		super.finalize();
-//	}
 
 	public void dispose() {
 		
@@ -77,12 +72,19 @@ public class TextureData {
 	
 	public int load() {
 		textureIndex.put(1, new String("data/texture/map.png"));
+		textureIndex.put(2, new String("data/texture/demo.png"));
 		//textureIndex.put(2, new String("data/m0.jpg"));
 		
 		regionIndex.put(1, new RegionData(1, 0, 0, 16, 16));
 		regionIndex.put(2, new RegionData(1, 16, 16, 16, 16));
 		regionIndex.put(3, new RegionData(1, 0, 16, 16, 16));
 		regionIndex.put(4, new RegionData(1, 16, 0, 16, 16));
+		
+		regionIndex.put(5, new RegionData(2, 0, 0, 256, 256));
+		regionIndex.put(6, new RegionData(2, 0, 256, 256, 256));
+		regionIndex.put(7, new RegionData(2, 0, 512, 128, 128));
+		regionIndex.put(8, new RegionData(2, 128, 512, 128, 128));
+		regionIndex.put(9, new RegionData(2, 0, 640, 48, 48));
 		
 		//animationIndex.put(1, new AnimationData(1, 256/6, 256/5, 1/25f));
 		

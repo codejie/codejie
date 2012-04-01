@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class BoxActor extends Actor {
 
 	public enum BoxShape {
-		RECTANGLE, CIRCLE, TRIANGLE, LINE
+		RECTANGLE, CIRCLE, TRIANGLE, LINE, RIGHT_TRIANGLE
 	}
 		
 	protected World world = null;
@@ -76,7 +76,8 @@ public class BoxActor extends Actor {
 
 			break;
 		}
-		case TRIANGLE: {
+		case TRIANGLE: 
+		case RIGHT_TRIANGLE: {
 			originX = 0;//-box.width / 2.0f;
 			originY = 0;//-box.height;// / 2.0f;// / 2.0f;
 
@@ -163,6 +164,15 @@ public class BoxActor extends Actor {
 					, box.width / Global.WORLD_SCALE, box.height / Global.WORLD_SCALE); 
 			return shape;
 		}
+		case RIGHT_TRIANGLE: {
+			PolygonShape shape = new PolygonShape();
+			
+			shape.set(new Vector2[] { new Vector2(0.0f, box.height / Global.WORLD_SCALE)
+									, new Vector2(0.0f, 0.0f)
+									, new Vector2(box.width / Global.WORLD_SCALE, 0.0f) } );
+			
+			return shape;			
+		}
 		default:
 			return null;
 		}
@@ -176,7 +186,8 @@ public class BoxActor extends Actor {
 		case CIRCLE: {
 			return new Vector2((box.x + box.width / 2) / Global.WORLD_SCALE, (box.y + box.width / 2) / Global.WORLD_SCALE);
 		}
-		case TRIANGLE: {
+		case TRIANGLE:
+		case RIGHT_TRIANGLE: {
 			return new Vector2((box.x) / Global.WORLD_SCALE, (box.y) / Global.WORLD_SCALE);
 		}
 		case LINE: {
@@ -229,7 +240,8 @@ public class BoxActor extends Actor {
 				y = body.getPosition().y * Global.WORLD_SCALE - box.width / 2;// * 2;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
 				break;
 			}
-			case TRIANGLE: {
+			case TRIANGLE: 
+			case RIGHT_TRIANGLE: {
 				x = body.getPosition().x * Global.WORLD_SCALE;// - box.width / 2;// * MathUtils.cos(rotation);
 				y = body.getPosition().y * Global.WORLD_SCALE;// - box.height / 2 ;// * MathUtils.sin(rotation);// / MathUtils.sin(rotation);
 				break;

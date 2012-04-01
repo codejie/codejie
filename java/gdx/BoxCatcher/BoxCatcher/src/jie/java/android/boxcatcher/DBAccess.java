@@ -31,9 +31,9 @@ public class DBAccess {
 	private final String TABLE_COLUMN_HEIGHT	=	"height";
 	private final String TABLE_COLUMN_ANGLE		=	"angle";
 	private final String TABLE_COLUMN_DENSITY	=	"density";
-	private final String TABLE_COLUMN_RESTITUTION	=	"resti";
-	private final String TABLE_COLUMN_FRICTION		=	"fric";
-	private final String TABLE_COLUMN_FILTERBITS	=	"filter";
+	private final String TABLE_COLUMN_RESTITUTION	=	"restitution";
+	private final String TABLE_COLUMN_FRICTION		=	"friction";
+	private final String TABLE_COLUMN_FILTERBITS	=	"filterbits";
 	private final String TABLE_COLUMN_TEXTUREINDEX	=	"textureidx";
 	private final String TABLE_COLUMN_ANIMATIONINDEX	=	"animationidx";
 	
@@ -295,6 +295,8 @@ public class DBAccess {
 			return BoxShape.TRIANGLE;
 		case 3:
 			return BoxShape.LINE;
+		case 4:
+			return BoxShape.RIGHT_TRIANGLE;
 		default:
 			return BoxShape.RECTANGLE;
 		}

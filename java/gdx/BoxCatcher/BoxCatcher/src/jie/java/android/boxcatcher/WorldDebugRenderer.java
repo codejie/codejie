@@ -15,11 +15,8 @@ public class WorldDebugRenderer {
 		renderer = new Box2DDebugRenderer();
 	}
 	
-	@Override
-	protected void finalize() throws Throwable {
+	public void dispose() {
 		renderer.dispose();
-		
-		super.finalize();
 	}
 
 	public void render(World world, Camera camera) {

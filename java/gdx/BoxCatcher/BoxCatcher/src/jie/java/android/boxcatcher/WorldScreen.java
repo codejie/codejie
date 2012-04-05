@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import jie.java.android.boxcatcher.StageData.BoxRace;
+import jie.java.android.boxcatcher.stagelayer.EndStageLayer;
 import jie.java.android.boxcatcher.stagelayer.ScoreStageLayer;
 
 import com.badlogic.gdx.Gdx;
@@ -24,6 +25,7 @@ public class WorldScreen extends BCScreen {
 	private ScoreStageLayer scoreStageLayer = null;
 	
 	private float stateTime = 0.0f;
+	private boolean isOver = false;
 		
 	public WorldScreen(BCGame game, int stageid) {
 		super(game);
@@ -39,6 +41,8 @@ public class WorldScreen extends BCScreen {
 		
 		initWorld();
 		initFrames();
+		
+		showLevel();
 //		
 		debugRenderer.setDebug(true);//false);//true);
 	}
@@ -48,8 +52,14 @@ public class WorldScreen extends BCScreen {
 		
 		Gdx.app.log("tag", "WorldScreen - dispose().");
 		
+		if(debugRenderer != null) {
+			debugRenderer.dispose();
+			debugRenderer = null;
+		}
+		
 		if(world != null) {
 			world.dispose();
+			world = null;
 		}
 		
 		super.dispose();
@@ -60,17 +70,19 @@ public class WorldScreen extends BCScreen {
 		//Gdx.app.log("tag", "WorldScreen - render()");
 		super.render(delta);
 		
-		world.step(1/60f, 6, 2);
-		
-//		stateTime += delta;
-//		
-//		loadBox(stateTime);
-		checkStateTime(delta);
+		if(world != null) {
+			world.step(1/60f, 6, 2);
+		}
 		
 		act(delta);
 		draw();		
 		
-		debugRenderer.render(world, camera);
+		if(debugRenderer != null) {
+			debugRenderer.render(world, camera);
+		}
+		
+		checkStateTime(delta);
+		
 	}
 
 	private void checkStateTime(float delta) {
@@ -79,13 +91,30 @@ public class WorldScreen extends BCScreen {
 		if(stateTime < stage.getSetting().maxStateTime) {
 			loadBox(stateTime);
 		}
-		else {
+		else if(isOver == false) {
 			finishStage();
+			isOver  = true;
 		}		
 	}
 
 	private void finishStage() {
-		Gdx.app.log("tag", "GAME Over!");
+		//Gdx.app.log("tag", "GAME Over!");
+/*			
+		if(debugRenderer != null) {
+			debugRenderer.dispose();
+			debugRenderer = null;
+		}
+		
+		if(world != null) {
+			world.dispose();
+			world = null;
+		}
+*/		
+		
+		addActor(new EndStageLayer(this, game.getMaterialManager()));
+		
+		//scoreStageLayer.showResult();
+		//game.nextScreen();
 	}
 
 	@Override
@@ -189,4 +218,7 @@ public class WorldScreen extends BCScreen {
 		scoreStageLayer.setScore(stage.getRuntime().score += offset);
 	}
 	
+	public void showLevel() {
+		scoreStageLayer.setLevel(stage.getSetting().id);
+	}
 }

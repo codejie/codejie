@@ -332,6 +332,26 @@ public class DBAccess {
 		}
 	}
 
+	public boolean isStageExist(int id) {
+		String sql = "SELECT COUNT(*) FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id;
+		
+		try {
+			ResultSet res = querySQL(sql);
+			if(res.next()) {
+				if(res.getInt(1) == 0)
+					return false;
+			}
+			else {
+				return false;
+			}
+		} catch (SQLException e) {
+			Gdx.app.log("tag", "dbaccess exception - " + e.toString());
+			return false;
+		}
+		
+		return true;
+	}
+
 
 
 	

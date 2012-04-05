@@ -1,18 +1,18 @@
 package jie.java.android.boxcatcher.stagelayer;
 
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
+import jie.java.android.boxcatcher.BCScreen;
 import jie.java.android.boxcatcher.Global;
 import jie.java.android.boxcatcher.MaterialManager;
-import jie.java.android.boxcatcher.WorldScreen;
 
 public class ScoreStageLayer extends BaseStageLayer {
 
 	private Label level = null;
 	private Label score = null;
 	
-	public ScoreStageLayer(WorldScreen screen, MaterialManager materialManager) {
+	public ScoreStageLayer(BCScreen screen, MaterialManager materialManager) {
 		super(screen, materialManager);
 		
 		init();
@@ -44,4 +44,12 @@ public class ScoreStageLayer extends BaseStageLayer {
 		score.x = Global.SCREEN_WIDTH - score.getText().length() * 32 - 20;
 	}
 
+	public void showResult() {
+		ImageButton btn = new ImageButton(materialManager.getTexture().getRegion(2), materialManager.getTexture().getRegion(1));
+		btn.x = 100;
+		btn.y = 100;
+		addActor(btn);
+	}
+	
+	
 }

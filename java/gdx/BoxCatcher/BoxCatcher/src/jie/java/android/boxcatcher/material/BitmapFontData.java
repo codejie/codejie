@@ -87,6 +87,7 @@ public class BitmapFontData {
 			return null;
 		
 		BitmapFont bf = new BitmapFont(Gdx.files.internal(file + ".fnt"), Gdx.files.internal(file + ".png"), false);
+		//bf.setScale(0.1f);
 		bitmapFont.put(index, bf);
 		
 		return bf;

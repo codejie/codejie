@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 public class DBAccess {
 
 	private final int DATABASE_VERSION	=	1;
-	private final String DATABASE_FILE	=	"data\\db.db";
+	private final String DATABASE_FILE	=	"data/db.db";
 	
 	private final String TABLE_NAME_BOXES		=	"Boxes";
 	private final String TABLE_NAME_STAGES		=	"Stages";

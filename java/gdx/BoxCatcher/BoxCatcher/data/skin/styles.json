@@ -1,0 +1,23 @@
+{
+	resources: {
+		com.badlogic.gdx.graphics.g2d.NinePatch: {
+			up: { x: 0, y: 0, width: 32, height: 32 },
+			down: { x: 32, y: 32, width: 32, height: 32 }
+		},
+		com.badlogic.gdx.graphics.Color: {
+			white: { r: 1, g: 1, b: 1, a: 1 },
+			downColor: { r: 1, g: 0, b: 0.2, a: 1}
+		},
+		com.badlogic.gdx.graphics.g2d.BitmapFont: {
+			default-font: { file: data/font/t.fnt }
+		}
+	},
+	styles: {
+		com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+			default: {
+				font: default-font, downFontColor: downColor,
+				fontColor: white, up:up, down: down
+			}
+		}
+	}
+}

@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.OnActionCompleted;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveTo;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import jie.java.android.boxcatcher.BCScreen;
 import jie.java.android.boxcatcher.Global;
@@ -68,6 +69,13 @@ public class EndStageLayer extends BaseStageLayer {
 		label.y = Global.SCREEN_HEIGHT / 2;
 		
 		addActor(label);
+		
+		TextButton next = new TextButton("Next Stage", materialManager.getSkin().getTextButtonStyle("default"));
+		next.x = 100;
+		next.y = 100;
+		next.width = 100;
+		next.height = 64;
+		addActor(next);
 		
 	}
 	

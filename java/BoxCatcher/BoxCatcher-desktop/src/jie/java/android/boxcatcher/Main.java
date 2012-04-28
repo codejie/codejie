@@ -7,9 +7,9 @@ public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "BoxCatcher";
-		cfg.useGL20 = false;
-		cfg.width = 480;
-		cfg.height = 320;
+		cfg.useGL20 = true;
+		cfg.width = Global.SCREEN_WIDTH;
+		cfg.height = Global.SCREEN_HEIGHT;
 		
 		new LwjglApplication(new BCGame(), cfg);
 	}

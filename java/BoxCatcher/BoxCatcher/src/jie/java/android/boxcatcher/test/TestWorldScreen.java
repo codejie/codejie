@@ -157,7 +157,7 @@ public class TestWorldScreen extends BCScreen {
 
 			@Override
 			public boolean onDestory() {
-				Gdx.app.log("tag", "circle will be destroyed");
+				Gdx.app.log(Global.APP_TAG, "circle will be destroyed");
 				return true;
 			}
 			
@@ -270,13 +270,13 @@ public class TestWorldScreen extends BCScreen {
 
 			@Override
 			public void onBeginContact(BoxActor actor, BoxActor other) {
-				Gdx.app.log("tag", "dead line begin contact with " + other.name);
+				Gdx.app.log(Global.APP_TAG, "dead line begin contact with " + other.name);
 				other.markToRemove(true);
 			}
 
 			@Override
 			public void onEndContact(BoxActor actor, BoxActor other) {
-				Gdx.app.log("tag", "dead line end contact with " + other.name);
+				Gdx.app.log(Global.APP_TAG, "dead line end contact with " + other.name);
 				other.markToRemove(true);
 				
 			}

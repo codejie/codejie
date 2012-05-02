@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import jie.java.android.boxcatcher.Global;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -48,13 +50,13 @@ public class TextureData {
 	private HashMap<Integer, Animation> animation = new HashMap<Integer, Animation>();
 	
 	public TextureData() {
-		Gdx.app.log("tag", "TextureData - constructor.");
+		Gdx.app.log(Global.APP_TAG, "TextureData - constructor.");
 	}
 
 
 	public void dispose() {
 		
-		Gdx.app.log("tag", "TextureData - dispose().");
+		Gdx.app.log(Global.APP_TAG, "TextureData - dispose().");
 		
 		region.clear();
 		animation.clear();

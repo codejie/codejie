@@ -51,7 +51,7 @@ public class ImageScreen extends BCScreen {
 		image.setRegion(animation.getKeyFrame(i, true));
 		//this.getSpriteBatch().draw(animation.getKeyFrame(i, true), 0, 0);
 		
-		Gdx.app.log("tag", "delta = " + i);
+		Gdx.app.log(Global.APP_TAG, "delta = " + i);
 		
 		super.draw();
 	}

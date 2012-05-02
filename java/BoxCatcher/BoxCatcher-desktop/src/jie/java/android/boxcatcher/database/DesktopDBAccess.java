@@ -1,75 +1,43 @@
-package jie.java.android.boxcatcher;
+package jie.java.android.boxcatcher.database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import jie.java.android.boxcatcher.BoxActor.BoxShape;
-import jie.java.android.boxcatcher.StageData.BoxRace;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class DBAccess {
+import jie.java.android.boxcatcher.Global;
+import jie.java.android.boxcatcher.StageData;
+import jie.java.android.boxcatcher.StageData.Box;
+import jie.java.android.boxcatcher.StageData.Setting;
 
-	private final int DATABASE_VERSION	=	1;
-	private final String DATABASE_FILE	=	"db.db";
-	
-	private final String TABLE_NAME_BOXES		=	"Boxes";
-	private final String TABLE_NAME_STAGES		=	"Stages";
-	private final String TABLE_NAME_STAGEBOX	=	"StageBox";
-	
-	private final String TABLE_COLUMN_INDEX		=	"idx";
-	private final String TABLE_COLUMN_NAME		=	"name";
-	private final String TABLE_COLUMN_RACE		=	"race";
-	private final String TABLE_COLUMN_TYPE		=	"type";
-	private final String TABLE_COLUMN_SHAPE		=	"shape";
-	private final String TABLE_COLUMN_X			=	"x";
-	private final String TABLE_COLUMN_Y			=	"y";
-	private final String TABLE_COLUMN_WIDTH		=	"width";
-	private final String TABLE_COLUMN_HEIGHT	=	"height";
-	private final String TABLE_COLUMN_ANGLE		=	"angle";
-	private final String TABLE_COLUMN_DENSITY	=	"density";
-	private final String TABLE_COLUMN_RESTITUTION	=	"restitution";
-	private final String TABLE_COLUMN_FRICTION		=	"friction";
-	private final String TABLE_COLUMN_FILTERBITS	=	"filterbits";
-	private final String TABLE_COLUMN_TEXTUREINDEX	=	"textureidx";
-	private final String TABLE_COLUMN_ANIMATIONINDEX	=	"animationidx";
-	
-	private final String TABLE_COLUMN_TITLE		=	"title";
-	private final String TABLE_COLUMN_MAXTIME	=	"maxtime";
-	private final String TABLE_COLUMN_GRAVITY_X	=	"gx";
-	private final String TABLE_COLUMN_GRAVITY_Y	=	"gy";
-	
-	private final String TABLE_COLUMN_STAGEINDEX 	=	"stageidx";
-	private final String TABLE_COLUMN_BOXINDEX 		=	"boxidx";
-	private final String TABLE_COLUMN_PRESENTTIME	=	"pt";
-	
+public class DesktopDBAccess extends DBAccess {
+
 	private Connection conn = null;
 	
-	public DBAccess() {
-	}
-	
+	@Override
 	public int init() {
 		try {
-			Class.forName("org.sqlite.JDBC");			
-			
-			createDatabase(DATABASE_FILE);
-			
-			createTables();
-		}
-		catch (SQLException e) {
-			Gdx.app.log(Global.APP_TAG, "dbaccess sql exception - " + e.toString());
-			return -1;
-		}
-		catch (Exception e) {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
 			Gdx.app.log(Global.APP_TAG, "dbaccess exception - " + e.toString());
 			return -1;
-		}
+		}			
+		
+		if(createDatabase(DATABASE_FILE) != 0)
+			return -1;
+		
+		if(createTables() != 0)
+			return -1;
 		return 0;
 	}
 
+	@Override
 	public void dispose() {
 		if(conn != null) {
 			try {
@@ -79,64 +47,37 @@ public class DBAccess {
 			}
 		}
 	}
-	
-	private void createDatabase(String file) throws SQLException {
-		conn = DriverManager.getConnection("jdbc:sqlite:" + file);
-	}	
-	
-	private void createTables() throws SQLException {
-		
-		String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_BOXES + " ("
-				+ TABLE_COLUMN_INDEX + " INTEGER PRIMARY KEY,"
-				+ TABLE_COLUMN_NAME + " TEXT," 
-				+ TABLE_COLUMN_RACE + " INTEGER,"
-				+ TABLE_COLUMN_TYPE + " INTEGER,"
-				+ TABLE_COLUMN_SHAPE + " INTEGER,"
-//				+ TABLE_COLUMN_X + " INTEGER,"
-//				+ TABLE_COLUMN_Y + " INTEGER,"
-				+ TABLE_COLUMN_WIDTH + " INTEGER,"
-				+ TABLE_COLUMN_HEIGHT + " INTEGER,"
-				+ TABLE_COLUMN_ANGLE + " REAL,"
-				+ TABLE_COLUMN_DENSITY + " REAL,"
-				+ TABLE_COLUMN_RESTITUTION + " REAL,"
-				+ TABLE_COLUMN_FRICTION + " REAL,"
-				+ TABLE_COLUMN_FILTERBITS + " INTEGER,"
-				+ TABLE_COLUMN_TEXTUREINDEX + " INTEGER,"
-				+ TABLE_COLUMN_ANIMATIONINDEX + " INTEGER"
-				+ ");";
-		execSQL(sql);
-		
-		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_STAGES + " ("
-				+ TABLE_COLUMN_INDEX + " INTEGER PRIMARY KEY,"
-				+ TABLE_COLUMN_TITLE + " TEXT,"
-				+ TABLE_COLUMN_MAXTIME + " INTEGER,"
-				+ TABLE_COLUMN_GRAVITY_X + " REAL,"
-				+ TABLE_COLUMN_GRAVITY_Y + " REAL"
-				+ ");";
-		execSQL(sql);
-		
-		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_STAGEBOX + " ("
-				+ TABLE_COLUMN_STAGEINDEX + " INTEGER,"
-				+ TABLE_COLUMN_BOXINDEX + " INTEGER,"
-				+ TABLE_COLUMN_X + " INTEGER,"
-				+ TABLE_COLUMN_Y + " INTEGER,"
-				+ TABLE_COLUMN_PRESENTTIME + " INTEGER"
-				+ ");";
-		execSQL(sql);
-		
+
+	@Override
+	protected int createDatabase(String file) {
+		try {
+			conn = DriverManager.getConnection("jdbc:sqlite:" + file);
+		} catch (SQLException e) {
+			Gdx.app.log(Global.APP_TAG, "dbaccess sql exception - " + e.toString());
+			return -1;
+		}
+		return 0;
 	}
 
-	private void execSQL(String sql) throws SQLException {
-        Statement stat = conn.createStatement();
-        stat.executeUpdate(sql);
+	@Override
+	protected int execSQL(String sql) {
+		try {
+			Statement stat = conn.createStatement();
+			stat.executeUpdate(sql);
+		} catch (SQLException e) {
+			Gdx.app.log(Global.APP_TAG, "dbaccess sql exception - " + e.toString());
+			return -1;
+		}
+		return 0;
 	}
-
+	
 	private ResultSet querySQL(String sql) throws SQLException {
 		Statement stat = conn.createStatement();
 		return stat.executeQuery(sql);
 	}
-	
-	public int loadSetting(int id, StageData.Setting setting) {
+
+	@Override
+	public int loadSetting(int id, Setting setting) {
 		String sql = "SELECT " + TABLE_COLUMN_TITLE + "," + TABLE_COLUMN_MAXTIME + "," + TABLE_COLUMN_GRAVITY_X + "," + TABLE_COLUMN_GRAVITY_Y + " FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id;
 		try {
 			ResultSet res = querySQL(sql);
@@ -158,7 +99,8 @@ public class DBAccess {
 		return 0;
 	}
 
-	public int loadFrames(int id, ArrayList<StageData.Box> frames) {
+	@Override
+	public int loadFrames(int id, ArrayList<Box> frames) {
 		//SELECT StageBox.x, StageBox.y, Boxes.name FROM StageBox, Boxes WHERE StageBox.boxidx = Boxes.idx AND StageBox.stageidx=1
 		String sql = "SELECT "// + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
 				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + ","
@@ -181,7 +123,7 @@ public class DBAccess {
 				 + " FROM " + TABLE_NAME_BOXES + "," + TABLE_NAME_STAGEBOX
 				 + " WHERE " + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + "=" + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_BOXINDEX
 				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_STAGEINDEX + "=" + id
-				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME + "= -1";
+				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME + "= -1";	
 		
 		try {
 			ResultSet res = querySQL(sql);
@@ -216,9 +158,9 @@ public class DBAccess {
 		
 		return 0;
 	}
-	
 
-	public int loadBoxes(int id, HashMap<Integer, ArrayList<StageData.Box>> boxes) {
+	@Override
+	public int loadBoxes(int id, HashMap<Integer, ArrayList<Box>> boxes) {
 		String sql = "SELECT "// + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
 				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + ","
 				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
@@ -282,59 +224,11 @@ public class DBAccess {
 		}
 		
 		return 0;
-		
-	}	
-
-	private BoxShape convertBoxShape(int shape) {
-		switch(shape) {
-		case 0:
-			return BoxShape.RECTANGLE;
-		case 1:
-			return BoxShape.CIRCLE;
-		case 2:
-			return BoxShape.TRIANGLE;
-		case 3:
-			return BoxShape.LINE;
-		case 4:
-			return BoxShape.RIGHT_TRIANGLE;
-		default:
-			return BoxShape.RECTANGLE;
-		}
 	}
 
-	private BodyType covertBoxType(int type) {
-		switch(type) {
-		case 0:
-			return BodyType.StaticBody;
-		case 1:
-			return BodyType.KinematicBody;
-		case 2:
-			return BodyType.DynamicBody;
-		default:
-			return BodyType.StaticBody;
-		}
-	}
-
-	private BoxRace covertBoxRace(int race) {
-		switch(race) {
-		case 0:
-			return StageData.BoxRace.UNKNOWN;
-		case 1:
-			return StageData.BoxRace.BOX;
-		case 2:
-			return StageData.BoxRace.DOCK;
-		case 3:
-			return StageData.BoxRace.BORDER;
-		case 4:
-			return StageData.BoxRace.DEADLINE;
-		default:
-			return StageData.BoxRace.UNKNOWN;			
-		}
-	}
-
+	@Override
 	public boolean isStageExist(int id) {
 		String sql = "SELECT COUNT(*) FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id;
-		
 		try {
 			ResultSet res = querySQL(sql);
 			if(res.next()) {
@@ -352,7 +246,4 @@ public class DBAccess {
 		return true;
 	}
 
-
-
-	
 }

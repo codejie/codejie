@@ -53,7 +53,7 @@ public class RectangleBox extends BoxActor {
 	@Override
 	public boolean touchDown(float x, float y, int pointer) {
 		// TODO Auto-generated method stub
-		Gdx.app.log("tag", "touchDown" + " x = " + x + " orgX = " + this.originX);
+		Gdx.app.log(Global.APP_TAG, "touchDown" + " x = " + x + " orgX = " + this.originX);
 
 		//applyForceToCenter(new Vector2(1, 0));
 		
@@ -61,7 +61,7 @@ public class RectangleBox extends BoxActor {
 		
 		//this.body.ap
 		
-		Gdx.app.log("tag", "actor size = " + this.getStage().getActors().size());
+		Gdx.app.log(Global.APP_TAG, "actor size = " + this.getStage().getActors().size());
 		this.destroy();
 		
 		return super.touchDown(x, y, pointer);
@@ -70,7 +70,7 @@ public class RectangleBox extends BoxActor {
 	@Override
 	public void touchUp(float x, float y, int pointer) {
 		// TODO Auto-generated method stub
-		Gdx.app.log("tag", "touchUp");
+		Gdx.app.log(Global.APP_TAG, "touchUp");
 
 		super.touchUp(x, y, pointer);
 	}
@@ -80,7 +80,7 @@ public class RectangleBox extends BoxActor {
 		// TODO Auto-generated method stub
 		//if(ox != -1.0f && oy != -1.0f)
 			//applyForceToCenter(new Vector2(x - ox, y - oy));
-		Gdx.app.log("tag", "touchDragged");
+		Gdx.app.log(Global.APP_TAG, "touchDragged");
 		super.touchDragged(x, y, pointer);
 	}
 
@@ -92,13 +92,13 @@ public class RectangleBox extends BoxActor {
 		Vector2 tmp = new Vector2(x , y);
 		tmp = body.getWorldVector(tmp);
 		if(hit(x, y) == this) {
-			Gdx.app.log("tag", "x = " + x + "  tmp.x= " + tmp.x + " p.x = " + body.getPosition().x + " (x - c.x) = " + (tmp.x / Global.WORLD_SCALE - body.getPosition().x));
+			Gdx.app.log(Global.APP_TAG, "x = " + x + "  tmp.x= " + tmp.x + " p.x = " + body.getPosition().x + " (x - c.x) = " + (tmp.x / Global.WORLD_SCALE - body.getPosition().x));
 			applyForceToCenter((x / Global.WORLD_SCALE - width / (2 * Global.WORLD_SCALE)) * 1, 0);
 			
 			
 			
 		//if(pressed == true) {
-			//Gdx.app.log("tag", "x = " + x + " tmp.x = " + tmp.x + " this.x = " + this.x);
+			//Gdx.app.log(Global.APP_TAG, "x = " + x + " tmp.x = " + tmp.x + " this.x = " + this.x);
 			//applyForceToCenter(tmp.x - this.x / Global.WORLD_SCALE, 0);
 		}
 		

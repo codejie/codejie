@@ -130,7 +130,7 @@ public class BoxActor extends Actor {
 		body.createFixture(fd);
 
 		shape.dispose();
-		Gdx.app.log("tag", this.name + " body mass = " + body.getMass());
+		Gdx.app.log(Global.APP_TAG, this.name + " body mass = " + body.getMass());
 		
 		body.setUserData(this);
 	}
@@ -259,7 +259,7 @@ public class BoxActor extends Actor {
 
 		//}
 		
-		//Gdx.app.log("tag", "body x = " + body.getPosition().x + " y = " + body.getPosition().y);
+		//Gdx.app.log(Global.APP_TAG, "body x = " + body.getPosition().x + " y = " + body.getPosition().y);
 	}	
 	
 	@Override

@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
+import jie.java.android.boxcatcher.database.DBAccess;
+
 public class BCGame extends Game {
 
 	private DBAccess dbAccess = null;
@@ -12,6 +14,11 @@ public class BCGame extends Game {
 	private static Screen screen = null;
 	
 	private int stageID = 1;
+	
+	public BCGame(DBAccess dbaccess) {
+		dbAccess = dbaccess;
+	}
+	
 	@Override
 	public void create() {
 		
@@ -20,12 +27,12 @@ public class BCGame extends Game {
 		this.setScreen(new WorldScreen(this, stageID));
 		//setScreen(new ShowStageScreen(this));
 		
-		Gdx.app.log("tag", "BCGame - constructor.");
+		Gdx.app.log(Global.APP_TAG, "BCGame - constructor.");
 				
 	}
 	
 	public int init() {
-		dbAccess = new DBAccess();
+//		dbAccess = new DBAccess();
 		dbAccess.init();
 		
 		materialManager = new MaterialManager();

@@ -3,13 +3,13 @@ package jie.java.android.boxcatcher;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import jie.java.android.boxcatcher.StageData.BoxRace;
-import jie.java.android.boxcatcher.stagelayer.EndStageLayer;
-import jie.java.android.boxcatcher.stagelayer.ScoreStageLayer;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 
+import jie.java.android.boxcatcher.StageData.BoxRace;
+import jie.java.android.boxcatcher.stagelayer.EndStageLayer;
+import jie.java.android.boxcatcher.stagelayer.ScoreStageLayer;
+import jie.java.android.boxcatcher.database.DBAccess;
 
 
 public class WorldScreen extends BCScreen {
@@ -33,7 +33,7 @@ public class WorldScreen extends BCScreen {
 		dbAccess = this.game.getDBAccess();
 		materialManager = this.game.getMaterialManager();
 		
-		Gdx.app.log("tag", "WorldScreen - constructor.");
+		Gdx.app.log(Global.APP_TAG, "WorldScreen - constructor.");
 		
 		loadData(stageid);
 //		
@@ -50,7 +50,7 @@ public class WorldScreen extends BCScreen {
 	@Override
 	public void dispose() {
 		
-		Gdx.app.log("tag", "WorldScreen - dispose().");
+		Gdx.app.log(Global.APP_TAG, "WorldScreen - dispose().");
 		
 		if(debugRenderer != null) {
 			debugRenderer.dispose();
@@ -67,7 +67,7 @@ public class WorldScreen extends BCScreen {
 
 	@Override
 	public void render(float delta) {
-		//Gdx.app.log("tag", "WorldScreen - render()");
+		//Gdx.app.log(Global.APP_TAG, "WorldScreen - render()");
 		super.render(delta);
 		
 		if(world != null) {
@@ -98,7 +98,7 @@ public class WorldScreen extends BCScreen {
 	}
 
 	private void finishStage() {
-		//Gdx.app.log("tag", "GAME Over!");
+		//Gdx.app.log(Global.APP_TAG, "GAME Over!");
 /*			
 		if(debugRenderer != null) {
 			debugRenderer.dispose();
@@ -119,21 +119,21 @@ public class WorldScreen extends BCScreen {
 
 	@Override
 	public void show() {
-		Gdx.app.log("tag", "WorldScreen - show()");
+		Gdx.app.log(Global.APP_TAG, "WorldScreen - show()");
 
 		super.show();
 	}
 
 	@Override
 	public void pause() {
-		Gdx.app.log("tag", "WorldScreen - pause()");
+		Gdx.app.log(Global.APP_TAG, "WorldScreen - pause()");
 			
 		super.pause();
 	}
 
 	@Override
 	public void resume() {
-		Gdx.app.log("tag", "WorldScreen - resume()");
+		Gdx.app.log(Global.APP_TAG, "WorldScreen - resume()");
 		super.resume();
 	}
 	

@@ -78,7 +78,8 @@ public class DesktopDBAccess extends DBAccess {
 
 	@Override
 	public int loadSetting(int id, Setting setting) {
-		String sql = "SELECT " + TABLE_COLUMN_TITLE + "," + TABLE_COLUMN_MAXTIME + "," + TABLE_COLUMN_GRAVITY_X + "," + TABLE_COLUMN_GRAVITY_Y + " FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id;
+		//String sql = "SELECT " + TABLE_COLUMN_TITLE + "," + TABLE_COLUMN_MAXTIME + "," + TABLE_COLUMN_GRAVITY_X + "," + TABLE_COLUMN_GRAVITY_Y + " FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id;
+		String sql = getLoadSettingSql(id);
 		try {
 			ResultSet res = querySQL(sql);
 			if(res.next()) {
@@ -102,28 +103,30 @@ public class DesktopDBAccess extends DBAccess {
 	@Override
 	public int loadFrames(int id, ArrayList<Box> frames) {
 		//SELECT StageBox.x, StageBox.y, Boxes.name FROM StageBox, Boxes WHERE StageBox.boxidx = Boxes.idx AND StageBox.stageidx=1
-		String sql = "SELECT "// + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RACE + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TYPE + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_SHAPE + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_WIDTH + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_HEIGHT + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANGLE + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_DENSITY + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RESTITUTION + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FRICTION + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FILTERBITS + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TEXTUREINDEX + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANIMATIONINDEX + ","
-				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_X + ","
-				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_Y// + ","
-//				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME
-				 + " FROM " + TABLE_NAME_BOXES + "," + TABLE_NAME_STAGEBOX
-				 + " WHERE " + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + "=" + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_BOXINDEX
-				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_STAGEINDEX + "=" + id
-				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME + "= -1";	
+//		String sql = "SELECT "// + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RACE + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TYPE + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_SHAPE + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_WIDTH + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_HEIGHT + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANGLE + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_DENSITY + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RESTITUTION + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FRICTION + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FILTERBITS + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TEXTUREINDEX + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANIMATIONINDEX + ","
+//				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_X + ","
+//				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_Y// + ","
+////				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME
+//				 + " FROM " + TABLE_NAME_BOXES + "," + TABLE_NAME_STAGEBOX
+//				 + " WHERE " + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + "=" + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_BOXINDEX
+//				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_STAGEINDEX + "=" + id
+//				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME + "= -1";	
+		
+		String sql = getLoadFramesSql(id);
 		
 		try {
 			ResultSet res = querySQL(sql);
@@ -161,28 +164,29 @@ public class DesktopDBAccess extends DBAccess {
 
 	@Override
 	public int loadBoxes(int id, HashMap<Integer, ArrayList<Box>> boxes) {
-		String sql = "SELECT "// + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RACE + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TYPE + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_SHAPE + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_WIDTH + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_HEIGHT + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANGLE + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_DENSITY + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RESTITUTION + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FRICTION + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FILTERBITS + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TEXTUREINDEX + ","
-				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANIMATIONINDEX + ","
-				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_X + ","
-				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_Y + ","
-				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME
-				 + " FROM " + TABLE_NAME_BOXES + "," + TABLE_NAME_STAGEBOX
-				 + " WHERE " + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + "=" + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_BOXINDEX
-				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_STAGEINDEX + "=" + id
-				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME + "!= -1";
+//		String sql = "SELECT "// + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RACE + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TYPE + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_SHAPE + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_WIDTH + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_HEIGHT + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANGLE + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_DENSITY + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RESTITUTION + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FRICTION + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FILTERBITS + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TEXTUREINDEX + ","
+//				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANIMATIONINDEX + ","
+//				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_X + ","
+//				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_Y + ","
+//				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME
+//				 + " FROM " + TABLE_NAME_BOXES + "," + TABLE_NAME_STAGEBOX
+//				 + " WHERE " + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + "=" + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_BOXINDEX
+//				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_STAGEINDEX + "=" + id
+//				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME + "!= -1";
+		String sql = getLoadBoxesSql(id);
 		
 		try {
 			ResultSet res = querySQL(sql);
@@ -228,7 +232,8 @@ public class DesktopDBAccess extends DBAccess {
 
 	@Override
 	public boolean isStageExist(int id) {
-		String sql = "SELECT COUNT(*) FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id;
+		//String sql = "SELECT COUNT(*) FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id;
+		String sql = getLoadBoxesSql(id);
 		try {
 			ResultSet res = querySQL(sql);
 			if(res.next()) {

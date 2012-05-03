@@ -92,6 +92,65 @@ public abstract class DBAccess {
 		return 0;
 	}
 	
+	protected String getLoadSettingSql(int id) {
+		return new String("SELECT " + TABLE_COLUMN_TITLE + "," + TABLE_COLUMN_MAXTIME + "," + TABLE_COLUMN_GRAVITY_X + "," + TABLE_COLUMN_GRAVITY_Y + " FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id);
+	}
+	
+	protected String getLoadFramesSql(int id) {
+		//SELECT StageBox.x, StageBox.y, Boxes.name FROM StageBox, Boxes WHERE StageBox.boxidx = Boxes.idx AND StageBox.stageidx=1		
+		return "SELECT "// + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RACE + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TYPE + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_SHAPE + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_WIDTH + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_HEIGHT + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANGLE + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_DENSITY + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RESTITUTION + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FRICTION + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FILTERBITS + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TEXTUREINDEX + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANIMATIONINDEX + ","
+				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_X + ","
+				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_Y// + ","
+//				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME
+				 + " FROM " + TABLE_NAME_BOXES + "," + TABLE_NAME_STAGEBOX
+				 + " WHERE " + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + "=" + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_BOXINDEX
+				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_STAGEINDEX + "=" + id
+				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME + "= -1";
+	}
+	
+	protected String getLoadBoxesSql(int id) {
+		return "SELECT "// + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_NAME + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RACE + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TYPE + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_SHAPE + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_WIDTH + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_HEIGHT + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANGLE + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_DENSITY + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_RESTITUTION + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FRICTION + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_FILTERBITS + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_TEXTUREINDEX + ","
+				 + TABLE_NAME_BOXES + "." + TABLE_COLUMN_ANIMATIONINDEX + ","
+				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_X + ","
+				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_Y + ","
+				 + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME
+				 + " FROM " + TABLE_NAME_BOXES + "," + TABLE_NAME_STAGEBOX
+				 + " WHERE " + TABLE_NAME_BOXES + "." + TABLE_COLUMN_INDEX + "=" + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_BOXINDEX
+				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_STAGEINDEX + "=" + id
+				 + " AND " + TABLE_NAME_STAGEBOX + "." + TABLE_COLUMN_PRESENTTIME + "!= -1";
+	}
+	
+	protected String getIsStageExistSql(int id) {
+		return "SELECT COUNT(*) FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id;
+	}
+	
 	protected BoxShape convertBoxShape(int shape) {
 		switch(shape) {
 		case 0:

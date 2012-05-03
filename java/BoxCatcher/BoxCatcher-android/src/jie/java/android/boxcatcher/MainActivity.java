@@ -1,5 +1,6 @@
 package jie.java.android.boxcatcher;
 
+import jie.java.android.boxcatcher.database.AndroidDBAccess;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -14,7 +15,8 @@ public class MainActivity extends AndroidApplication {
         cfg.useGL20 = true;
         cfg.useAccelerometer = false;
         cfg.useCompass = false;
+        cfg.useWakelock = false;
         
-        initialize(new BCGame(), cfg);
+        initialize(new BCGame(new AndroidDBAccess()), cfg);
     }
 }

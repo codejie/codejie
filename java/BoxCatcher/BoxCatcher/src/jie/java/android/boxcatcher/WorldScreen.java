@@ -24,6 +24,7 @@ public class WorldScreen extends BCScreen {
 	
 	private ScoreStageLayer scoreStageLayer = null;
 	
+	private float fps = 0.33f;
 	private float stateTime = 0.0f;
 	private boolean isOver = false;
 		
@@ -34,6 +35,8 @@ public class WorldScreen extends BCScreen {
 		materialManager = this.game.getMaterialManager();
 		
 		Gdx.app.log(Global.APP_TAG, "WorldScreen - constructor.");
+		
+		fps = Global.sysSetting.fps;
 		
 		loadData(stageid);
 //		
@@ -71,7 +74,7 @@ public class WorldScreen extends BCScreen {
 		super.render(delta);
 		
 		if(world != null) {
-			world.step(1/60f, 6, 2);
+			world.step(fps, 6, 2);
 		}
 		
 		act(delta);

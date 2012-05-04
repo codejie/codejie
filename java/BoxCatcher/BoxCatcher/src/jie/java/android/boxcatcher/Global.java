@@ -5,7 +5,12 @@ import com.badlogic.gdx.math.Vector2;
 
 public final class Global {
 	
-	public enum Platform { DESKTOP, ANDROID, HTML5 };
+	public enum PlatformType { DESKTOP, ANDROID, HTML5 };
+	
+	public static class SystemSetting {
+		public PlatformType type;
+		public float fps;
+	}
 	
 	public static final int SCREEN_WIDTH		=	800;//480;//Gdx.graphics.getWidth();
 	public static final int SCREEN_HEIGHT		=	480;//800;//Gdx.graphics.getHeight();
@@ -17,4 +22,6 @@ public final class Global {
 	public static final String APP_VERSION		=	"dev";
 	public static final String APP_TAG			=	"bx";
 
+	public static SystemSetting sysSetting = new SystemSetting();
+	
 }

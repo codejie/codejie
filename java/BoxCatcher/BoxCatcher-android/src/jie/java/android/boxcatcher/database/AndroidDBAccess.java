@@ -21,18 +21,6 @@ public class AndroidDBAccess extends DBAccess {
 	private static SQLiteDatabase db = null;
 	
 	@Override
-	public int init() {
-		
-		if(createDatabase(DATABASE_FILE) != 0)
-			return -1;
-		
-		if(createTables() != 0)
-			return -1;
-		
-		return 0;
-	}
-
-	@Override
 	public void dispose() {
 		if(db != null) {
 			db.close();

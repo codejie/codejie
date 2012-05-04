@@ -4,8 +4,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
+import jie.java.android.boxcatcher.Global;
 import jie.java.android.boxcatcher.StageData;
 import jie.java.android.boxcatcher.BoxActor.BoxShape;
 import jie.java.android.boxcatcher.StageData.BoxRace;
@@ -14,9 +16,14 @@ public abstract class DBAccess {
 	protected final int DATABASE_VERSION	=	1;
 	protected final String DATABASE_FILE	=	"db.db";
 	
+	protected final String TABLE_NAME_SYSTEM	=	"System";
 	protected final String TABLE_NAME_BOXES		=	"Boxes";
-	protected final String TABLE_NAME_STAGES		=	"Stages";
+	protected final String TABLE_NAME_STAGES	=	"Stages";
 	protected final String TABLE_NAME_STAGEBOX	=	"StageBox";
+	
+	protected final String TABLE_COLUMN_ATTRIB		=	"attr";
+	protected final String TABLE_COLUMN_VALUE_INT	=	"val_int";
+	protected final String TABLE_COLUMN_VALUE_STR	=	"val_str";
 	
 	protected final String TABLE_COLUMN_INDEX		=	"idx";
 	protected final String TABLE_COLUMN_NAME		=	"name";
@@ -47,9 +54,31 @@ public abstract class DBAccess {
 	public DBAccess() {
 	}
 	
+	public int init() {
+		if(createDatabase(DATABASE_FILE) != 0)
+			return -1;
+		
+		if(createTables() != 0)
+			return -1;
+		
+		if(initSystemSetting() != 0)
+			return -1;
+		
+		return 0;
+	}	
+	
+	
 	protected int createTables() {
 		
-		String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_BOXES + " ("
+		String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_SYSTEM + " ("
+				+ TABLE_COLUMN_ATTRIB + " INTEGER,"
+				+ TABLE_COLUMN_VALUE_INT + " INTEGER,"
+				+ TABLE_COLUMN_VALUE_STR + " TEXT"
+				+ ")";
+		if(execSQL(sql) != 0)
+			return -1;
+		
+		sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_BOXES + " ("
 				+ TABLE_COLUMN_INDEX + " INTEGER PRIMARY KEY,"
 				+ TABLE_COLUMN_NAME + " TEXT," 
 				+ TABLE_COLUMN_RACE + " INTEGER,"
@@ -92,8 +121,12 @@ public abstract class DBAccess {
 		return 0;
 	}
 	
+	protected String getInitSysSettingSql() {
+		return "SELECT " + TABLE_COLUMN_ATTRIB + "," + TABLE_COLUMN_VALUE_INT + "," + TABLE_COLUMN_VALUE_STR + " FROM " + TABLE_NAME_SYSTEM;
+	}
+	
 	protected String getLoadSettingSql(int id) {
-		return new String("SELECT " + TABLE_COLUMN_TITLE + "," + TABLE_COLUMN_MAXTIME + "," + TABLE_COLUMN_GRAVITY_X + "," + TABLE_COLUMN_GRAVITY_Y + " FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id);
+		return "SELECT " + TABLE_COLUMN_TITLE + "," + TABLE_COLUMN_MAXTIME + "," + TABLE_COLUMN_GRAVITY_X + "," + TABLE_COLUMN_GRAVITY_Y + " FROM " + TABLE_NAME_STAGES + " WHERE " + TABLE_COLUMN_INDEX + "=" + id;
 	}
 	
 	protected String getLoadFramesSql(int id) {
@@ -198,11 +231,11 @@ public abstract class DBAccess {
 		}
 	}	
 	
-	public abstract int init();
 	public abstract void dispose();
 	
 	protected abstract int createDatabase(String file);
 	protected abstract int execSQL(String sql);
+	protected abstract int initSystemSetting();
 	
 	public abstract int loadSetting(int id, StageData.Setting setting);
 	public abstract int loadFrames(int id, ArrayList<StageData.Box> frames);

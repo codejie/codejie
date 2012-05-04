@@ -20,22 +20,6 @@ public class DesktopDBAccess extends DBAccess {
 
 	private Connection conn = null;
 	
-	@Override
-	public int init() {
-		try {
-			Class.forName("org.sqlite.JDBC");
-		} catch (ClassNotFoundException e) {
-			Gdx.app.log(Global.APP_TAG, "dbaccess exception - " + e.toString());
-			return -1;
-		}			
-		
-		if(createDatabase(DATABASE_FILE) != 0)
-			return -1;
-		
-		if(createTables() != 0)
-			return -1;
-		return 0;
-	}
 
 	@Override
 	public void dispose() {
@@ -49,7 +33,20 @@ public class DesktopDBAccess extends DBAccess {
 	}
 
 	@Override
+	protected int initSystemSetting() {
+		
+		return 0;
+	}
+	
+	@Override
 	protected int createDatabase(String file) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			Gdx.app.log(Global.APP_TAG, "dbaccess exception - " + e.toString());
+			return -1;
+		}				
+		
 		try {
 			conn = DriverManager.getConnection("jdbc:sqlite:" + file);
 		} catch (SQLException e) {
@@ -250,5 +247,6 @@ public class DesktopDBAccess extends DBAccess {
 		
 		return true;
 	}
+
 
 }

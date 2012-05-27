@@ -20,10 +20,12 @@ public class DataCalculator {
 	public static final class CalcResult {
 		public float now;
 		public float end;
+		public float next;
 		
 		public CalcResult() {
-			now = 0;
-			end = 0;
+			now = 0.0f;
+			end = 0.0f;
+			next = 0.0f;
 		}
 	}
 	
@@ -259,22 +261,27 @@ public class DataCalculator {
 		if(t.compareTo(GLOBAL.TODAY) > 0) {
 			result.now = getCurrentAmount(checkin, amount, currency);
 			result.end = getFixedMonthEstimateFixedAmount(checkin, months, amount, currency, type);
+			result.next = result.end;
 			return 0;
 		}
 		
 		result.end = amount;
 		result.now = amount;
+		result.next = amount;
+		float rate = 0.0f;
 		while(t.compareTo(GLOBAL.TODAY) <= 0) {
-			float rate = getFixedRate(t, currency, type);
+			rate = getFixedRate(t, currency, type);
 			rate = rate / 12;
 			result.end = result.end * (1 + rate * months);
-			
 			t.setMonth(t.getMonth() + months);
 		}
+		rate = getFixedRate(t, currency, type);
+		result.next = result.end * (1 + rate * months);
 		
 		t.setMonth(t.getMonth() - months);
 		
 		result.now = getCurrentAmount(t, result.end, currency);
+		
 		return 0;
 	}
 	
@@ -303,17 +310,21 @@ public class DataCalculator {
 		if(t.compareTo(GLOBAL.TODAY) > 0) {
 			result.now = getCurrentAmount(checkin, amount, currency);
 			result.end = getFixedYearEstimateFixedAmount(checkin, years, amount, currency, type);//amount;
+			result.next = result.end;
 			return 0;
 		}
 		
 		result.end = amount;
 		result.now = amount;
+		float rate = 0.0f;
 		while(t.compareTo(GLOBAL.TODAY) <= 0) {
-			float rate = getFixedRate(t, currency, type);
+			rate = getFixedRate(t, currency, type);
 			result.end = result.end * (1 + rate * years);
 			
 			t.setYear(t.getYear() + years);
 		}
+		rate = getFixedRate(t, currency, type);
+		result.next = result.end * (1 + rate * years);
 		
 		t.setYear(t.getYear() - years);
 		
@@ -329,6 +340,7 @@ public class DataCalculator {
 			float r = getCurrentAmount(checkin, amount, currency);
 			result.end = r;
 			result.now = r;
+			result.next = r;
 			return 0;
 		}
 		else if(type == DBAccess.SAVING_TYPE_FIXED_3_MONTH || type == DBAccess.SAVING_TYPE_FIXED_6_MONTH) {

@@ -51,7 +51,6 @@ public class BankListActivity extends ListActivity {
 		this.setListAdapter(adapter);
 		
 		this.getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				BankListActivity.this.onListItemLongClick(view, position, id);
 				//Toast.makeText(BankListActivity.this, "pos:" + position + " id:" + id, Toast.LENGTH_SHORT).show();
@@ -120,14 +119,12 @@ public class BankListActivity extends ListActivity {
 				build.setView(textEntryView);
 				final EditText text = (EditText)textEntryView.findViewById(R.id.editText1);
 				build.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
 					public void onClick(DialogInterface dialog, int which) {					
 						GLOBAL.DBACCESS.insertBank(text.getText().toString());
 						cursor.requery();
 					}
 				});
 				build.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {				
-					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 					}
@@ -140,7 +137,6 @@ public class BankListActivity extends ListActivity {
 				build.setIcon(android.R.drawable.ic_delete);
 				build.setTitle(R.string.title_remove_bank);
 				build.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						//dialog.dismiss();
 						if(GLOBAL.DBACCESS.removeBank(idBank) == -1) {
@@ -148,7 +144,6 @@ public class BankListActivity extends ListActivity {
 							b.setIcon(android.R.drawable.ic_dialog_alert);
 							b.setMessage(R.string.error_remove_bank);
 							b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {				
-								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									dialog.dismiss();
 								}
@@ -161,7 +156,6 @@ public class BankListActivity extends ListActivity {
 					}
 				});
 				build.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 					}

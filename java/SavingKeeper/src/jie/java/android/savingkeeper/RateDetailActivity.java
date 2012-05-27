@@ -41,7 +41,6 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 		((Button)this.findViewById(R.id.btnInsert)).setOnClickListener(this);
 	}
 
-	@Override
 	public void onClick(View v) {
 		if(v.getId() == R.id.button01) {
 			View tl = this.findViewById(R.id.tableLayout01);
@@ -94,7 +93,6 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 			
 			DatePickerDialog.OnDateSetListener onCheckinListSelected = new DatePickerDialog.OnDateSetListener() {
 
-				@Override
 				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 					edit.setText(year + "." + (monthOfYear + 1) + "." + dayOfMonth);
 				}
@@ -108,7 +106,6 @@ public class RateDetailActivity extends Activity  implements OnClickListener{
 			
 			DatePickerDialog.OnDateSetListener onCheckinListSelected = new DatePickerDialog.OnDateSetListener() {
 
-				@Override
 				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 					edit.setText(year + "." + (monthOfYear + 1) + "." + dayOfMonth);
 				}

@@ -90,7 +90,6 @@ public class RateListActivity extends ExpandableListActivity {
 		this.setListAdapter(_adapter);
 		
 		this.getExpandableListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				RateListActivity.this.onItemLongClick(parent, view, position, id);
 				//Toast.makeText(BankListActivity.this, "pos:" + position + " id:" + id, Toast.LENGTH_SHORT).show();
@@ -277,7 +276,6 @@ public class RateListActivity extends ExpandableListActivity {
 				build.setTitle(R.string.title_reteremove);
 				build.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 					
-					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						if(GLOBAL.DBACCESS.removeRate(_startDate, _endDate) != 0) {
 							Toast.makeText(RateListActivity.this, "Remove rate data failed.", 1).show();
@@ -289,7 +287,6 @@ public class RateListActivity extends ExpandableListActivity {
 				});
 				build.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 					
-					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();				
 					}

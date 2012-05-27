@@ -84,7 +84,8 @@ public class SavingListActivity extends ListActivity {
 			v.setId(cursor.getInt(0));
 	
 			v.textTitle.setText(title + " - " + checkin);
-			v.textTitle.setTextColor(getColor(type, ci));
+			int state = getState(type, ci);
+			v.textTitle.setTextColor(getColor(state));
 			
 			v.textAmount.setText(String.format("%.2f", amount));
 			v.textCurrency.setText(RCLoader.getCurrency(SavingListActivity.this, currency));
@@ -92,8 +93,58 @@ public class SavingListActivity extends ListActivity {
 			v.textType.setText(RCLoader.getType(SavingListActivity.this, type));
 			v.textBank.setText(GLOBAL.DBACCESS.getBank(bank));
 			v.textNote.setText(note);
-			v.textEnd.setText(String.format("%.2f", result.end));
+			if(state != 1)
+				v.textEnd.setText(String.format("%.2f", result.end));
+			else
+				v.textEnd.setText(String.format("%.2f/%.2f", result.end, result.next));
 			v.textNow.setText(String.format("%.2f", result.now));			
+		}
+		
+		//0: current; 1: fixed - over one period; 1: fixed - in one period
+		private int getState(int type, final Date ci) {
+			switch(type) {
+			case DBAccess.SAVING_TYPE_CURRENT:
+				return 0;
+			case DBAccess.SAVING_TYPE_FIXED_3_MONTH:
+				ci.setMonth(ci.getMonth() + 3);
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return 1;
+			case DBAccess.SAVING_TYPE_FIXED_6_MONTH:
+				ci.setMonth(ci.getMonth() + 6);
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return 1;
+			case DBAccess.SAVING_TYPE_FIXED_1_YEAR:
+				ci.setYear(ci.getYear() + 1);
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return 1;
+			case DBAccess.SAVING_TYPE_FIXED_2_YEAR:
+				ci.setYear(ci.getYear() + 2);
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return 1;
+			case DBAccess.SAVING_TYPE_FIXED_3_YEAR:
+				ci.setYear(ci.getYear() + 3);
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return 1;				
+			case DBAccess.SAVING_TYPE_FIXED_5_YEAR:
+				ci.setYear(ci.getYear() + 5);
+				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+					return 1;
+			default:
+				break;
+			}
+			
+			return 2;			
+		}
+		
+		private int getColor(int state) {
+			switch(state) {
+			case 0:
+				return Color.GREEN;
+			case 1:
+				return Color.YELLOW;
+			default:
+				return Color.BLUE;
+			}
 		}
 		
 		private int getColor(int type, final Date ci) {
@@ -463,7 +514,6 @@ public class SavingListActivity extends ListActivity {
     		build.setTitle(SavingListActivity.this.getResources().getString(R.string.title_savingremove) + "'" + _title + "' ?");
     		build.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 				
-				@Override
 				public void onClick(DialogInterface dialog, int which) {
 			    	GLOBAL.DBACCESS.removeSaving(_id);
 			    	_cursor.requery();					
@@ -471,7 +521,6 @@ public class SavingListActivity extends ListActivity {
 			});
     		build.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 				
-				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
 				}

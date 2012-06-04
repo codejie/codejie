@@ -255,7 +255,7 @@ public class DataCalculator {
 			break;
 		}
 		
-		Date t = new Date(checkin.getYear(), checkin.getMonth(), checkin.getDay());
+		Date t = (Date) checkin.clone();// new Date(checkin.getYear(), checkin.getMonth(), checkin.getDay());
 		t.setMonth(t.getMonth() + months);
 		
 		if(t.compareTo(GLOBAL.TODAY) > 0) {
@@ -305,7 +305,7 @@ public class DataCalculator {
 			break;
 		}
 		
-		Date t = new Date(checkin.getYear(), checkin.getMonth(), checkin.getDay());//checkin;
+		Date t = (Date)checkin.clone();//new Date(checkin.getYear(), checkin.getMonth(), checkin.getDay());//checkin;
 		t.setYear(t.getYear() + years);
 		
 		if(t.compareTo(GLOBAL.TODAY) > 0) {

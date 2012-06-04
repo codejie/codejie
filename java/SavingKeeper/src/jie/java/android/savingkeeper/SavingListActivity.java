@@ -18,7 +18,6 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
@@ -27,7 +26,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
@@ -35,8 +33,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -102,7 +98,7 @@ public class SavingListActivity extends ListActivity {
 		
 		//0: current; 1: fixed - over one period; 1: fixed - in one period
 		private int getState(int type, final Date ci) {
-			Date tmp = new Date(ci.getDay());
+			Date tmp = (Date) ci.clone();
 			
 			switch(type) {
 			case DBAccess.SAVING_TYPE_CURRENT:

@@ -183,7 +183,7 @@ public class DataCalculator {
 		return calcMoney(ci, amount, currency, type, result);
 	}
 
-	private long getDays(Date begin, Date end) {
+	private long getDays(final Date begin, final Date end) {
 		long d = ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24));
 		if(d <= 0) {
 			return 0;//Log.e(GLOBAL.APP_TAG, "error: " + d + " end:" + end.toString() + " begin:" + begin.toString());
@@ -191,7 +191,7 @@ public class DataCalculator {
 		return d;
 	}	
 	
-	private float getCurrentAmount(Date checkin, float amount, int currency) {
+	private float getCurrentAmount(final Date checkin, float amount, int currency) {
 		float result = amount;
 		
 		for(RateData data : _rateSplitData) {
@@ -220,7 +220,7 @@ public class DataCalculator {
 		return result;
 	}
 	
-	private float getFixedRate(Date checkin, int currency, int type) {
+	private float getFixedRate(final Date checkin, int currency, int type) {
 		
 		for(RateData data : _rateData) {
 			if(data.begin.compareTo(checkin) <= 0 && data.end.compareTo(checkin) > 0) {
@@ -231,18 +231,18 @@ public class DataCalculator {
 		return 0.0f;
 	}
 	
-	private float getFixedMonthEstimateFixedAmount(Date checkin, int months, float amount, int currency, int type) {
+	private float getFixedMonthEstimateFixedAmount(final Date checkin, int months, float amount, int currency, int type) {
 		float rate = getFixedRate(checkin, currency, type);
 		rate = rate / 12;
 		return amount * (1 + rate * months);
 	}
 	
-	private float getFixedYearEstimateFixedAmount(Date checkin, int years, float amount, int currency, int type) {
+	private float getFixedYearEstimateFixedAmount(final Date checkin, int years, float amount, int currency, int type) {
 		float rate = getFixedRate(checkin, currency, type);
 		return amount * (1 + rate * years);
 	}
 	
-	private int getFixedMonthAmount(Date checkin, float amount, int currency, int type, CalcResult result) {
+	private int getFixedMonthAmount(final Date checkin, float amount, int currency, int type, CalcResult result) {
 		int months = 0;
 		switch(type) {
 		case DBAccess.SAVING_TYPE_FIXED_3_MONTH:
@@ -276,6 +276,7 @@ public class DataCalculator {
 			t.setMonth(t.getMonth() + months);
 		}
 		rate = getFixedRate(t, currency, type);
+		rate = rate / 12;
 		result.next = result.end * (1 + rate * months);
 		
 		t.setMonth(t.getMonth() - months);
@@ -285,7 +286,7 @@ public class DataCalculator {
 		return 0;
 	}
 	
-	private int getFixedYearAmount(Date checkin, float amount, int currency, int type, CalcResult result) {
+	private int getFixedYearAmount(final Date checkin, float amount, int currency, int type, CalcResult result) {
 		int years = 0;
 		switch(type) {
 		case DBAccess.SAVING_TYPE_FIXED_1_YEAR:

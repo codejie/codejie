@@ -102,32 +102,34 @@ public class SavingListActivity extends ListActivity {
 		
 		//0: current; 1: fixed - over one period; 1: fixed - in one period
 		private int getState(int type, final Date ci) {
+			Date tmp = new Date(ci.getDay());
+			
 			switch(type) {
 			case DBAccess.SAVING_TYPE_CURRENT:
 				return 0;
 			case DBAccess.SAVING_TYPE_FIXED_3_MONTH:
-				ci.setMonth(ci.getMonth() + 3);
-				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+				tmp.setMonth(tmp.getMonth() + 3);
+				if(tmp.compareTo(GLOBAL.TODAY) <= 0)
 					return 1;
 			case DBAccess.SAVING_TYPE_FIXED_6_MONTH:
-				ci.setMonth(ci.getMonth() + 6);
-				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+				tmp.setMonth(tmp.getMonth() + 6);
+				if(tmp.compareTo(GLOBAL.TODAY) <= 0)
 					return 1;
 			case DBAccess.SAVING_TYPE_FIXED_1_YEAR:
-				ci.setYear(ci.getYear() + 1);
-				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+				tmp.setYear(tmp.getYear() + 1);
+				if(tmp.compareTo(GLOBAL.TODAY) <= 0)
 					return 1;
 			case DBAccess.SAVING_TYPE_FIXED_2_YEAR:
-				ci.setYear(ci.getYear() + 2);
-				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+				tmp.setYear(tmp.getYear() + 2);
+				if(tmp.compareTo(GLOBAL.TODAY) <= 0)
 					return 1;
 			case DBAccess.SAVING_TYPE_FIXED_3_YEAR:
-				ci.setYear(ci.getYear() + 3);
-				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+				tmp.setYear(tmp.getYear() + 3);
+				if(tmp.compareTo(GLOBAL.TODAY) <= 0)
 					return 1;				
 			case DBAccess.SAVING_TYPE_FIXED_5_YEAR:
-				ci.setYear(ci.getYear() + 5);
-				if(ci.compareTo(GLOBAL.TODAY) <= 0)
+				tmp.setYear(tmp.getYear() + 5);
+				if(tmp.compareTo(GLOBAL.TODAY) <= 0)
 					return 1;
 			default:
 				break;

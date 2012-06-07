@@ -32,7 +32,8 @@
         <meta-data android:value="3ad1d9569acb45969e4d85864727e67d" android:name="Wooboo_PID"/>
         <meta-data android:value="1" android:name="Market_ID"/>
 		<activity android:name="com.wooboo.adlib_android.AdActivity" android:configChanges="orientation|keyboardHidden" />
-		<activity android:name="com.wooboo.adlib_android.FullActivity" android:configChanges="orientation|keyboardHidden" android:launchMode="singleTask"/>        
+		<activity android:name="com.wooboo.adlib_android.FullActivity" android:configChanges="orientation|keyboardHidden" android:launchMode="singleTask"/>
+		<activity android:name="PlayActivity" android:launchMode="singleInstance"></activity>        
     </application>
 
 </manifest>

@@ -153,6 +153,7 @@ public class ResultDisplayActivity extends Activity /*implements OnTouchListener
 		Intent intent = new Intent(this, WordDisplayActivity.class);
 		intent.putExtra(Score.TAG_JUDGE, judge);
 		this.startActivity(intent);
+		this.finish();
 	}
 	
 }

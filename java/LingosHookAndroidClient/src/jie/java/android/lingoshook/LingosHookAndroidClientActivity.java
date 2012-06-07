@@ -41,7 +41,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
         this.findViewById(R.id.linearLayout1).setOnTouchListener(this);
         this.findViewById(R.id.linearLayout1).setLongClickable(true);
         
-        intiAdView();
+        if(Global.STATE_CODING == 2) {
+        	intiAdView();
+        }
     }
 
 	private void intiAdView() {
@@ -61,7 +63,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	public boolean onTouch(View view, MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_UP) {
 			if(DBAccess.checkWord()) {
-				Intent intent = new Intent(this, WordDisplayActivity.class);
+				Intent intent = new Intent(this, PlayActivity.class);
 				this.startActivity(intent);
 			}
 			else {

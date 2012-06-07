@@ -10,6 +10,8 @@ public final class Global {
 	
 	public static int DB_FORMAT_VERSION				=	1;
 	
+	public static int STATE_CODING					=	0;//0:Debug; 1: Coding; 2: Release
+	
 	public static int initApplication(Context context) {
 		DBAccess.init(DATABASE_NAME);
 		Setting.init(context);

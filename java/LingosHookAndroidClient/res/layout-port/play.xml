@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/viewSwitcher1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+	    <LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		        android:orientation="vertical" >
+	    <TextView
+	        android:id="@+id/textType"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0"
+	        android:text="Small Text"
+	        android:textAppearance="?android:attr/textAppearanceSmall" android:layout_gravity="right" android:layout_marginRight="20dp"/>
+	
+	    <TextView
+	        android:id="@+id/textWord"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0"
+	        android:text="@string/str_noword"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textSize="30dp" android:layout_gravity="center_horizontal"/>
+	
+	    <TextView
+	        android:id="@+id/textScore"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0" android:layout_gravity="right" android:layout_marginRight="20dp" android:text="Score"/>
+	
+	    <RadioGroup
+	        android:id="@+id/radioGroup1"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0">
+	
+	        <RadioButton
+	            android:id="@+id/radio1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:checked="false"
+	            android:text="@string/str_score_0"/>
+	
+	        <RadioButton
+	            android:id="@+id/radio2"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:text="@string/str_score_1" />
+	
+	        <RadioButton
+	            android:id="@+id/radio3"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:text="@string/str_score_2" />
+	
+	        <RadioButton
+	            android:id="@+id/radio4"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:text="@string/str_score_3" />
+	    </RadioGroup>
+	
+	
+	
+	    <LinearLayout
+	        android:id="@+id/linearLayout2"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" >
+	
+	        <jie.java.android.lingoshook.FingerDrawView
+	            android:id="@+id/fingerDrawView1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:layout_weight="0" />
+	
+	    </LinearLayout>	        
+	    </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent" >
+
+	    <android.webkit.WebView
+	        android:id="@+id/webView"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent" >
+	
+	    </android.webkit.WebView>
+	
+	
+	    <Button
+	        android:id="@+id/btnYes"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="16dp"
+	        android:text="@string/title_yes" android:minWidth="70dp"/>
+	
+	    <Button
+	        android:id="@+id/btnNo"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_marginRight="16dp"
+	        android:layout_toLeftOf="@+id/btnYes"
+	        android:text="@string/title_no" android:minWidth="70dp"/>
+    
+    </RelativeLayout>
+
+</ViewSwitcher>

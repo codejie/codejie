@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -266,9 +269,12 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     	_scoreWord = score;
     	
     	if(Setting.loadResultDisplay) {
-    		Intent intent = new Intent(this, ResultDisplayActivity.class);
-    		intent.putExtra(ResultDisplayActivity.ACTION, ResultDisplayActivity.ACTION_WORD);
-    		this.startActivity(intent);
+//    		Intent intent = new Intent(this, ResultDisplayActivity.class);
+//    		intent.putExtra(ResultDisplayActivity.ACTION, ResultDisplayActivity.ACTION_WORD);
+//    		this.startActivity(intent);
+    		
+    		showSrcView();
+//    		this.setContentView(R.layout.result_display);
     	}
     	else {
     		updateWordData(Score.JUDGE_YES);
@@ -365,5 +371,24 @@ public class WordDisplayActivity extends Activity implements OnClickListener {
     
     private void speakWord(final String word) {
     	Speaker.speak(word);
+    }
+    
+    private void showWordView() {
+    	
+    }
+    
+    private void showSrcView() {
+		this.setContentView(R.layout.result_display);
+		WebView web = (WebView)this.findViewById(R.id.webView);
+		//web.loadUrl("file://" + Environment.getExternalStorageDirectory() + Score.CACHE_FILE);
+//		try {
+//			web.loadData(URLEncoder.encode(DBAccess.getHTML(_dataWord.data.srcid), "utf-8"), "text/html", "utf-8");
+//		} catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		//web.loadData(DBAccess.getHTML(_dataWord.data.srcid), null, null);
+		web.loadDataWithBaseURL(null, DBAccess.getHTML(_dataWord.data.srcid), "text/html", "utf-8", null);
     }
 }

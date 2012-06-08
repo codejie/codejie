@@ -9,11 +9,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -23,6 +25,10 @@ import android.widget.ViewSwitcher;
 public class PlayActivity extends Activity implements OnClickListener, OnTouchListener {
 
 	private ViewSwitcher switcher;
+	private TranslateAnimation aniResultIn = null;
+	private TranslateAnimation aniWord = null;
+	private TranslateAnimation aniResultOut = null;
+	
 	private FingerDrawView drawer = null;
 	private WebView web = null;
 	
@@ -32,19 +38,47 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 	private boolean isWordShow = true;
 	
 	private Score.WordDisplayData dataWord = null;
+	private int scoreWord = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
 		this.setContentView(R.layout.play);
 
+		initAnination();
+		
 		initViews();
 		
 		initDrawer();
 		
 		initWordData();
+	}
+
+	private void initAnination() {
+		
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+        
+        if(height > width) {		
+			aniResultIn = new TranslateAnimation(width, 0, 0, 0);
+			aniResultIn.setDuration(700);
+			aniWord = new TranslateAnimation(0, 0, 0, 0);
+			aniWord.setDuration(700);
+			aniResultOut = new TranslateAnimation(0, width, 0, 0);
+			aniResultOut.setDuration(700);
+        }
+        else {
+        	aniResultIn = new TranslateAnimation(0, 0, height, 0);
+			aniResultIn.setDuration(700);
+			aniWord = new TranslateAnimation(0, 0, 0, 0);
+			aniWord.setDuration(700);
+			aniResultOut = new TranslateAnimation(0, 0, 0, height);
+			aniResultOut.setDuration(700);
+        }
+		
 	}
 
 	private void initWordData() {
@@ -86,10 +120,40 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 	}
 
 	private void initViews() {
-		switcher = (ViewSwitcher) switcher.findViewById(R.id.viewSwitcher1);
-		web = (WebView) switcher.findViewById(R.id.webView);
+		switcher = (ViewSwitcher) this.findViewById(R.id.viewSwitcher1);
 		
 		setClickListener(true);
+		
+		web = (WebView) switcher.findViewById(R.id.webView);				
+		web.setOnTouchListener(this);
+		
+		switcher.findViewById(R.id.btnYes).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				submitResult(Score.JUDGE_YES);
+			}
+			
+		});
+		
+		switcher.findViewById(R.id.btnNo).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				submitResult(Score.JUDGE_NO);
+			}
+			
+		});
+	}
+
+	protected void submitResult(int judge) {
+		updateWordScore(judge);
+		
+		showWord();
+	}
+
+	private void updateWordScore(int judge) {
+		Score.updateWordData(dataWord.data, scoreWord, judge);
 	}
 
 	private void setClickListener(boolean enable) {
@@ -114,9 +178,9 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_UP) {
-			switcher.showNext();
+			showWord();
 		}
-		return false;
+		return true;
 	}
 
 	@Override
@@ -143,9 +207,15 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 	}
 
 	private void showWord() {
+
 		if(!isWordShow) {
-			switcher.showPrevious();
-		}
+			isWordShow = true;
+
+			switcher.clearAnimation();
+			switcher.setInAnimation(aniWord);
+			switcher.setOutAnimation(aniResultOut);
+			switcher.showPrevious();		
+		}		
 		
 		drawer.clearCanvas();
 		
@@ -153,8 +223,17 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 			setClickListener(false);
 		}
 		
-		enableRefreshDrawer(true);
-		
+		enableRefreshDrawer(true);	
+	}
+	
+	private void showResult() {
+		if(isWordShow) {
+			isWordShow = false;
+			switcher.clearAnimation();
+			switcher.setInAnimation(aniResultIn);
+			switcher.setOutAnimation(aniWord);	
+			switcher.showNext();
+		}
 	}
 	
     private int loadWordData() {
@@ -179,12 +258,7 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
     }
 
     private void showWordData(Score.WordDisplayData data) {
-    	
-    	((RadioButton)switcher.findViewById(R.id.radio1)).setChecked(false);
-    	((RadioButton)switcher.findViewById(R.id.radio2)).setChecked(false);
-    	((RadioButton)switcher.findViewById(R.id.radio3)).setChecked(false);
-    	((RadioButton)switcher.findViewById(R.id.radio4)).setChecked(false);
-    	
+    	    	
     	TextView tv = (TextView)switcher.findViewById(R.id.textWord);
     	tv.setText(data.data.word);
     	
@@ -204,7 +278,13 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
     	}
     	else {
     		tv.setText("NULL");
-    	}    	
+    	}
+    	
+    	((RadioButton)switcher.findViewById(R.id.radio1)).setChecked(false);
+    	((RadioButton)switcher.findViewById(R.id.radio2)).setChecked(false);
+    	((RadioButton)switcher.findViewById(R.id.radio3)).setChecked(false);
+    	((RadioButton)switcher.findViewById(R.id.radio4)).setChecked(false);
+    	
     }
     
     private int showSrcData() {
@@ -221,18 +301,13 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
     	if(dataWord == null)
     		return;
     	
-    	//_scoreWord = score;
+    	scoreWord = score;
     	
     	if(Setting.loadResultDisplay) {
-//    		Intent intent = new Intent(this, ResultDisplayActivity.class);
-//    		intent.putExtra(ResultDisplayActivity.ACTION, ResultDisplayActivity.ACTION_WORD);
-//    		this.startActivity(intent);
-    		switcher.showNext();
-//    		showSrcView();
-//    		this.setContentView(R.layout.result_display);
+    		showResult();
     	}
     	else {
- //   		updateWordData(Score.JUDGE_YES);
+    		updateWordScore(Score.JUDGE_YES);
     		
     		showWord();
     	}

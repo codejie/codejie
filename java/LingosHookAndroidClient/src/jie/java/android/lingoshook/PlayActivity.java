@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -33,7 +34,10 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 	private WebView web = null;
 	
 	private Handler handler = null;
-	private Runnable runnable = null;
+	private Runnable runRefreshDrawer = null;
+	private Runnable runLoadWord = null;
+	private Message msgRefreshDrawer = null;
+	private Message msgLoadWord = null;
 	
 	private boolean isWordShow = true;
 	
@@ -46,6 +50,8 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 		
 		this.setContentView(R.layout.play);
 
+		initHandler();
+		
 		initAnination();
 		
 		initViews();
@@ -55,6 +61,48 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 		initWordData();
 	}
 
+	private void initHandler() {
+		
+		msgRefreshDrawer = new Message();
+		msgRefreshDrawer.what = 2;
+		msgLoadWord = new Message();
+		msgLoadWord.what = 1;
+		
+		handler = new Handler() {
+	        public void handleMessage(Message msg) {
+	            if(msg.what == 2) {
+	        		if(msg.arg1 == 1) {
+	        			handler.postDelayed(runRefreshDrawer, Setting.intervalFingerPanel);
+	        		}
+	        		else {
+	        			handler.removeCallbacks(runRefreshDrawer);
+	        		}
+	            }
+	            else if(msg.what == 1) {
+	            	handler.post(runLoadWord);
+	            }
+	            
+	        }			
+		};
+		
+		runLoadWord = new Runnable() {
+
+			@Override
+			public void run() {
+				loadWordData();
+			}
+			
+		};	
+		
+		runRefreshDrawer = new Runnable() {
+
+			@Override
+			public void run() {
+				refreshDrawer();
+			}
+		};		
+	}
+	
 	private void initAnination() {
 		
         DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -68,7 +116,7 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 			aniWord = new TranslateAnimation(0, 0, 0, 0);
 			aniWord.setDuration(700);
 			aniResultOut = new TranslateAnimation(0, width, 0, 0);
-			aniResultOut.setDuration(700);
+			aniResultOut.setDuration(500);
         }
         else {
         	aniResultIn = new TranslateAnimation(0, 0, height, 0);
@@ -76,47 +124,27 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 			aniWord = new TranslateAnimation(0, 0, 0, 0);
 			aniWord.setDuration(700);
 			aniResultOut = new TranslateAnimation(0, 0, 0, height);
-			aniResultOut.setDuration(700);
+			aniResultOut.setDuration(500);
         }
 		
 	}
 
 	private void initWordData() {
-		Score.refreshData();
-	
+		Score.refreshData();		
 		showWord();
 	}
 
 	private void initDrawer() {
 		drawer = (FingerDrawView) switcher.findViewById(R.id.fingerDrawView1);
 		
-		handler = new Handler();
-		
-		runnable = new Runnable() {
-
-			@Override
-			public void run() {
-				refreshDrawer();
-			}
-		};
-		
-		enableRefreshDrawer(true);		
-	}
-
-	private void enableRefreshDrawer(boolean enable) {
-		if(enable) {
-			handler.postDelayed(runnable, Setting.intervalFingerPanel);
-		}
-		else {
-			handler.removeCallbacks(runnable);
-		}
+		handler.dispatchMessage(msgRefreshDrawer);
 	}
 
 	protected void refreshDrawer() {
 		if(Setting.refeshFingerPanel) {
 			drawer.clearCanvas();
-			handler.postDelayed(runnable, Setting.intervalFingerPanel);
 		}
+		handler.dispatchMessage(msgRefreshDrawer);
 	}
 
 	private void initViews() {
@@ -178,7 +206,7 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_UP) {
-			showWord();
+			submitResult(Score.JUDGE_YES);
 		}
 		return true;
 	}
@@ -208,6 +236,8 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 
 	private void showWord() {
 
+		handler.dispatchMessage(msgLoadWord);
+		
 		if(!isWordShow) {
 			isWordShow = true;
 
@@ -218,17 +248,18 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 		}		
 		
 		drawer.clearCanvas();
-		
-		if(loadWordData() != 0) {
-			setClickListener(false);
-		}
-		
-		enableRefreshDrawer(true);	
+
+		msgRefreshDrawer.arg1 = 1;
+		handler.dispatchMessage(msgRefreshDrawer);
 	}
 	
 	private void showResult() {
 		if(isWordShow) {
 			isWordShow = false;
+			
+			msgRefreshDrawer.arg1 = 2;
+			handler.dispatchMessage(msgRefreshDrawer);			
+			
 			switcher.clearAnimation();
 			switcher.setInAnimation(aniResultIn);
 			switcher.setOutAnimation(aniWord);	
@@ -247,13 +278,13 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
     	}
     	
     	showWordData(dataWord);
+    	    	
+    	showSrcData();
     	
     	if(Setting.loadSpeaker) {
     		Speaker.speak(dataWord.data.word);
-    	}
-    	
-    	showSrcData();    	
-    	
+    	}   	
+    	    	
     	return 0;
     }
 

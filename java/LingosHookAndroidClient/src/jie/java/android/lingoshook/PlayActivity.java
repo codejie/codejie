@@ -236,7 +236,7 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 
 	private void showWord() {
 
-		handler.dispatchMessage(msgLoadWord);
+		//handler.dispatchMessage(msgLoadWord);
 		
 		if(!isWordShow) {
 			isWordShow = true;
@@ -246,6 +246,8 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 			switcher.setOutAnimation(aniResultOut);
 			switcher.showPrevious();		
 		}		
+		
+		handler.dispatchMessage(msgLoadWord);
 		
 		drawer.clearCanvas();
 

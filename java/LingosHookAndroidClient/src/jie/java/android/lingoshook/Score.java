@@ -54,7 +54,7 @@ public final class Score {
 	public static final String TAG_SCORE		=	"score";
 	public static final String TAG_JUDGE		=	"judge";
 	
-	public static final String CACHE_FILE		=	"/lhc_cache.html";
+	//public static final String CACHE_FILE		=	"/lhc_cache.html";
 
 	public static final int WORD_NEW	=	0;
 	public static final int WORD_OLD	=	1;

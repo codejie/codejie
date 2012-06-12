@@ -2,17 +2,22 @@ package jie.java.android.lingoshook;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class ScoreListActivity extends Activity {
+public class ScoreListActivity extends Activity implements OnClickListener {
 
 	private class ScoreDataAdapter extends BaseAdapter {
 
@@ -62,12 +67,14 @@ public class ScoreListActivity extends Activity {
 				convertView = LayoutInflater.from(_context).inflate(R.layout.score_item, null);
 			}
 			TextView u = (TextView)convertView.findViewById(R.id.textUpdated);
-			TextView a = (TextView)convertView.findViewById(R.id.textAmount);	
+			TextView a = (TextView)convertView.findViewById(R.id.textAmount);
 			
 			_cursor.moveToPosition(position);
 			
 			u.setText(_cursor.getString(0));
 			a.setText(_cursor.getString(1));
+			
+			convertView.setId(_cursor.getInt(0));
 			
 			return convertView;
 		}
@@ -109,9 +116,26 @@ public class ScoreListActivity extends Activity {
 		adapter.initData();
 		
 		GridView grid = (GridView)this.findViewById(R.id.gridScore);
+//		TypedArray a = obtainStyledAttributes(R.styleable.Gallery);
+//        int mGalleryItemBackground = a.getResourceId(R.styleable.Gallery_android_galleryItemBackground, 0);
+//        a.recycle();		
+//		grid.setBackgroundResource(mGalleryItemBackground);
+
 		//Cursor cursor = DBAccess.getScoreStatData();
 		grid.setAdapter(adapter);
-		
+		grid.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Toast.makeText(ScoreListActivity.this, "pos: " + position + " id: " + id + "  viewid: " + view.getId(), Toast.LENGTH_LONG).show();
+			}
+			
+		});
+		//.setOnClickListener(this);		
+	}
+
+	@Override
+	public void onClick(View view) {
 		
 	}
 

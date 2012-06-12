@@ -47,7 +47,6 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     }
 
 	private void intiAdView() {
-		// TODO Auto-generated method stub
 		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout1);
 		new AdPanelView(this, ll, 0, 80);
 	}
@@ -75,7 +74,6 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
 		this.getMenuInflater().inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -107,7 +105,6 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		// TODO Auto-generated method stub
 		Dialog dlg = null;
 		switch(id) {
 		case DIALOG_IMPORT: {
@@ -144,7 +141,6 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 
 						@Override
 						public void run() {
-							// TODO Auto-generated method stub
 							importData(d.getText().toString(), f.getText().toString(), c.isChecked());
 							handler.sendEmptyMessage(0);
 						}    					
@@ -180,9 +176,10 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-		    		Intent intent = new Intent(LingosHookAndroidClientActivity.this, ResultDisplayActivity.class);
-		    		intent.putExtra(ResultDisplayActivity.ACTION, ResultDisplayActivity.ACTION_HELP);
-		    		LingosHookAndroidClientActivity.this.startActivity(intent);					
+					LingosHookAndroidClientActivity.this.startActivity(new Intent(LingosHookAndroidClientActivity.this, HelpActivity.class));
+//		    		Intent intent = new Intent(LingosHookAndroidClientActivity.this, ResultDisplayActivity.class);
+//		    		intent.putExtra(ResultDisplayActivity.ACTION, ResultDisplayActivity.ACTION_HELP);
+//		    		LingosHookAndroidClientActivity.this.startActivity(intent);					
 					dialog.dismiss();
 					
 				}

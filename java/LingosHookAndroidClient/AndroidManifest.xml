@@ -25,15 +25,14 @@
             </intent-filter>
             
         </activity>
-        <activity android:name="WordDisplayActivity" android:launchMode="singleTop"></activity>
-        <activity android:name="ResultDisplayActivity" android:launchMode="singleInstance"></activity>
         <activity android:name="ScoreListActivity"></activity>
         <activity android:name="SettingActivity"></activity>
         <meta-data android:value="3ad1d9569acb45969e4d85864727e67d" android:name="Wooboo_PID"/>
         <meta-data android:value="1" android:name="Market_ID"/>
 		<activity android:name="com.wooboo.adlib_android.AdActivity" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name="com.wooboo.adlib_android.FullActivity" android:configChanges="orientation|keyboardHidden" android:launchMode="singleTask"/>
-		<activity android:name="PlayActivity" android:launchMode="singleInstance"></activity>        
+		<activity android:name="PlayActivity" android:launchMode="singleInstance"></activity>
+		<activity android:launchMode="standard" android:name="HelpActivity"></activity>        
     </application>
 
 </manifest>

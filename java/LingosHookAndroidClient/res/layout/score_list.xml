@@ -78,7 +78,12 @@
         android:id="@+id/gridScore"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:numColumns="3" android:layout_marginLeft="20dp" android:layout_marginRight="20dp" android:layout_marginTop="10dp" android:verticalSpacing="10dp" android:horizontalSpacing="10dp">
+        android:numColumns="4" 
+        android:layout_marginLeft="5dp" 
+        android:layout_marginRight="5dp" 
+        android:layout_marginTop="10dp" 
+        android:verticalSpacing="5dp" 
+        android:horizontalSpacing="5dp">
     </GridView>
 
 </LinearLayout>

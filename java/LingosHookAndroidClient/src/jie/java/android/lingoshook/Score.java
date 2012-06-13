@@ -56,8 +56,9 @@ public final class Score {
 	
 	//public static final String CACHE_FILE		=	"/lhc_cache.html";
 
-	public static final int WORD_NEW	=	0;
-	public static final int WORD_OLD	=	1;
+	public static final int WORD_ALL	=	0;
+	public static final int WORD_NEW	=	1;
+	public static final int WORD_OLD	=	2;
 	
 	//private static final int WORD_LIMIT_NEW	=	3;
 	//private static final int WORD_LIMIT_OLD	=	3;

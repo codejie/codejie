@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.webkit.WebView;
 
-public class HelpActivity extends Activity implements OnTouchListener {
+public class HtmlDisplayActivity extends Activity implements OnTouchListener {
 
 	private WebView web = null;
 	

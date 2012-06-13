@@ -367,4 +367,30 @@ public final class DBAccess {
 		return true;
 	}
 
+	public static Cursor getWords(int type, int value) {
+		
+		String sql = "SELECT Word.word, Word.srcid, Score.updated FROM Word, Score WHERE (Word.id = Score.wordid)";
+		
+		if(type == 0) {
+			if(value == 1) {
+				//new
+				sql += " AND (Score.updated = 0)";
+			}
+			else if(value == 2) {
+				//old
+				sql += " AND (Score.updated > 0)";
+			}
+		}
+		else {
+			sql += (" AND (Score.updated = " + value + ")");
+		}
+		
+		try {
+			return db.rawQuery(sql, null);
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return null;	
+		}
+	}
 }

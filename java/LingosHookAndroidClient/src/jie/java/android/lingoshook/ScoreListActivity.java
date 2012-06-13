@@ -2,6 +2,7 @@ package jie.java.android.lingoshook;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -106,9 +107,17 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 		int n = DBAccess.getScoreCount(true);
 		int o = DBAccess.getScoreCount(false);
 		
-		((TextView)this.findViewById(R.id.textView1)).setText(String.format("%d", (n + o)));
-		((TextView)this.findViewById(R.id.textView2)).setText(String.format("%d", n));
-		((TextView)this.findViewById(R.id.textView3)).setText(String.format("%d", o));		
+		TextView text = ((TextView)this.findViewById(R.id.textView1));
+		text.setText(String.format("%d", (n + o)));
+		text.setOnClickListener(this);
+		
+		text = ((TextView)this.findViewById(R.id.textView2));
+		text.setText(String.format("%d", (n)));
+		text.setOnClickListener(this);
+
+		text = ((TextView)this.findViewById(R.id.textView3));
+		text.setText(String.format("%d", (o)));
+		text.setOnClickListener(this);
 	}
 	
 	private void loadScoreList() {
@@ -127,7 +136,13 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent intent = new Intent(ScoreListActivity.this, WordListActivity.class);
+				intent.putExtra(WordListActivity.REQ_TYPE, 1);
+				intent.putExtra(WordListActivity.REQ_VALUE, view.getId());
+
 				Toast.makeText(ScoreListActivity.this, "pos: " + position + " id: " + id + "  viewid: " + view.getId(), Toast.LENGTH_LONG).show();
+				
+				ScoreListActivity.this.startActivity(intent);
 			}
 			
 		});
@@ -136,7 +151,26 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View view) {
+		Intent intent = new Intent(this, WordListActivity.class);
 		
+		if(view == this.findViewById(R.id.textView1)) {
+			intent.putExtra(WordListActivity.REQ_TYPE, 0);
+			intent.putExtra(WordListActivity.REQ_VALUE, 0);
+		}
+		else if(view == this.findViewById(R.id.textView1)) {
+			intent.putExtra(WordListActivity.REQ_TYPE, 0);
+			intent.putExtra(WordListActivity.REQ_VALUE, 1);
+		}
+		else if(view == this.findViewById(R.id.textView1)) {
+			intent.putExtra(WordListActivity.REQ_TYPE, 0);
+			intent.putExtra(WordListActivity.REQ_VALUE, 2);
+		}
+		else
+		{
+			return;
+		}
+		
+		this.startActivity(intent);
 	}
 
 }

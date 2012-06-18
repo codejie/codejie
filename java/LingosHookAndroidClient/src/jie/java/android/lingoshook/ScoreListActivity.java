@@ -118,6 +118,10 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 		text = ((TextView)this.findViewById(R.id.textView3));
 		text.setText(String.format("%d", (o)));
 		text.setOnClickListener(this);
+		
+		((TextView)this.findViewById(R.id.textTotal)).setOnClickListener(this);
+		((TextView)this.findViewById(R.id.textNew)).setOnClickListener(this);
+		((TextView)this.findViewById(R.id.textOld)).setOnClickListener(this);
 	}
 	
 	private void loadScoreList() {
@@ -153,15 +157,15 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 	public void onClick(View view) {
 		Intent intent = new Intent(this, WordListActivity.class);
 		
-		if(view == this.findViewById(R.id.textView1)) {
+		if(view == this.findViewById(R.id.textView1) || view == this.findViewById(R.id.textTotal)) {
 			intent.putExtra(WordListActivity.REQ_TYPE, 0);
 			intent.putExtra(WordListActivity.REQ_VALUE, 0);
 		}
-		else if(view == this.findViewById(R.id.textView1)) {
+		else if(view == this.findViewById(R.id.textView2) || view == this.findViewById(R.id.textNew)) {
 			intent.putExtra(WordListActivity.REQ_TYPE, 0);
 			intent.putExtra(WordListActivity.REQ_VALUE, 1);
 		}
-		else if(view == this.findViewById(R.id.textView1)) {
+		else if(view == this.findViewById(R.id.textView3) || view == this.findViewById(R.id.textOld)) {
 			intent.putExtra(WordListActivity.REQ_TYPE, 0);
 			intent.putExtra(WordListActivity.REQ_VALUE, 2);
 		}

@@ -72,7 +72,12 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 			
 			_cursor.moveToPosition(position);
 			
-			u.setText(_cursor.getString(0));
+			if(_cursor.getInt(0) != 0) {
+				u.setText(String.format("%d", (_cursor.getInt(0) - Score.deltaUpdated)));
+			}
+			else {
+				u.setText("New");
+			}
 			a.setText(_cursor.getString(1));
 			
 			convertView.setId(_cursor.getInt(0));
@@ -104,8 +109,8 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 	}
 	
 	private void loadTotalData() {
-		int n = DBAccess.getScoreCount(true);
-		int o = DBAccess.getScoreCount(false);
+		int n = DBAccess.getScoreCount(true, -1);
+		int o = DBAccess.getScoreCount(false, -1);
 		
 		TextView text = ((TextView)this.findViewById(R.id.textView1));
 		text.setText(String.format("%d", (n + o)));
@@ -144,7 +149,7 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 				intent.putExtra(WordListActivity.REQ_TYPE, 1);
 				intent.putExtra(WordListActivity.REQ_VALUE, view.getId());
 
-				Toast.makeText(ScoreListActivity.this, "pos: " + position + " id: " + id + "  viewid: " + view.getId(), Toast.LENGTH_LONG).show();
+				//Toast.makeText(ScoreListActivity.this, "pos: " + position + " id: " + id + "  viewid: " + view.getId(), Toast.LENGTH_LONG).show();
 				
 				ScoreListActivity.this.startActivity(intent);
 			}

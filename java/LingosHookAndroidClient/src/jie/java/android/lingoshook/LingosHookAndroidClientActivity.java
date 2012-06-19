@@ -176,10 +176,10 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					LingosHookAndroidClientActivity.this.startActivity(new Intent(LingosHookAndroidClientActivity.this, HtmlDisplayActivity.class));
-//		    		Intent intent = new Intent(LingosHookAndroidClientActivity.this, ResultDisplayActivity.class);
-//		    		intent.putExtra(ResultDisplayActivity.ACTION, ResultDisplayActivity.ACTION_HELP);
-//		    		LingosHookAndroidClientActivity.this.startActivity(intent);					
+					//LingosHookAndroidClientActivity.this.startActivity(new Intent(LingosHookAndroidClientActivity.this, HtmlDisplayActivity.class));
+		    		Intent intent = new Intent(LingosHookAndroidClientActivity.this, HtmlDisplayActivity.class);
+		    		intent.putExtra(HtmlDisplayActivity.REQ, HtmlDisplayActivity.REQ_HELP);
+		    		LingosHookAndroidClientActivity.this.startActivity(intent);					
 					dialog.dismiss();
 					
 				}

@@ -1,6 +1,10 @@
 package jie.java.android.lingoshook;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CursorAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -33,12 +39,9 @@ public class WordListActivity extends Activity {
 		public void bindView(View view, Context context, Cursor cursor) {
 			TextView w = (TextView) view.findViewById(R.id.textView1);
 			w.setText(cursor.getString(0));
-			
-			if(cursor.getInt(2) != 0) {
-				w = (TextView) view.findViewById(R.id.textView2);
-				//w.setText(text)
-			}
-			
+
+			w = (TextView) view.findViewById(R.id.textView2);
+			w.setText(getDateByUpdated(cursor.getInt(2)));			
 		}
 
 		@Override
@@ -46,8 +49,7 @@ public class WordListActivity extends Activity {
 			View view = LayoutInflater.from(WordListActivity.this).inflate(R.layout.word_list_item, null);
 			view.setId(cursor.getInt(1));
 			return view;
-		}
-		
+		}		
 	}
 	
 	
@@ -59,6 +61,20 @@ public class WordListActivity extends Activity {
 		
 		textView = (TextView) this.findViewById(R.id.textView1);
 		listView = (ListView) this.findViewById(R.id.listView1);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	    		Intent intent = new Intent(WordListActivity.this, HtmlDisplayActivity.class);
+	    		intent.putExtra(HtmlDisplayActivity.REQ, HtmlDisplayActivity.REQ_WORD);
+	    		intent.putExtra(HtmlDisplayActivity.ID, view.getId());
+	    		WordListActivity.this.startActivity(intent);					
+			}			
+		});
+		
+		//this.registerForContextMenu(listView);
+		
+		
 		
 		Intent intent = this.getIntent();
 		if(intent != null) {
@@ -77,6 +93,27 @@ public class WordListActivity extends Activity {
 		
 	}
 
+	@Override
+	protected void onDestroy() {
+		if(cursor != null) {
+			cursor.close();
+		}
+		super.onDestroy();
+	}
+
+	public String getDateByUpdated(int updated) {
+		if(updated == 0)
+			return "";
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(DBAccess.CHECKIN);
+		c.add(Calendar.DATE, updated);
+		
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+		
+		return fmt.format(c.getTime());
+	}
+
 	private void loadCommonWords(int value) {
 		if(value == 0) {
 			//all
@@ -90,17 +127,30 @@ public class WordListActivity extends Activity {
 			textView.setText("All Old Words");
 		}
 		
-		cursor = DBAccess.getWords(0, 0);
+		cursor = DBAccess.getWords(0, value);
 		ListAdapter adapter = new WordCursorAdapter(this, cursor);
 		listView.setAdapter(adapter);
-		
+		//listView.setItemsCanFocus(false);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	    		Intent intent = new Intent(WordListActivity.this, HtmlDisplayActivity.class);
+	    		intent.putExtra(HtmlDisplayActivity.REQ, HtmlDisplayActivity.REQ_WORD);
+	    		intent.putExtra(HtmlDisplayActivity.ID, view.getId());
+	    		WordListActivity.this.startActivity(intent);					
+			}			
+		});
+		//listView.setOnClickListener(this);
 	}	
 
 	private void loadSpecificWords(int value) {
-		// TODO Auto-generated method stub
 		
+		textView.setText("All Words on " + getDateByUpdated(value));
+		
+		cursor = DBAccess.getWords(1, value);
+		ListAdapter adapter = new WordCursorAdapter(this, cursor);
+		listView.setAdapter(adapter);
 	}
-	
-
 
 }

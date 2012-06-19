@@ -1,14 +1,21 @@
 package jie.java.android.lingoshook;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 
 public class HtmlDisplayActivity extends Activity implements OnTouchListener {
 
+	public static String REQ		=	"req";
+	public static String ID			=	"id";
+	public static int REQ_HELP		=	0;
+	public static int REQ_WORD		=	1;
+	
 	private WebView web = null;
 	
 	@Override
@@ -16,12 +23,31 @@ public class HtmlDisplayActivity extends Activity implements OnTouchListener {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		this.setContentView(R.layout.help);
+		this.setContentView(R.layout.html_display);
 		
-		web = (WebView) this.findViewById(R.id.webView1);
+        if(Global.STATE_CODING == 2) {
+        	intiAdView();
+        }
+		
+		web = (WebView) this.findViewById(R.id.webView1);		
 		web.setOnTouchListener(this);
 		
-		loadHelpInfo();
+		Intent intent = this.getIntent();
+		if(intent != null) {
+			if(intent.getExtras().getInt(REQ) == REQ_WORD) {
+				loadWordData(intent.getExtras().getInt(ID));
+			}
+			else {
+				loadHelpInfo();
+			}
+		}
+		else {
+			loadHelpInfo();
+		}
+	}
+
+	private void loadWordData(int id) {
+		web.loadDataWithBaseURL(null, DBAccess.getHTML(id), "text/html", "utf-8", null);
 	}
 
 	private void loadHelpInfo() {
@@ -34,4 +60,8 @@ public class HtmlDisplayActivity extends Activity implements OnTouchListener {
 		return true;
 	}
 
+	private void intiAdView() {
+		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout1);
+		new AdPanelView(this, ll, 0, Global.SCREEN_HEIGHT - 80);
+	}	
 }

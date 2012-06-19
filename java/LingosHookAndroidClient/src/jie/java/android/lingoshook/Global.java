@@ -4,13 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public final class Global {
-	public static final String DATABASE_NAME		=	"/data/data/jie.java.android.lingoshook/LingosHook.db";
-	public static final String APP_TITLE			=	"LingosHook";
-	public static int APP_VERSION					=	1;
+	public static final String DATABASE_NAME			=	"/data/data/jie.java.android.lingoshook/LingosHook.db";
+	public static final String APP_TITLE				=	"LingosHook";
+	public static final int APP_VERSION					=	1;
 	
-	public static int DB_FORMAT_VERSION				=	1;
+	public static final int DB_FORMAT_VERSION			=	1;
 	
-	public static int STATE_CODING					=	0;//0:Debug; 1: Coding; 2: Release
+	public static final int STATE_CODING				=	0;//0:Debug; 1: Coding; 2: Release
+	
+	public static int SCREEN_WIDTH						=	480;
+	public static int SCREEN_HEIGHT						=	800; 
 	
 	public static int initApplication(Context context) {
 		DBAccess.init(DATABASE_NAME);

@@ -90,7 +90,7 @@ public final class Score {
 	}
 
 	private static int loadNewWordData(int limit) {
-		numRestWord = DBAccess.getScoreCount(true);
+		numRestWord = DBAccess.getScoreCount(true, -1);
 		Cursor cursor = DBAccess.getWordData(WORD_NEW, limit, offsetNewWord);
 		if(cursor == null)
 			return -1;
@@ -118,7 +118,7 @@ public final class Score {
 	}
 	
 	private static int loadOldWordData(int limit) {
-		numRestWord = DBAccess.getScoreCount(false);
+		numRestWord = DBAccess.getScoreCount(false, -1);
 		
 		Cursor cursor = DBAccess.getWordData(WORD_OLD, limit, offsetOldWord);
 		if(cursor == null)

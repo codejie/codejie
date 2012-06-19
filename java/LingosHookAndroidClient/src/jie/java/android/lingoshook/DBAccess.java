@@ -35,6 +35,8 @@ public final class DBAccess {
 	public static final int IMPORTTYPE_OVERWRITE	=	0;
 	public static final int IMPORTTYPE_APPEND		=	1;
 	
+	public static Date CHECKIN		= null;
+	
 	private static SQLiteDatabase db = null;
 	
 	public static int init(final String file) {
@@ -217,13 +219,14 @@ public final class DBAccess {
 				return 0;
 			cursor.moveToFirst();
 			
-			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 			//String s = cursor.getString(0);
-			Date checkin = fmt.parse(cursor.getString(0));
+			//Date checkin = fmt.parse(cursor.getString(0));
+			CHECKIN = fmt.parse(cursor.getString(0));
 			Date today = Calendar.getInstance().getTime();
 			cursor.close();
 			
-			return ((today.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24));
+			return (((today.getTime() - CHECKIN.getTime()) / (1000 * 60 * 60 * 24)) + 1);
 		}
 		catch (SQLiteException e) {
 			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
@@ -325,7 +328,7 @@ public final class DBAccess {
 		}
 	}
 	
-	public static int getScoreCount(boolean newword) {
+	public static int getScoreCount(boolean newword, int updated) {
 		try {
 			String sql = "SELECT COUNT(" + COLUMN_SCORE + ") FROM " + TABLE_SCORE;
 			if(newword) {
@@ -333,7 +336,11 @@ public final class DBAccess {
 			}
 			else {
 				sql += " WHERE " + COLUMN_SCORE + "<>" + Score.SCORE_UNKNOWN;
+				if(updated != -1) {
+					sql += " AND " + COLUMN_UPDATED + " >= " + updated;
+				}
 			}
+
 			Cursor cursor = db.rawQuery(sql, null);
 			if(cursor == null)
 				return -1;
@@ -369,7 +376,7 @@ public final class DBAccess {
 
 	public static Cursor getWords(int type, int value) {
 		
-		String sql = "SELECT Word.word, Word.srcid, Score.updated FROM Word, Score WHERE (Word.id = Score.wordid)";
+		String sql = "SELECT Word.word, Word.srcid AS _id, Score.updated FROM Word, Score WHERE (Word.id = Score.wordid)";
 		
 		if(type == 0) {
 			if(value == 1) {
@@ -393,4 +400,5 @@ public final class DBAccess {
 			return null;	
 		}
 	}
+
 }

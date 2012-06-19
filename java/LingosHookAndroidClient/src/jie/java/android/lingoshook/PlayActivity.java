@@ -107,23 +107,23 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 		
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int height = displaymetrics.heightPixels;
-        int width = displaymetrics.widthPixels;
+        Global.SCREEN_HEIGHT = displaymetrics.heightPixels;
+        Global.SCREEN_WIDTH = displaymetrics.widthPixels;
         
-        if(height > width) {		
-			aniResultIn = new TranslateAnimation(width, 0, 0, 0);
+        if(Global.SCREEN_HEIGHT > Global.SCREEN_WIDTH) {		
+			aniResultIn = new TranslateAnimation(Global.SCREEN_WIDTH, 0, 0, 0);
 			aniResultIn.setDuration(700);
 			aniWord = new TranslateAnimation(0, 0, 0, 0);
 			aniWord.setDuration(700);
-			aniResultOut = new TranslateAnimation(0, width, 0, 0);
+			aniResultOut = new TranslateAnimation(0, Global.SCREEN_WIDTH, 0, 0);
 			aniResultOut.setDuration(500);
         }
         else {
-        	aniResultIn = new TranslateAnimation(0, 0, height, 0);
+        	aniResultIn = new TranslateAnimation(0, 0, Global.SCREEN_HEIGHT, 0);
 			aniResultIn.setDuration(700);
 			aniWord = new TranslateAnimation(0, 0, 0, 0);
 			aniWord.setDuration(700);
-			aniResultOut = new TranslateAnimation(0, 0, 0, height);
+			aniResultOut = new TranslateAnimation(0, 0, 0, Global.SCREEN_HEIGHT);
 			aniResultOut.setDuration(500);
         }
 		

@@ -28,7 +28,7 @@ public class AdPanelView implements AdListener {
 
 	private static boolean IS_AD_SHOW	=	true;
 	private static String APP_AD_ID		=	"3ad1d9569acb45969e4d85864727e67d";
-	private static boolean IS_TESTING	=	false;
+	private static boolean IS_TESTING	=	true;
 	private static int[] AD_TYPE 		=	null;
 
 	private ImpressionAdView ad = null;

@@ -35,9 +35,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
         //Toast.makeText(this, "state:" + (savedInstanceState != null ? "yes" : "no"), Toast.LENGTH_SHORT).show();
         
         Global.initApplication(this);
-        
+
         setContentView(R.layout.main);
-        
+              
         this.findViewById(R.id.linearLayout1).setOnTouchListener(this);
         this.findViewById(R.id.linearLayout1).setLongClickable(true);
         
@@ -47,8 +47,12 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     }
 
 	private void intiAdView() {
+		
+		Global.getScreenInfo(this);
+		
 		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout1);
-		new AdPanelView(this, ll, 0, 80);
+		//new AdPanelView(this, ll, 0, 80);
+		new AdPanelView(this, ll, 0, Global.SCREEN_HEIGHT - 80);
 	}
 
 	@Override

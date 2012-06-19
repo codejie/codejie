@@ -105,6 +105,8 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 	
 	private void initAnination() {
 		
+		Global.getScreenInfo(this);
+		
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         Global.SCREEN_HEIGHT = displaymetrics.heightPixels;

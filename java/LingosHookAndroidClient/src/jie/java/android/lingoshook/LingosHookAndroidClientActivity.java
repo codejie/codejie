@@ -27,7 +27,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	private static final int DIALOG_ABOUT 		=	2;
 	private static final int DIALOG_NOWORD		=	3;
 	
-	/** Called when the activity is first created. */
+
+	private boolean hasListShowed 				=	false;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +41,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
         setContentView(R.layout.main);
               
         this.findViewById(R.id.linearLayout1).setOnTouchListener(this);
-        this.findViewById(R.id.linearLayout1).setLongClickable(true);
-        
+        //this.findViewById(R.id.linearLayout1).setLongClickable(true);
+               
         if(Global.STATE_CODING == 2) {
         	intiAdView();
         }
@@ -50,7 +52,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		
 		Global.getScreenInfo(this);
 		
-		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout1);
+		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout2);
 		//new AdPanelView(this, ll, 0, 80);
 		new AdPanelView(this, ll, 0, Global.SCREEN_HEIGHT - 80);
 	}
@@ -65,17 +67,52 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_UP) {
-			if(DBAccess.checkWord()) {
+			
+			if(hasListShowed) {
+				
+				showMainView();
+				
 				Intent intent = new Intent(this, PlayActivity.class);
 				this.startActivity(intent);
+				
 			}
 			else {
-				this.showDialog(DIALOG_NOWORD);
+				showListView();
+				
+				//hasListShowed = true;
 			}
+			//this.setContentView(R.layout.main_list);
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View v = factory.inflate(R.layout.main_list, null);
+            
+            LinearLayout p = (LinearLayout) this.findViewById(R.id.linearLayout1);
+            p.removeAllViews();
+            p.addView(v);
+            
+            
+			return true;
+			
+//			if(DBAccess.checkWord()) {
+//				Intent intent = new Intent(this, PlayActivity.class);
+//				this.startActivity(intent);
+//			}
+//			else {
+//				this.showDialog(DIALOG_NOWORD);
+//			}
 		}
-		return false;
+		return true;
 	}
 	
+	private void showMainView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void showListView() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		this.getMenuInflater().inflate(R.menu.main, menu);
@@ -115,7 +152,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     		final Builder builder = new AlertDialog.Builder(this);
     		builder.setIcon(android.R.drawable.ic_dialog_info);
     		String dir = Environment.getExternalStorageDirectory().getPath();
-    		String file = "clientdata.db3";
+    		String file = "LH_Export.db3";
             LayoutInflater factory = LayoutInflater.from(this);
             final View v = factory.inflate(R.layout.import_dialog, null);
             final EditText d = (EditText) v.findViewById(R.id.editText1);

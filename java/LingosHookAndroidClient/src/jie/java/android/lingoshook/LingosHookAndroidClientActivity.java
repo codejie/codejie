@@ -38,11 +38,12 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
         
         Global.initApplication(this);
 
-        setContentView(R.layout.main);
-              
+        setContentView(R.layout.main);              
         this.findViewById(R.id.linearLayout1).setOnTouchListener(this);
         //this.findViewById(R.id.linearLayout1).setLongClickable(true);
-               
+
+        showMainView();
+
         if(Global.STATE_CODING == 2) {
         	intiAdView();
         }
@@ -70,11 +71,10 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 			
 			if(hasListShowed) {
 				
-				showMainView();
+				//showMainView();
 				
 				Intent intent = new Intent(this, PlayActivity.class);
-				this.startActivity(intent);
-				
+				this.startActivity(intent);				
 			}
 			else {
 				showListView();
@@ -82,12 +82,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 				//hasListShowed = true;
 			}
 			//this.setContentView(R.layout.main_list);
-            LayoutInflater factory = LayoutInflater.from(this);
-            final View v = factory.inflate(R.layout.main_list, null);
-            
-            LinearLayout p = (LinearLayout) this.findViewById(R.id.linearLayout1);
-            p.removeAllViews();
-            p.addView(v);
+
             
             
 			return true;
@@ -104,13 +99,27 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	}
 	
 	private void showMainView() {
-		// TODO Auto-generated method stub
-		
+        //LayoutInflater factory = LayoutInflater.from(this);
+        //final View v = factory.inflate(R.layout.main_title, null);
+        
+        LinearLayout p = (LinearLayout) this.findViewById(R.id.linearLayout1);
+        p.removeAllViews();
+        LayoutInflater.from(this).inflate(R.layout.main_title, p);
+        //p.addView(v);
+        
+        hasListShowed = false;
 	}
 
 	private void showListView() {
-		// TODO Auto-generated method stub
-		
+        //LayoutInflater factory = LayoutInflater.from(this);
+        //final View v = factory.inflate(R.layout.main_list, null);
+        
+        LinearLayout p = (LinearLayout) this.findViewById(R.id.linearLayout1);
+        p.removeAllViews();
+        LayoutInflater.from(this).inflate(R.layout.main_list, p);
+        //p.addView(LayoutInflater.from(this).inflate(R.layout.main_list, null));
+        
+        hasListShowed = true;
 	}
 
 	@Override

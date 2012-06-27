@@ -38,8 +38,9 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 			_cursor = DBAccess.getScoreStat();
 			if(_cursor == null)
 				return -1;
-			if(_cursor.moveToFirst() == false)
+			if(_cursor.moveToFirst() == false) {
 				return -1;
+			}
 			return 0;
 		}
 		
@@ -73,7 +74,7 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 			_cursor.moveToPosition(position);
 			
 			if(_cursor.getInt(0) != 0) {
-				u.setText(String.format("%d", (_cursor.getInt(0) - Score.deltaUpdated)));
+				u.setText(String.format("%d", (_cursor.getInt(0) - Score.getDeltaUpdated())));
 			}
 			else {
 				u.setText("New");

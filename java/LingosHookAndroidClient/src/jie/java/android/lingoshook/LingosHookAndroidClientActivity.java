@@ -19,6 +19,7 @@ import android.view.View.OnTouchListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LingosHookAndroidClientActivity extends Activity implements OnTouchListener {
@@ -74,7 +75,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 				//showMainView();
 				
 				Intent intent = new Intent(this, PlayActivity.class);
-				this.startActivity(intent);				
+				this.startActivity(intent);
+				
+				showMainView();
 			}
 			else {
 				showListView();
@@ -117,6 +120,24 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
         LinearLayout p = (LinearLayout) this.findViewById(R.id.linearLayout1);
         p.removeAllViews();
         LayoutInflater.from(this).inflate(R.layout.main_list, p);
+        
+        int n = DBAccess.getScoreCount(true, -1);
+        int o = DBAccess.getScoreCount(false, Score.getDeltaUpdated());
+        
+        if(n > Setting.numLoadNewWord) {
+        	n = Setting.numLoadNewWord;
+        }
+        
+        if(Setting.numLoadOldWord != 0 && o > Setting.numLoadOldWord) {
+        	o = Setting.numLoadOldWord;
+        }        
+                
+		TextView text = ((TextView)this.findViewById(R.id.textView2));
+		text.setText(String.format("%d", (n)));
+
+		text = ((TextView)this.findViewById(R.id.textView3));
+		text.setText(String.format("%d", (o)));
+       
         //p.addView(LayoutInflater.from(this).inflate(R.layout.main_list, null));
         
         hasListShowed = true;

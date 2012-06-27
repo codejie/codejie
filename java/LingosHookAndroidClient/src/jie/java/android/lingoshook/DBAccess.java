@@ -215,8 +215,10 @@ public final class DBAccess {
 			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_VALUE }, COLUMN_ID + "=" + INFOTAG_CHECKIN, null, null, null, null);
 			if(cursor == null)
 				return 0;
-			if(cursor.getCount() == 0)
+			if(cursor.getCount() == 0) {
+				cursor.close();
 				return 0;
+			}
 			cursor.moveToFirst();
 			
 			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
@@ -328,7 +330,7 @@ public final class DBAccess {
 		}
 	}
 	
-	public static int getScoreCount(boolean newword, int updated) {
+	public static int getScoreCount(boolean newword, long updated) {
 		try {
 			String sql = "SELECT COUNT(" + COLUMN_SCORE + ") FROM " + TABLE_SCORE;
 			if(newword) {
@@ -337,7 +339,7 @@ public final class DBAccess {
 			else {
 				sql += " WHERE " + COLUMN_SCORE + "<>" + Score.SCORE_UNKNOWN;
 				if(updated != -1) {
-					sql += " AND " + COLUMN_UPDATED + " >= " + updated;
+					sql += " AND " + COLUMN_UPDATED + " <= " + updated;
 				}
 			}
 

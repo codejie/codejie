@@ -66,7 +66,7 @@ public final class Score {
 	public static final long UPDATED_START		=	30;
 	public static final int DEFAULT_LIMIT_OLD	=	30;
 	
-	public static long deltaUpdated = 0;
+	private static long deltaUpdated = 0;
 	
 	private static int offsetNewWord = 0;
 	private static int offsetOldWord = 0;		
@@ -87,6 +87,10 @@ public final class Score {
 	
 	public static void setDeltaUpdated(long delta) {
 		deltaUpdated = delta;
+	}
+	
+	public static long getDeltaUpdated() {
+		return deltaUpdated;
 	}
 
 	private static int loadNewWordData(int limit) {

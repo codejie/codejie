@@ -56,15 +56,19 @@ public final class Score {
 	
 	//public static final String CACHE_FILE		=	"/lhc_cache.html";
 
-	public static final int WORD_ALL	=	0;
-	public static final int WORD_NEW	=	1;
-	public static final int WORD_OLD	=	2;
+	public static final int WORD_TYPE_ALL	=	0;
+	public static final int WORD_TYPE_NEW	=	1;
+	public static final int WORD_TYPE_OLD	=	2;
 	
 	//private static final int WORD_LIMIT_NEW	=	3;
 	//private static final int WORD_LIMIT_OLD	=	3;
 
-	public static final long UPDATED_START		=	30;
+	public static final long UPDATED_START		=	7;//30;
 	public static final int DEFAULT_LIMIT_OLD	=	30;
+	
+	public static int TODAY_NEW		=	0;
+	public static int TODAY_OLD		=	0;
+	public static int WORD_TOTAL	=	0;
 	
 	private static long deltaUpdated = 0;
 	
@@ -79,6 +83,18 @@ public final class Score {
 	
 	public static int init() {
 		deltaUpdated = DBAccess.getDeltaUpdate();
+		
+		WORD_TOTAL = DBAccess.getWordCount();
+        TODAY_NEW = DBAccess.getScoreCount(true, -1);
+        TODAY_OLD = DBAccess.getScoreCount(false, Score.getDeltaUpdated());
+        
+        if(TODAY_NEW > Setting.numLoadNewWord) {
+        	TODAY_NEW = Setting.numLoadNewWord;
+        }
+        
+        if(Setting.numLoadOldWord != 0 && TODAY_OLD > Setting.numLoadOldWord) {
+        	TODAY_OLD = Setting.numLoadOldWord;
+        }
 		
 		Log.d(Global.APP_TITLE, "score deltaUpdated : " + deltaUpdated);
 		
@@ -95,7 +111,7 @@ public final class Score {
 
 	private static int loadNewWordData(int limit) {
 		numRestWord = DBAccess.getScoreCount(true, -1);
-		Cursor cursor = DBAccess.getWordData(WORD_NEW, limit, offsetNewWord);
+		Cursor cursor = DBAccess.getWordData(WORD_TYPE_NEW, limit, offsetNewWord);
 		if(cursor == null)
 			return -1;
 		
@@ -124,7 +140,7 @@ public final class Score {
 	private static int loadOldWordData(int limit) {
 		numRestWord = DBAccess.getScoreCount(false, -1);
 		
-		Cursor cursor = DBAccess.getWordData(WORD_OLD, limit, offsetOldWord);
+		Cursor cursor = DBAccess.getWordData(WORD_TYPE_OLD, limit, offsetOldWord);
 		if(cursor == null)
 			return -1;
 		
@@ -162,25 +178,26 @@ public final class Score {
 	
 	private static int loadWordData() {
 		if(typeWord == WordType.NULL) {
-			if(loadNewWordData(Setting.numLoadNewWord) != 0) {
+			if(loadNewWordData(TODAY_NEW) != 0) {
 				return -1;
 			}
 			if(listWord.isEmpty())
 				return loadWordData();
 		}
 		else if(typeWord == WordType.NEW) {
-			if(loadOldWordData(Setting.numLoadOldWord) != 0) {
+			if(loadOldWordData(TODAY_OLD) != 0) {
 				return -1;
 			}
 			if(listWord.isEmpty())
 				return loadWordData();
 		}
 		else if(typeWord == WordType.OLD) {
-			if(Setting.numLoadOldWord == 0) {
-				if(loadOldWordData(DEFAULT_LIMIT_OLD) != 0)
-					return -1;
-			}
-			else if(Setting.loadMistakeWord) { 
+//			if(Setting.numLoadOldWord == 0) {
+//				if(loadOldWordData(DEFAULT_LIMIT_OLD) != 0)
+//					return -1;
+//			}
+//			else
+			if(Setting.loadMistakeWord) { 
 				if(loadMistakeWordData() != 0) {
 					return -1;
 				}

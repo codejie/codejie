@@ -60,5 +60,7 @@
     <string name="str_loadmistakeword">是否加载记错的单词？</string>
     <string name="str_nowordindb">没有任何单词记录，请先使用‘导入’功能加载数据。</string>
     <string name="str_nomoreword">没有新的单词记录了。</string>
-    <string name="title_ad_version">Wooboo 2.2</string>    
+	<string name="str_today_nomoreword">今天没有需要记忆单词了.</string>    
+    <string name="title_ad_version">Wooboo 2.2</string>
+    <string name="title_today">今日:</string>    
 </resources>

@@ -6,12 +6,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +30,8 @@ import android.widget.ViewSwitcher;
 
 public class PlayActivity extends Activity implements OnClickListener, OnTouchListener {
 
+	private static final int DIALOG_LOADMISTAKEWORD = 0;
+	
 	private ViewSwitcher switcher;
 	private TranslateAnimation aniResultIn = null;
 	private TranslateAnimation aniWord = null;
@@ -183,7 +190,9 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 	}
 
 	private void updateWordScore(int judge) {
-		Score.updateWordData(dataWord.data, scoreWord, judge);
+		if(dataWord != null && dataWord.data != null) {
+			Score.updateWordData(dataWord.data, scoreWord, judge);
+		}
 	}
 
 	private void setClickListener(boolean enable) {
@@ -234,6 +243,19 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			//Log.d(Global.APP_TITLE, "Word - back key.");
+			if(Setting.loadMistakeWord && Score.getMistakeWordCount() > 0) {
+				//Toast.makeText(this, "mistake word list", Toast.LENGTH_SHORT).show();
+				this.showDialog(DIALOG_LOADMISTAKEWORD);
+				return true;
+			}
+		}
+		return super.onKeyUp(keyCode, event);
 	}
 
 	private void showWord() {
@@ -353,5 +375,57 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 			return;
    	
 		Speaker.speak(dataWord.data.word);
-	}    
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog dlg = null;
+		switch(id) {
+		case DIALOG_LOADMISTAKEWORD: {
+			Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.str_loadmistakeword);
+			builder.setIcon(android.R.drawable.ic_dialog_info);
+			builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					onDialogClick(DIALOG_LOADMISTAKEWORD, android.R.id.button1);
+					dialog.dismiss();
+					
+				}
+			});
+			builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					onDialogClick(DIALOG_LOADMISTAKEWORD, android.R.id.button2);
+					dialog.dismiss();					
+				}
+			});
+			dlg = builder.create();
+			}
+			break;
+		default:
+			break;
+			
+		}
+		return dlg;
+	}
+	
+	protected void onDialogClick(int id, int which) {
+		switch(id)
+		{
+		case DIALOG_LOADMISTAKEWORD:
+			if(which == android.R.id.button1) {
+				Score.loadMistakeWordData();
+				onResume();
+			}
+			else {
+				this.finish();
+			}
+			break;
+		default:
+			break;
+		}		
+	}	
 }

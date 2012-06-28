@@ -70,42 +70,36 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	public boolean onTouch(View view, MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_UP) {
 			
-			if(hasListShowed) {
-				
-				//showMainView();
-				
-				Intent intent = new Intent(this, PlayActivity.class);
-				this.startActivity(intent);
+			if(hasListShowed) {				
+				if(Score.TODAY_NEW != 0 || Score.TODAY_OLD != 0) {
+					Intent intent = new Intent(this, PlayActivity.class);
+					this.startActivity(intent);
+				}
+				else {
+					Toast.makeText(this, this.getString(R.string.str_today_nomoreword), Toast.LENGTH_LONG).show();
+					return true;
+				}
 				
 				showMainView();
 			}
 			else {
-				showListView();
+				if(Score.WORD_TOTAL == 0) {
+					//Toast.makeText(this, this.getString(R.string.str_nomoreword), Toast.LENGTH_LONG).show();
+					this.showDialog(DIALOG_NOWORD);
+					return true;
+				}
 				
-				//hasListShowed = true;
+				showListView();
 			}
-			//this.setContentView(R.layout.main_list);
-
-            
             
 			return true;
-			
-//			if(DBAccess.checkWord()) {
-//				Intent intent = new Intent(this, PlayActivity.class);
-//				this.startActivity(intent);
-//			}
-//			else {
-//				this.showDialog(DIALOG_NOWORD);
-//			}
 		}
 		return true;
 	}
 	
 	private void showMainView() {
-        //LayoutInflater factory = LayoutInflater.from(this);
-        //final View v = factory.inflate(R.layout.main_title, null);
-        
-        LinearLayout p = (LinearLayout) this.findViewById(R.id.linearLayout1);
+
+		LinearLayout p = (LinearLayout) this.findViewById(R.id.linearLayout1);
         p.removeAllViews();
         LayoutInflater.from(this).inflate(R.layout.main_title, p);
         //p.addView(v);
@@ -120,25 +114,15 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
         LinearLayout p = (LinearLayout) this.findViewById(R.id.linearLayout1);
         p.removeAllViews();
         LayoutInflater.from(this).inflate(R.layout.main_list, p);
-        
-        int n = DBAccess.getScoreCount(true, -1);
-        int o = DBAccess.getScoreCount(false, Score.getDeltaUpdated());
-        
-        if(n > Setting.numLoadNewWord) {
-        	n = Setting.numLoadNewWord;
-        }
-        
-        if(Setting.numLoadOldWord != 0 && o > Setting.numLoadOldWord) {
-        	o = Setting.numLoadOldWord;
-        }        
-                
+            
 		TextView text = ((TextView)this.findViewById(R.id.textView2));
-		text.setText(String.format("%d", (n)));
+		text.setText(String.format("%d", (Score.TODAY_NEW)));
 
 		text = ((TextView)this.findViewById(R.id.textView3));
-		text.setText(String.format("%d", (o)));
-       
-        //p.addView(LayoutInflater.from(this).inflate(R.layout.main_list, null));
+		text.setText(String.format("%d", (Score.TODAY_OLD)));
+
+		text = ((TextView)this.findViewById(R.id.textView1));
+		text.setText(String.format("%d", (Score.WORD_TOTAL)));		
         
         hasListShowed = true;
 	}
@@ -204,7 +188,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 						@Override
 						public void handleMessage(Message msg) {
 							dialog.dismiss();
-							//super.handleMessage(msg);
+							super.handleMessage(msg);
 						}    					
     				};
 
@@ -285,6 +269,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		else {
 			Score.init();
 		}
+		showMainView();
 	}
 	
 	private void onMenuExit() {

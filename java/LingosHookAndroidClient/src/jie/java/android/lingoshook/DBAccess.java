@@ -121,8 +121,10 @@ public final class DBAccess {
 				String s = sql + " LIMIT 10 OFFSET " + offset;
 				
 				Cursor cursor = src.rawQuery(s, null);
-				if(cursor.getCount() == 0)
+				if(cursor.getCount() == 0) {
+					cursor.close();
 					break;
+				}
 				while(cursor.moveToNext()) {
 					n = cursor.getInt(0);
 					if(p != n) {
@@ -293,7 +295,7 @@ public final class DBAccess {
 			//select Word.srcid, Word.word, Score.updated, Score.score from Word, Score where Word.id = Score.wordid and Score.updated = 0 limit 10 offset 10
 			String sql = "SELECT " + TABLE_WORD + "." + COLUMN_ID + "," + TABLE_WORD + "." + COLUMN_SRCID + "," + TABLE_WORD + "." + COLUMN_WORD + "," + TABLE_SCORE + "." + COLUMN_UPDATED + "," + TABLE_SCORE + "." + COLUMN_SCORE + " FROM " + TABLE_WORD + "," + TABLE_SCORE;
 			sql += " WHERE " + TABLE_WORD + "." + COLUMN_ID + "=" + TABLE_SCORE + "." + COLUMN_WORDID + " AND " + TABLE_SCORE + "." + COLUMN_UPDATED;
-			if(type == Score.WORD_NEW)
+			if(type == Score.WORD_TYPE_NEW)
 				sql += "=0 AND " + TABLE_SCORE + "." + TABLE_SCORE + "=" + Score.SCORE_UNKNOWN;
 			else
 				sql += ">0 and " + TABLE_SCORE + "." + COLUMN_UPDATED;
@@ -327,6 +329,23 @@ public final class DBAccess {
 		catch (SQLException e) {
 			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
 			return null;	
+		}
+	}
+	
+	public static int getWordCount() {
+		try {
+			String sql = "SELECT COUNT(*) FROM " + TABLE_WORD;
+			Cursor cursor = db.rawQuery(sql, null);
+			if(cursor == null)
+				return -1;
+			cursor.moveToFirst();
+			int ret = cursor.getInt(0);
+			cursor.close();
+			return ret;
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return -1;	
 		}
 	}
 	

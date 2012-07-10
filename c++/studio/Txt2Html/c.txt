@@ -3217,8 +3217,7 @@ acquisition / ‘ækwi’ziʃәn/n. 获得,添加的
 物品
 activate / ‘æktiveit/vt. 刺激,使活动
 acute / ә’kju:t/a. 敏锐的
-adhere / әd’hiә/vi. (fml)粘附;追随;坚持(~ to 
-sth)
+adhere / әd’hiә/vi. (fml)粘附;追随;坚持(~ to sth)
 adjacent / ә’dʒeisәnt/a.毗连的；紧接着的
 adjoin / ә’dʒɔin/vt.贴近，毗连；靠近
 administer / әd’ministә/vt.执行,管理,治理,
@@ -3312,7 +3311,7 @@ avail / ә’veil/vt.有益于 n.效用
 avert / ә’vә:t/vt. 转开,避免,防止
 aviation / eivi’eiʃәn/n.飞行
 axis / ‘æksis/n.轴，轴线；第二颈椎
-B
+#B
 bachelor / ‘bætʃәlә/n.未婚男子；学士
 badge / bædʒ/n.徽章，像章；标志
 baffle / ‘bæfl/vt.使挫折 n.迷惑
@@ -4076,8 +4075,7 @@ merge / mә:dʒ/vt. 使合并,使并为一体
 mess / mes/vt.弄脏，弄乱，搞糟
 messenger / ‘mesindʒә/n.送信者，信使
 metallic / mi’tælik/a.金属的 n.金属粒子
-metropolitan / metrә’pɔlitәn/a.主要都市的
-n.大主教
+metropolitan / metrә’pɔlitәn/a.主要都市的 n.大主教
 midst / ‘midst/n.中部，中间，当中
 migrate / mai’greit/vi.迁移，移居
 militant / ‘militәnt/a. 好战的
@@ -4421,8 +4419,7 @@ scorn / skɔ:n/n.轻蔑；嘲笑 vt.轻蔑
 scrap / skræp/n.碎片；废料 vt.废弃
 script / skript/n. 手迹,手稿,剧本,字母表
 scrutiny / ‘skrutni/n. 细看,仔细检查,监视
-sculpture / ‘skΛlptʃә/n. 雕刻,雕塑,雕刻
-(术)
+sculpture / ‘skΛlptʃә/n. 雕刻,雕塑,雕刻(术)
 seam / si:m/n.缝口；接缝；骨缝
 sector / ‘sektә/n.部门,部分,扇形
 seemingly / ‘si:miŋli/ad.表面上，外表上

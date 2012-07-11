@@ -18,7 +18,7 @@ int TxtTidy::Tidy(const std::string& input, const std::string& output)
 	size_t size = 0;
 	char ch;
 	bool flag = false;
-	bool lf = true;
+	bool lf = false;
 	while(true)
 	{
 		ifs.get(ch);
@@ -39,7 +39,7 @@ int TxtTidy::Tidy(const std::string& input, const std::string& output)
 			lf = true;
 		}
 		
-		if(ch == '#' && lf == true)
+		if(ch == '#'/* && lf == true*/)
 		{
 			flag = true;
 			continue;
@@ -166,6 +166,8 @@ int TxtTidy::GetData(TxtTidy::TData &data)
 		return -1;
 	}
 
+	data.data.clear();
+
 	std::string str = buff;
 	std::string::size_type pos = str.find("/");
 	if(pos == std::string::npos)
@@ -176,6 +178,35 @@ int TxtTidy::GetData(TxtTidy::TData &data)
 	if(end == std::string::npos || end >= str.size() -1)
 		return -1;
 	data.symbol = str.substr(pos + 1, end - pos - 1);
-	data.data = str.substr(end + 1);
+	AnalyseData(str.substr(end + 1), data.data);
+	//data.data = str.substr(end + 1);
+	return 0;
+}
+
+int TxtTidy::AnalyseData(const std::string& data, std::vector<std::string>& vct) const
+{
+	std::string::size_type begin = 0, end = 0, t;
+	std::string::size_type pos = data.find(".");
+	if(pos == std::string::npos)
+	{
+		vct.push_back(data);
+		return 0;
+	}
+	end = pos + 1;
+	while(end < data.size())//ascii
+	{
+		if(data[end] > 0 && data[end] != '&' && data[end] != '(' && data[end] != ')' && data[end] != '.' && data[end] != '=' && data[end] != ',' && data[end] != ';' && !::isdigit(data[end]))// ascii
+//		if(data[end] > 0 && (data[end] == 'n' || data[end] == 'v' || data[end] == ')' && data[end] != '.')// ascii
+		{
+			vct.push_back(data.substr(begin, end - begin));
+			begin = end;
+			end = data.find(".", begin);
+		}
+
+		++ end;
+	}
+
+	vct.push_back(data.substr(begin, end - begin));
+
 	return 0;
 }

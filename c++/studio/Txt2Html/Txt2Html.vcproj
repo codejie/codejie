@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(WXSQLITE_ROOT)\sqlite3\include&quot;;&quot;$(WXSQLITE_ROOT)\include&quot;;&quot;$(WX_ROOT)\include\msvc&quot;;&quot;$(WX_ROOT)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,7 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="sqlite3.lib wxcode_msw28ud_wxsqlite3.lib wxbase28ud.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(WXSQLITE_ROOT)\sqlite3\lib&quot;;&quot;$(WXSQLITE_ROOT)\lib\vc_dll&quot;;&quot;$(WX_ROOT)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -175,6 +178,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Txt2DB.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\TxtTidy.cpp"
 				>
 			</File>
@@ -184,6 +191,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\Txt2DB.h"
+				>
+			</File>
 			<File
 				RelativePath=".\TxtTidy.h"
 				>

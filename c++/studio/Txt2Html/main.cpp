@@ -14,7 +14,7 @@ int main()
 	TxtTidy::TData data;
 	while(tidy.GetData(data) == 0)
 	{
-		std::cout << data.word << "[" << data.symbol << "]:" << data.data << std::endl;
+		std::cout << data.word << "[" << data.symbol << "]:" << data.data.size() << std::endl;
 	}
 
 	return 0;

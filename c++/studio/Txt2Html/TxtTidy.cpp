@@ -18,11 +18,54 @@ int TxtTidy::Tidy(const std::string& input, const std::string& output)
 	size_t size = 0;
 	char ch;
 	bool flag = false;
+	bool lf = true;
 	while(true)
 	{
 		ifs.get(ch);
 		if(ifs.eof())
 			break;
+		
+		if(ch == 0x0a)
+		{
+			if(flag == true)
+			{
+				flag = false;
+				continue;
+			}
+
+			ifs.get(ch);
+			if(ifs.eof())
+				break;
+			lf = true;
+		}
+		
+		if(ch == '#' && lf == true)
+		{
+			flag = true;
+			continue;
+		}
+		else if(ch == 0x0a)
+		{
+			flag = false;
+			lf = true;
+			continue;
+		}
+		else if(ch == 0x20 || ch == 0x09)
+		{
+			continue;
+		}
+		else if(flag == false)
+		{
+			if(ch > 0 && lf == true)
+			{
+				ofs.put(SEPARATOR);
+			}
+			ofs.put(ch);
+		}
+
+		lf = false;
+
+/*
 		if(ch == '#')
 		{
 			flag = true;
@@ -70,6 +113,7 @@ int TxtTidy::Tidy(const std::string& input, const std::string& output)
 			if(flag == false)
 				ofs.put(ch);
 		}
+*/
 		//if(ch == 0x0a || ch == 0x0d || ch == 0x20 || ch == 0x09)
 		//	continue;
 		//ofs.put(ch);
@@ -128,5 +172,10 @@ int TxtTidy::GetData(TxtTidy::TData &data)
 		return -1;
 	data.word = str.substr(0, pos);
 
+	std::string::size_type end = str.find("/", pos + 1);
+	if(end == std::string::npos || end >= str.size() -1)
+		return -1;
+	data.symbol = str.substr(pos + 1, end - pos - 1);
+	data.data = str.substr(end + 1);
 	return 0;
 }

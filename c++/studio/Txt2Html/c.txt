@@ -497,8 +497,8 @@ coat/ kəut/ n.外套，上衣；表皮
 cock/ kɔk/ n.公鸡；雄禽；旋塞 
 code/ kəud/ n.准则；法典；代码  
 coffee/ ‘kɔfi/ n.咖啡，咖啡茶  
-cɔil/ kɔil/ n.(一)卷；线圈 vt.卷  
-cɔin/ kɔin/ n.硬币；铸造(硬币)  
+coil/ kɔil/ n.(一)卷；线圈 vt.卷  
+coin/ kɔin/ n.硬币；铸造(硬币)  
 cold/ kəuld/ a.冷的；冷淡的 n.冷  
 collapse/ kə’læps/ vi.倒坍；崩溃，瓦解 
 collar/ ‘kɔlə/ n.衣领，项圈  
@@ -658,7 +658,7 @@ costly/ ‘kɔstli/ a.昂贵的；价值高的
 cottage/ ‘kɔtidʒ/ n.村舍，小屋 
 cotton/ ‘kɔtn/ n.棉；棉线；棉布 
 cough/ kɔf/ vi.咳，咳嗽 n.咳嗽 
-could/ kud, kəd/ aux.v.(can的过去式) 
+#could/ kud, kəd/ aux.v.(can的过去式) 
 council/ ‘kaunsil/ n.理事会，委员会 
 count/ kaunt/ vt.计算 vi.数，计数  
 counter/ ‘kauntə/ n.柜台；计数器 
@@ -2625,7 +2625,7 @@ resistance/ ri’zistəns/ n.抵抗；抵制；抵抗力
 resistant/ ri’zistənt/ a.抵抗的，反抗的 
 resolution/ rezə’lju:ʃən/ n.坚决，坚定；决定  
 resolve/ ri’zɔlv/ vt.解决；决心 n.决心  
-resort/ ri’zɔ:t/ vi.&n.求助，凭借;诉诸于(+ to武力等)  
+#resort/ ri’zɔ:t/ vi.&n.求助，凭借;诉诸于(+ to武力等)  
 respective/ ris’pektiv/ 各自的，各个的  
 respectively/ ris’pektivli/ ad.各自地，分别地  
 respond/ ris’pɔnd/ vi.作答；响应 
@@ -2694,7 +2694,7 @@ satisfactory/ sætis’fæktəri/ a.令人满意的，良好的
 saucer/ ‘sɔ:sə/ n.茶托，浅碟 
 sausage/ ‘sɔsidʒ/ n.香肠，腊肠 
 saw/ sɔ:/ n.锯子 vt.锯，锯开 
-say/ sei/ vt.比如说[用于举例] 
+#say/ sei/ vt.比如说[用于举例] 
 scale/ skeil/ n.天平，磅秤，秤 
 scale/ skeil/ n.标度；比例；大小  
 scan/ skæn/ vt.细看；浏览；扫描  
@@ -3054,7 +3054,7 @@ tyre/ ‘taiə/ n.轮胎，车胎
 #UUUUUUUUU
 ultimate/ ‘Λltimit/ a.最后的，最终的 
 unconscious/ Λn’kɔʃəs/ a.不省人事的  
-uncover/ Λn’kΛvə/ vt.揭开…的盖子  
+#uncover/ Λn’kΛvə/ vt.揭开…的盖子  
 undergo/ Λndə’gəu/ vt.经历，经受，忍受 
 undergraduate/ Λndə’grædjuit/ n.大学在校生  
 underline/ Λndə’lain/ vt.划线于…之下  
@@ -3190,7 +3190,7 @@ wound/ wu:nd/ n.创伤，伤 vt.使受伤
 wrap/ ræp/ vt.裹，包，捆 n.披肩 
 wreck/ rek/ n.失事；残骸 vt.破坏 
 wrist/ rist/ n.腕，腕关节 
-X-ray/ ‘eks’rei/ n.X射线，X光 
+#X-ray/ ‘eks’rei/ n.X射线，X光 
 yard/ ja:d/ n.院子，庭院；场地 
 yard/ ja:d/ n.码  
 yawn/ jɔ:n/ vi.打呵欠 n.呵欠 
@@ -3198,9 +3198,7 @@ yearly/ ‘jə:li/ a.每年的 ad.一年一度
 yield/ ji:ld/ vt.&vi.出产 n.产量 
 youth/ ju:θ/ n.青春；青年们；青年 
 zone/ zəun/ n.地区，区域，范围
-第二部分：六级词汇大全（带音标）
-
-
+#第二部分：六级词汇大全（带音标）
 abnormal / æb’nɔ:mәl/a.不正常的；变态的
 abolish / ә’bɔliʃ/ vt.废除，取消
 abrupt/ ә’brΛpt/a. 突然的，意外的，唐突的 
@@ -3210,14 +3208,14 @@ academy / ә’kædәmi/n.私立中学；专科院校
 accessory / æk’sesәri/n.同谋 a.附属的
 accommodate / ә’kɔmәdeit/vt.容纳；供应，供
 给
-accord / ә’kɔ:d/vt.一致(~ with)；给予
+#accord / ә’kɔ:d/vt.一致(~ with)；给予
 acknowledge / әk’nɔlidʒ/vt.承认；告知收到
 acquaint / ә’kweint/vt.使认识，使了解
 acquisition / ‘ækwi’ziʃәn/n. 获得,添加的
 物品
 activate / ‘æktiveit/vt. 刺激,使活动
 acute / ә’kju:t/a. 敏锐的
-adhere / әd’hiә/vi. (fml)粘附;追随;坚持(~ to sth)
+#adhere / әd’hiә/vi. (fml)粘附;追随;坚持(~ to sth)
 adjacent / ә’dʒeisәnt/a.毗连的；紧接着的
 adjoin / ә’dʒɔin/vt.贴近，毗连；靠近
 administer / әd’ministә/vt.执行,管理,治理,
@@ -3473,8 +3471,7 @@ confront / kәn’frΛnt/vt.使面对；使对证
 confusion / kәn’fju:ʒәn/n.混乱；骚乱；混淆
 conscientious / kɔnʃi’enʃәs/a. 本着良心的,
 负责的
-consecutive /kәn’sekjutiv/a.连续/联贯的,始
-的
+#consecutive /kәn’sekjutiv/a.连续/联贯的,始的
 consensus/ kәn’sensәs/n. 一致
 consequent / ‘kɔnsikwәnt/a.作为结果的；必然
 的
@@ -3516,14 +3513,13 @@ correspondence / kɔris’pɔndәns/n.通信；符合；
 对应
 correspondent / kɔris’pɔndәnt/n.通信者；通
 讯员
-corrode / kә’rәud/vt.vi 腐蚀,侵蚀,破坏
+#corrode / kә’rәud/vt.vi 腐蚀,侵蚀,破坏
 corrupt / kә’rΛpt/vt.贿赂 a.腐败的
 cosmic / ‘kɔzmik/a.宇宙的；广大无边的
 costume / ‘kɔstju:m/n. 装束,服装
 couch / kautʃ/n.睡椅，长沙发椅
 counsel / ‘kaunsәl/n.商议；忠告；律师
-counterpart / ‘kauntәpa:t/n.副/复本,配对物,
-相应物
+#counterpart / ‘kauntәpa:t/n.副/复本,配对物,相应物
 courtesy / ‘kә:tisi/n.礼貌，谦恭，请安
 coward / ‘kauәd/a.懦怯的，胆小的
 cradle / ‘kreidl/n.摇篮，发源地
@@ -3535,8 +3531,7 @@ crucial / ‘kru:ʃiәl/a. 决定性的,重要的,严厉
 的
 cruise / kru:z/vi.巡航 vt.巡航于…
 cue / kju:/n. 开端,线索,发辫,长队
-culminate / ‘kΛlmineit/vi.到绝顶,达于极点/
-高潮
+#culminate / ‘kΛlmineit/vi.到绝顶,达于极点/高潮
 cumulative / ‘kjumjuleitiv/a. 累积的
 curb / kә:b/n. 抑制,勒马绳 vt. 抑制,束缚
 curt / kә:t/a. 简略的,简短的,生硬的
@@ -3623,8 +3618,7 @@ disposition / dispә’ziʃәn/n. 性情,处置,处理,
 布置
 disregard / ‘disri’ga:d/vt.不管，不顾 n.
 不管
-disrupt / dis’rΛpt/a.分裂的,分散的 vt.使分
-裂/瓦解
+disrupt / dis’rΛpt/a.分裂的,分散的 vt.使分裂/瓦解
 dissipate / ‘disipeit/vt.驱散；浪费vi.消散
 distil / dis’til/v. 蒸馏, 提取....的精华
 distort / dis’tɔ:t/vt.歪曲，曲解，扭曲

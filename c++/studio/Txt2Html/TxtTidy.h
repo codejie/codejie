@@ -24,10 +24,9 @@ public:
 
 //	int Load(const std::string& file);
 	int Tidy(const std::string& input, const std::string& output);
-	int Load(const std::string& file);
-	int GetData(TData& data);
 private:
-	int AnalyseData(const std::string& data, std::vector<std::string>& vct) const;
+	int AnalyseData(std::ofstream& ofs, const std::string& data) const;
+	int AnalyseSubData(std::ofstream& ofs, const std::string& data) const;
 private:
 	std::ifstream _ifs;
 };

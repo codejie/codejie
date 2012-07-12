@@ -12,7 +12,9 @@ public:
 	Data2Html() {};
 	virtual ~Data2Html() {}
 
-	int Make(const TxtTidy::TData& data, wxString& html) const;
+	int Load(const std::string& file);
+
+	int Make(const TxtTidy::TData &data, wxString& word, wxString &html) const;
 };
 
 #endif

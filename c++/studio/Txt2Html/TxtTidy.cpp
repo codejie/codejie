@@ -1,5 +1,5 @@
 
-
+#include <sstream>
 
 #include "TxtTidy.h"
 
@@ -19,6 +19,9 @@ int TxtTidy::Tidy(const std::string& input, const std::string& output)
 	char ch;
 	bool flag = false;
 	bool lf = false;
+
+	std::ostringstream ostr;
+
 	while(true)
 	{
 		ifs.get(ch);
@@ -29,6 +32,7 @@ int TxtTidy::Tidy(const std::string& input, const std::string& output)
 		{
 			if(flag == true)
 			{
+//				ofs.put(SEPARATOR);
 				flag = false;
 				continue;
 			}
@@ -41,6 +45,9 @@ int TxtTidy::Tidy(const std::string& input, const std::string& output)
 		
 		if(ch == '#'/* && lf == true*/)
 		{
+			if(AnalyseData(ofs, ostr.str()) != 0)
+				return -1;
+			ostr.str("");
 			flag = true;
 			continue;
 		}
@@ -58,9 +65,13 @@ int TxtTidy::Tidy(const std::string& input, const std::string& output)
 		{
 			if(ch > 0 && lf == true)
 			{
-				ofs.put(SEPARATOR);
+				//ofs.put(SEPARATOR);
+				if(AnalyseData(ofs, ostr.str()) != 0)
+					return -1;
+				ostr.str("");
 			}
-			ofs.put(ch);
+			//ofs.put(ch);
+			ostr << ch;
 		}
 
 		lf = false;
@@ -127,86 +138,66 @@ int TxtTidy::Tidy(const std::string& input, const std::string& output)
 //		++ size;
 	}
 
+	if(AnalyseData(ofs, ostr.str()) != 0)
+		return -1;
+
+
 	ifs.close();
 	ofs.close();
 
 	return 0;
 }
 
-int TxtTidy::Load(const std::string &file)
+int TxtTidy::AnalyseData(std::ofstream& ofs, const std::string& data) const
 {
-	if(_ifs.is_open())
+	if(data.size() > 0)
 	{
-		_ifs.close();
-	}
+		std::string::size_type pos = data.find("/");
+		if(pos == std::string::npos)
+			return -1;
+		ofs << "%w" << data.substr(0, pos);
 
-	_ifs.open(file.c_str());
-	if(!_ifs.is_open())
-		return -1;
+		std::cout << data.substr(0, pos) << std::endl;
+
+		std::string::size_type end = data.find("/", pos + 1);
+		if(end == std::string::npos || end >= data.size() -1)
+			return -1;
+		ofs << "%s" << data.substr(pos + 1, end - pos - 1);
+		AnalyseSubData(ofs, data.substr(end + 1));
+		ofs << "|";
+	}
 	return 0;
 }
 
-
-int TxtTidy::GetData(TxtTidy::TData &data)
-{
-	if(!_ifs.is_open())
-		return -1;
-
-	char buff[512];
-
-	if(!_ifs.getline(buff, 512, SEPARATOR).good())
-	{
-		_ifs.close();
-		return -1;
-	}
-
-	if(_ifs.eof())
-	{
-		_ifs.close();
-		return -1;
-	}
-
-	data.data.clear();
-
-	std::string str = buff;
-	std::string::size_type pos = str.find("/");
-	if(pos == std::string::npos)
-		return -1;
-	data.word = str.substr(0, pos);
-
-	std::string::size_type end = str.find("/", pos + 1);
-	if(end == std::string::npos || end >= str.size() -1)
-		return -1;
-	data.symbol = str.substr(pos + 1, end - pos - 1);
-	AnalyseData(str.substr(end + 1), data.data);
-	//data.data = str.substr(end + 1);
-	return 0;
-}
-
-int TxtTidy::AnalyseData(const std::string& data, std::vector<std::string>& vct) const
+int TxtTidy::AnalyseSubData(std::ofstream& ofs, const std::string& data) const
 {
 	std::string::size_type begin = 0, end = 0, t;
 	std::string::size_type pos = data.find(".");
 	if(pos == std::string::npos)
 	{
-		vct.push_back(data);
+		ofs << "%d" << data;
 		return 0;
 	}
 	end = pos + 1;
+//	int i = 0;
 	while(end < data.size())//ascii
 	{
-		if(data[end] > 0 && data[end] != '&' && data[end] != '(' && data[end] != ')' && data[end] != '.' && data[end] != '=' && data[end] != ',' && data[end] != ';' && !::isdigit(data[end]))// ascii
+		//if(++ i > 5)
+		//{
+		//	std::cout << "=========" << std::endl;
+		//	break;
+		//}
+		if(data[end] > 0 && data[end] != '&' && data[end] != '/' && data[end] != '(' && data[end] != ')' && data[end] != '.' && data[end] != '=' && data[end] != ',' && data[end] != ';' && !::isdigit(data[end]))// ascii
 //		if(data[end] > 0 && (data[end] == 'n' || data[end] == 'v' || data[end] == ')' && data[end] != '.')// ascii
 		{
-			vct.push_back(data.substr(begin, end - begin));
+			ofs << "%d" << data.substr(begin, end - begin);
 			begin = end;
-			end = data.find(".", begin);
+			end = data.find(".", begin + 1);
 		}
 
 		++ end;
 	}
 
-	vct.push_back(data.substr(begin, end - begin));
-
+	ofs << "%d" << data.substr(begin, end - begin);
 	return 0;
 }

@@ -19,9 +19,9 @@ int Txt2DB::Create(const wxString &file)
 	return 0;
 }
 
-int Txt2DB::Push(const TxtTidy::TData &data)
+int Txt2DB::Push(const wxString& word, const wxString& html)
 {
-	wxString word = wxString(data.word.c_str(), wxConvUTF8);
+	//wxString word = wxString(data.word.c_str(), wxConvUTF8);
 
 	return 0;
 }

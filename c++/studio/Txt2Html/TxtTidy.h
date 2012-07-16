@@ -15,7 +15,7 @@ public:
 	{
 		std::string word;
 		std::string symbol;
-		std::vector<std::string> data;
+		std::vector<std::pair<std::string, std::string> > data;
 	};
 	
 public:

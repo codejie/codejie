@@ -19,7 +19,7 @@ public:
 	virtual ~Txt2DB() {}
 
 	int Create(const wxString& file);
-	int Push(const TxtTidy::TData& data);
+	int Push(const wxString& word, const wxString& html);
 	void Close();
 private:
 	TDatabase _db;

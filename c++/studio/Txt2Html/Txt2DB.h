@@ -23,6 +23,8 @@ public:
 	void Close();
 private:
 	TDatabase _db;
+	TQuery _qsrc;
+	TQuery _qword;
 };
 
 #endif

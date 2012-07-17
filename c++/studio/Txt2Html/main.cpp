@@ -21,14 +21,16 @@ int main()
 //	}
 
 	Txt2DB db;
+	db.Create(wxT("c46.db"));
 	Data2Html data;
-	data.Load("b.txt");
-	std::string word, html;
+	data.Load("d.txt");
+	wxString word, html;
 	while(data.GetData(word, html) == 0)
 	{
-		db.Push(wxString(word.c_str(), wxConvUTF8), wxString(html.c_str(), wxConvUTF8));
+		db.Push(word, html);//wxString(word.c_str(), wxConvUTF8), wxString(html.c_str(), wxConvUTF8));
 	}
 	data.Close();
+	db.Close();
 
 	return 0;
 }

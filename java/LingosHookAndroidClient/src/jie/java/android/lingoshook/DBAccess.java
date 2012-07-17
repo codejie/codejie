@@ -10,6 +10,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 public final class DBAccess {
@@ -101,7 +104,7 @@ public final class DBAccess {
 		return 0;
 	}
 	
-	public static int importData(final String file, int type) {
+	public static int importData(Handler handler, final String file, int type) {
 		if(type == IMPORTTYPE_OVERWRITE) {
 			if(clearData() != 0)
 				return -1;
@@ -143,6 +146,13 @@ public final class DBAccess {
 					values.put(COLUMN_UPDATED, 0);//
 					values.put(COLUMN_SCORE, Score.SCORE_UNKNOWN);
 					db.insert(TABLE_SCORE, null, values);
+					
+					Message msg = new Message();
+					Bundle b = new Bundle();
+					b.putString("word", cursor.getString(1));
+					msg.setData(b);
+					msg.what = 0x0F01;
+					handler.sendMessage(msg);
 				}
 				cursor.close();
 				

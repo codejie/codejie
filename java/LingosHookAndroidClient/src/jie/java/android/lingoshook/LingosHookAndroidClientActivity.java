@@ -176,6 +176,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
             v.findViewById(R.id.progressBar1).setVisibility(View.GONE);
     		builder.setView(v);
     		final CheckBox c = (CheckBox)v.findViewById(R.id.checkBox1);
+    		final TextView tv = (TextView)v.findViewById(R.id.textView3);
     		
     		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
@@ -187,7 +188,15 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 
 						@Override
 						public void handleMessage(Message msg) {
-							dialog.dismiss();
+							//dialog.dismiss();
+							if(msg.what == 0x0F01) {
+								String word = msg.getData().getString("word");
+								tv.setText(word);
+							}
+							else
+							{
+								dialog.dismiss();
+							}
 							super.handleMessage(msg);
 						}    					
     				};
@@ -196,7 +205,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 
 						@Override
 						public void run() {
-							importData(d.getText().toString(), f.getText().toString(), c.isChecked());
+							importData(handler, d.getText().toString(), f.getText().toString(), c.isChecked());
 							handler.sendEmptyMessage(0);
 						}    					
     				};
@@ -262,8 +271,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		return dlg;
 	}    
 	
-	private void importData(final String dir, final String file, boolean overwrite) {
-		if(DBAccess.importData(dir + "/" + file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) != 0) {
+	private void importData(Handler handler, final String dir, final String file, boolean overwrite) {
+		if(DBAccess.importData(handler, dir + "/" + file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) != 0) {
 			Toast.makeText(this, "Import data failed.", Toast.LENGTH_LONG).show();
 		}
 		else {

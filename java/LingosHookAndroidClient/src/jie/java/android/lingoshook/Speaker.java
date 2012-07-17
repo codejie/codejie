@@ -23,7 +23,7 @@ public final class Speaker {
 				if(status == TextToSpeech.SUCCESS) {
 					int result = _speaker.setLanguage(_locale);
 					if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-						Toast.makeText(_context, "TTS initialize failed.", Toast.LENGTH_LONG).show();
+						Toast.makeText(_context, "TTS initialize failed - missing data or not supported.", Toast.LENGTH_LONG).show();
 					}
 					else {
 						_isReady = true;
@@ -31,7 +31,7 @@ public final class Speaker {
 					}
 				}
 				else {
-					Toast.makeText(_context, "TTS initialize failed.", Toast.LENGTH_LONG).show();
+					Toast.makeText(_context, "TTS initialize failed - status:" + status, Toast.LENGTH_LONG).show();
 				}				
 			}			
 		});

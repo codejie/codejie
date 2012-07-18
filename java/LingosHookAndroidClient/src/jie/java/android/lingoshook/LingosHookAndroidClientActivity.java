@@ -31,6 +31,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 
 	private boolean hasListShowed 				=	false;
 	
+	private Handler handlerImport				=	null;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,7 +186,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     			public void onClick(final DialogInterface dialog, int which) {
     				v.findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
     				
-    				final Handler handler = new Handler() {
+    				//final Handler handler = new Handler() {
+    				handlerImport = new Handler() {
 
 						@Override
 						public void handleMessage(Message msg) {
@@ -192,6 +195,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 							if(msg.what == 0x0F01) {
 								String word = msg.getData().getString("word");
 								tv.setText(word);
+								tv.invalidate();
 							}
 							else
 							{
@@ -201,16 +205,21 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 						}    					
     				};
 
-    				Runnable r = new Runnable() {
+    				final Runnable r = new Runnable() {
 
 						@Override
 						public void run() {
-							importData(handler, d.getText().toString(), f.getText().toString(), c.isChecked());
-							handler.sendEmptyMessage(0);
+							importData(handlerImport, d.getText().toString(), f.getText().toString(), c.isChecked());
+							handlerImport.sendEmptyMessage(0);
 						}    					
     				};
     				
-    				handler.post(r);
+    				new Thread() {
+    						public void run() {
+    		    				handlerImport.post(r);   							
+    						}
+    				}.start(); 
+    				
     			}    			
     		});
     		builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

@@ -204,19 +204,10 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 							super.handleMessage(msg);
 						}    					
     				};
-
-    				final Runnable r = new Runnable() {
-
-						@Override
-						public void run() {
-							importData(handlerImport, d.getText().toString(), f.getText().toString(), c.isChecked());
-							handlerImport.sendEmptyMessage(0);
-						}    					
-    				};
-    				
+   				
     				new Thread() {
     						public void run() {
-    		    				handlerImport.post(r);   							
+    							importData(handlerImport, d.getText().toString(), f.getText().toString(), c.isChecked());   							
     						}
     				}.start(); 
     				
@@ -296,7 +287,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	}
 	
 	private void onMenuImport() {
-		this.showDialog(DIALOG_IMPORT);
+		this.startActivity(new Intent(this, ImportDBActivity.class));
+		//this.showDialog(DIALOG_IMPORT);
 	}
 	
 	private void onMenuScoreList() {

@@ -33,7 +33,8 @@
 		<activity android:name="com.wooboo.adlib_android.FullActivity" android:configChanges="orientation|keyboardHidden" android:launchMode="singleTask"/>
 		<activity android:name="PlayActivity" android:launchMode="singleInstance"></activity>
 		<activity android:launchMode="standard" android:name=".HtmlDisplayActivity"></activity>
-		<activity android:launchMode="standard" android:name="WordListActivity"></activity>        
+		<activity android:launchMode="standard" android:name="WordListActivity"></activity>
+		<activity android:name="ImportDBActivity" android:launchMode="standard"></activity>        
     </application>
 
 </manifest>

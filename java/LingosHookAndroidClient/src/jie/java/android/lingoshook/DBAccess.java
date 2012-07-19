@@ -263,6 +263,23 @@ public final class DBAccess {
 		}
 	}
 	
+	public static String getHTMLbyWord(final String word) {
+		try {
+			String sql = "SELECT " + TABLE_DATA + "." + COLUMN_HTML + " FROM " + TABLE_DATA + "," + TABLE_WORD + " WHERE " + TABLE_DATA + "." + COLUMN_ID + "=" + TABLE_WORD + "." + COLUMN_SRCID + " AND " + TABLE_WORD + "." + COLUMN_WORD + "='" + word + "'";
+			
+			Cursor cursor = db.rawQuery(sql, null);
+			if(cursor.getCount() == 0)
+				return null;
+			cursor.moveToFirst();
+			String ret = cursor.getString(0);
+			cursor.close();
+			return ret;
+		}
+		catch (SQLiteException e) {
+			return null;
+		}		
+	}
+	
 	private static void clearTables() {
 		try {
 			String sql = "DROP TABLE " + TABLE_INFO;

@@ -39,7 +39,6 @@ public class WordListActivity extends Activity {
 		public void bindView(View view, Context context, Cursor cursor) {
 			TextView w = (TextView) view.findViewById(R.id.textView1);
 			w.setText(cursor.getString(0));
-			w.setId(cursor.getInt(1));
 
 			w = (TextView) view.findViewById(R.id.textView2);
 			w.setText(getDateByUpdated(cursor.getInt(2)));			
@@ -51,8 +50,7 @@ public class WordListActivity extends Activity {
 			//view.setId(cursor.getInt(1));
 			return view;
 		}		
-	}
-	
+	}	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +66,7 @@ public class WordListActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 	    		Intent intent = new Intent(WordListActivity.this, HtmlDisplayActivity.class);
 	    		intent.putExtra(HtmlDisplayActivity.REQ, HtmlDisplayActivity.REQ_WORD);
-	    		intent.putExtra(HtmlDisplayActivity.ID, view.findViewById(R.id.textView1).getId());//view.getId());
+	    		intent.putExtra(HtmlDisplayActivity.WORD, ((TextView)view.findViewById(R.id.textView1)).getText().toString());//view.getId());
 	    		WordListActivity.this.startActivity(intent);					
 			}			
 		});
@@ -138,7 +136,7 @@ public class WordListActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 	    		Intent intent = new Intent(WordListActivity.this, HtmlDisplayActivity.class);
 	    		intent.putExtra(HtmlDisplayActivity.REQ, HtmlDisplayActivity.REQ_WORD);
-	    		intent.putExtra(HtmlDisplayActivity.ID, view.findViewById(R.id.textView1).getId());//view.getId());
+	    		intent.putExtra(HtmlDisplayActivity.WORD, ((TextView)view.findViewById(R.id.textView1)).getText().toString());//view.getId());
 	    		WordListActivity.this.startActivity(intent);					
 			}			
 		});

@@ -30,11 +30,11 @@ public class HtmlDisplayActivity extends Activity implements OnTouchListener {
         }
 		
 		web = (WebView) this.findViewById(R.id.webView1);		
-		web.setOnTouchListener(this);
 		
 		Intent intent = this.getIntent();
 		if(intent != null) {
 			if(intent.getExtras().getInt(REQ) == REQ_WORD) {
+				web.setOnTouchListener(this);
 				loadWordData(intent.getExtras().getInt(ID));
 			}
 			else {

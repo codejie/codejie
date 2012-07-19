@@ -413,6 +413,9 @@ public final class DBAccess {
 				//old
 				sql += " AND (Score.updated > 0)";
 			}
+			else {
+				//all
+			}
 		}
 		else {
 			sql += (" AND (Score.updated = " + value + ")");

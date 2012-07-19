@@ -135,12 +135,6 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 		adapter.initData();
 		
 		GridView grid = (GridView)this.findViewById(R.id.gridScore);
-//		TypedArray a = obtainStyledAttributes(R.styleable.Gallery);
-//        int mGalleryItemBackground = a.getResourceId(R.styleable.Gallery_android_galleryItemBackground, 0);
-//        a.recycle();		
-//		grid.setBackgroundResource(mGalleryItemBackground);
-
-		//Cursor cursor = DBAccess.getScoreStatData();
 		grid.setAdapter(adapter);
 		grid.setOnItemClickListener(new OnItemClickListener() {
 

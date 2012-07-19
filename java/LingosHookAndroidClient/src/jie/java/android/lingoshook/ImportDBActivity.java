@@ -16,8 +16,10 @@ import android.widget.Toast;
 
 public class ImportDBActivity extends Activity implements OnClickListener {
 
-	private int MSG_WORD	=	0x0F01;
-	private int MSG_DONE	=	0x0F00;
+	private final int MSG_WORD		=	0x0F01;
+	private final int MSG_DONE		=	0x0F00;
+	private final int MSG_EXCEPTION	=	0x0F02;
+	private final int MSG_FAILED		=	0x0F03;
 	
 	private Handler handler = null;
 	
@@ -38,17 +40,40 @@ public class ImportDBActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void handleMessage(Message msg) {
-				if(msg.what == MSG_WORD) {
-					String str = (String)msg.obj;//msg.getData().getString("word");
-					v.setText(str);
-//					v.invalidate();
+							
+				switch(msg.what) {
+					case MSG_WORD: {
+						v.setText((String)msg.obj);
+						break;
+					}
+					case MSG_DONE: {
+						
+						ImportDBActivity.this.findViewById(R.id.linearLayout1).setVisibility(View.GONE);
+						
+						isDone = true;
+						btn.setText(R.string.title_done);
+						
+						Score.init();
+
+						break;
+					}
+					case MSG_FAILED: {
+						ImportDBActivity.this.findViewById(R.id.linearLayout1).setVisibility(View.GONE);
+
+						Toast.makeText(ImportDBActivity.this, "Import data failed.", Toast.LENGTH_LONG).show();
+						break;
+					}
+					case MSG_EXCEPTION: {
+						ImportDBActivity.this.findViewById(R.id.linearLayout1).setVisibility(View.GONE);
+
+						Toast.makeText(ImportDBActivity.this, "Import data failed - exception", Toast.LENGTH_LONG).show();
+						break;
+					}
+					default: {
+						break;
+					}
 				}
-				else if(msg.what == MSG_DONE)
-				{
-					isDone = true;
-					btn.setText(R.string.title_done);
-					//ImportDBActivity.this.finish();
-				}
+				
 				super.handleMessage(msg);
 			}
 			
@@ -61,27 +86,29 @@ public class ImportDBActivity extends Activity implements OnClickListener {
 	public void onClick(View view) {
 		if(view == this.findViewById(R.id.button1)) {
 			if(!isDone) {
-	    		final String file = ((EditText) this.findViewById(R.id.editText1)).getText().toString() + "/" + ((EditText) this.findViewById(R.id.editText2)).toString();
+	    		final String file = ((EditText) this.findViewById(R.id.editText1)).getText().toString() + "/" + ((EditText) this.findViewById(R.id.editText2)).getText().toString();
 	    		final CheckBox c = (CheckBox)this.findViewById(R.id.checkBox1);
 				
 				this.findViewById(R.id.linearLayout1).setVisibility(View.VISIBLE);
-				new Thread() {
-					@Override
-					public void run() {
-						//handler.post(ImportDBActivity.this);
-						if(DBAccess.importData(handler, MSG_WORD, file, (c.isChecked() ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) == 0) {
-							Score.init();
-							handler.sendMessage(Message.obtain(handler, MSG_DONE));
+				try {
+					new Thread() {
+						@Override
+						public void run() {
+							if(DBAccess.importData(handler, MSG_WORD, file, (c.isChecked() ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) == 0) {
+								handler.sendMessage(Message.obtain(handler, MSG_DONE));
+							}
+							else {
+								handler.sendMessage(Message.obtain(handler, MSG_FAILED));
+							}
 						}
-						else {
-							Toast.makeText(ImportDBActivity.this, "Import data failed.", Toast.LENGTH_LONG).show();
-						}
-					}
-					
-				}.start();
+						
+					}.start();
+				}
+				catch (Exception e) {
+					handler.sendMessage(Message.obtain(handler, MSG_EXCEPTION));
+				}
 			}
 			else {
-				this.findViewById(R.id.progressBar1).setVisibility(View.INVISIBLE);
 				ImportDBActivity.this.finish();
 			}
 		}

@@ -62,5 +62,7 @@
     <string name="str_nomoreword">没有新的单词记录了。</string>
 	<string name="str_today_nomoreword">今天没有需要记忆单词了.</string>    
     <string name="title_ad_version">Wooboo 2.2</string>
-    <string name="title_today">今日:</string>    
+    <string name="title_today">今日:</string>
+    <string name="title_import">导入</string>   
+    <string name="title_done">完成</string>    
 </resources>

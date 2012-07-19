@@ -104,7 +104,7 @@ public final class DBAccess {
 		return 0;
 	}
 	
-	public static int importData(Handler handler, final String file, int type) {
+	public static int importData(Handler handler, int msgcode, final String file, int type) {
 		if(type == IMPORTTYPE_OVERWRITE) {
 			if(clearData() != 0)
 				return -1;
@@ -147,12 +147,7 @@ public final class DBAccess {
 					values.put(COLUMN_SCORE, Score.SCORE_UNKNOWN);
 					db.insert(TABLE_SCORE, null, values);
 					
-					Message msg = new Message();
-					Bundle b = new Bundle();
-					b.putString("word", cursor.getString(1));
-					msg.setData(b);
-					msg.what = 0x0F01;
-					handler.sendMessage(msg);
+					handler.sendMessage(Message.obtain(handler, msgcode, cursor.getString(1)));
 				}
 				cursor.close();
 				

@@ -8,7 +8,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Medium Text"
+        android:text="@string/title_dir"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
@@ -24,7 +24,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Medium Text"
+        android:text="@string/title_file"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
@@ -37,7 +37,7 @@
         android:id="@+id/checkBox1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CheckBox" />
+        android:text="@string/title_import_overwrite" android:checked="true"/>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="fill"
-            android:text="Button" android:layout_marginLeft="30dp" android:layout_marginRight="30dp"/>
+            android:text="@string/title_import" android:layout_marginLeft="30dp" android:layout_marginRight="30dp"/>
 
     </LinearLayout>
 

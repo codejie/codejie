@@ -4,14 +4,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -31,8 +29,11 @@ public class WordListActivity extends Activity {
 	
 	protected class WordCursorAdapter extends CursorAdapter {
 
-		public WordCursorAdapter(Context context, Cursor cursor) {
+		private boolean showDate = true;
+		public WordCursorAdapter(Context context, Cursor cursor, boolean showDate) {
 			super(context, cursor);
+			
+			this.showDate = showDate;
 		}
 
 		@Override
@@ -40,14 +41,15 @@ public class WordListActivity extends Activity {
 			TextView w = (TextView) view.findViewById(R.id.textView1);
 			w.setText(cursor.getString(0));
 
-			w = (TextView) view.findViewById(R.id.textView2);
-			w.setText(getDateByUpdated(cursor.getInt(2)));			
+			if(showDate) {
+				w = (TextView) view.findViewById(R.id.textView2);
+				w.setText(getDateByUpdated(cursor.getInt(2)));
+			}
 		}
 
 		@Override
 		public View newView(Context context, Cursor cursor, ViewGroup parent) {
 			View view = LayoutInflater.from(WordListActivity.this).inflate(R.layout.word_list_item, null);
-			//view.setId(cursor.getInt(1));
 			return view;
 		}		
 	}	
@@ -116,18 +118,18 @@ public class WordListActivity extends Activity {
 	private void loadCommonWords(int value) {
 		if(value == 0) {
 			//all
-			textView.setText("All Words");
+			textView.setText(R.string.str_all_words);
 		}
 		else if(value == 1) {
 			//new
-			textView.setText("All New Words");
+			textView.setText(R.string.str_all_newwords);
 		}
 		else if(value == 2) {
-			textView.setText("All Old Words");
+			textView.setText(R.string.str_all_oldwords);
 		}
 		
 		cursor = DBAccess.getWords(0, value);
-		ListAdapter adapter = new WordCursorAdapter(this, cursor);
+		ListAdapter adapter = new WordCursorAdapter(this, cursor, true);
 		listView.setAdapter(adapter);
 		//listView.setItemsCanFocus(false);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -145,10 +147,15 @@ public class WordListActivity extends Activity {
 
 	private void loadSpecificWords(int value) {
 		
-		textView.setText("All Words on " + getDateByUpdated(value));
+		if(value != 0) {
+			textView.setText(this.getString(R.string.str_all_wordson) +  getDateByUpdated(value));
+		}
+		else {
+			textView.setText(R.string.str_all_newwords);
+		}
 		
 		cursor = DBAccess.getWords(1, value);
-		ListAdapter adapter = new WordCursorAdapter(this, cursor);
+		ListAdapter adapter = new WordCursorAdapter(this, cursor, false);
 		listView.setAdapter(adapter);
 	}
 

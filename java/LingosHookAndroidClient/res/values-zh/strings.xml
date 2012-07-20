@@ -52,7 +52,7 @@
     <string name="str_newword">N:</string>
     <string name="str_oldword">O:</string>
     <string name="str_mistakeword">M:</string>
-    <string name="str_version">Beta Version</string>
+    <string name="str_version">Version 1.0.0</string>
     <string name="set_summary_finger_refresh">自动清除输入轨迹</string>
     <string name="set_summary_finger_interval">设置自动刷新间隔</string>
     <string name="set_summary_finger_pencolor">设置输入轨迹的颜色</string>
@@ -64,5 +64,9 @@
     <string name="title_ad_version">Wooboo 2.2</string>
     <string name="title_today">今日:</string>
     <string name="title_import">导入</string>   
-    <string name="title_done">完成</string>    
+    <string name="title_done">完成</string>
+    <string name="str_all_words">全部单词</string>
+    <string name="str_all_oldwords">全部旧单词</string>
+    <string name="str_all_newwords">全部新单词</string>
+    <string name="str_all_wordson">全部单词在 </string>
 </resources>

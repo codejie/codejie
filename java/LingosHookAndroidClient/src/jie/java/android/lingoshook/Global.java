@@ -2,13 +2,12 @@ package jie.java.android.lingoshook;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.DisplayMetrics;
 
 public final class Global {
 	public static final String DATABASE_NAME			=	"/data/data/jie.java.android.lingoshook/LingosHook.db";
 	public static final String APP_TITLE				=	"LingosHook";
-	public static final int APP_VERSION					=	1;
+	public static final int APP_VERSION					=	2;
 	
 	public static final int DB_FORMAT_VERSION			=	1;
 	

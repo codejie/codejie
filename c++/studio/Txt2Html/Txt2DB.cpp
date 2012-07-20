@@ -3,8 +3,6 @@
 
 int Txt2DB::Create(const wxString &file)
 {
-	Close();
-
 	try
 	{
 		_db.Open(file, wxEmptyString);
@@ -59,6 +57,21 @@ void Txt2DB::Close()
 {
 	if(_db.IsOpen())
 	{
+        TQuery qinfo = _db.PrepareStatement("INSERT INTO info (item, value) VALUES (?, ?)");
+        qinfo.Bind(1, 1);
+        qinfo.Bind(2, 1);//version
+        qinfo.ExecuteUpdate();
+
+        qinfo.ClearBindings();
+        qinfo.Bind(1, 2);
+        qinfo.Bind(2, wxT("txt2html"));
+        qinfo.ExecuteQuery();
+
+        //qinfo.ClearBindings();
+        //qinfo.Bind(1, 3);
+        //qinfo.Bind(2, wxT("2012.07.20"));
+        //qinfo.ExecuteQuery();
+
 		_db.Close();
 	}
 }

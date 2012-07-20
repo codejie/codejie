@@ -21,9 +21,9 @@ int main()
 //	}
 
 	Txt2DB db;
-	db.Create(wxT("s46.db3"));
+	db.Create(wxT("c6.db3"));
 	Data2Html data;
-	data.Load("d.txt");
+	data.Load("c6.txt");
 	wxString word, html;
 	while(data.GetData(word, html) == 0)
 	{

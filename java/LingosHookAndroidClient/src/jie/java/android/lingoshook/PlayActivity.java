@@ -319,9 +319,9 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
     	TextView tv = (TextView)switcher.findViewById(R.id.textWord);
     	tv.setText(data.data.word);
     	
-    	tv = (TextView)switcher.findViewById(R.id.textScore);
+//    	tv = (TextView)switcher.findViewById(R.id.textScore);
     	//tv.setText(String.format("%d", ((dataWord.updated > 0) ? Score.deltaUpdated - dataWord.updated : dataWord.updated)));
-    	tv.setText(String.format("%d", data.data.updated));
+//    	tv.setText(String.format("%d", data.data.updated));
     	
     	tv = (TextView)switcher.findViewById(R.id.textType);
     	if(data.type == Score.WordType.NEW) {

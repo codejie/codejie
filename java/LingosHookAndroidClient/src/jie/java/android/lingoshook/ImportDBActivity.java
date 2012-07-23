@@ -53,7 +53,7 @@ public class ImportDBActivity extends Activity implements OnClickListener {
 						isDone = true;
 						btn.setText(R.string.title_done);
 						
-						Score.init();
+//						Score.init();
 
 						break;
 					}

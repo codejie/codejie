@@ -178,13 +178,6 @@ public final class Score {
 	
 	private static int loadWordData() {
 		if(typeWord == WordType.NULL) {
-			if(loadNewWordData(TODAY_NEW) != 0) {
-				return -1;
-			}
-			if(listWord.isEmpty())
-				return loadWordData();
-		}
-		else if(typeWord == WordType.NEW) {
 			if(loadOldWordData(TODAY_OLD) != 0) {
 				return -1;
 			}
@@ -192,11 +185,13 @@ public final class Score {
 				return loadWordData();
 		}
 		else if(typeWord == WordType.OLD) {
-//			if(Setting.numLoadOldWord == 0) {
-//				if(loadOldWordData(DEFAULT_LIMIT_OLD) != 0)
-//					return -1;
-//			}
-//			else
+			if(loadNewWordData(TODAY_NEW) != 0) {
+				return -1;
+			}
+			if(listWord.isEmpty())
+				return loadWordData();
+		}
+		else if(typeWord == WordType.NEW) {
 			if(Setting.loadMistakeWord) { 
 				if(loadMistakeWordData() != 0) {
 					return -1;
@@ -209,6 +204,40 @@ public final class Score {
 		
 		return 0;
 	}
+	
+//	private static int loadWordData() {
+//		if(typeWord == WordType.NULL) {
+//			if(loadNewWordData(TODAY_NEW) != 0) {
+//				return -1;
+//			}
+//			if(listWord.isEmpty())
+//				return loadWordData();
+//		}
+//		else if(typeWord == WordType.NEW) {
+//			if(loadOldWordData(TODAY_OLD) != 0) {
+//				return -1;
+//			}
+//			if(listWord.isEmpty())
+//				return loadWordData();
+//		}
+//		else if(typeWord == WordType.OLD) {
+////			if(Setting.numLoadOldWord == 0) {
+////				if(loadOldWordData(DEFAULT_LIMIT_OLD) != 0)
+////					return -1;
+////			}
+////			else
+//			if(Setting.loadMistakeWord) { 
+//				if(loadMistakeWordData() != 0) {
+//					return -1;
+//				}
+//			}
+//		}
+//		else {
+//			return -1;
+//		}
+//		
+//		return 0;
+//	}
 	
 	public static int popWordData(WordDisplayData data) {
 		if(listWord.isEmpty()) {

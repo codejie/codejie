@@ -63,4 +63,5 @@ public class SettingActivity extends PreferenceActivity implements OnPreferenceC
 		return true;
 	}
 
+
 }

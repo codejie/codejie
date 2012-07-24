@@ -36,12 +36,16 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
         this.findViewById(R.id.linearLayout1).setOnTouchListener(this);
         //this.findViewById(R.id.linearLayout1).setLongClickable(true);
 
-        showMainView();
-
         if(Global.STATE_CODING == 2) {
         	intiAdView();
         }
     }
+
+	@Override
+	protected void onResume() {
+        showMainView();
+		super.onResume();
+	}
 
 	private void intiAdView() {
 		
@@ -69,12 +73,16 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 					Intent intent = new Intent(this, PlayActivity.class);
 					this.startActivity(intent);
 				}
+				else if(Score.WORD_TOTAL == 0)
+				{
+					this.showDialog(DIALOG_NOWORD);
+				}
 				else {
 					Toast.makeText(this, this.getString(R.string.str_today_nomoreword), Toast.LENGTH_LONG).show();
 					return true;
 				}
 				
-				showMainView();
+//				showMainView();
 			}
 			else {
 				if(Score.WORD_TOTAL == 0) {
@@ -85,8 +93,6 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 				
 				showListView();
 			}
-            
-			return true;
 		}
 		return true;
 	}

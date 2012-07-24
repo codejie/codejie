@@ -299,7 +299,8 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
     	
     	if(Score.popWordData(dataWord) != 0)
     	{
-    		Toast.makeText(this, this.getString(R.string.str_nomoreword), Toast.LENGTH_LONG).show();
+    		Toast.makeText(this, this.getString(R.string.str_today_nomoreword), Toast.LENGTH_LONG).show();
+    		this.finish();
     		return -1;
     	}
     	

@@ -43,6 +43,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 
 	@Override
 	protected void onResume() {
+		Score.init();
+
         showMainView();
 		super.onResume();
 	}
@@ -69,7 +71,6 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 			
 			if(hasListShowed) {				
 				if(Score.TODAY_NEW != 0 || Score.TODAY_OLD != 0) {
-					Score.init();
 					Intent intent = new Intent(this, PlayActivity.class);
 					this.startActivity(intent);
 				}

@@ -58,7 +58,7 @@ public class SettingActivity extends PreferenceActivity implements OnPreferenceC
 			return false;
 		}
 		
-		preference.getEditor().commit();
+		//preference.getEditor().commit();
 
 		return true;
 	}

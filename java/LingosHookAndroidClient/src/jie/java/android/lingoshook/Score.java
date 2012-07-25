@@ -9,10 +9,10 @@ import android.util.Log;
 public final class Score {
 
 	public static final class WordData {
-		public long wordid;
-		public long srcid;
-		public long last;
-		public long next;
+		public int wordid;
+		public int srcid;
+		public int last;
+		public int next;
 		public int score;
 		public String word;
 	}
@@ -60,18 +60,19 @@ public final class Score {
 	public static final int WORD_TYPE_ALL	=	0;
 	public static final int WORD_TYPE_NEW	=	1;
 	public static final int WORD_TYPE_OLD	=	2;
+	public static final int WORD_TYPE_TODAY	=	3;
 	
 	//private static final int WORD_LIMIT_NEW	=	3;
 	//private static final int WORD_LIMIT_OLD	=	3;
 
-	public static final long UPDATED_START		=	7;//30;
+	public static final int UPDATED_START		=	7;//30;
 	public static final int DEFAULT_LIMIT_OLD	=	30;
 	
 	public static int TODAY_NEW		=	0;
 	public static int TODAY_OLD		=	0;
 	public static int WORD_TOTAL	=	0;
 	
-	private static long deltaUpdated = 0;
+	private static int deltaUpdated = 0;
 	
 	private static int offsetNewWord = 0;
 	private static int offsetOldWord = 0;		
@@ -105,76 +106,84 @@ public final class Score {
 		return 0;//loadWordData();
 	}
 	
-	public static void setDeltaUpdated(long delta) {
+	public static void setDeltaUpdated(int delta) {
 		deltaUpdated = delta;
 	}
 	
-	public static long getDeltaUpdated() {
+	public static int getDeltaUpdated() {
 		return deltaUpdated;
 	}
 
 	private static int loadNewWordData(int limit) {
-		numRestWord = TODAY_NEW;//DBAccess.getScoreCount(true, -1);
-		Cursor cursor = DBAccess.getWordData(WORD_TYPE_NEW, limit, offsetNewWord);
-		if(cursor == null)
-			return -1;
-		
-		while(cursor.moveToNext()) {
-			WordData data = new WordData();
+		if(limit > 0) {
+			numRestWord = limit;//DBAccess.getScoreCount(true, -1);
+			Cursor cursor = DBAccess.getWordData(WORD_TYPE_NEW, limit, offsetNewWord);
+			if(cursor == null)
+				return -1;
 			
-			data.wordid = cursor.getLong(0);
-			data.srcid = cursor.getLong(1);
-			data.updated = cursor.getLong(3);
-			data.score = cursor.getInt(4);
-			if(data.score == SCORE_UNKNOWN)
-				data.score = SCORE_0;
-			data.word = cursor.getString(2);
-			
-			listWord.add(data);
-			
-			++ offsetNewWord;
+			while(cursor.moveToNext()) {
+				WordData data = new WordData();
+				
+				data.wordid = cursor.getInt(0);
+				data.srcid = cursor.getInt(1);
+				data.last = cursor.getInt(3);
+				data.next = cursor.getInt(4);
+				data.score = cursor.getInt(5);
+				if(data.score == SCORE_UNKNOWN)
+					data.score = SCORE_0;
+				data.word = cursor.getString(2);
+				
+				listWord.add(data);
+				
+				++ offsetNewWord;
+			}
+			cursor.close();
 		}
-		cursor.close();
-		
 		typeWord = WordType.NEW;
 
 		return 0;
 	}
 	
 	private static int loadOldWordData(int limit) {
-		numRestWord = TODAY_OLD;// DBAccess.getScoreCount(false, -1);
-		
-		Cursor cursor = DBAccess.getWordData(WORD_TYPE_OLD, limit, offsetOldWord);
-		if(cursor == null)
-			return -1;
-		
-		while(cursor.moveToNext()) {
-			WordData data = new WordData();
+		if(limit > 0) {
+			numRestWord = limit;// DBAccess.getScoreCount(false, -1);
 			
-			data.wordid = cursor.getLong(0);
-			data.srcid = cursor.getLong(1);
-			data.updated = cursor.getLong(3);
-			data.score = cursor.getInt(4);
-			data.word = cursor.getString(2);
+			Cursor cursor = DBAccess.getWordData(WORD_TYPE_OLD, limit, offsetOldWord);
+			if(cursor == null)
+				return -1;
 			
-			listWord.add(data);
-			
-			++ offsetOldWord;
+			while(cursor.moveToNext()) {
+				WordData data = new WordData();
+				
+				data.wordid = cursor.getInt(0);
+				data.srcid = cursor.getInt(1);
+				data.last = cursor.getInt(3);
+				data.next = cursor.getInt(4);
+				data.score = cursor.getInt(5);
+				data.word = cursor.getString(2);
+				
+				listWord.add(data);
+				
+				++ offsetOldWord;
+			}
+			cursor.close();
 		}
-		cursor.close();
-		
 		typeWord = WordType.OLD;
 		
 		return 0;		
 	}
 	
 	public static int loadMistakeWordData() {
+	
+		numRestWord = listMistakeWord.size();
+		if(numRestWord == 0)
+			return -1;
+		
 		if(!listWord.isEmpty())
 			listWord.clear();
 		
-		numRestWord = listMistakeWord.size();
-		listWord = listMistakeWord;
-		//listMistakeWord.clear();
+		listWord.addAll(listMistakeWord);// . .s  = listMistakeWord;
+		listMistakeWord.clear();
 		
 		typeWord = WordType.MISTAKE;
 		
@@ -196,12 +205,19 @@ public final class Score {
 			if(listWord.isEmpty())
 				return loadWordData();
 		}
-		else if(typeWord == WordType.NEW || typeWord == WordType.MISTAKE) {
+		else if(typeWord == WordType.NEW) {
 			if(Setting.loadMistakeWord) { 
 				if(loadMistakeWordData() != 0) {
 					return -1;
 				}
 			}
+		}
+		else if(typeWord == WordType.MISTAKE) {
+			if(loadMistakeWordData() != 0) {
+				return -1;
+			}
+			if(listWord.isEmpty())
+				return loadWordData();			
 		}
 		else {
 			return -1;
@@ -269,14 +285,18 @@ public final class Score {
 		int check = judgeTable[judge][score];
 		
 		Log.d(Global.APP_TITLE, data.word + " check : " + check);
-		
-		long result = (long) ((((data.updated != 0) ? data.updated : UPDATED_START)) * rateTable[data.score][check]);
 
-		result = ((data.updated + result) > deltaUpdated) ? (data.updated + result) : (deltaUpdated + result);
+		data.next = (data.last != 0) ? deltaUpdated - data.last : UPDATED_START;
+		data.next *= rateTable[data.score][check];
+		data.next += (deltaUpdated + 1);
 		
-		Log.d(Global.APP_TITLE, data.word + "old score: " + data.score + " new score : " + result);
+//		int result = ((((data.updated != 0) ? data.updated : UPDATED_START)) * rateTable[data.score][check]);
+
+//		result = ((data.updated + result) > deltaUpdated) ? (data.updated + result) : (deltaUpdated + result);
 		
-		return DBAccess.updateScoreData(data.wordid, result, check);
+//		Log.d(Global.APP_TITLE, data.word + "old score: " + data.score + " new score : " + result);
+		
+		return DBAccess.updateScoreData(data.wordid, deltaUpdated, data.next, check);
 	}
 	
 	public static int getMistakeWordCount() {

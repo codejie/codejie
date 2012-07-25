@@ -249,7 +249,7 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
 			//Log.d(Global.APP_TITLE, "Word - back key.");
-			if(Setting.loadMistakeWord && Score.getMistakeWordCount() > 0) {
+			if(Score.getMistakeWordCount() > 0) {
 				//Toast.makeText(this, "mistake word list", Toast.LENGTH_SHORT).show();
 				this.showDialog(DIALOG_LOADMISTAKEWORD);
 				return true;
@@ -299,9 +299,16 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
     	
     	if(Score.popWordData(dataWord) != 0)
     	{
-    		Toast.makeText(this, this.getString(R.string.str_today_nomoreword), Toast.LENGTH_LONG).show();
-    		this.finish();
-    		return -1;
+			if(Score.getMistakeWordCount() > 0) {
+				//Toast.makeText(this, "mistake word list", Toast.LENGTH_SHORT).show();
+				this.showDialog(DIALOG_LOADMISTAKEWORD);
+				return -1;
+			}
+			else {
+	    		Toast.makeText(this, this.getString(R.string.str_today_nomoreword), Toast.LENGTH_LONG).show();
+	    		this.finish();
+	    		return -1;
+			}
     	}
     	
     	showWordData(dataWord);
@@ -419,7 +426,8 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 		case DIALOG_LOADMISTAKEWORD:
 			if(which == android.R.id.button1) {
 				Score.loadMistakeWordData();
-				onResume();
+//				showWord();//onResume();
+				loadWordData();
 			}
 			else {
 				this.finish();

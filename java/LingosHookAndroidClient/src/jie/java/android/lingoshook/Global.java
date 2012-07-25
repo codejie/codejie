@@ -27,7 +27,7 @@ public final class Global {
 		DBAccess.init(DATABASE_NAME);
 		Setting.init(context);
 		Speaker.init(context);
-		Score.init();
+//		Score.init();
 		
 		return 0;
 	}

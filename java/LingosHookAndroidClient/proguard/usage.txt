@@ -1,0 +1,381 @@
+android.annotation.SuppressLint
+android.annotation.TargetApi
+com.wooboo.adlib_android.AdActivity:
+    private static final int q
+    private static final int r
+com.wooboo.adlib_android.FullAdView:
+    private static final int b
+    private static int c
+    public FullAdView(android.content.Context,boolean,int[])
+    public FullAdView(android.content.Context,java.lang.String,boolean,int[])
+    protected FullAdView(android.content.Context,com.wooboo.adlib_android.jb,boolean,int[])
+    protected FullAdView(android.content.Context,java.lang.String,com.wooboo.adlib_android.jb,boolean,int[])
+    protected static int b()
+    public FullAdView(android.content.Context,android.util.AttributeSet,com.wooboo.adlib_android.jb)
+    protected FullAdView(android.content.Context,android.util.AttributeSet,int,com.wooboo.adlib_android.jb)
+    public void close()
+    protected int e()
+    protected boolean h()
+    public void setAdListener(com.wooboo.adlib_android.AdListener)
+    private void a(com.wooboo.adlib_android.n)
+    private void b(com.wooboo.adlib_android.n)
+com.wooboo.adlib_android.HalfAdView
+com.wooboo.adlib_android.ImpressionAdView
+com.wooboo.adlib_android.WoobooAdView:
+    private static final int c
+    public WoobooAdView(android.content.Context,int,int,boolean,int,int[])
+    public WoobooAdView(android.content.Context,java.lang.String,int,int,boolean,int,int[])
+    protected WoobooAdView(android.content.Context,int,int,boolean,int,int[],com.wooboo.adlib_android.jb)
+    protected WoobooAdView(android.content.Context,java.lang.String,int,int,boolean,int,int[],com.wooboo.adlib_android.jb)
+    protected WoobooAdView(android.content.Context,android.util.AttributeSet,int,com.wooboo.adlib_android.jb)
+    protected WoobooAdView(android.content.Context,com.wooboo.adlib_android.n,java.util.Timer,int,int,com.wooboo.adlib_android.AdListener,boolean,com.wooboo.adlib_android.kc,android.content.Context,android.util.AttributeSet,int,android.os.Handler)
+    public synchronized byte[] getImgData(android.content.Context,java.lang.String,boolean)
+    private static void a(java.io.Closeable)
+    protected int d()
+    protected static int h()
+    public void setAdListener(com.wooboo.adlib_android.AdListener)
+    public boolean hasAd()
+com.wooboo.adlib_android.ab
+com.wooboo.adlib_android.ac
+com.wooboo.adlib_android.bc
+com.wooboo.adlib_android.cc
+com.wooboo.adlib_android.d
+com.wooboo.adlib_android.dc
+com.wooboo.adlib_android.e
+com.wooboo.adlib_android.ec:
+    public ec(java.lang.String)
+    public java.lang.Object a(int)
+    public boolean b(int)
+    public double c(int)
+    public int d(int)
+    public com.wooboo.adlib_android.ec e(int)
+    public com.wooboo.adlib_android.fc f(int)
+    public long g(int)
+    public java.lang.String h(int)
+    public boolean i(int)
+    public java.lang.Object j(int)
+    public boolean k(int)
+    public boolean a(int,boolean)
+    public double l(int)
+    public double a(int,double)
+    public int m(int)
+    public int a(int,int)
+    public com.wooboo.adlib_android.ec n(int)
+    public com.wooboo.adlib_android.fc o(int)
+    public long p(int)
+    public long a(int,long)
+    public java.lang.String q(int)
+    public java.lang.String a(int,java.lang.String)
+    public com.wooboo.adlib_android.ec a(boolean)
+    public com.wooboo.adlib_android.ec a(java.util.Collection)
+    public com.wooboo.adlib_android.ec a(double)
+    public com.wooboo.adlib_android.ec r(int)
+    public com.wooboo.adlib_android.ec a(long)
+    public com.wooboo.adlib_android.ec a(java.util.Map)
+    public com.wooboo.adlib_android.ec b(int,boolean)
+    public com.wooboo.adlib_android.ec a(int,java.util.Collection)
+    public com.wooboo.adlib_android.ec b(int,double)
+    public com.wooboo.adlib_android.ec b(int,int)
+    public com.wooboo.adlib_android.ec b(int,long)
+    public com.wooboo.adlib_android.ec a(int,java.util.Map)
+    public com.wooboo.adlib_android.ec a(int,java.lang.Object)
+    public java.lang.Object s(int)
+    public com.wooboo.adlib_android.fc a(com.wooboo.adlib_android.ec)
+    public java.lang.String t(int)
+    java.lang.String c(int,int)
+    public java.io.Writer a(java.io.Writer)
+com.wooboo.adlib_android.fc:
+    public fc(com.wooboo.adlib_android.fc,java.lang.String[])
+    public fc(java.lang.Object,java.lang.String[])
+    public fc(java.lang.String,java.util.Locale)
+    public com.wooboo.adlib_android.fc a(java.lang.String,java.lang.Object)
+    public com.wooboo.adlib_android.fc b(java.lang.String,java.lang.Object)
+    public static java.lang.String a(double)
+    public boolean b(java.lang.String)
+    public double c(java.lang.String)
+    public com.wooboo.adlib_android.ec e(java.lang.String)
+    public com.wooboo.adlib_android.fc f(java.lang.String)
+    public static java.lang.String[] a(com.wooboo.adlib_android.fc)
+    public static java.lang.String[] a(java.lang.Object)
+    public com.wooboo.adlib_android.fc j(java.lang.String)
+    public boolean k(java.lang.String)
+    public com.wooboo.adlib_android.ec c()
+    public boolean m(java.lang.String)
+    public boolean a(java.lang.String,boolean)
+    public double n(java.lang.String)
+    public double a(java.lang.String,double)
+    public int o(java.lang.String)
+    public int a(java.lang.String,int)
+    public com.wooboo.adlib_android.ec p(java.lang.String)
+    public com.wooboo.adlib_android.fc q(java.lang.String)
+    public long r(java.lang.String)
+    public long a(java.lang.String,long)
+    public java.lang.String s(java.lang.String)
+    public java.lang.String a(java.lang.String,java.lang.String)
+    public com.wooboo.adlib_android.fc a(java.lang.String,java.util.Collection)
+    public com.wooboo.adlib_android.fc b(java.lang.String,double)
+    public com.wooboo.adlib_android.fc b(java.lang.String,long)
+    public com.wooboo.adlib_android.fc a(java.lang.String,java.util.Map)
+    public com.wooboo.adlib_android.fc e(java.lang.String,java.lang.Object)
+    public com.wooboo.adlib_android.ec a(com.wooboo.adlib_android.ec)
+    public java.lang.String a(int)
+    java.lang.String a(int,int)
+    static java.lang.String a(java.lang.Object,int,int)
+    public java.io.Writer a(java.io.Writer)
+com.wooboo.adlib_android.gd
+com.wooboo.adlib_android.hb:
+    private static final java.lang.String a
+    public android.content.Context a()
+    public com.wooboo.adlib_android.ib n()
+com.wooboo.adlib_android.hd
+com.wooboo.adlib_android.ic:
+    public ic(java.io.InputStream)
+    public static int a(char)
+    public boolean c()
+    public char b(char)
+    public java.lang.String d(char)
+    public java.lang.String a(java.lang.String)
+    public char e(char)
+com.wooboo.adlib_android.id
+com.wooboo.adlib_android.jb:
+    private jb(int,int)
+    public int a()
+com.wooboo.adlib_android.jc
+com.wooboo.adlib_android.jd
+com.wooboo.adlib_android.kb:
+    kb()
+    public static boolean a(java.lang.String)
+    public static byte[] a(java.io.File)
+    public static java.lang.String a(android.content.Context,java.lang.String)
+    public static void a(android.content.Context,java.lang.String,byte[])
+    public static void a(android.content.Context,java.io.File,java.lang.String)
+    public static byte[] b(java.io.File)
+com.wooboo.adlib_android.lb:
+    private lb()
+com.wooboo.adlib_android.mb:
+    mb()
+com.wooboo.adlib_android.mc:
+    public mc()
+com.wooboo.adlib_android.n:
+    private static final int a
+    private static final int b
+    private static final int c
+    private static final double d
+    private static final int e
+    private static final float g
+    private static final float i
+    private static final int j
+    private static final int k
+    private static final int l
+    private static final int m
+    private static final float n
+    private static final float o
+    private java.lang.String I
+    public static final int X
+    public static final int Y
+    public static final int Z
+    public static final int ab
+    public int i()
+    protected com.wooboo.adlib_android.hb j()
+    public static void a(java.lang.String)
+    public void a(com.wooboo.adlib_android.gb)
+com.wooboo.adlib_android.nb:
+    public static final int c
+    public static final long d
+    public static final int e
+    public static final int m
+    public static final int n
+    public static final int o
+    public static final int p
+    public static final int q
+    public static final int r
+    public static final int s
+    public static final int t
+    public static final int u
+    protected static final int M
+    protected static final int Y
+    protected static final int Z
+    protected static final int ab
+    protected static final int db
+    protected static final int eb
+    protected static final int fb
+    protected static final int gb
+    protected static final int hb
+    protected static final int kb
+    protected static final int lb
+    protected static final int mb
+    protected static final int nb
+    protected static final int ob
+    public nb()
+com.wooboo.adlib_android.o:
+    private static final long serialVersionUID
+com.wooboo.adlib_android.ob:
+    ob()
+    public static byte[] b(byte[])
+    public static final java.lang.String a(java.lang.String,java.lang.String)
+    public static byte[] d(byte[])
+com.wooboo.adlib_android.oc:
+    public synchronized void c()
+com.wooboo.adlib_android.od
+com.wooboo.adlib_android.pb:
+    public static javax.crypto.spec.DESKeySpec e
+    public static javax.crypto.spec.SecretKeySpec f
+    public pb()
+    public static javax.crypto.spec.DESKeySpec a()
+    public static javax.crypto.spec.SecretKeySpec b()
+    public static javax.crypto.spec.DESKeySpec b(java.lang.String)
+    public static javax.crypto.spec.DESKeySpec c(java.lang.String)
+    public static javax.crypto.spec.SecretKeySpec d(java.lang.String)
+    public static javax.crypto.spec.SecretKeySpec e(java.lang.String)
+    public static java.lang.String c()
+    public static java.lang.String d()
+    public static byte[] a(byte[])
+    public static byte[] b(byte[])
+    public static final java.lang.String f(java.lang.String)
+    public static final java.lang.String g(java.lang.String)
+    public static java.io.File a(java.io.File,java.lang.String,boolean)
+    public static java.io.File b(java.io.File,java.lang.String,boolean)
+com.wooboo.adlib_android.pc:
+    public void a(java.lang.String,java.lang.String)
+    public void a(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+com.wooboo.adlib_android.pd
+com.wooboo.adlib_android.qd
+com.wooboo.adlib_android.rc:
+    public rc()
+    public static java.lang.String a(java.lang.String)
+    public static void a(java.lang.String,java.lang.String)
+    public static java.lang.String a(int)
+    public static java.lang.String b(int)
+    public static java.lang.String b(java.lang.String)
+    public static java.lang.String a()
+    public static java.lang.String b()
+    private static java.lang.String a(java.lang.String[],java.lang.String)
+    private static java.lang.String b(java.lang.String,java.lang.String)
+    public static java.util.Vector c(java.lang.String,java.lang.String)
+    public static java.lang.String c()
+    public static void c(java.lang.String)
+    public static java.lang.String d(java.lang.String)
+    public static byte[] e(java.lang.String)
+    public static java.lang.String f(java.lang.String)
+com.wooboo.adlib_android.sc:
+    public sc()
+    public static java.lang.String c(java.lang.String)
+    public static java.lang.String a(java.lang.String,java.util.HashMap)
+    public static java.lang.String b(android.content.Context,java.lang.String)
+    public static com.wooboo.adlib_android.fc a(com.wooboo.adlib_android.fc,com.wooboo.adlib_android.fc)
+    public static java.lang.String e(android.content.Context,java.lang.String)
+    protected static void d(int)
+    private static int c()
+    public static void p()
+    public static java.lang.String q()
+com.wooboo.adlib_android.tb
+com.wooboo.adlib_android.ub
+com.wooboo.adlib_android.vb
+com.wooboo.adlib_android.wb:
+    public static final int a
+    public static final int b
+    public static final int c
+    protected static final int M
+    public int a()
+    public void a(int)
+    public android.graphics.Bitmap c()
+    public int d()
+com.wooboo.adlib_android.wc
+com.wooboo.adlib_android.y
+com.wooboo.adlib_android.yb
+com.wooboo.adlib_android.z
+com.wooboo.adlib_android.zb
+com.wooboo.download.c:
+    public static final int b
+    public static final int c
+    public static final int d
+    public static final int e
+    public static final int f
+    public static final int l
+    private static final int n
+    public c(android.content.Context,com.wooboo.download.d,com.wooboo.download.e,com.wooboo.adlib_android.pc)
+com.wooboo.download.d:
+    public java.lang.String j
+com.wooboo.download.f:
+    public void a(java.lang.String)
+com.wooboo.download.g:
+    public abstract void a(boolean)
+com.wooboo.download.h:
+    public h()
+    public static boolean c()
+jie.java.android.lingoshook.AdPanelView
+jie.java.android.lingoshook.BuildConfig
+jie.java.android.lingoshook.DBAccess:
+    private static final java.lang.String TABLE_INFO
+    private static final java.lang.String TABLE_WORD
+    private static final java.lang.String TABLE_DATA
+    private static final java.lang.String TABLE_SCORE
+    private static final java.lang.String COLUMN_ID
+    private static final java.lang.String COLUMN_VALUE
+    private static final java.lang.String COLUMN_WORD
+    private static final java.lang.String COLUMN_SRCID
+    private static final java.lang.String COLUMN_HTML
+    private static final java.lang.String COLUMN_WORDID
+    private static final java.lang.String COLUMN_UPDATED
+    private static final java.lang.String COLUMN_SCORE
+    private static final int INFOTAG_VERSION
+    private static final int INFOTAG_CHECKIN
+    private static final java.lang.String INFOVALUE_VERSION
+    public static final int IMPORTTYPE_OVERWRITE
+    public static final int IMPORTTYPE_APPEND
+    17:17:public DBAccess()
+    284:299:private static void clearTables()
+    402:416:public static boolean checkWord()
+jie.java.android.lingoshook.Global:
+    public static final java.lang.String DATABASE_NAME
+    public static final java.lang.String APP_TITLE
+    public static final int APP_VERSION
+    public static final int DB_FORMAT_VERSION
+    public static final int STATE_CODING
+    7:7:public Global()
+jie.java.android.lingoshook.HtmlDisplayActivity:
+    65:67:private void intiAdView()
+jie.java.android.lingoshook.LingosHookAndroidClientActivity:
+    private static final int DIALOG_ABOUT
+    private static final int DIALOG_NOWORD
+    48:53:private void intiAdView()
+jie.java.android.lingoshook.PlayActivity:
+    private static final int DIALOG_LOADMISTAKEWORD
+jie.java.android.lingoshook.R
+jie.java.android.lingoshook.R$array
+jie.java.android.lingoshook.R$attr
+jie.java.android.lingoshook.R$drawable
+jie.java.android.lingoshook.R$id
+jie.java.android.lingoshook.R$layout
+jie.java.android.lingoshook.R$menu
+jie.java.android.lingoshook.R$string
+jie.java.android.lingoshook.R$styleable
+jie.java.android.lingoshook.R$xml
+jie.java.android.lingoshook.Score:
+    public static final int SCORE_0
+    public static final int SCORE_1
+    public static final int SCORE_2
+    public static final int SCORE_3
+    public static final int SCORE_UNKNOWN
+    public static final int JUDGE_YES
+    public static final int JUDGE_NO
+    public static final java.lang.String TAG_WORDID
+    public static final java.lang.String TAG_SRCID
+    public static final java.lang.String TAG_UPDATED
+    public static final java.lang.String TAG_PRESCORE
+    public static final java.lang.String TAG_SCORE
+    public static final java.lang.String TAG_JUDGE
+    public static final int WORD_TYPE_ALL
+    public static final int WORD_TYPE_NEW
+    public static final int WORD_TYPE_OLD
+    public static final long UPDATED_START
+    public static final int DEFAULT_LIMIT_OLD
+    9:9:public Score()
+    105:106:public static void setDeltaUpdated(long)
+jie.java.android.lingoshook.Setting:
+    7:7:public Setting()
+jie.java.android.lingoshook.Speaker:
+    9:9:public Speaker()
+jie.java.android.lingoshook.WordListActivity:
+    public static final java.lang.String REQ_TYPE
+    public static final java.lang.String REQ_VALUE

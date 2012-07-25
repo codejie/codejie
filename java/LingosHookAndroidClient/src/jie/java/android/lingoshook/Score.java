@@ -11,7 +11,8 @@ public final class Score {
 	public static final class WordData {
 		public long wordid;
 		public long srcid;
-		public long updated;
+		public long last;
+		public long next;
 		public int score;
 		public String word;
 	}

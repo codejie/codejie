@@ -27,7 +27,8 @@ public final class DBAccess {
 	private static final String COLUMN_SRCID	=	"srcid";
 	private static final String COLUMN_HTML		=	"html";
 	private static final String COLUMN_WORDID	=	"wordid";
-	private static final String COLUMN_UPDATED	=	"updated";
+	private static final String COLUMN_LAST		=	"last";//latest update
+	private static final String COLUMN_NEXT		=	"next";//next update
 	private static final String COLUMN_SCORE	=	"score";
 	
 	private static final int INFOTAG_VERSION	=	1;
@@ -91,7 +92,8 @@ public final class DBAccess {
 			
 			sql = "CREATE TABLE IF NOT EXISTS " + TABLE_SCORE + " ("
 					+ COLUMN_WORDID + " INTEGER PRIMARY KEY,"
-					+ COLUMN_UPDATED + " INTEGER,"
+					+ COLUMN_LAST + " INTEGER,"
+					+ COLUMN_NEXT + " INTEGER,"
 					+ COLUMN_SCORE + " INTEGER"
 					+ ")";
 			db.execSQL(sql);

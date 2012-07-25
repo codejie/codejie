@@ -196,7 +196,7 @@ public final class Score {
 			if(listWord.isEmpty())
 				return loadWordData();
 		}
-		else if(typeWord == WordType.NEW) {
+		else if(typeWord == WordType.NEW || typeWord == WordType.MISTAKE) {
 			if(Setting.loadMistakeWord) { 
 				if(loadMistakeWordData() != 0) {
 					return -1;
@@ -251,8 +251,6 @@ public final class Score {
 		}
 		if(listWord.isEmpty())
 			return -1;
-		
-		//data = new WordData();
 
 		data.data = listWord.remove(0);
 		data.type = typeWord;

@@ -130,7 +130,7 @@ public final class Score {
 				data.next = cursor.getInt(4);
 				data.score = cursor.getInt(5);
 				if(data.score == SCORE_UNKNOWN)
-					data.score = SCORE_0;
+					data.score = SCORE_3;
 				data.word = cursor.getString(2);
 				
 				listWord.add(data);

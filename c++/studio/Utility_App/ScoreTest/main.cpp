@@ -38,8 +38,8 @@ int judgeTable[2][4] = {
 int test()
 {
 	int preScore = 3; //0 ~ 3
-	int judge = 1;//yes, no
-	int curScore = 2;
+	int judge = 0;//yes, no
+	int curScore = 0;
 
 
 	int last = 0;
@@ -49,12 +49,15 @@ int test()
 	int num = 0;
 	while(++ num < 10)
 	{
+		judge = (judge == 0) ? 1 : 0;
 		check = judgeTable[judge][preScore];
 		next = ((last != 0) ? (updated - last) : 7) * rateTable[curScore][check] + updated + 1;
 		std::cout << updated << "," << next << "," << (next - updated) << std::endl;
 		last = updated;
 		updated = next;
 		preScore = curScore;
+		if(curScore < 4)
+			++ curScore;
 	}
 	
 	return 0;

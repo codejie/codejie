@@ -11,7 +11,7 @@
     <string name="title_file">文件</string>
     <string name="title_import_overwrite">覆盖</string>
     <string name="title_yes">正确</string>
-    <string name="title_no">错误</string>
+    <string name="title_no">再记一次</string>
     <string name="str_noword">无单词</string>
     <string name="str_score_0">太简单</string>
     <string name="str_score_1">认识的</string>
@@ -29,9 +29,9 @@
     <string name="set_title_word_numloadold">旧单词数量</string>
     <string name="set_summary_word_numloadold">设置每次加载显示的旧单词数量</string>
     <string name="set_key_word_loadmistake">set_key_word_loadmistake</string>
-    <string name="set_title_word_loadmistake">记错单词加载</string>
-    <string name="set_summary_on_word_loadmistake">完成旧单词后，自动加载显示记错的单词</string>
-    <string name="set_summary_off_word_loadmistake">完成旧单词后，不加载显示记错的单词</string>
+    <string name="set_title_word_loadmistake">自动加载标记为\'再记\'的单词</string>
+    <string name="set_summary_on_word_loadmistake">完成新旧单词后，自动加载显示\'再记\'的单词</string>
+    <string name="set_summary_off_word_loadmistake">完成新旧单词后，不加载显示\'再记\'的单词</string>
     <string name="set_key_word_loadresult">set_key_word_loadresult</string>
     <string name="set_title_word_loadresult">单词解释显示</string>
     <string name="set_summary_on_word_loadresult">自动显示单词解释</string>

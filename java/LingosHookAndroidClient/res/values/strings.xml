@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="hello">Hello World, LingosHookAndroidClientActivity!</string>
     <string name="app_name">LingosHook Android Client</string>
     <string name="menu_exit">Exit</string>
@@ -11,7 +10,7 @@
     <string name="title_file">File</string>
     <string name="title_import_overwrite">Overwrite</string>
     <string name="title_yes">Yes</string>
-    <string name="title_no">No</string>
+    <string name="title_no">Try again</string>
     <string name="str_noword">No Word</string>
     <string name="str_score_0">Very easy.</string>
     <string name="str_score_1">I know it.</string>
@@ -29,9 +28,9 @@
     <string name="set_title_word_numloadold">Old Words Number</string>
     <string name="set_summary_word_numloadold">Choose the number of old words that app every loads</string>
     <string name="set_key_word_loadmistake">set_key_word_loadmistake</string>
-    <string name="set_title_word_loadmistake">Reload Mistake Words</string>
-    <string name="set_summary_on_word_loadmistake">Loads mistake words after finish old words</string>
-    <string name="set_summary_off_word_loadmistake">Not loads mistake words after finish old words</string>
+    <string name="set_title_word_loadmistake">Auto laod words marked \'Try Again\'</string>
+    <string name="set_summary_on_word_loadmistake">Loads \'Try Again\' words after finish old/new words</string>
+    <string name="set_summary_off_word_loadmistake">Not loads \'Try Again\' words after finish old/new words</string>
     <string name="set_key_word_loadresult">set_key_word_loadresult</string>
     <string name="set_title_word_loadresult">Display Result Data</string>
     <string name="set_summary_on_word_loadresult">Display the result of word after check</string>

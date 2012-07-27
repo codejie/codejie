@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 public final class DBAccess {
@@ -25,7 +27,8 @@ public final class DBAccess {
 	private static final String COLUMN_SRCID	=	"srcid";
 	private static final String COLUMN_HTML		=	"html";
 	private static final String COLUMN_WORDID	=	"wordid";
-	private static final String COLUMN_UPDATED	=	"updated";
+	private static final String COLUMN_LAST		=	"last";//latest update
+	private static final String COLUMN_NEXT		=	"next";//next update
 	private static final String COLUMN_SCORE	=	"score";
 	
 	private static final int INFOTAG_VERSION	=	1;
@@ -34,6 +37,8 @@ public final class DBAccess {
 	
 	public static final int IMPORTTYPE_OVERWRITE	=	0;
 	public static final int IMPORTTYPE_APPEND		=	1;
+	
+	public static Date CHECKIN		= null;
 	
 	private static SQLiteDatabase db = null;
 	
@@ -87,7 +92,8 @@ public final class DBAccess {
 			
 			sql = "CREATE TABLE IF NOT EXISTS " + TABLE_SCORE + " ("
 					+ COLUMN_WORDID + " INTEGER PRIMARY KEY,"
-					+ COLUMN_UPDATED + " INTEGER,"
+					+ COLUMN_LAST + " INTEGER,"
+					+ COLUMN_NEXT + " INTEGER,"
 					+ COLUMN_SCORE + " INTEGER"
 					+ ")";
 			db.execSQL(sql);
@@ -99,15 +105,15 @@ public final class DBAccess {
 		return 0;
 	}
 	
-	public static int importData(final String file, int type) {
+	public static int importData(Handler handler, int msgcode, final String file, int type) {
 		if(type == IMPORTTYPE_OVERWRITE) {
 			if(clearData() != 0)
 				return -1;
 		}
 		
 		try {
-			long srcid = -1, wordid = -1;
-			long p = -1, n = -1;
+			int srcid = -1, wordid = -1;
+			int p = -1, n = -1;
 	
 			ContentValues values = new ContentValues();
 			
@@ -119,26 +125,31 @@ public final class DBAccess {
 				String s = sql + " LIMIT 10 OFFSET " + offset;
 				
 				Cursor cursor = src.rawQuery(s, null);
-				if(cursor.getCount() == 0)
+				if(cursor.getCount() == 0) {
+					cursor.close();
 					break;
+				}
 				while(cursor.moveToNext()) {
 					n = cursor.getInt(0);
 					if(p != n) {
 						p = n;
 						values.clear();
 						values.put(COLUMN_HTML, cursor.getString(2));
-						srcid = db.insert(TABLE_DATA, null, values);
+						srcid = (int) db.insert(TABLE_DATA, null, values);
 					}
 					values.clear();
 					values.put(COLUMN_SRCID, srcid);
 					values.put(COLUMN_WORD, cursor.getString(1));
-					wordid = db.insert(TABLE_WORD, null, values);
+					wordid = (int) db.insert(TABLE_WORD, null, values);
 					
 					values.clear();
 					values.put(COLUMN_WORDID, wordid);
-					values.put(COLUMN_UPDATED, 0);//
+					values.put(COLUMN_LAST, 0);//
+					values.put(COLUMN_NEXT, 0);//
 					values.put(COLUMN_SCORE, Score.SCORE_UNKNOWN);
 					db.insert(TABLE_SCORE, null, values);
+					
+					handler.sendMessage(Message.obtain(handler, msgcode, cursor.getString(1)));
 				}
 				cursor.close();
 				
@@ -208,22 +219,25 @@ public final class DBAccess {
 		return 0;
 	}
 	
-	public static long getDeltaUpdate() {
+	public static int getDeltaUpdate() {
 		try {
 			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_VALUE }, COLUMN_ID + "=" + INFOTAG_CHECKIN, null, null, null, null);
 			if(cursor == null)
 				return 0;
-			if(cursor.getCount() == 0)
+			if(cursor.getCount() == 0) {
+				cursor.close();
 				return 0;
+			}
 			cursor.moveToFirst();
 			
-			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 			//String s = cursor.getString(0);
-			Date checkin = fmt.parse(cursor.getString(0));
+			//Date checkin = fmt.parse(cursor.getString(0));
+			CHECKIN = fmt.parse(cursor.getString(0));
 			Date today = Calendar.getInstance().getTime();
 			cursor.close();
 			
-			return ((today.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24));
+			return (int) (((today.getTime() - CHECKIN.getTime()) / (1000 * 60 * 60 * 24)) + 1);
 		}
 		catch (SQLiteException e) {
 			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
@@ -236,7 +250,7 @@ public final class DBAccess {
 		}
 	}
 	
-	public static String getHTML(long srcid) {
+	public static String getHTML(int srcid) {
 		try {
 			Cursor cursor = db.query(TABLE_DATA, new String[] { COLUMN_HTML }, COLUMN_ID + "=" + srcid, null, null, null, null);
 			if(cursor.getCount() == 0)
@@ -249,6 +263,23 @@ public final class DBAccess {
 		catch (SQLiteException e) {
 			return null;
 		}
+	}
+	
+	public static String getHTMLbyWord(final String word) {
+		try {
+			String sql = "SELECT " + TABLE_DATA + "." + COLUMN_HTML + " FROM " + TABLE_DATA + "," + TABLE_WORD + " WHERE " + TABLE_DATA + "." + COLUMN_ID + "=" + TABLE_WORD + "." + COLUMN_SRCID + " AND " + TABLE_WORD + "." + COLUMN_WORD + "='" + word + "'";
+			
+			Cursor cursor = db.rawQuery(sql, null);
+			if(cursor.getCount() == 0)
+				return null;
+			cursor.moveToFirst();
+			String ret = cursor.getString(0);
+			cursor.close();
+			return ret;
+		}
+		catch (SQLiteException e) {
+			return null;
+		}		
 	}
 	
 	private static void clearTables() {
@@ -286,13 +317,13 @@ public final class DBAccess {
 	public static Cursor getWordData(int type, int limit, int offset) {
 		try {
 			//select Word.srcid, Word.word, Score.updated, Score.score from Word, Score where Word.id = Score.wordid and Score.updated = 0 limit 10 offset 10
-			String sql = "SELECT " + TABLE_WORD + "." + COLUMN_ID + "," + TABLE_WORD + "." + COLUMN_SRCID + "," + TABLE_WORD + "." + COLUMN_WORD + "," + TABLE_SCORE + "." + COLUMN_UPDATED + "," + TABLE_SCORE + "." + COLUMN_SCORE + " FROM " + TABLE_WORD + "," + TABLE_SCORE;
-			sql += " WHERE " + TABLE_WORD + "." + COLUMN_ID + "=" + TABLE_SCORE + "." + COLUMN_WORDID + " AND " + TABLE_SCORE + "." + COLUMN_UPDATED;
-			if(type == Score.WORD_NEW)
-				sql += "=0 AND " + TABLE_SCORE + "." + TABLE_SCORE + "=" + Score.SCORE_UNKNOWN;
+			String sql = "SELECT " + TABLE_WORD + "." + COLUMN_ID + "," + TABLE_WORD + "." + COLUMN_SRCID + "," + TABLE_WORD + "." + COLUMN_WORD + "," + TABLE_SCORE + "." + COLUMN_LAST + "," + TABLE_SCORE + "." + COLUMN_NEXT + "," + TABLE_SCORE + "." + COLUMN_SCORE + " FROM " + TABLE_WORD + "," + TABLE_SCORE;
+			sql += " WHERE " + TABLE_WORD + "." + COLUMN_ID + "=" + TABLE_SCORE + "." + COLUMN_WORDID + " AND " + TABLE_SCORE + "." + COLUMN_NEXT;
+			if(type == Score.WORD_TYPE_NEW)
+				sql += "=0";// AND " + TABLE_SCORE + "." + COLUMN_NEXT + "=0";
 			else
-				sql += ">0 and " + TABLE_SCORE + "." + COLUMN_UPDATED;
-			sql += " ORDER BY " + TABLE_SCORE + "." + COLUMN_UPDATED + " LIMIT " + limit + " OFFSET " + offset; 
+				sql += ">0";// AND " + TABLE_SCORE + "." + COLUMN_UPDATED;
+			sql += " ORDER BY " + TABLE_SCORE + "." + COLUMN_LAST + " LIMIT " + limit + " OFFSET " + offset; 
 			return db.rawQuery(sql, null);
 		}
 		catch (SQLException e) {
@@ -301,10 +332,11 @@ public final class DBAccess {
 		}
 	}
 	
-	public static int updateScoreData(long wordid, long updated, int score) {
+	public static int updateScoreData(int wordid, int last, int next, int score) {
 		try {
 			ContentValues values = new ContentValues();
-			values.put(COLUMN_UPDATED, updated);
+			values.put(COLUMN_LAST, last);
+			values.put(COLUMN_NEXT, next);
 			values.put(COLUMN_SCORE, score);
 			return ((db.update(TABLE_SCORE, values, COLUMN_WORDID + "=" + wordid, null) > 0) ? 0 : -1);
 		}
@@ -316,7 +348,7 @@ public final class DBAccess {
 
 	public static Cursor getScoreStat() {
 		try {
-			String sql = "SELECT " + COLUMN_UPDATED + ", COUNT(" + COLUMN_UPDATED + ") FROM " + TABLE_SCORE + " GROUP BY " + COLUMN_UPDATED;
+			String sql = "SELECT " + COLUMN_NEXT + ", COUNT(" + COLUMN_NEXT + ") FROM " + TABLE_SCORE + " GROUP BY " + COLUMN_NEXT;
 			return db.rawQuery(sql, null);
 		}
 		catch (SQLException e) {
@@ -325,7 +357,24 @@ public final class DBAccess {
 		}
 	}
 	
-	public static int getScoreCount(boolean newword) {
+	public static int getWordCount() {
+		try {
+			String sql = "SELECT COUNT(*) FROM " + TABLE_WORD;
+			Cursor cursor = db.rawQuery(sql, null);
+			if(cursor == null)
+				return -1;
+			cursor.moveToFirst();
+			int ret = cursor.getInt(0);
+			cursor.close();
+			return ret;
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return -1;	
+		}
+	}
+	
+	public static int getScoreCount(boolean newword, int updated) {
 		try {
 			String sql = "SELECT COUNT(" + COLUMN_SCORE + ") FROM " + TABLE_SCORE;
 			if(newword) {
@@ -333,7 +382,11 @@ public final class DBAccess {
 			}
 			else {
 				sql += " WHERE " + COLUMN_SCORE + "<>" + Score.SCORE_UNKNOWN;
+				if(updated != -1) {
+					sql += " AND " + COLUMN_NEXT + " <= " + updated;
+				}
 			}
+
 			Cursor cursor = db.rawQuery(sql, null);
 			if(cursor == null)
 				return -1;
@@ -365,6 +418,37 @@ public final class DBAccess {
 			return false;	
 		}
 		return true;
+	}
+
+	public static Cursor getWords(int type, int value) {
+		
+		String sql = "SELECT " + TABLE_WORD +"." + COLUMN_WORD + "," + TABLE_WORD + "." + COLUMN_SRCID + " AS _id, "+ TABLE_SCORE + "." + COLUMN_NEXT + " FROM " + TABLE_WORD + "," + TABLE_SCORE + " WHERE (" + TABLE_WORD + "." + COLUMN_ID + "="  + TABLE_SCORE + "." + COLUMN_WORDID + ")";
+		//Word.word, Word.srcid AS _id, Score.updated FROM Word, Score WHERE (Word.id = Score.wordid);
+		
+		if(type == 0) {
+			if(value == 1) {
+				//new
+				sql += "AND (" + TABLE_SCORE + "." + COLUMN_NEXT + "=0)";// " AND (Score.updated = 0)";
+			}
+			else if(value == 2) {
+				//old
+				sql += "AND (" + TABLE_SCORE + "." + COLUMN_NEXT + ">0)";//" AND (Score.updated > 0)";
+			}
+			else {
+				//all
+			}
+		}
+		else {
+			sql += ("AND (" + TABLE_SCORE + "." + COLUMN_NEXT + "=" + value +")");// " AND (Score.updated = " + value + ")");
+		}
+		
+		try {
+			return db.rawQuery(sql, null);
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return null;	
+		}
 	}
 
 }

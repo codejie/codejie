@@ -7,27 +7,23 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LingosHookAndroidClientActivity extends Activity implements OnTouchListener {
 
-	private static final int DIALOG_IMPORT		=	1;
 	private static final int DIALOG_ABOUT 		=	2;
-	private static final int DIALOG_NOWORD		=	3;
+	private static final int DIALOG_NOWORD		=	3;	
+
+	private boolean hasListShowed 				=	false;
 	
-	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,19 +31,31 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
         //Toast.makeText(this, "state:" + (savedInstanceState != null ? "yes" : "no"), Toast.LENGTH_SHORT).show();
         
         Global.initApplication(this);
-        
-        setContentView(R.layout.main);
-        
+
+        setContentView(R.layout.main);              
         this.findViewById(R.id.linearLayout1).setOnTouchListener(this);
-        this.findViewById(R.id.linearLayout1).setLongClickable(true);
-        
-        intiAdView();
+        //this.findViewById(R.id.linearLayout1).setLongClickable(true);
+
+        if(Global.STATE_CODING == 2) {
+        	intiAdView();
+        }
     }
 
+	@Override
+	protected void onResume() {
+		Score.init();
+
+        showMainView();
+		super.onResume();
+	}
+
 	private void intiAdView() {
-		// TODO Auto-generated method stub
-		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout1);
-		new AdPanelView(this, ll, 0, 60);
+		
+		Global.getScreenInfo(this);
+		
+		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout2);
+		//new AdPanelView(this, ll, 0, 80);
+		new AdPanelView(this, ll, 0, Global.SCREEN_HEIGHT - AdPanelView.BANNER_WIDTH);
 	}
 
 	@Override
@@ -60,20 +68,68 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_UP) {
-			if(DBAccess.checkWord()) {
-				Intent intent = new Intent(this, WordDisplayActivity.class);
-				this.startActivity(intent);
+			
+			if(hasListShowed) {				
+				if(Score.TODAY_NEW != 0 || Score.TODAY_OLD != 0) {
+					Intent intent = new Intent(this, PlayActivity.class);
+					this.startActivity(intent);
+				}
+				else if(Score.WORD_TOTAL == 0)
+				{
+					this.showDialog(DIALOG_NOWORD);
+				}
+				else {
+					Toast.makeText(this, this.getString(R.string.str_today_nomoreword), Toast.LENGTH_LONG).show();
+					return true;
+				}
+				
+//				showMainView();
 			}
 			else {
-				this.showDialog(DIALOG_NOWORD);
+				if(Score.WORD_TOTAL == 0) {
+					//Toast.makeText(this, this.getString(R.string.str_nomoreword), Toast.LENGTH_LONG).show();
+					this.showDialog(DIALOG_NOWORD);
+					return true;
+				}
+				
+				showListView();
 			}
 		}
-		return false;
+		return true;
 	}
 	
+	private void showMainView() {
+
+		LinearLayout p = (LinearLayout) this.findViewById(R.id.linearLayout1);
+        p.removeAllViews();
+        LayoutInflater.from(this).inflate(R.layout.main_title, p);
+        //p.addView(v);
+        
+        hasListShowed = false;
+	}
+
+	private void showListView() {
+        //LayoutInflater factory = LayoutInflater.from(this);
+        //final View v = factory.inflate(R.layout.main_list, null);
+        
+        LinearLayout p = (LinearLayout) this.findViewById(R.id.linearLayout1);
+        p.removeAllViews();
+        LayoutInflater.from(this).inflate(R.layout.main_list, p);
+            
+		TextView text = ((TextView)this.findViewById(R.id.textView2));
+		text.setText(String.format("%d", (Score.TODAY_NEW)));
+
+		text = ((TextView)this.findViewById(R.id.textView3));
+		text.setText(String.format("%d", (Score.TODAY_OLD)));
+
+		text = ((TextView)this.findViewById(R.id.textView1));
+		text.setText(String.format("%d", (Score.WORD_TOTAL)));		
+        
+        hasListShowed = true;
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
 		this.getMenuInflater().inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -105,64 +161,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		// TODO Auto-generated method stub
 		Dialog dlg = null;
 		switch(id) {
-		case DIALOG_IMPORT: {
-    		final Builder builder = new AlertDialog.Builder(this);
-    		builder.setIcon(android.R.drawable.ic_dialog_info);
-    		String dir = Environment.getExternalStorageDirectory().getPath();
-    		String file = "clientdata.db3";
-            LayoutInflater factory = LayoutInflater.from(this);
-            final View v = factory.inflate(R.layout.import_dialog, null);
-            final EditText d = (EditText) v.findViewById(R.id.editText1);
-            d.setText(dir);
-            final EditText f = (EditText) v.findViewById(R.id.editText2);
-            f.setText(file);
-            v.findViewById(R.id.progressBar1).setVisibility(View.GONE);
-    		builder.setView(v);
-    		final CheckBox c = (CheckBox)v.findViewById(R.id.checkBox1);
-    		
-    		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-    			@Override
-    			public void onClick(final DialogInterface dialog, int which) {
-    				v.findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
-    				
-    				final Handler handler = new Handler() {
-
-						@Override
-						public void handleMessage(Message msg) {
-							dialog.dismiss();
-							//super.handleMessage(msg);
-						}    					
-    				};
-
-    				Runnable r = new Runnable() {
-
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							importData(d.getText().toString(), f.getText().toString(), c.isChecked());
-							handler.sendEmptyMessage(0);
-						}    					
-    				};
-    				
-    				handler.post(r);
-    			}    			
-    		});
-    		builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();					
-				}
-			});
-    		
-    		dlg = builder.create();
-			
-			}
-			break;
 		case DIALOG_ABOUT: {
 			Builder builder = new AlertDialog.Builder(this);
 			builder.setView(LayoutInflater.from(this).inflate(R.layout.about_dialog, null));
@@ -178,8 +178,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-		    		Intent intent = new Intent(LingosHookAndroidClientActivity.this, ResultDisplayActivity.class);
-		    		intent.putExtra(ResultDisplayActivity.ACTION, ResultDisplayActivity.ACTION_HELP);
+					//LingosHookAndroidClientActivity.this.startActivity(new Intent(LingosHookAndroidClientActivity.this, HtmlDisplayActivity.class));
+		    		Intent intent = new Intent(LingosHookAndroidClientActivity.this, HtmlDisplayActivity.class);
+		    		intent.putExtra(HtmlDisplayActivity.REQ, HtmlDisplayActivity.REQ_HELP);
 		    		LingosHookAndroidClientActivity.this.startActivity(intent);					
 					dialog.dismiss();
 					
@@ -207,23 +208,15 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		}
 		return dlg;
 	}    
-	
-	private void importData(final String dir, final String file, boolean overwrite) {
-		if(DBAccess.importData(dir + "/" + file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) != 0) {
-			Toast.makeText(this, "Import data failed.", Toast.LENGTH_LONG).show();
-		}
-		else {
-			Score.init();
-		}
-	}
-	
+		
 	private void onMenuExit() {
 		Global.exitApplication();
 		this.finish();
 	}
 	
 	private void onMenuImport() {
-		this.showDialog(DIALOG_IMPORT);
+		this.startActivity(new Intent(this, ImportDBActivity.class));
+		//this.showDialog(DIALOG_IMPORT);
 	}
 	
 	private void onMenuScoreList() {

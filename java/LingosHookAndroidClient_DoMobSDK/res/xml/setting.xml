@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <PreferenceCategory android:title="@string/set_title_word">
+            <ListPreference android:entryValues="@array/setting_word_numloadnew_value" android:entries="@array/setting_word_numloadnew" android:defaultValue="30" android:title="@string/set_title_word_numloadnew" android:key="@string/set_key_word_numloadnew" android:summary="@string/set_summary_word_numloadnew"/>
+            <ListPreference android:entries="@array/setting_word_numloadold" android:entryValues="@array/setting_word_numloadold_value" android:defaultValue="0" android:title="@string/set_title_word_numloadold" android:key="@string/set_key_word_numloadold" android:summary="@string/set_summary_word_numloadold"/>
+            <CheckBoxPreference android:defaultValue="true" android:key="@string/set_key_word_loadmistake" android:summaryOn="@string/set_summary_on_word_loadmistake" android:title="@string/set_title_word_loadmistake" android:summaryOff="@string/set_summary_off_word_loadmistake"/>
+            <CheckBoxPreference android:defaultValue="true" android:summaryOn="@string/set_summary_on_word_loadresult" android:key="@string/set_key_word_loadresult" android:title="@string/set_title_word_loadresult" android:summaryOff="@string/set_summary_off_word_loadresult"/><CheckBoxPreference android:defaultValue="true" android:summaryOff="@string/set_summary_off_word_loadspeaker" android:summaryOn="@string/set_summary_on_word_loadspeaker" android:key="@string/set_key_word_loadspeaker" android:title="@string/set_title_word_loadspeaker"/>
+            
+        </PreferenceCategory>
+        <PreferenceCategory android:title="@string/set_title_fingerpanel">
+            <CheckBoxPreference android:key="@string/set_key_finger_refresh" android:title="@string/set_title_finger_refresh" android:defaultValue="true" android:summary="@string/set_summary_finger_refresh"/>
+            <ListPreference android:dependency="@string/set_key_finger_refresh" android:key="@string/set_key_finger_interval" android:title="@string/set_title_finger_interval" android:entryValues="@array/set_finger_interval_value" android:entries="@array/set_finger_interval" android:defaultValue="3" android:summary="@string/set_summary_finger_interval"/>
+            <ListPreference android:key="@string/set_key_finger_pencolor" android:title="@string/set_title_finger_pencolor" android:entryValues="@array/setting_finger_pencolor_value" android:entries="@array/setting_finger_pencolor" android:defaultValue="0" android:summary="@string/set_summary_finger_pencolor"/>
+            <ListPreference android:key="@string/set_key_finger_penwidth" android:title="@string/set_title_finger_penwidth" android:entryValues="@array/setting_finger_penwidth_value" android:entries="@array/setting_finger_penwidth" android:defaultValue="0" android:summary="@string/set_summary_finger_penwidth"/>
+        </PreferenceCategory>
+    </PreferenceScreen>

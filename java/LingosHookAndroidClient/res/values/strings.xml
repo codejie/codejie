@@ -56,7 +56,7 @@
     <string name="set_summary_finger_interval">Refresh interval of finger panel</string>
     <string name="set_summary_finger_pencolor">Choose pen color of finger panel</string>
     <string name="set_summary_finger_penwidth">Choose pen width of finger panel</string>
-    <string name="str_loadmistakeword">Would you like load the mistake words now?</string>
+    <string name="str_loadmistakeword">Would you like load the words marked \'Try Again\' now?</string>
     <string name="str_nowordindb">No any word in local db, please use \'import\' cmd to load first.</string>
     <string name="str_nomoreword">No more words now.</string> 
 	<string name="str_today_nomoreword">No any word need to memory today.</string>    

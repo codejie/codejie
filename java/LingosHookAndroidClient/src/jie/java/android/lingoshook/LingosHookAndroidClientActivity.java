@@ -55,7 +55,7 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		
 		LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout2);
 		//new AdPanelView(this, ll, 0, 80);
-		new AdPanelView(this, ll, 0, Global.SCREEN_HEIGHT - 80);
+		new AdPanelView(this, ll, 0, Global.SCREEN_HEIGHT - AdPanelView.BANNER_WIDTH);
 	}
 
 	@Override

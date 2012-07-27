@@ -26,6 +26,8 @@ public class AdPanelView extends TextView {
 
 public class AdPanelView implements AdListener {
 
+	public static int BANNER_WIDTH		=	80;
+	
 	private static boolean IS_AD_SHOW	=	true;
 	private static String APP_AD_ID		=	"3ad1d9569acb45969e4d85864727e67d";
 	private static boolean IS_TESTING	=	false;

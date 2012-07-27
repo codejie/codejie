@@ -57,7 +57,7 @@
     <string name="set_summary_finger_interval">设置自动刷新间隔</string>
     <string name="set_summary_finger_pencolor">设置输入轨迹的颜色</string>
     <string name="set_summary_finger_penwidth">设置输入轨迹的宽度</string>
-    <string name="str_loadmistakeword">是否加载记错的单词？</string>
+    <string name="str_loadmistakeword">是否加载标记为\'再记\'的单词？</string>
     <string name="str_nowordindb">没有任何单词记录，请先使用‘导入’功能加载数据。</string>
     <string name="str_nomoreword">没有新的单词记录了。</string>
 	<string name="str_today_nomoreword">今天没有需要记忆单词了.</string>    

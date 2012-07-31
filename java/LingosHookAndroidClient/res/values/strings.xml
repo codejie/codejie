@@ -60,7 +60,7 @@
     <string name="str_nowordindb">No any word in local db, please use \'import\' cmd to load first.</string>
     <string name="str_nomoreword">No more words now.</string> 
 	<string name="str_today_nomoreword">No any word need to memory today.</string>    
-    <string name="title_ad_version">Wooboo 2.2</string> 
+    <string name="title_ad_version">Wooboo 2.3</string> 
     <string name="title_today">Toady:</string>
     <string name="title_import">Import</string>   
     <string name="title_done">Done</string>

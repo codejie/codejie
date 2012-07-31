@@ -44,7 +44,7 @@ public class AdPanelView implements AdListener {
 */	
 	public AdPanelView(Context context, View parent, int x, int y) {
 		if(IS_AD_SHOW) {
-			ad = new ImpressionAdView(context, APP_AD_ID, parent, x, y, 0xFFFFFF, IS_TESTING, AD_TYPE);
+			ad = new ImpressionAdView(context, APP_AD_ID, parent, x, y, 0xFFFFFF);
 			ad.show(40);
 			ad.setAdListener(this);
 		}

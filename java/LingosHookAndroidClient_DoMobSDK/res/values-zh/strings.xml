@@ -10,7 +10,7 @@
     <string name="title_dir">目录</string>
     <string name="title_file">文件</string>
     <string name="title_import_overwrite">覆盖</string>
-    <string name="title_yes">正确</string>
+    <string name="title_yes">下一个</string>
     <string name="title_no">再记一次</string>
     <string name="str_noword">无单词</string>
     <string name="str_score_0">太简单</string>

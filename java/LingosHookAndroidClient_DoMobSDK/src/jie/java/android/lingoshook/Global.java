@@ -16,6 +16,8 @@ public final class Global {
 	public static int SCREEN_WIDTH						=	480;
 	public static int SCREEN_HEIGHT						=	800; 
 	
+	public static final boolean WEB_CLICK_ENABLED		=	true;
+	
 	public static void getScreenInfo(Activity activity) {
         DisplayMetrics displaymetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);

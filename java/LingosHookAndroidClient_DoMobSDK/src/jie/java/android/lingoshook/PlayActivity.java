@@ -161,8 +161,10 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 		
 		setClickListener(true);
 		
-		web = (WebView) switcher.findViewById(R.id.webView);				
-		web.setOnTouchListener(this);
+		web = (WebView) switcher.findViewById(R.id.webView);
+		if(Global.WEB_CLICK_ENABLED) {
+			web.setOnTouchListener(this);
+		}
 		
 		switcher.findViewById(R.id.btnYes).setOnClickListener(new OnClickListener() {
 
@@ -216,8 +218,10 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
-		if(event.getAction() == MotionEvent.ACTION_UP) {
-			submitResult(Score.JUDGE_YES);
+		if(Global.WEB_CLICK_ENABLED) {
+			if(event.getAction() == MotionEvent.ACTION_UP) {
+				submitResult(Score.JUDGE_YES);
+			}
 		}
 		return true;
 	}

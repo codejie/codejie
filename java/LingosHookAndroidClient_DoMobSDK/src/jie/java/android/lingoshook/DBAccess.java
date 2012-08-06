@@ -451,4 +451,22 @@ public final class DBAccess {
 		}
 	}
 
+	public static boolean isUsing() {
+		
+		try {
+			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_VALUE }, COLUMN_ID + "=" + INFOTAG_CHECKIN, null, null, null, null);
+			if(cursor == null)
+				return false;
+			if(cursor.getCount() == 0) {
+				cursor.close();
+				return false;
+			}
+		}
+		catch (SQLiteException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return false;
+		} 
+		
+		return true;
+	}
 }

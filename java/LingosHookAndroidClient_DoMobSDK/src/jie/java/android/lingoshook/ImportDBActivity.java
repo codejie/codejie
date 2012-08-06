@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 public class ImportDBActivity extends Activity implements OnClickListener {
 
+	private final int DIALOG_USING = 0;
+	
 	private final int MSG_WORD		=	0x0F01;
 	private final int MSG_DONE		=	0x0F00;
 	private final int MSG_EXCEPTION	=	0x0F02;
@@ -84,34 +86,45 @@ public class ImportDBActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		if(view == this.findViewById(R.id.button1)) {
+		if(view == this.findViewById(R.id.button1)) {					
 			if(!isDone) {
-	    		final String file = ((EditText) this.findViewById(R.id.editText1)).getText().toString() + "/" + ((EditText) this.findViewById(R.id.editText2)).getText().toString();
-	    		final CheckBox c = (CheckBox)this.findViewById(R.id.checkBox1);
-				
-				this.findViewById(R.id.linearLayout1).setVisibility(View.VISIBLE);
-				try {
-					new Thread() {
-						@Override
-						public void run() {
-							if(DBAccess.importData(handler, MSG_WORD, file, (c.isChecked() ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) == 0) {
-								handler.sendMessage(Message.obtain(handler, MSG_DONE));
-							}
-							else {
-								handler.sendMessage(Message.obtain(handler, MSG_FAILED));
-							}
-						}
-						
-					}.start();
+				final CheckBox c = (CheckBox)this.findViewById(R.id.checkBox1);
+				if(c.isChecked() && DBAccess.isUsing()) {
+					this.showDialog(DIALOG_USING);
 				}
-				catch (Exception e) {
-					handler.sendMessage(Message.obtain(handler, MSG_EXCEPTION));
+				else {
+					importDB();
 				}
 			}
 			else {
 				ImportDBActivity.this.finish();
 			}
 		}
+	}
+	
+	private int importDB() {
+		final String file = ((EditText) this.findViewById(R.id.editText1)).getText().toString() + "/" + ((EditText) this.findViewById(R.id.editText2)).getText().toString();
+		final CheckBox c = (CheckBox)this.findViewById(R.id.checkBox1);
+		
+		this.findViewById(R.id.linearLayout1).setVisibility(View.VISIBLE);
+		try {
+			new Thread() {
+				@Override
+				public void run() {
+					if(DBAccess.importData(handler, MSG_WORD, file, (c.isChecked() ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) == 0) {
+						handler.sendMessage(Message.obtain(handler, MSG_DONE));
+					}
+					else {
+						handler.sendMessage(Message.obtain(handler, MSG_FAILED));
+					}
+				}
+				
+			}.start();
+		}
+		catch (Exception e) {
+			handler.sendMessage(Message.obtain(handler, MSG_EXCEPTION));
+		}
+		return 0;
 	}
 
 }

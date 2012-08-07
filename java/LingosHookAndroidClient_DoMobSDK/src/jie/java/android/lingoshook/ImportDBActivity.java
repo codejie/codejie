@@ -1,6 +1,10 @@
 package jie.java.android.lingoshook;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -125,6 +129,38 @@ public class ImportDBActivity extends Activity implements OnClickListener {
 			handler.sendMessage(Message.obtain(handler, MSG_EXCEPTION));
 		}
 		return 0;
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog dlg = null;
+		switch(id) {
+		case DIALOG_USING: {
+			Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.str_wordindb);
+			builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					importDB();
+					dialog.dismiss();
+				}
+			});
+			
+			builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			
+			dlg = builder.create();
+		}
+		break;
+		default:;
+		}
+		return dlg;
 	}
 
 }

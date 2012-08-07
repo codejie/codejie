@@ -68,4 +68,5 @@
     <string name="str_all_oldwords">All Old Words</string>
     <string name="str_all_newwords">All New Words</string>
     <string name="str_all_wordson">All Words on </string>
+    <string name="str_wordindb">Do you REALLY want to overwrite the database?</string>
 </resources>

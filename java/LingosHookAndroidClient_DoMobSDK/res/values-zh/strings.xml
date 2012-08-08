@@ -69,5 +69,10 @@
     <string name="str_all_oldwords">全部旧单词</string>
     <string name="str_all_newwords">全部新单词</string>
     <string name="str_all_wordson">全部单词在 </string>
-	<string name="str_wordindb">你确定要覆盖已有数据吗?</string>    
+	<string name="str_wordindb">你确定要覆盖已有数据吗?</string>
+    <string name="set_title_webview">Web页面相关配置</string>
+    <string name="set_key_web_clickable">set_key_web_clickable</string>
+    <string name="set_title_web_clickable">开启Web页面点击响应</string>
+    <string name="set_summary_on_web_clickable">Web页面点击有效</string>
+    <string name="set_summary_off_web_clickable">Web页面点击无效</string>	    
 </resources>

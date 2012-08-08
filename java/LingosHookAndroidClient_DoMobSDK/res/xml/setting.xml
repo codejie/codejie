@@ -13,4 +13,7 @@
             <ListPreference android:key="@string/set_key_finger_pencolor" android:title="@string/set_title_finger_pencolor" android:entryValues="@array/setting_finger_pencolor_value" android:entries="@array/setting_finger_pencolor" android:defaultValue="0" android:summary="@string/set_summary_finger_pencolor"/>
             <ListPreference android:key="@string/set_key_finger_penwidth" android:title="@string/set_title_finger_penwidth" android:entryValues="@array/setting_finger_penwidth_value" android:entries="@array/setting_finger_penwidth" android:defaultValue="0" android:summary="@string/set_summary_finger_penwidth"/>
         </PreferenceCategory>
+        <PreferenceCategory android:title="@string/set_title_webview">
+            <CheckBoxPreference android:key="@string/set_key_web_clickable" android:summaryOff="@string/set_summary_off_web_clickable" android:summaryOn="@string/set_summary_on_web_clickable" android:title="@string/set_title_web_clickable"/>
+        </PreferenceCategory>
     </PreferenceScreen>

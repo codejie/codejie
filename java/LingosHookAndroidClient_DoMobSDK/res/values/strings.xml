@@ -69,4 +69,9 @@
     <string name="str_all_newwords">All New Words</string>
     <string name="str_all_wordson">All Words on </string>
     <string name="str_wordindb">Do you REALLY want to overwrite the database?</string>
+    <string name="set_title_webview">Web View References</string>
+    <string name="set_key_web_clickable">set_key_web_clickable</string>
+    <string name="set_title_web_clickable">Enable Web View Click event</string>
+    <string name="set_summary_on_web_clickable">Web View is clickable</string>
+    <string name="set_summary_off_web_clickable">Web View is NOT clickable</string>
 </resources>

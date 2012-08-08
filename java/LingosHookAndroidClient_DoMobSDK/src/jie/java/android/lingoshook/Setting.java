@@ -17,6 +17,8 @@ public final class Setting {
 	public static int colorFingerPanelPen	=	0;
 	public static int widthFingerPanelPen	=	0;
 	
+	public static boolean webclickable		=	true;
+	
 	public static int init(Context context) {
 		
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -31,6 +33,8 @@ public final class Setting {
 		intervalFingerPanel = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_interval), "2000"));
 		colorFingerPanelPen = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_pencolor), "FFFFFF"), 16);
 		widthFingerPanelPen = Integer.parseInt(preferences.getString(context.getString(R.string.set_key_finger_penwidth), "6"));
+		
+		webclickable = preferences.getBoolean(context.getString(R.string.set_key_web_clickable), true);
 		
 		return 0;
 	}

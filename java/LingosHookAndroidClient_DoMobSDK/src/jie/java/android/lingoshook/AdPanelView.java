@@ -13,7 +13,7 @@ public class AdPanelView implements DomobAdListener {
 
 	public static int BANNER_WIDTH		=	50;
 	
-	private static boolean IS_AD_SHOW	=	true;
+	private static boolean IS_AD_SHOW	=	false;//true;
 	private static String APP_AD_ID		=	"56OJyNcouMGCCFOyTJ";//"56OJyM1ouMGoaSnvCK";//"56OJyNcouMGCCFOyTJ";
 
 /*	

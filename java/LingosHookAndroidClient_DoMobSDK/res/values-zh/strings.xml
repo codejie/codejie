@@ -74,5 +74,7 @@
     <string name="set_key_web_clickable">set_key_web_clickable</string>
     <string name="set_title_web_clickable">开启Web页面点击响应</string>
     <string name="set_summary_on_web_clickable">Web页面点击有效</string>
-    <string name="set_summary_off_web_clickable">Web页面点击无效</string>	    
+    <string name="set_summary_off_web_clickable">Web页面点击无效</string>
+	<string name="title_import_remote">远程导入方式</string>
+    <string name="title_import_local">本地导入方式</string>
 </resources>

@@ -74,4 +74,6 @@
     <string name="set_title_web_clickable">Enable Web View Click event</string>
     <string name="set_summary_on_web_clickable">Web View is clickable</string>
     <string name="set_summary_off_web_clickable">Web View is NOT clickable</string>
+    <string name="title_import_remote">Remote Import Mode</string>
+    <string name="title_import_local">Local Import Mode</string>
 </resources>

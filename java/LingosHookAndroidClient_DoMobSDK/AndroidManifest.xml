@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.BATTERY_STATS"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
         android:icon="@drawable/lac"
@@ -32,6 +33,7 @@
 		<activity android:launchMode="standard" android:name="WordListActivity"></activity>
 		<activity android:name="ImportDBActivity" android:launchMode="standard"></activity>
 		<activity android:name="cn.domob.android.ads.DomobActivity" android:theme="@android:style/Theme.Translucent"></activity>
+		<activity android:name="HttpdActivity"></activity>
     </application>
 
 </manifest>

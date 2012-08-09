@@ -11,7 +11,7 @@ public final class Global {
 	
 	public static final int DB_FORMAT_VERSION			=	1;
 	
-	public static final int STATE_CODING				=	2;//0:Debug; 1: Coding; 2: Release
+	public static final int STATE_CODING				=	0;//0:Debug; 1: Coding; 2: Release
 	
 	public static int SCREEN_WIDTH						=	480;
 	public static int SCREEN_HEIGHT						=	800; 

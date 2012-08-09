@@ -144,14 +144,20 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     	case R.id.menu_exit:
     		onMenuExit();
     		break;
-    	case R.id.menu_import:
-    		onMenuImport();
-    		break;
+//    	case R.id.menu_import:
+//    		onMenuImport();
+//    		break;
     	case R.id.menu_setting:
     		onMenuSetting();
     		break;
     	case R.id.menu_about:
     		onMenuAbout();
+    		break;
+    	case R.id.menu_import_local:
+    		onMenuImportLocal();
+    		break;
+    	case R.id.menu_import_remote:
+    		onMenuImportRemote();
     		break;
     	default:
     		break;
@@ -214,9 +220,13 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		this.finish();
 	}
 	
-	private void onMenuImport() {
+	private void onMenuImportLocal() {
 		this.startActivity(new Intent(this, ImportDBActivity.class));
 		//this.showDialog(DIALOG_IMPORT);
+	}
+	
+	private void onMenuImportRemote() {
+		this.startActivity(new Intent(this, HttpdActivity.class));
 	}
 	
 	private void onMenuScoreList() {

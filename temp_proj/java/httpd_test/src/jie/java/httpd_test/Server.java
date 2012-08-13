@@ -10,11 +10,15 @@ public class Server extends NanoHTTPD {
 
 	public Server() throws IOException
 	{
-		super(8080, new File(".").getAbsoluteFile());
+		super(8080, new File("."));
 	}
 
 	public Response serve( String uri, String method, Properties header, Properties parms, Properties files )
 	{
+		if(uri.isEmpty()) {
+			
+		}
+		
 		System.out.println( method + " '" + uri + "' " );
 		String msg = "<html><body><h1>Hello server</h1>\n";
 		if ( parms.getProperty("username") == null )

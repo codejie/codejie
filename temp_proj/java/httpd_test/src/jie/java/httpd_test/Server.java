@@ -15,22 +15,44 @@ public class Server extends NanoHTTPD {
 
 	public Response serve( String uri, String method, Properties header, Properties parms, Properties files )
 	{
-		if(uri.isEmpty()) {
-			
+		if(method == "POST") {
+			if(uri == "/import_file.html") {
+				
+			}
+			else if(uri == "/input_data.html") {
+				String msg = "<html><body><h1>Hello server</h1>\n";
+				if ( parms.getProperty("username") == null )
+					msg +=
+						"<form action='?' method='get'>\n" +
+						"  <p>Your name: <input type='text' name='username'></p>\n" +
+						"</form>\n";
+				else
+					msg += "<p>Hello, " + parms.getProperty("username") + "!</p>";
+		
+				msg += "</body></html>\n";
+				return new NanoHTTPD.Response( HTTP_OK, MIME_HTML, msg );		
+			}
+ 
 		}
 		
-		System.out.println( method + " '" + uri + "' " );
-		String msg = "<html><body><h1>Hello server</h1>\n";
-		if ( parms.getProperty("username") == null )
-			msg +=
-				"<form action='?' method='get'>\n" +
-				"  <p>Your name: <input type='text' name='username'></p>\n" +
-				"</form>\n";
-		else
-			msg += "<p>Hello, " + parms.getProperty("username") + "!</p>";
-
-		msg += "</body></html>\n";
-		return new NanoHTTPD.Response( HTTP_OK, MIME_HTML, msg );
+		
+		return serveFile( uri, header, new File("."), true );
+//		if(uri.isEmpty()) {
+//			
+//		}
+//		
+//		System.out.println( method + " '" + uri + "' " );
+//		String msg = "<html><body><h1>Hello server</h1>\n";
+//		if ( parms.getProperty("username") == null )
+//			msg +=
+//				"<form action='?' method='get'>\n" +
+//				"  <p>Your name: <input type='text' name='username'></p>\n" +
+//				"</form>\n";
+//		else
+//			msg += "<p>Hello, " + parms.getProperty("username") + "!</p>";
+//
+//		msg += "</body></html>\n";
+//		return new NanoHTTPD.Response( HTTP_OK, MIME_HTML, msg );
 	}
 
 

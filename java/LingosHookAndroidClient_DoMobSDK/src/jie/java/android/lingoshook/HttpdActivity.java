@@ -54,7 +54,7 @@ public class HttpdActivity extends Activity {
 	
 	private void startHttdp() {
 		try {
-			server = new HttpdServer(8080);
+			server = new HttpdServer(this, 8080);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

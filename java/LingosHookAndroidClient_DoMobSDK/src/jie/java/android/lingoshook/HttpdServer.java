@@ -21,6 +21,7 @@ public class HttpdServer extends NanoHTTPD {
 	public HttpdServer(Context context, Handler handler, int port) throws IOException {
 		super(port, null);
 		this.context = context;
+		this.handler = handler;
 	}
 
 	@Override
@@ -135,7 +136,7 @@ public class HttpdServer extends NanoHTTPD {
 		msg.getData().putString("file", ifile);
 		msg.getData().putString("local", lfile);
 		msg.getData().putBoolean("overwrite", oflag);		
-		handler.sendMessage(Message.obtain(handler, HttpdActivity.MSG_IMPORT_FILE));
+		handler.sendMessage(msg);
 		
 		InputStream stream = context.getAssets().open("import_file_done.html");
 		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);

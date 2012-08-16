@@ -76,4 +76,7 @@
     <string name="set_summary_off_web_clickable">Web View is NOT clickable</string>
     <string name="title_import_remote">Remote Import Mode</string>
     <string name="title_import_local">Local Import Mode</string>
+    <string name="title_httpd_comment">Please use the following address to  visit your LAC via WiFi now..</string>
+    <string name="str_httpd_importing">Import..</string>
+    <string name="str_httpd_importdone">File \'%s\' imported.</string>    
 </resources>

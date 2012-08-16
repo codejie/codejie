@@ -8,15 +8,18 @@ import java.util.Properties;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Handler;
+import android.os.Message;
 
 import jie.java.android.lingoshook.NanoHTTPD.Response;
 
 public class HttpdServer extends NanoHTTPD {
 
 	Context context = null;
+	Handler handler = null;
 	
-	public HttpdServer(Context context, int port) throws IOException {
-		super(port, new File("."));
+	public HttpdServer(Context context, Handler handler, int port) throws IOException {
+		super(port, null);
 		this.context = context;
 	}
 
@@ -128,7 +131,11 @@ public class HttpdServer extends NanoHTTPD {
 			return new Response(HTTP_BADREQUEST, MIME_PLAINTEXT, HTTP_BADREQUEST);//
 		}
 		
-//		DBAccess.importData(handler, msgcode, file, type)
+		Message msg = Message.obtain(handler, HttpdActivity.MSG_IMPORT_FILE);
+		msg.getData().putString("file", ifile);
+		msg.getData().putString("local", lfile);
+		msg.getData().putBoolean("overwrite", oflag);		
+		handler.sendMessage(Message.obtain(handler, HttpdActivity.MSG_IMPORT_FILE));
 		
 		InputStream stream = context.getAssets().open("import_file_done.html");
 		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);

@@ -25,7 +25,7 @@ public class ImportDBActivity extends Activity implements OnClickListener {
 	private final int MSG_WORD		=	0x0F01;
 	private final int MSG_DONE		=	0x0F00;
 	private final int MSG_EXCEPTION	=	0x0F02;
-	private final int MSG_FAILED		=	0x0F03;
+	private final int MSG_FAILED	=	0x0F03;
 	
 	private Handler handler = null;
 	

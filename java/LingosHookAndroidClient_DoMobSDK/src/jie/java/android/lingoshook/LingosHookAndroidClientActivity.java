@@ -1,5 +1,13 @@
 package jie.java.android.lingoshook;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -240,4 +248,65 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	private void onMenuAbout() {
 		this.showDialog(DIALOG_ABOUT);		
 	}
+	
+/*
+	<LAC>
+	<Version>1.0</Version>
+	<DefaultDict>test</DefaultDict>
+	<WordList>
+		<Item>
+			<Dict></Dict>
+			<Word></Word>
+			<Symbol></Symbol>
+			<DataList>
+				<Data>
+					<Category></Category>
+					<Meaning></Meaning>
+				</Data>
+			<DataList>
+		<Item>
+	<WordList>
+	</LAC>	
+ */
+	
+	private void importXml(final String file, boolean overwrite) {
+		File ifile = new File(file);
+		if(!ifile.exists()) {
+			return;
+		}
+		
+		try {
+			FileInputStream is = new FileInputStream(ifile);
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			XmlPullParser xp = factory.newPullParser();
+			xp.setInput(is, "UTF-8");
+			
+			int type = xp.getEventType();
+			while(type != XmlPullParser.END_DOCUMENT) {
+				if(type == XmlPullParser.START_TAG) {
+					if(xp.getName().equals("DefaultDict")) {
+						
+					}
+					else if(xp.getName().equals("WordList")) {
+						
+					}
+				}
+				type = xp.next();
+			}
+			is.close();
+			
+			
+		}
+		catch (XmlPullParserException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+				
+	}
+	
+	
+	
+	
 }

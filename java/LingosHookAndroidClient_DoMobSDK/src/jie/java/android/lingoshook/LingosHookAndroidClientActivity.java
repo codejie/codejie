@@ -3,6 +3,7 @@ package jie.java.android.lingoshook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import jie.java.android.lingoshook.DataFormat.Data;
 
@@ -161,7 +162,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     		onMenuSetting();
     		break;
     	case R.id.menu_about:
-    		onMenuAbout();
+    		//onMenuAbout();
+    		this.importXml("a.xml", true);
     		break;
     	case R.id.menu_import_local:
     		onMenuImportLocal();
@@ -265,20 +267,22 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 					<Category></Category>
 					<Meaning></Meaning>
 				</Item>
-			<DataList>
-		<Item>
-	<WordList>
+			</DataList>
+		</Item>
+	</WordList>
 	</LAC>	
  */
 	
 	private void importXml(final String file, boolean overwrite) {
-		File ifile = new File(file);
-		if(!ifile.exists()) {
-			return;
-		}
+//		File ifile = new File(file);
+//		if(!ifile.exists()) {
+//			return;
+//		}
 		
 		try {
-			FileInputStream is = new FileInputStream(ifile);
+			//FileInputStream is = new FileInputStream(ifile);
+			InputStream is = this.getAssets().open(file);
+			
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 			XmlPullParser xp = factory.newPullParser();
 			xp.setInput(is, "UTF-8");
@@ -295,15 +299,17 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 					else if(xp.getName().equals("WordList")) {
 						type = xp.nextTag();
 						if(type == XmlPullParser.START_TAG) {
-							while(xp.getName().equals("item")) {
+							while(xp.getName().equals("Item")) {
 								getItem(xp, data);
 								checkData(data, defDict);
+//								type = xp.next();
+								type = xp.nextTag();
 								type = xp.nextTag();
 							}
 						}
 					}
 				}
-				type = xp.nextTag();
+				type = xp.next();
 			}
 			is.close();
 			
@@ -318,40 +324,47 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 				
 	}
 	
+	private int checkData(Data data, String defDict) {
+		return 0;		
+	}
+
 	private int getItem(XmlPullParser xp, DataFormat.Data data) {
 		try {
+			//Dict			
 			int type = xp.nextTag();
-			if(type != XmlPullParser.START_TAG)
-				return -1;
-			//Dict
 			if(xp.getName().equals("Dict")) {
 				type = xp.next();
 				data.dict = xp.getText();
-				type = xp.nextTag();
+				type = xp.next();
 			}
 			//Word
+			type = xp.nextTag();
 			if(xp.getName().equals("Word")) {
 				type = xp.next();
 				data.word = xp.getText();
-				type = xp.nextTag();
+				type = xp.next();
 			}
 			else {
 				return -1;
 			}
 			
 			//Symbol
+			type = xp.nextTag();
 			if(xp.getName().equals("Symbol")) {
 				type = xp.next();
 				data.symbol = xp.getText();
-				type = xp.nextTag();
+				type = xp.next();
 			}
 			//DataList
+			type = xp.nextTag();
 			if(xp.getName().equals("DataList")) {
 				type = xp.nextTag();
 				if(type == XmlPullParser.START_TAG) {
 					while(xp.getName().equals("Item")) {
 						getWordData(xp, data);
 						checkWordData(data);
+						//type = xp.next();
+						type = xp.nextTag();
 						type = xp.nextTag();
 					}
 				}
@@ -369,25 +382,28 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		return 0;
 	}
 
+	private int checkWordData(Data data) {
+		return 0;
+	}
+
 	private int getWordData(XmlPullParser xp, Data data) {
 		try {
-			int type = xp.nextTag();
-			if(type != XmlPullParser.START_TAG)
-				return -1;
 			//Category
+			int type = xp.nextTag();			
 			if(xp.getName().equals("Category")) {
 				type = xp.next();
 				data.category.add(xp.getText());
-				type = xp.nextTag();
+				type = xp.next();
 			}
 			else {
 				return -1;
 			}
 			//Meaning
+			type = xp.nextTag();
 			if(xp.getName().equals("Meaning")) {
 				type = xp.next();
 				data.meaning.add(xp.getText());
-				type = xp.nextTag();
+				type = xp.next();
 			}
 			else {
 				return -1;

@@ -1,9 +1,19 @@
 package jie.java.android.lingoshook;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import jie.java.android.lingoshook.DataFormat.Data;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -166,20 +176,25 @@ public final class DBAccess {
 		}
 		
 		if(type == IMPORTTYPE_OVERWRITE || (checkInfoTable(INFOTAG_CHECKIN) == false)) {
-			try {
-				Date today = Calendar.getInstance().getTime();
-				SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				
-				ContentValues values = new ContentValues();
-				values.put(COLUMN_ID, INFOTAG_CHECKIN);
-				values.put(COLUMN_VALUE, fmt.format(today));
-				db.insert(TABLE_INFO, null, values);
-			}
-			catch (SQLException e) {
-				Log.e(Global.APP_TITLE, "db exception - " + e.toString());
-				return -1;
-			}
+			return refreshDeltaUpdate();
 		}		
+		return 0;
+	}
+	
+	private static int refreshDeltaUpdate() {
+		try {
+			Date today = Calendar.getInstance().getTime();
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
+			ContentValues values = new ContentValues();
+			values.put(COLUMN_ID, INFOTAG_CHECKIN);
+			values.put(COLUMN_VALUE, fmt.format(today));
+			db.insert(TABLE_INFO, null, values);
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return -1;
+		}
 		return 0;
 	}
 	
@@ -468,5 +483,158 @@ public final class DBAccess {
 		} 
 		
 		return true;
+	}
+	
+	public static int importXml(Handler handler, final String file, int type) {
+		if(type == IMPORTTYPE_OVERWRITE) {
+			if(clearData() != 0)
+				return -1;
+		}
+		
+		try {
+			//FileInputStream is = new FileInputStream(ifile);
+			FileInputStream is = new FileInputStream(new File(file));// this.getAssets().open(file);
+			
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			XmlPullParser xp = factory.newPullParser();
+			xp.setInput(is, "UTF-8");
+			
+			DataFormat.Data data = new DataFormat.Data();
+			String defDict = "Default Dictionary";
+			
+			int et = xp.getEventType();
+			while(et != XmlPullParser.END_DOCUMENT) {
+				if(et == XmlPullParser.START_TAG) {
+					if(xp.getName().equals("DefaultDict")) {
+						defDict = xp.getText();
+					}
+					else if(xp.getName().equals("WordList")) {
+						et = xp.nextTag();
+						if(et == XmlPullParser.START_TAG) {
+							while(xp.getName().equals("Item")) {
+								importXml_getItem(xp, data);
+								importXml_checkData(data, defDict);
+//								type = xp.next();
+								et = xp.nextTag();
+								et = xp.nextTag();
+							}
+						}
+					}
+				}
+				et = xp.next();
+			}
+			is.close();			
+		}
+		catch (XmlPullParserException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}		
+		
+		if(type == IMPORTTYPE_OVERWRITE || (checkInfoTable(INFOTAG_CHECKIN) == false)) {
+			return refreshDeltaUpdate();
+		}		
+		return 0;
+	}
+	
+	private static int importXml_checkData(Data data, String defDict) {
+		return 0;		
+	}
+
+	private static int importXml_getItem(XmlPullParser xp, DataFormat.Data data) {
+		try {
+			//Dict			
+			int type = xp.nextTag();
+			if(xp.getName().equals("Dict")) {
+				type = xp.next();
+				data.dict = xp.getText();
+				type = xp.next();
+			}
+			//Word
+			type = xp.nextTag();
+			if(xp.getName().equals("Word")) {
+				type = xp.next();
+				data.word = xp.getText();
+				type = xp.next();
+			}
+			else {
+				return -1;
+			}
+			
+			//Symbol
+			type = xp.nextTag();
+			if(xp.getName().equals("Symbol")) {
+				type = xp.next();
+				data.symbol = xp.getText();
+				type = xp.next();
+			}
+			//DataList
+			type = xp.nextTag();
+			if(xp.getName().equals("DataList")) {
+				type = xp.nextTag();
+				if(type == XmlPullParser.START_TAG) {
+					while(xp.getName().equals("Item")) {
+						importXml_getWordData(xp, data);
+						importXml_checkWordData(data);
+						//type = xp.next();
+						type = xp.nextTag();
+						type = xp.nextTag();
+					}
+				}
+			}
+			else {
+				return -1;
+			}
+			
+		}
+		catch (XmlPullParserException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	private static int importXml_checkWordData(Data data) {
+		return 0;
+	}
+
+	private static int importXml_getWordData(XmlPullParser xp, Data data) {
+		try {
+			//Category
+			int type = xp.nextTag();			
+			if(xp.getName().equals("Category")) {
+				type = xp.next();
+				data.category.add(xp.getText());
+				type = xp.next();
+			}
+			else {
+				return -1;
+			}
+			//Meaning
+			type = xp.nextTag();
+			if(xp.getName().equals("Meaning")) {
+				type = xp.next();
+				data.meaning.add(xp.getText());
+				type = xp.next();
+			}
+			else {
+				return -1;
+			}
+			
+		}
+		catch (XmlPullParserException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;		
+	}	
+
+	public static int addWordData(final DataFormat.Data data) {
+		
+		
+		return 0;
 	}
 }

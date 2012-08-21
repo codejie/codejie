@@ -161,8 +161,24 @@ public class HttpdActivity extends Activity {
 		return 0;
 	}
 	
-	private void importXml(String file, boolean overwrite) {
-		// TODO Auto-generated method stub
-		
+	private int importXml(final String file, final boolean overwrite) {
+		try {
+			new Thread() {
+				@Override
+				public void run() {
+					if(DBAccess.importXml(handler, MSG_WORD, file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) == 0) {
+						handler.sendMessage(Message.obtain(handler, MSG_DONE));
+					}
+					else {
+						handler.sendMessage(Message.obtain(handler, MSG_XML_FAILED));
+					}
+				}
+				
+			}.start();
+		}
+		catch (Exception e) {
+			handler.sendMessage(Message.obtain(handler, MSG_EXCEPTION));
+		}
+		return 0;
 	}	
 }

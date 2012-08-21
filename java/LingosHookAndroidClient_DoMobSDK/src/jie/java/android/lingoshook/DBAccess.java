@@ -485,7 +485,7 @@ public final class DBAccess {
 		return true;
 	}
 	
-	public static int importXml(Handler handler, final String file, int type) {
+	public static int importXml(Handler handler, int msgcode, final String file, int type) {
 		if(type == IMPORTTYPE_OVERWRITE) {
 			if(clearData() != 0)
 				return -1;
@@ -499,7 +499,6 @@ public final class DBAccess {
 			XmlPullParser xp = factory.newPullParser();
 			xp.setInput(is, "UTF-8");
 			
-			DataFormat.Data data = new DataFormat.Data();
 			String defDict = "Default Dictionary";
 			
 			int et = xp.getEventType();
@@ -512,8 +511,16 @@ public final class DBAccess {
 						et = xp.nextTag();
 						if(et == XmlPullParser.START_TAG) {
 							while(xp.getName().equals("Item")) {
+								DataFormat.Data data = new DataFormat.Data();
 								importXml_getItem(xp, data);
-								importXml_checkData(data, defDict);
+								if(importXml_checkData(data, defDict) == 0) {
+									if(addWordData(data) == 0) {
+										handler.sendMessage(Message.obtain(handler, msgcode, data.word));
+									}
+									else {
+										//
+									}
+								}
 //								type = xp.next();
 								et = xp.nextTag();
 								et = xp.nextTag();
@@ -526,10 +533,10 @@ public final class DBAccess {
 			is.close();			
 		}
 		catch (XmlPullParserException e) {
-			e.printStackTrace();
+			return -1;
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			return -1;
 		}		
 		
 		if(type == IMPORTTYPE_OVERWRITE || (checkInfoTable(INFOTAG_CHECKIN) == false)) {
@@ -539,6 +546,10 @@ public final class DBAccess {
 	}
 	
 	private static int importXml_checkData(Data data, String defDict) {
+
+		if(data.dict == null) {
+			data.dict = defDict;
+		}
 		return 0;		
 	}
 
@@ -589,9 +600,9 @@ public final class DBAccess {
 			
 		}
 		catch (XmlPullParserException e) {
-			e.printStackTrace();
+			return -1;
 		} catch (IOException e) {
-			e.printStackTrace();
+			return -1;
 		}
 		return 0;
 	}
@@ -610,7 +621,7 @@ public final class DBAccess {
 				type = xp.next();
 			}
 			else {
-				return -1;
+				data.category.add("");
 			}
 			//Meaning
 			type = xp.nextTag();
@@ -625,16 +636,36 @@ public final class DBAccess {
 			
 		}
 		catch (XmlPullParserException e) {
-			e.printStackTrace();
+			return -1;
 		} catch (IOException e) {
-			e.printStackTrace();
+			return -1;
 		}
 		return 0;		
 	}	
 
 	public static int addWordData(final DataFormat.Data data) {
+		StringBuffer html = new StringBuffer();
 		
+		DataFormat.data2html(data, html);
+		
+		ContentValues values = new ContentValues();
+
+		values.put(COLUMN_HTML, html.toString());
+		int srcid = (int) db.insert(TABLE_DATA, null, values);		
+		
+		values.clear();
+		values.put(COLUMN_SRCID, srcid);
+		values.put(COLUMN_WORD, data.word);
+		int wordid = (int) db.insert(TABLE_WORD, null, values);
+		
+		values.clear();
+		values.put(COLUMN_WORDID, wordid);
+		values.put(COLUMN_LAST, 0);//
+		values.put(COLUMN_NEXT, 0);//
+		values.put(COLUMN_SCORE, Score.SCORE_UNKNOWN);
+		db.insert(TABLE_SCORE, null, values);
 		
 		return 0;
 	}
+	
 }

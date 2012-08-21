@@ -162,8 +162,8 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     		onMenuSetting();
     		break;
     	case R.id.menu_about:
-    		//onMenuAbout();
-    		this.importXml("a.xml", true);
+    		onMenuAbout();
+    		//this.importXml("a.xml", true);
     		break;
     	case R.id.menu_import_local:
     		onMenuImportLocal();

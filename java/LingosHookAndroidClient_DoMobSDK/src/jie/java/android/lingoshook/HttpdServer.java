@@ -105,37 +105,107 @@ public class HttpdServer extends NanoHTTPD {
 
 	private Response unsupportedRequest(String uri, String method, Properties header, Properties parms, Properties files) {
 		
-		return new Response(HTTP_NOTFOUND, MIME_PLAINTEXT,	"Error 404, file not found.");
+		return new Response(HTTP_NOTFOUND, MIME_PLAINTEXT,	"Error 404, file not found. -- codejie");
+	}
+	
+	private Response missInputParameter(String uri, String method, Properties header, Properties parms, Properties files) throws IOException {
+		InputStream stream = context.getAssets().open("err_missparameter.html");
+		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);
+	}
+
+	private Response requestInputDataDone(String uri, String method, Properties header, Properties parms, Properties files) throws IOException {
+
+		Message msg = Message.obtain(handler, HttpdActivity.MSG_INPUT_DATA);
+
+		String str = parms.getProperty("dict");
+		if(str == null || str.equals("")) {
+			msg.getData().putString("dict", "Default Dictionary");	
+		}
+		else {
+			msg.getData().putString("dict", str);
+		}	
+	
+		str = parms.getProperty("word");
+		if(str == null || str.equals(""))
+			return missInputParameter(uri, method, header, parms, header);
+		msg.getData().putString("word", str);
 		
+		str = parms.getProperty("symbol");
+		if(str == null || str.equals("")) {
+			msg.getData().putString("symbol", "");	
+		}
+		else {
+			msg.getData().putString("symbol", str);
+		}
+
+		str = parms.getProperty("category1");
+		if(str == null || str.equals("")) {
+			msg.getData().putString("category1", "");	
+		}
+		else {
+			msg.getData().putString("category1", str);
+		}
+		
+		str = parms.getProperty("meaning1");
+		if(str == null || str.equals(""))
+			return missInputParameter(uri, method, header, parms, header);
+		msg.getData().putString("meaning1", str);
+
+		str = parms.getProperty("meaning2");
+		if(str != null && !str.equals("")) {
+			msg.getData().putString("meaning2", str);
+			
+			str = parms.getProperty("category2");
+			if(str == null || str.equals("")) {
+				msg.getData().putString("category2", "");	
+			}
+			else {
+				msg.getData().putString("category2", str);
+			}
+		}
+		
+		str = parms.getProperty("meaning3");
+		if(str != null && !str.equals("")) {
+			msg.getData().putString("meaning3", str);
+			
+			str = parms.getProperty("category3");
+			if(str == null || str.equals("")) {
+				msg.getData().putString("category3", "");	
+			}
+			else {
+				msg.getData().putString("category3", str);
+			}
+		}
+		
+		handler.sendMessage(msg);
+		
+		InputStream stream = context.getAssets().open("input_data_done.html");
+		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);		
 	}
 
-	private Response requestInputDataDone(String uri, String method, Properties header, Properties parms, Properties files) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private Response requestInputData(String uri, String method, Properties header, Properties parms, Properties files) {
-		// TODO Auto-generated method stub
-		return null;
+	private Response requestInputData(String uri, String method, Properties header, Properties parms, Properties files) throws IOException {
+		InputStream stream = context.getAssets().open("input_data.html");
+		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);
 	}
 
 	private Response requestImportFileDone(String uri, String method, Properties header, Properties parms, Properties files) throws IOException {
 
 		String ifile = parms.getProperty("import");
 		if(ifile == null || ifile.equals("")) {
-			return new Response(HTTP_BADREQUEST, MIME_PLAINTEXT, HTTP_BADREQUEST);//
+			return missInputParameter(uri, method, header, parms, header);
 		}
 		boolean oflag = !(parms.getProperty("overwrite") == null || parms.getProperty("overwrite").equals(""));
 		
 		String lfile = files.getProperty("import");
 		if(lfile == null || lfile.equals("")) {
-			return new Response(HTTP_BADREQUEST, MIME_PLAINTEXT, HTTP_BADREQUEST);//
+			return missInputParameter(uri, method, header, parms, header);
 		}
 		
 		Message msg = Message.obtain(handler, HttpdActivity.MSG_IMPORT_FILE);
 		msg.getData().putString("file", ifile);
 		msg.getData().putString("local", lfile);
-		msg.getData().putBoolean("overwrite", oflag);		
+		msg.getData().putBoolean("overwrite", oflag);
+
 		handler.sendMessage(msg);
 		
 		InputStream stream = context.getAssets().open("import_file_done.html");

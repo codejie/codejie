@@ -52,7 +52,7 @@
     <string name="str_newword">N:</string>
     <string name="str_oldword">O:</string>
     <string name="str_mistakeword">M:</string>
-    <string name="str_version">Version 1.0.0</string>
+    <string name="str_version">Version 1.1.0</string>
     <string name="set_summary_finger_refresh">自动清除输入轨迹</string>
     <string name="set_summary_finger_interval">设置自动刷新间隔</string>
     <string name="set_summary_finger_pencolor">设置输入轨迹的颜色</string>
@@ -80,4 +80,6 @@
     <string name="title_httpd_comment">请通过WiFi网络使用下面地址来访问你的LAC:</string>
     <string name="str_httpd_importing">正在导入..</string>
     <string name="str_httpd_importdone">完成  \'%s\' 文件导入.</string>
+    <string name="str_httpd_inputdone">数据添加成功..</string>
+    <string name="str_httpd_inputfail">数据添加失败..</string>        
 </resources>

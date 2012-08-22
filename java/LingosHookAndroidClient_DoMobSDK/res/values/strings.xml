@@ -51,7 +51,7 @@
     <string name="str_newword">N:</string>
     <string name="str_oldword">O:</string>
     <string name="str_mistakeword">M:</string>
-    <string name="str_version">Version 1.0.0</string>
+    <string name="str_version">Version 1.1.0</string>
     <string name="set_summary_finger_refresh">Automate to refresh finger input panel</string>
     <string name="set_summary_finger_interval">Refresh interval of finger panel</string>
     <string name="set_summary_finger_pencolor">Choose pen color of finger panel</string>
@@ -78,5 +78,7 @@
     <string name="title_import_local">Local Import Mode</string>
     <string name="title_httpd_comment">Please use the following address to  visit your LAC via WiFi now..</string>
     <string name="str_httpd_importing">Import..</string>
-    <string name="str_httpd_importdone">File \'%s\' imported.</string>    
+    <string name="str_httpd_importdone">File \'%s\' imported.</string>
+    <string name="str_httpd_inputdone">Data inputed successfully..</string>
+    <string name="str_httpd_inputfail">Data inputed failed..</string>    
 </resources>

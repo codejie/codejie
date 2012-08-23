@@ -79,7 +79,8 @@
     <string name="title_import_local">本地导入方式</string>
     <string name="title_httpd_comment">请通过WiFi网络使用下面地址来访问你的LAC:</string>
     <string name="str_httpd_importing">正在导入..</string>
-    <string name="str_httpd_importdone">完成  \'%s\' 文件导入.</string>
+    <string name="str_httpd_importdone">\'%s\'文件导入完成.</string>
     <string name="str_httpd_inputdone">数据添加成功..</string>
-    <string name="str_httpd_inputfail">数据添加失败..</string>        
+    <string name="str_httpd_inputfail">数据添加失败..</string>
+    <string name="str_httpd_importfail">\'%s\'文件导入失败.</string>
 </resources>

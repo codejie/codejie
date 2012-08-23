@@ -1,90 +1,45 @@
 package jie.java.android.lingoshook;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class ImportDBActivity extends Activity implements OnClickListener {
+public class ImportDBActivity extends ImportBaseActivity implements OnClickListener {
 
 	private final int DIALOG_USING = 0;
 	
-	private final int MSG_WORD		=	0x0F01;
-	private final int MSG_DONE		=	0x0F00;
-	private final int MSG_EXCEPTION	=	0x0F02;
-	private final int MSG_FAILED	=	0x0F03;
-	
-	private Handler handler = null;
-	
 	private boolean isDone = false;
+	
+	private TextView v = null;
+	private Button btn = null;	
+	private LinearLayout layout = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		this.setContentView(R.layout.importdb);
-		final TextView v = (TextView)this.findViewById(R.id.textView3);
-		final Button btn = (Button)this.findViewById(R.id.button1);
+
+		v = (TextView)this.findViewById(R.id.textView3);
+		btn = (Button)this.findViewById(R.id.button1);
+		layout = (LinearLayout) ImportDBActivity.this.findViewById(R.id.linearLayout1);
 		
 		((EditText) this.findViewById(R.id.editText1)).setText(Environment.getExternalStorageDirectory().getPath());
         ((EditText) this.findViewById(R.id.editText2)).setText("LH_Export.db3");
-		
-		handler = new Handler() {
-
-			@Override
-			public void handleMessage(Message msg) {
-							
-				switch(msg.what) {
-					case MSG_WORD: {
-						v.setText((String)msg.obj);
-						break;
-					}
-					case MSG_DONE: {
-						
-						ImportDBActivity.this.findViewById(R.id.linearLayout1).setVisibility(View.GONE);
-						
-						isDone = true;
-						btn.setText(R.string.title_done);
-						
-//						Score.init();
-
-						break;
-					}
-					case MSG_FAILED: {
-						ImportDBActivity.this.findViewById(R.id.linearLayout1).setVisibility(View.GONE);
-
-						Toast.makeText(ImportDBActivity.this, "Import data failed.", Toast.LENGTH_LONG).show();
-						break;
-					}
-					case MSG_EXCEPTION: {
-						ImportDBActivity.this.findViewById(R.id.linearLayout1).setVisibility(View.GONE);
-
-						Toast.makeText(ImportDBActivity.this, "Import data failed - exception", Toast.LENGTH_LONG).show();
-						break;
-					}
-					default: {
-						break;
-					}
-				}
-				
-				super.handleMessage(msg);
-			}
 			
-		};
-		
 		this.findViewById(R.id.button1).setOnClickListener(this);
 	}
 
@@ -110,24 +65,15 @@ public class ImportDBActivity extends Activity implements OnClickListener {
 		final String file = ((EditText) this.findViewById(R.id.editText1)).getText().toString() + "/" + ((EditText) this.findViewById(R.id.editText2)).getText().toString();
 		final CheckBox c = (CheckBox)this.findViewById(R.id.checkBox1);
 		
-		this.findViewById(R.id.linearLayout1).setVisibility(View.VISIBLE);
-		try {
-			new Thread() {
-				@Override
-				public void run() {
-					if(DBAccess.importData(handler, MSG_WORD, file, (c.isChecked() ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) == 0) {
-						handler.sendMessage(Message.obtain(handler, MSG_DONE));
-					}
-					else {
-						handler.sendMessage(Message.obtain(handler, MSG_FAILED));
-					}
-				}
-				
-			}.start();
-		}
-		catch (Exception e) {
-			handler.sendMessage(Message.obtain(handler, MSG_EXCEPTION));
-		}
+		layout.setVisibility(View.VISIBLE);
+		
+		Message msg = Message.obtain(this.getHandler(), HttpdActivity.MSG_IMPORT_FILE);
+		msg.getData().putString("file", file);
+		msg.getData().putString("local", file);
+		msg.getData().putBoolean("overwrite", c.isChecked());
+
+		this.getHandler().sendMessage(msg);
+		
 		return 0;
 	}
 
@@ -161,6 +107,35 @@ public class ImportDBActivity extends Activity implements OnClickListener {
 		default:;
 		}
 		return dlg;
+	}
+
+	@Override
+	protected void onMsg_ImportFile(String file, String local, boolean overwrite) {
+		super.onMsg_ImportFile(file, local, overwrite);
+	}
+
+	@Override
+	protected void onMsg_Word(String word) {
+		v.setText(word);
+	}
+
+	@Override
+	protected void onMsg_ImportFileDone(String file, String local, boolean overwrite) {
+		layout.setVisibility(View.GONE);		
+		isDone = true;
+		btn.setText(R.string.title_done);
+	}
+
+	@Override
+	protected void onMsg_ImportFileFailed(boolean isDBFile, String file, String local) {
+		layout.setVisibility(View.GONE);
+		Toast.makeText(ImportDBActivity.this, "Import data failed.", Toast.LENGTH_LONG).show();	
+	}
+
+	@Override
+	protected void onMsg_Exception() {
+		layout.setVisibility(View.GONE);
+		Toast.makeText(ImportDBActivity.this, "Import data failed - exception", Toast.LENGTH_LONG).show();
 	}
 
 }

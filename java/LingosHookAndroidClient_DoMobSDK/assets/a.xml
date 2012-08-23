@@ -25,11 +25,11 @@
 		<DataList>
 			<Item>
 				<Category>n.</Category>
-				<Meaning>meaning</Meaning>
+				<Meaning>中文啊</Meaning>
 			</Item>
 			<Item>
 				<Category>v.</Category>
-				<Meaning>meaning2</Meaning>
+				<Meaning>测试啊</Meaning>
 			</Item>			
 		</DataList>
 	</Item>

@@ -15,24 +15,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class HttpdActivity extends Activity {
+public class HttpdActivity extends ImportBaseActivity {
 
-	private final static int MSG_WORD			=	0x0F01;
-	private final static int MSG_DB_DONE		=	0x0F00;
-	private final static int MSG_XML_DONE		=	0x0F05;
-	private final static int MSG_DATA_DONE		=	0x0F06;
-	private final static int MSG_EXCEPTION		=	0x0F02;
-	private final static int MSG_DB_FAILED		=	0x0F03;	
-	private final static int MSG_XML_FAILED		=	0x0F04;
-	private final static int MSG_DATA_FAILED	=	0x0F07;
-	
-	public final static int MSG_IMPORT_FILE	=	0;
-	public final static int MSG_INPUT_DATA =	1;
-	
 	private final int HTTPD_PORT			=	8102;
 	
 	private HttpdServer server = null;
-	private Handler handler = null;
+	
+	private TextView comment = null;
+	private TextView word = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +30,9 @@ public class HttpdActivity extends Activity {
 		
 		this.setContentView(R.layout.httpd);
 		
-		initHandler();
-		
-		TextView tv = (TextView) this.findViewById(R.id.textView2);
+		TextView tv = (TextView) this.findViewById(R.id.textView2);		
+		comment = (TextView)this.findViewById(R.id.textView3);
+		word = (TextView)this.findViewById(R.id.textView4);
 		
 		if(getLocalAddress(tv) == 0) {
 			if(startHttdp() != 0) {
@@ -80,160 +70,58 @@ public class HttpdActivity extends Activity {
 		return 0;		
 	}
 	
-	private void initHandler() {
-		
-		//final LinearLayout ll = (LinearLayout) this.findViewById(R.id.linearLayout2);
-		final TextView comment = (TextView)this.findViewById(R.id.textView3);
-		final TextView word = (TextView)this.findViewById(R.id.textView4);
-		
-		handler = new Handler() {
-			private String src = "";
-			private String file = "";
-			private boolean overwrite = false;			
-			@Override
-			public void handleMessage(Message msg) {
-
-				switch(msg.what) {
-					case MSG_IMPORT_FILE: {
-						
-						comment.setText(R.string.str_httpd_importing);
-						
-						src = msg.getData().getString("file");
-						file = msg.getData().getString("local");
-						overwrite = msg.getData().getBoolean("overwrite");						
-						
-						//comment.setText(R.string.str_httpd_importing);
-//						ll.setVisibility(View.VISIBLE);
-						
-						importDB(file, overwrite);
-						break;
-					}
-					case MSG_INPUT_DATA: {
-						
-						comment.setText(R.string.str_httpd_importing);
-						
-						DataFormat.Data data = new DataFormat.Data();
-						data.dict = msg.getData().getString("dict");
-						data.word = msg.getData().getString("word");
-						data.symbol = msg.getData().getString("symbol");
-						data.category.add(msg.getData().getString("category1"));
-						data.meaning.add(msg.getData().getString("meaning1"));
-						if(msg.getData().getString("meaning2") != null) {
-							data.category.add(msg.getData().getString("category2"));
-							data.meaning.add(msg.getData().getString("meaning2"));							
-						}
-						if(msg.getData().getString("meaning3") != null) {
-							data.category.add(msg.getData().getString("category3"));
-							data.meaning.add(msg.getData().getString("meaning3"));							
-						}
-
-						inputData(data);
-						
-						break;
-					}
-					case MSG_WORD: {
-						word.setText((String)msg.obj);
-						break;
-					}
-					case MSG_DB_DONE:
-					case MSG_XML_DONE: {
-						comment.setText(String.format(getString(R.string.str_httpd_importdone), src));
-						word.setText("DONE");
-						break;
-					}
-					case MSG_DATA_DONE: {
-						comment.setText(R.string.str_httpd_inputdone);
-						word.setText((String)msg.obj);
-						break;						
-					}
-					case MSG_DB_FAILED: {			
-						importXml(file, overwrite);
-						break;
-					}
-					case MSG_XML_FAILED: {
-//						ll.setVisibility(View.GONE);
-						Toast.makeText(HttpdActivity.this, "Import data failed.", Toast.LENGTH_LONG).show();
-						break;
-					}
-					case MSG_DATA_FAILED: {
-						comment.setText(R.string.str_httpd_inputfail);
-						word.setText((String)msg.obj);						
-						break;
-					}
-					case MSG_EXCEPTION: {
-//						ll.setVisibility(View.GONE);
-						Toast.makeText(HttpdActivity.this, "Import data failed - exception", Toast.LENGTH_LONG).show();
-						break;
-					}					
-					default: {
-						break;
-					}
-				}
-				
-				super.handleMessage(msg);
-			}			
-		};
-	}
-
 	private int startHttdp() {
 		try {
-			server = new HttpdServer(this, handler, HTTPD_PORT);
+			server = new HttpdServer(this, this.getHandler(), HTTPD_PORT);
 		} catch (IOException e) {
 			return -1;
 		}
 		return 0;	
 	}
-	
-	private int importDB(final String file, final boolean overwrite) {
-		try {
-			new Thread() {
-				@Override
-				public void run() {
-					if(DBAccess.importData(handler, MSG_WORD, file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) == 0) {
-						handler.sendMessage(Message.obtain(handler, MSG_DB_DONE));
-					}
-					else {
-						handler.sendMessage(Message.obtain(handler, MSG_DB_FAILED));
-					}
-				}
-				
-			}.start();
-		}
-		catch (Exception e) {
-			handler.sendMessage(Message.obtain(handler, MSG_EXCEPTION));
-		}
-		return 0;
-	}
-	
-	private int importXml(final String file, final boolean overwrite) {
-		try {
-			new Thread() {
-				@Override
-				public void run() {
-					if(DBAccess.importXml(handler, MSG_WORD, file, (overwrite ? DBAccess.IMPORTTYPE_OVERWRITE : DBAccess.IMPORTTYPE_APPEND)) == 0) {
-						handler.sendMessage(Message.obtain(handler, MSG_XML_DONE));
-					}
-					else {
-						handler.sendMessage(Message.obtain(handler, MSG_XML_FAILED));
-					}
-				}
-				
-			}.start();
-		}
-		catch (Exception e) {
-			handler.sendMessage(Message.obtain(handler, MSG_EXCEPTION));
-		}
-		return 0;
-	}
-	
 
-	private void inputData(Data data) {
-		if(DBAccess.addWordData(data) == 0) {
-			handler.sendMessage(Message.obtain(handler, MSG_DATA_DONE, data.word));
-		}
-		else {
-			handler.sendMessage(Message.obtain(handler, MSG_DATA_FAILED));
+	@Override
+	protected void onMsg_ImportFile(String file, String local, boolean overwrite) {
+		comment.setText(R.string.str_httpd_importing);
+	}
+
+	@Override
+	protected void onMsg_InputData(Data data) {
+		comment.setText(R.string.str_httpd_importing);
+	}
+
+	@Override
+	protected void onMsg_Word(String word) {
+		this.word.setText(word);
+	}
+
+	@Override
+	protected void onMsg_ImportFileDone(String file, String local, boolean overwrite) {
+		comment.setText(String.format(getString(R.string.str_httpd_importdone), file));
+		word.setText("DONE");
+	}
+
+	@Override
+	protected void onMsg_InputDataDone() {
+		comment.setText(R.string.str_httpd_inputdone);
+	}
+
+	@Override
+	protected void onMsg_ImportFileFailed(boolean isDBFile, final String file, final String local) {
+		if(!isDBFile) {
+			comment.setText(String.format(getString(R.string.str_httpd_importfail), file));
+			Toast.makeText(HttpdActivity.this, "Import file failed.", Toast.LENGTH_LONG).show();
 		}
 	}
+
+	@Override
+	protected void onMsg_InputDataFailed() {
+		comment.setText(R.string.str_httpd_inputfail);	
+	}
+
+	@Override
+	protected void onMsg_Exception() {
+		Toast.makeText(HttpdActivity.this, "Import file failed - exception", Toast.LENGTH_LONG).show();
+	}
+	
 
 }

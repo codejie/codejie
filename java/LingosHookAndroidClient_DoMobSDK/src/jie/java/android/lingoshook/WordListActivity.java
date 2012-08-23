@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CursorAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class WordListActivity extends Activity {
 
@@ -41,9 +43,15 @@ public class WordListActivity extends Activity {
 			TextView w = (TextView) view.findViewById(R.id.textView1);
 			w.setText(cursor.getString(0));
 
+			w = (TextView) view.findViewById(R.id.textView3);//wordid
+			w.setText(cursor.getString(1));
+			
+			w = (TextView) view.findViewById(R.id.textView4);//srcid
+			w.setText(cursor.getString(2));			
+			
 			if(showDate) {
 				w = (TextView) view.findViewById(R.id.textView2);
-				w.setText(getDateByUpdated(cursor.getInt(2)));
+				w.setText(getDateByUpdated(cursor.getInt(3)));
 			}
 		}
 
@@ -62,20 +70,29 @@ public class WordListActivity extends Activity {
 		
 		textView = (TextView) this.findViewById(R.id.textView1);
 		listView = (ListView) this.findViewById(R.id.listView1);
+//		
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 	    		Intent intent = new Intent(WordListActivity.this, HtmlDisplayActivity.class);
 	    		intent.putExtra(HtmlDisplayActivity.REQ, HtmlDisplayActivity.REQ_WORD);
-	    		intent.putExtra(HtmlDisplayActivity.WORD, ((TextView)view.findViewById(R.id.textView1)).getText().toString());//view.getId());
+	//    		intent.putExtra(HtmlDisplayActivity.WORD, ((TextView)view.findViewById(R.id.textView1)).getText().toString());//view.getId());
+	    		intent.putExtra(HtmlDisplayActivity.SRCID, ((TextView)view.findViewById(R.id.textView4)).getText().toString());//view.getId());	    		
 	    		WordListActivity.this.startActivity(intent);					
 			}			
 		});
 		
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				Toast.makeText(WordListActivity.this, "wordid:" + ((TextView)view.findViewById(R.id.textView3)).getText().toString(), Toast.LENGTH_SHORT).show();
+				return true;
+			}			
+		});		
+		
 		//this.registerForContextMenu(listView);
-		
-		
 		
 		Intent intent = this.getIntent();
 		if(intent != null) {
@@ -90,8 +107,7 @@ public class WordListActivity extends Activity {
 				//specific date
 				loadSpecificWords(value);
 			}
-		}
-		
+		}		
 	}
 
 	@Override
@@ -131,18 +147,6 @@ public class WordListActivity extends Activity {
 		cursor = DBAccess.getWords(0, value);
 		ListAdapter adapter = new WordCursorAdapter(this, cursor, true);
 		listView.setAdapter(adapter);
-		//listView.setItemsCanFocus(false);
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-	    		Intent intent = new Intent(WordListActivity.this, HtmlDisplayActivity.class);
-	    		intent.putExtra(HtmlDisplayActivity.REQ, HtmlDisplayActivity.REQ_WORD);
-	    		intent.putExtra(HtmlDisplayActivity.WORD, ((TextView)view.findViewById(R.id.textView1)).getText().toString());//view.getId());
-	    		WordListActivity.this.startActivity(intent);					
-			}			
-		});
-		//listView.setOnClickListener(this);
 	}	
 
 	private void loadSpecificWords(int value) {

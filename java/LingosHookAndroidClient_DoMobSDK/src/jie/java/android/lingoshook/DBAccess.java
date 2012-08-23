@@ -437,7 +437,7 @@ public final class DBAccess {
 
 	public static Cursor getWords(int type, int value) {
 		
-		String sql = "SELECT " + TABLE_WORD +"." + COLUMN_WORD + "," + TABLE_WORD + "." + COLUMN_SRCID + " AS _id, "+ TABLE_SCORE + "." + COLUMN_NEXT + " FROM " + TABLE_WORD + "," + TABLE_SCORE + " WHERE (" + TABLE_WORD + "." + COLUMN_ID + "="  + TABLE_SCORE + "." + COLUMN_WORDID + ")";
+		String sql = "SELECT " + TABLE_WORD +"." + COLUMN_WORD + "," + TABLE_WORD + "." + COLUMN_ID + " AS _id" + "," + TABLE_WORD + "." + COLUMN_SRCID + "," + TABLE_SCORE + "." + COLUMN_NEXT + " FROM " + TABLE_WORD + "," + TABLE_SCORE + " WHERE (" + TABLE_WORD + "." + COLUMN_ID + "="  + TABLE_SCORE + "." + COLUMN_WORDID + ")";
 		//Word.word, Word.srcid AS _id, Score.updated FROM Word, Score WHERE (Word.id = Score.wordid);
 		
 		if(type == 0) {

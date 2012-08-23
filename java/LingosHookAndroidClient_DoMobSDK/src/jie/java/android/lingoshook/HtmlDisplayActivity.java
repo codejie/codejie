@@ -13,6 +13,7 @@ public class HtmlDisplayActivity extends Activity implements OnTouchListener {
 
 	public static String REQ		=	"req";
 	public static String ID			=	"id";
+	public static String SRCID		=	"srcid";
 	public static String WORD		=	"w";
 	public static int REQ_HELP		=	0;
 	public static int REQ_WORD		=	1;
@@ -36,7 +37,8 @@ public class HtmlDisplayActivity extends Activity implements OnTouchListener {
 		if(intent != null) {
 			if(intent.getExtras().getInt(REQ) == REQ_WORD) {
 				web.setOnTouchListener(this);
-				loadWordData(intent.getExtras().getString(WORD));
+				//loadWordData(intent.getExtras().getString(WORD));
+				loadWordSrc(Integer.parseInt(intent.getExtras().getString(SRCID)));
 			}
 			else {
 				loadHelpInfo();
@@ -49,6 +51,10 @@ public class HtmlDisplayActivity extends Activity implements OnTouchListener {
 
 	private void loadWordData(final String word) {
 		web.loadDataWithBaseURL(null, DBAccess.getHTMLbyWord(word), "text/html", "utf-8", null);
+	}
+	
+	private void loadWordSrc(int srcid) {
+		web.loadDataWithBaseURL(null, DBAccess.getHTML(srcid), "text/html", "utf-8", null);
 	}
 
 	private void loadHelpInfo() {

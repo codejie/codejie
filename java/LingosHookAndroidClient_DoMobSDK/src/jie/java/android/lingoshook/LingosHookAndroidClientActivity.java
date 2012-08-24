@@ -171,6 +171,9 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     	case R.id.menu_import_remote:
     		onMenuImportRemote();
     		break;
+    	case R.id.menu_input_data:
+    		onMenuInputData();
+    		break;
     	default:
     		break;
     	}
@@ -239,6 +242,10 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	
 	private void onMenuImportRemote() {
 		this.startActivity(new Intent(this, HttpdActivity.class));
+	}
+	
+	private void onMenuInputData() {
+		this.startActivity(new Intent(this, InputDataActivity.class));
 	}
 	
 	private void onMenuScoreList() {

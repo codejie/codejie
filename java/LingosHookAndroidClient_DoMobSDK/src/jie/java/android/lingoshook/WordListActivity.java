@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +25,8 @@ public class WordListActivity extends Activity {
 
 	public static final String REQ_TYPE		=	"type";
 	public static final String REQ_VALUE	=	"value";
+	
+	private static final int DIALOG_REMOVEWORD = 1;
 	
 	private TextView textView = null;
 	private ListView listView = null;
@@ -83,10 +86,13 @@ public class WordListActivity extends Activity {
 			}			
 		});
 		
+		this.registerForContextMenu(listView);
+		
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				WordListActivity.this.showDialog(DIALOG_REMOVEWORD);
 				Toast.makeText(WordListActivity.this, "wordid:" + ((TextView)view.findViewById(R.id.textView3)).getText().toString(), Toast.LENGTH_SHORT).show();
 				return true;
 			}			
@@ -161,6 +167,12 @@ public class WordListActivity extends Activity {
 		cursor = DBAccess.getWords(1, value);
 		ListAdapter adapter = new WordCursorAdapter(this, cursor, false);
 		listView.setAdapter(adapter);
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		// TODO Auto-generated method stub
+		return super.onCreateDialog(id);
 	}
 
 }

@@ -34,6 +34,7 @@
 		<activity android:name="ImportDBActivity" android:launchMode="standard"></activity>
 		<activity android:name="cn.domob.android.ads.DomobActivity" android:theme="@android:style/Theme.Translucent"></activity>
 		<activity android:name="HttpdActivity" android:launchMode="standard" android:screenOrientation="landscape"></activity>
+		<activity android:name="InputDataActivity"></activity>
     </application>
 
 </manifest>

@@ -83,5 +83,12 @@
     <string name="str_httpd_inputdone">数据添加成功..</string>
     <string name="str_httpd_inputfail">数据添加失败..</string>
     <string name="str_httpd_importfail">\'%s\'文件导入失败.</string>
-	<string name="title_input_data">输入单一数据</string>    
+	<string name="title_input_data">输入单一数据</string>
+    <string name="title_dictionary">词典</string>
+    <string name="title_word">单词</string>
+    <string name="title_symbol">音标</string>
+    <string name="title_category">词类</string>
+    <string name="title_meaning">解释</string>
+    <string name="title_input">添加</string>
+    <string name="str_query_removeword">确定删除\'%s\'吗?</string>    	
 </resources>

@@ -82,5 +82,12 @@
     <string name="str_httpd_inputdone">Data inputed successfully..</string>
     <string name="str_httpd_inputfail">Data inputed failed..</string>
     <string name="str_httpd_importfail">File \'%s\' imported failed.</string>
-    <string name="title_input_data">Input Single Data</string>    
+    <string name="title_input_data">Input Single Data</string>
+    <string name="title_dictionary">Dictionary</string>
+    <string name="title_word">Word</string>
+    <string name="title_symbol">Symbol</string>
+    <string name="title_category">Category</string>
+    <string name="title_meaning">Meaning</string>
+    <string name="title_input">Input</string>
+    <string name="str_query_removeword">Sure remove \'%s\'?</string>    
 </resources>

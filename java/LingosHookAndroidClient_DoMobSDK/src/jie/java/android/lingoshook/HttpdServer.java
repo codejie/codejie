@@ -53,28 +53,6 @@ public class HttpdServer extends NanoHTTPD {
 			return badRequest();
 		}		
 		return unsupportedRequest(uri, method, header, parms, files);
-		
-//		String msg = "<html><body><h1>Hello</h1><p><form action='' method='POST'><p><p>Your name: <input type='text' name='username'></p></form></body></html>";
-//		
-//		Response resp = new NanoHTTPD.Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, msg);//"<HTML><BODY>HELLO World!</BODY></HTML>");
-//		
-//		
-//		return resp;
-		//int resourceId = context.getResources().getIdentifier("jie.java.android.lingoshook:raw/index.html", null, null);
-//		File f = null;
-//			f = new File("android_asset");
-//		try {
-//			InputStream stream = context.getAssets().open("index.html");
-//			return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return null;
-		
-		//File f = new File(context.getResources().openRawResource(resourceId));
-		
-//		return serveFile( uri, header, f, true );
 	}
 
 	private void displayDebugInfo(String uri, String method, Properties header,	Properties parms, Properties files) {

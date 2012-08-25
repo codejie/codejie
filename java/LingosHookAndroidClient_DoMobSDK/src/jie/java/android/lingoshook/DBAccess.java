@@ -235,6 +235,11 @@ public final class DBAccess {
 	}
 	
 	public static int getDeltaUpdate() {
+		
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date today = Calendar.getInstance().getTime();
+		CHECKIN = today;
+		
 		try {
 			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_VALUE }, COLUMN_ID + "=" + INFOTAG_CHECKIN, null, null, null, null);
 			if(cursor == null)
@@ -245,11 +250,7 @@ public final class DBAccess {
 			}
 			cursor.moveToFirst();
 			
-			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-			//String s = cursor.getString(0);
-			//Date checkin = fmt.parse(cursor.getString(0));
 			CHECKIN = fmt.parse(cursor.getString(0));
-			Date today = Calendar.getInstance().getTime();
 			cursor.close();
 			
 			return (int) (((today.getTime() - CHECKIN.getTime()) / (1000 * 60 * 60 * 24)) + 1);
@@ -465,24 +466,62 @@ public final class DBAccess {
 			return null;	
 		}
 	}
-
-	public static boolean isUsing() {
+	
+	public static int removeWordData(int wordid, int srcid) {
+		String sql = "SELECT COUNT(*) FROM " + TABLE_WORD + " WHERE " + TABLE_WORD + "." + COLUMN_SRCID + "=" + srcid;
 		
 		try {
-			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_VALUE }, COLUMN_ID + "=" + INFOTAG_CHECKIN, null, null, null, null);
+			Cursor cursor = db.rawQuery(sql, null);
 			if(cursor == null)
-				return false;
-			if(cursor.getCount() == 0) {
-				cursor.close();
-				return false;
+				return -1;
+			cursor.moveToFirst();
+			int cnt = cursor.getInt(0);
+			cursor.close();
+			if(cnt == 1) {
+				if(db.delete(TABLE_DATA, COLUMN_ID + "=" + srcid, null) != 1)
+					return -1;				
 			}
+			
+			if(db.delete(TABLE_WORD, COLUMN_ID + "=" + wordid, null) != 1)
+				return -1;
+			if(db.delete(TABLE_SCORE, COLUMN_WORDID + "=" + wordid, null) != 1)
+				return -1;			
 		}
-		catch (SQLiteException e) {
+		catch (SQLException e) {
 			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
-			return false;
-		} 
+			return -1;	
+		}		
 		
-		return true;
+		return 0;
+	}	
+
+	public static boolean isUsing() {
+		return checkInfoTable(INFOTAG_CHECKIN);
+//		
+//		try {
+//			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_VALUE }, COLUMN_ID + "=" + INFOTAG_CHECKIN, null, null, null, null);
+//			if(cursor == null)
+//				return false;
+//			if(cursor.getCount() == 0) {
+//				cursor.close();
+//				return false;
+//			}
+//		}
+//		catch (SQLiteException e) {
+//			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+//			return false;
+//		} 
+//		
+//		return true;
+	}
+	
+	public static int inputData(final DataFormat.Data data) {
+		if(addWordData(data) != 0)
+			return -1;
+		if(checkInfoTable(INFOTAG_CHECKIN) == false) {
+			return refreshDeltaUpdate();
+		}
+		return 0;
 	}
 	
 	public static int importXml(Handler handler, int msgcode, final String file, int type) {
@@ -643,7 +682,7 @@ public final class DBAccess {
 		return 0;		
 	}	
 
-	public static int addWordData(final DataFormat.Data data) {
+	private static int addWordData(final DataFormat.Data data) {
 		StringBuffer html = new StringBuffer();
 		
 		DataFormat.data2html(data, html);

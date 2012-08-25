@@ -4,8 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -31,6 +34,13 @@ public class WordListActivity extends Activity {
 	private TextView textView = null;
 	private ListView listView = null;
 	private Cursor cursor = null;
+
+	private String word = null;
+	private int wordid = -1;
+	private int srcid = -1;
+	
+	private int type = -1;
+	private int value = -1;
 	
 	protected class WordCursorAdapter extends CursorAdapter {
 
@@ -86,14 +96,15 @@ public class WordListActivity extends Activity {
 			}			
 		});
 		
-		this.registerForContextMenu(listView);
+		//this.registerForContextMenu(listView);
 		
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				setWordData(((TextView)view.findViewById(R.id.textView1)).getText().toString(), ((TextView)view.findViewById(R.id.textView3)).getText().toString(), ((TextView)view.findViewById(R.id.textView4)).getText().toString());
 				WordListActivity.this.showDialog(DIALOG_REMOVEWORD);
-				Toast.makeText(WordListActivity.this, "wordid:" + ((TextView)view.findViewById(R.id.textView3)).getText().toString(), Toast.LENGTH_SHORT).show();
+//				Toast.makeText(WordListActivity.this, "wordid:" + ((TextView)view.findViewById(R.id.textView3)).getText().toString(), Toast.LENGTH_SHORT).show();
 				return true;
 			}			
 		});		
@@ -102,18 +113,37 @@ public class WordListActivity extends Activity {
 		
 		Intent intent = this.getIntent();
 		if(intent != null) {
-			int type = intent.getExtras().getInt(REQ_TYPE);
-			int value = intent.getExtras().getInt(REQ_VALUE);
-		
-			if(type == 0) {
-				//all, new, old
-				loadCommonWords(value);
-			}
-			else {
-				//specific date
-				loadSpecificWords(value);
-			}
+			type = intent.getExtras().getInt(REQ_TYPE);
+			value = intent.getExtras().getInt(REQ_VALUE);
+			
+			loadWords();
+//		
+//			if(type == 0) {
+//				//all, new, old
+//				loadCommonWords(value);
+//			}
+//			else {
+//				//specific date
+//				loadSpecificWords(value);
+//			}
 		}		
+	}
+	
+	private void loadWords() {
+		if(type == 0) {
+			//all, new, old
+			loadCommonWords(value);
+		}
+		else {
+			//specific date
+			loadSpecificWords(value);
+		}
+	}
+
+	protected void setWordData(String word, String wordid, String srcid) {
+		this.word = word;
+		this.wordid = Integer.parseInt(wordid);
+		this.srcid = Integer.parseInt(srcid);
 	}
 
 	@Override
@@ -132,7 +162,7 @@ public class WordListActivity extends Activity {
 		c.setTime(DBAccess.CHECKIN);
 		c.add(Calendar.DATE, updated);
 		
-		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		return fmt.format(c.getTime());
 	}
@@ -171,8 +201,44 @@ public class WordListActivity extends Activity {
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		// TODO Auto-generated method stub
-		return super.onCreateDialog(id);
+		Dialog dlg = null;
+		switch(id) {
+		case DIALOG_REMOVEWORD: {
+			Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(this.getString(R.string.str_query_removeword, this.word));
+			builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					removeData();
+					dialog.dismiss();
+				}
+			});
+			
+			builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			
+			dlg = builder.create();
+			break;
+		}
+		default:;
+		}
+		return dlg;
+	}
+
+	protected void removeData() {
+		if(DBAccess.removeWordData(this.wordid, this.srcid) == 0) {
+			loadWords();
+//			listView.removeView(this.subView);
+		}
+		else{
+			Toast.makeText(this, "Remove '" + this.word + "' failed.", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 }

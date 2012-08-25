@@ -162,7 +162,7 @@ public abstract class ImportBaseActivity extends Activity {
 	}	
 
 	private void inputData(Data data) {
-		if(DBAccess.addWordData(data) == 0) {
+		if(DBAccess.inputData(data) == 0) {
 			handler.sendMessage(Message.obtain(handler, MSG_DATA_DONE, data.word));
 		}
 		else {

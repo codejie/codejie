@@ -92,11 +92,17 @@ public class ScoreListActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		
 		this.setContentView(R.layout.score_list);
-
-		loadTotalData();
-		loadScoreList();
 	}
 	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+
+		loadTotalData();
+		loadScoreList();		
+	}
+
 	@Override
 	public void finish() {
 		// TODO Auto-generated method stub

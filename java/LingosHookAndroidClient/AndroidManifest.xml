@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jie.java.android.lingoshook"
-    android:versionCode="1"
+    android:versionCode="2"
     android:versionName="@string/str_version" >
 
     <uses-sdk android:minSdkVersion="7" />
@@ -38,7 +38,9 @@
 		<activity android:name="com.wooboo.adlib_android.FullActivity" android:configChanges="orientation|keyboardHidden" android:launchMode="singleTask" />
 		
 		<service android:name="com.wooboo.download.WoobooService" > <intent-filter> <action android:name="com.wooboo.WoobooDownloadService" > </action> </intent-filter> </service>
-		<meta-data android:name="Market_ID" android:value="1"/>		
+		<meta-data android:name="Market_ID" android:value="1"/>
+		<activity android:screenOrientation="landscape" android:name="HttpdActivity" android:launchMode="standard"></activity>
+		<activity android:name="InputDataActivity"></activity>		
     </application>
 
 </manifest>

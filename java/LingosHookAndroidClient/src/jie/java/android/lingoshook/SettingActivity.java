@@ -23,6 +23,8 @@ public class SettingActivity extends PreferenceActivity implements OnPreferenceC
 		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_finger_interval)).setOnPreferenceChangeListener(this);
 		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_finger_pencolor)).setOnPreferenceChangeListener(this);
 		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_finger_penwidth)).setOnPreferenceChangeListener(this);
+		
+		this.getPreferenceScreen().findPreference(this.getString(R.string.set_key_web_clickable)).setOnPreferenceChangeListener(this);
 	}
 
 	@Override
@@ -54,6 +56,9 @@ public class SettingActivity extends PreferenceActivity implements OnPreferenceC
 		else if(preference.getKey().equals(this.getString(R.string.set_key_finger_penwidth))) {
 			Setting.widthFingerPanelPen = Integer.parseInt((String)value);
 		}
+		else if(preference.getKey().equals(this.getString(R.string.set_key_web_clickable))) {
+			Setting.webclickable = (Boolean)value;
+		}		
 		else {
 			return false;
 		}

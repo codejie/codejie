@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<LAC>
+<Version>1.0</Version>
+<DefaultDict>test</DefaultDict>
+<WordList>
+	<Item>
+		<Dict>dict</Dict>
+		<Word>word</Word>
+		<Symbol>wc'd</Symbol>
+		<DataList>
+			<Item>
+				<Category>n.</Category>
+				<Meaning>meaning</Meaning>
+			</Item>
+			<Item>
+				<Category>v.</Category>
+				<Meaning>meaning2</Meaning>
+			</Item>			
+		</DataList>
+	</Item>
+	<Item>
+		<Dict>dict2</Dict>
+		<Word>word2</Word>
+		<Symbol>wc'd2</Symbol>
+		<DataList>
+			<Item>
+				<Category>n.</Category>
+				<Meaning>中文啊</Meaning>
+			</Item>
+			<Item>
+				<Category>v.</Category>
+				<Meaning>测试啊</Meaning>
+			</Item>			
+		</DataList>
+	</Item>
+	
+</WordList>
+</LAC>	

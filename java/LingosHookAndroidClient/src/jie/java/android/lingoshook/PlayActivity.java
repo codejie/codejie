@@ -21,8 +21,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -161,26 +163,42 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 		
 		setClickListener(true);
 		
-		web = (WebView) switcher.findViewById(R.id.webView);				
-		web.setOnTouchListener(this);
-		
-		switcher.findViewById(R.id.btnYes).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				submitResult(Score.JUDGE_YES);
-			}
+		web = (WebView) switcher.findViewById(R.id.webView);
+		if(Setting.webclickable) {
+			web.setOnTouchListener(this);
+			switcher.findViewById(R.id.btnNo).setVisibility(View.GONE);
+			Button btnYes = (Button)switcher.findViewById(R.id.btnYes);
 			
-		});
-		
-		switcher.findViewById(R.id.btnNo).setOnClickListener(new OnClickListener() {
+			btnYes.setText(R.string.title_no);			
+			btnYes.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				submitResult(Score.JUDGE_NO);
-			}
+				@Override
+				public void onClick(View arg0) {
+					submitResult(Score.JUDGE_NO);
+				}
+				
+			});
 			
-		});
+		}
+		else {
+			switcher.findViewById(R.id.btnYes).setOnClickListener(new OnClickListener() {
+	
+				@Override
+				public void onClick(View arg0) {
+					submitResult(Score.JUDGE_YES);
+				}
+				
+			});
+			
+			switcher.findViewById(R.id.btnNo).setOnClickListener(new OnClickListener() {
+	
+				@Override
+				public void onClick(View arg0) {
+					submitResult(Score.JUDGE_NO);
+				}
+				
+			});
+		}
 	}
 
 	protected void submitResult(int judge) {
@@ -216,8 +234,10 @@ public class PlayActivity extends Activity implements OnClickListener, OnTouchLi
 
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
-		if(event.getAction() == MotionEvent.ACTION_UP) {
-			submitResult(Score.JUDGE_YES);
+		if(Setting.webclickable) {
+			if(event.getAction() == MotionEvent.ACTION_UP) {
+				submitResult(Score.JUDGE_YES);
+			}
 		}
 		return true;
 	}

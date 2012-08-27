@@ -1,9 +1,19 @@
 package jie.java.android.lingoshook;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import jie.java.android.lingoshook.DataFormat.Data;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -166,20 +176,25 @@ public final class DBAccess {
 		}
 		
 		if(type == IMPORTTYPE_OVERWRITE || (checkInfoTable(INFOTAG_CHECKIN) == false)) {
-			try {
-				Date today = Calendar.getInstance().getTime();
-				SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				
-				ContentValues values = new ContentValues();
-				values.put(COLUMN_ID, INFOTAG_CHECKIN);
-				values.put(COLUMN_VALUE, fmt.format(today));
-				db.insert(TABLE_INFO, null, values);
-			}
-			catch (SQLException e) {
-				Log.e(Global.APP_TITLE, "db exception - " + e.toString());
-				return -1;
-			}
+			return refreshDeltaUpdate();
 		}		
+		return 0;
+	}
+	
+	private static int refreshDeltaUpdate() {
+		try {
+			Date today = Calendar.getInstance().getTime();
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
+			ContentValues values = new ContentValues();
+			values.put(COLUMN_ID, INFOTAG_CHECKIN);
+			values.put(COLUMN_VALUE, fmt.format(today));
+			db.insert(TABLE_INFO, null, values);
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return -1;
+		}
 		return 0;
 	}
 	
@@ -220,6 +235,11 @@ public final class DBAccess {
 	}
 	
 	public static int getDeltaUpdate() {
+		
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date today = Calendar.getInstance().getTime();
+		CHECKIN = today;
+		
 		try {
 			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_VALUE }, COLUMN_ID + "=" + INFOTAG_CHECKIN, null, null, null, null);
 			if(cursor == null)
@@ -230,11 +250,7 @@ public final class DBAccess {
 			}
 			cursor.moveToFirst();
 			
-			SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-			//String s = cursor.getString(0);
-			//Date checkin = fmt.parse(cursor.getString(0));
 			CHECKIN = fmt.parse(cursor.getString(0));
-			Date today = Calendar.getInstance().getTime();
 			cursor.close();
 			
 			return (int) (((today.getTime() - CHECKIN.getTime()) / (1000 * 60 * 60 * 24)) + 1);
@@ -422,7 +438,7 @@ public final class DBAccess {
 
 	public static Cursor getWords(int type, int value) {
 		
-		String sql = "SELECT " + TABLE_WORD +"." + COLUMN_WORD + "," + TABLE_WORD + "." + COLUMN_SRCID + " AS _id, "+ TABLE_SCORE + "." + COLUMN_NEXT + " FROM " + TABLE_WORD + "," + TABLE_SCORE + " WHERE (" + TABLE_WORD + "." + COLUMN_ID + "="  + TABLE_SCORE + "." + COLUMN_WORDID + ")";
+		String sql = "SELECT " + TABLE_WORD +"." + COLUMN_WORD + "," + TABLE_WORD + "." + COLUMN_ID + " AS _id" + "," + TABLE_WORD + "." + COLUMN_SRCID + "," + TABLE_SCORE + "." + COLUMN_NEXT + " FROM " + TABLE_WORD + "," + TABLE_SCORE + " WHERE (" + TABLE_WORD + "." + COLUMN_ID + "="  + TABLE_SCORE + "." + COLUMN_WORDID + ")";
 		//Word.word, Word.srcid AS _id, Score.updated FROM Word, Score WHERE (Word.id = Score.wordid);
 		
 		if(type == 0) {
@@ -450,5 +466,245 @@ public final class DBAccess {
 			return null;	
 		}
 	}
+	
+	public static int removeWordData(int wordid, int srcid) {
+		String sql = "SELECT COUNT(*) FROM " + TABLE_WORD + " WHERE " + TABLE_WORD + "." + COLUMN_SRCID + "=" + srcid;
+		
+		try {
+			Cursor cursor = db.rawQuery(sql, null);
+			if(cursor == null)
+				return -1;
+			cursor.moveToFirst();
+			int cnt = cursor.getInt(0);
+			cursor.close();
+			if(cnt == 1) {
+				if(db.delete(TABLE_DATA, COLUMN_ID + "=" + srcid, null) != 1)
+					return -1;				
+			}
+			
+			if(db.delete(TABLE_WORD, COLUMN_ID + "=" + wordid, null) != 1)
+				return -1;
+			if(db.delete(TABLE_SCORE, COLUMN_WORDID + "=" + wordid, null) != 1)
+				return -1;			
+		}
+		catch (SQLException e) {
+			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+			return -1;	
+		}		
+		
+		return 0;
+	}	
 
+	public static boolean isUsing() {
+		return checkInfoTable(INFOTAG_CHECKIN);
+//		
+//		try {
+//			Cursor cursor = db.query(TABLE_INFO, new String[] { COLUMN_VALUE }, COLUMN_ID + "=" + INFOTAG_CHECKIN, null, null, null, null);
+//			if(cursor == null)
+//				return false;
+//			if(cursor.getCount() == 0) {
+//				cursor.close();
+//				return false;
+//			}
+//		}
+//		catch (SQLiteException e) {
+//			Log.e(Global.APP_TITLE, "db exception - " + e.toString());
+//			return false;
+//		} 
+//		
+//		return true;
+	}
+	
+	public static int inputData(final DataFormat.Data data) {
+		if(addWordData(data) != 0)
+			return -1;
+		if(checkInfoTable(INFOTAG_CHECKIN) == false) {
+			return refreshDeltaUpdate();
+		}
+		return 0;
+	}
+	
+	public static int importXml(Handler handler, int msgcode, final String file, int type) {
+		if(type == IMPORTTYPE_OVERWRITE) {
+			if(clearData() != 0)
+				return -1;
+		}
+		
+		try {
+			//FileInputStream is = new FileInputStream(ifile);
+			FileInputStream is = new FileInputStream(new File(file));// this.getAssets().open(file);
+			
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			XmlPullParser xp = factory.newPullParser();
+			xp.setInput(is, "UTF-8");
+			
+			String defDict = "Default Dictionary";
+			
+			int et = xp.getEventType();
+			while(et != XmlPullParser.END_DOCUMENT) {
+				if(et == XmlPullParser.START_TAG) {
+					if(xp.getName().equals("DefaultDict")) {
+						defDict = xp.getText();
+					}
+					else if(xp.getName().equals("WordList")) {
+						et = xp.nextTag();
+						if(et == XmlPullParser.START_TAG) {
+							while(xp.getName().equals("Item")) {
+								DataFormat.Data data = new DataFormat.Data();
+								importXml_getItem(xp, data);
+								if(importXml_checkData(data, defDict) == 0) {
+									if(addWordData(data) == 0) {
+										handler.sendMessage(Message.obtain(handler, msgcode, data.word));
+									}
+									else {
+										//
+									}
+								}
+//								type = xp.next();
+								et = xp.nextTag();
+								et = xp.nextTag();
+							}
+						}
+					}
+				}
+				et = xp.next();
+			}
+			is.close();			
+		}
+		catch (XmlPullParserException e) {
+			return -1;
+		}
+		catch (IOException e) {
+			return -1;
+		}		
+		
+		if(type == IMPORTTYPE_OVERWRITE || (checkInfoTable(INFOTAG_CHECKIN) == false)) {
+			return refreshDeltaUpdate();
+		}		
+		return 0;
+	}
+	
+	private static int importXml_checkData(Data data, String defDict) {
+
+		if(data.dict == null) {
+			data.dict = defDict;
+		}
+		return 0;		
+	}
+
+	private static int importXml_getItem(XmlPullParser xp, DataFormat.Data data) {
+		try {
+			//Dict			
+			int type = xp.nextTag();
+			if(xp.getName().equals("Dict")) {
+				type = xp.next();
+				data.dict = xp.getText();
+				type = xp.next();
+			}
+			//Word
+			type = xp.nextTag();
+			if(xp.getName().equals("Word")) {
+				type = xp.next();
+				data.word = xp.getText();
+				type = xp.next();
+			}
+			else {
+				return -1;
+			}
+			
+			//Symbol
+			type = xp.nextTag();
+			if(xp.getName().equals("Symbol")) {
+				type = xp.next();
+				data.symbol = xp.getText();
+				type = xp.next();
+			}
+			//DataList
+			type = xp.nextTag();
+			if(xp.getName().equals("DataList")) {
+				type = xp.nextTag();
+				if(type == XmlPullParser.START_TAG) {
+					while(xp.getName().equals("Item")) {
+						importXml_getWordData(xp, data);
+						importXml_checkWordData(data);
+						//type = xp.next();
+						type = xp.nextTag();
+						type = xp.nextTag();
+					}
+				}
+			}
+			else {
+				return -1;
+			}
+			
+		}
+		catch (XmlPullParserException e) {
+			return -1;
+		} catch (IOException e) {
+			return -1;
+		}
+		return 0;
+	}
+
+	private static int importXml_checkWordData(Data data) {
+		return 0;
+	}
+
+	private static int importXml_getWordData(XmlPullParser xp, Data data) {
+		try {
+			//Category
+			int type = xp.nextTag();			
+			if(xp.getName().equals("Category")) {
+				type = xp.next();
+				data.category.add(xp.getText());
+				type = xp.next();
+			}
+			else {
+				data.category.add("");
+			}
+			//Meaning
+			type = xp.nextTag();
+			if(xp.getName().equals("Meaning")) {
+				type = xp.next();
+				data.meaning.add(xp.getText());
+				type = xp.next();
+			}
+			else {
+				return -1;
+			}
+			
+		}
+		catch (XmlPullParserException e) {
+			return -1;
+		} catch (IOException e) {
+			return -1;
+		}
+		return 0;		
+	}	
+
+	private static int addWordData(final DataFormat.Data data) {
+		StringBuffer html = new StringBuffer();
+		
+		DataFormat.data2html(data, html);
+		
+		ContentValues values = new ContentValues();
+
+		values.put(COLUMN_HTML, html.toString());
+		int srcid = (int) db.insert(TABLE_DATA, null, values);		
+		
+		values.clear();
+		values.put(COLUMN_SRCID, srcid);
+		values.put(COLUMN_WORD, data.word);
+		int wordid = (int) db.insert(TABLE_WORD, null, values);
+		
+		values.clear();
+		values.put(COLUMN_WORDID, wordid);
+		values.put(COLUMN_LAST, 0);//
+		values.put(COLUMN_NEXT, 0);//
+		values.put(COLUMN_SCORE, Score.SCORE_UNKNOWN);
+		db.insert(TABLE_SCORE, null, values);
+		
+		return 0;
+	}
+	
 }

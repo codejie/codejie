@@ -1,5 +1,16 @@
 package jie.java.android.lingoshook;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import jie.java.android.lingoshook.DataFormat.Data;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -144,14 +155,24 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
     	case R.id.menu_exit:
     		onMenuExit();
     		break;
-    	case R.id.menu_import:
-    		onMenuImport();
-    		break;
+//    	case R.id.menu_import:
+//    		onMenuImport();
+//    		break;
     	case R.id.menu_setting:
     		onMenuSetting();
     		break;
     	case R.id.menu_about:
     		onMenuAbout();
+    		//this.importXml("a.xml", true);
+    		break;
+    	case R.id.menu_import_local:
+    		onMenuImportLocal();
+    		break;
+    	case R.id.menu_import_remote:
+    		onMenuImportRemote();
+    		break;
+    	case R.id.menu_input_data:
+    		onMenuInputData();
     		break;
     	default:
     		break;
@@ -214,9 +235,17 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 		this.finish();
 	}
 	
-	private void onMenuImport() {
+	private void onMenuImportLocal() {
 		this.startActivity(new Intent(this, ImportDBActivity.class));
 		//this.showDialog(DIALOG_IMPORT);
+	}
+	
+	private void onMenuImportRemote() {
+		this.startActivity(new Intent(this, HttpdActivity.class));
+	}
+	
+	private void onMenuInputData() {
+		this.startActivity(new Intent(this, InputDataActivity.class));
 	}
 	
 	private void onMenuScoreList() {
@@ -230,4 +259,172 @@ public class LingosHookAndroidClientActivity extends Activity implements OnTouch
 	private void onMenuAbout() {
 		this.showDialog(DIALOG_ABOUT);		
 	}
+	
+/*
+	<LAC>
+	<Version>1.0</Version>
+	<DefaultDict>test</DefaultDict>
+	<WordList>
+		<Item>
+			<Dict></Dict>
+			<Word></Word>
+			<Symbol></Symbol>
+			<DataList>
+				<Item>
+					<Category></Category>
+					<Meaning></Meaning>
+				</Item>
+			</DataList>
+		</Item>
+	</WordList>
+	</LAC>	
+ */
+	
+	private void importXml(final String file, boolean overwrite) {
+//		File ifile = new File(file);
+//		if(!ifile.exists()) {
+//			return;
+//		}
+		
+		try {
+			//FileInputStream is = new FileInputStream(ifile);
+			InputStream is = this.getAssets().open(file);
+			
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			XmlPullParser xp = factory.newPullParser();
+			xp.setInput(is, "UTF-8");
+			
+			DataFormat.Data data = new DataFormat.Data();
+			String defDict = "Default Dictionary";
+			
+			int type = xp.getEventType();
+			while(type != XmlPullParser.END_DOCUMENT) {
+				if(type == XmlPullParser.START_TAG) {
+					if(xp.getName().equals("DefaultDict")) {
+						defDict = xp.getText();
+					}
+					else if(xp.getName().equals("WordList")) {
+						type = xp.nextTag();
+						if(type == XmlPullParser.START_TAG) {
+							while(xp.getName().equals("Item")) {
+								getItem(xp, data);
+								checkData(data, defDict);
+//								type = xp.next();
+								type = xp.nextTag();
+								type = xp.nextTag();
+							}
+						}
+					}
+				}
+				type = xp.next();
+			}
+			is.close();
+			
+			
+		}
+		catch (XmlPullParserException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+				
+	}
+	
+	private int checkData(Data data, String defDict) {
+		return 0;		
+	}
+
+	private int getItem(XmlPullParser xp, DataFormat.Data data) {
+		try {
+			//Dict			
+			int type = xp.nextTag();
+			if(xp.getName().equals("Dict")) {
+				type = xp.next();
+				data.dict = xp.getText();
+				type = xp.next();
+			}
+			//Word
+			type = xp.nextTag();
+			if(xp.getName().equals("Word")) {
+				type = xp.next();
+				data.word = xp.getText();
+				type = xp.next();
+			}
+			else {
+				return -1;
+			}
+			
+			//Symbol
+			type = xp.nextTag();
+			if(xp.getName().equals("Symbol")) {
+				type = xp.next();
+				data.symbol = xp.getText();
+				type = xp.next();
+			}
+			//DataList
+			type = xp.nextTag();
+			if(xp.getName().equals("DataList")) {
+				type = xp.nextTag();
+				if(type == XmlPullParser.START_TAG) {
+					while(xp.getName().equals("Item")) {
+						getWordData(xp, data);
+						checkWordData(data);
+						//type = xp.next();
+						type = xp.nextTag();
+						type = xp.nextTag();
+					}
+				}
+			}
+			else {
+				return -1;
+			}
+			
+		}
+		catch (XmlPullParserException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	private int checkWordData(Data data) {
+		return 0;
+	}
+
+	private int getWordData(XmlPullParser xp, Data data) {
+		try {
+			//Category
+			int type = xp.nextTag();			
+			if(xp.getName().equals("Category")) {
+				type = xp.next();
+				data.category.add(xp.getText());
+				type = xp.next();
+			}
+			else {
+				return -1;
+			}
+			//Meaning
+			type = xp.nextTag();
+			if(xp.getName().equals("Meaning")) {
+				type = xp.next();
+				data.meaning.add(xp.getText());
+				type = xp.next();
+			}
+			else {
+				return -1;
+			}
+			
+		}
+		catch (XmlPullParserException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;		
+	}
+	
+	
+	
 }

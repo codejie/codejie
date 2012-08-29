@@ -101,8 +101,9 @@ public class HttpdActivity extends ImportBaseActivity {
 	}
 
 	@Override
-	protected void onMsg_InputDataDone() {
+	protected void onMsg_InputDataDone(final String word) {
 		comment.setText(R.string.str_httpd_inputdone);
+		this.word.setText(word);
 	}
 
 	@Override

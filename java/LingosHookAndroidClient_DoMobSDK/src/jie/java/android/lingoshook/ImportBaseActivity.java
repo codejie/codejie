@@ -87,7 +87,7 @@ public abstract class ImportBaseActivity extends Activity {
 						break;
 					}
 					case MSG_DATA_DONE: {
-						onMsg_InputDataDone();
+						onMsg_InputDataDone((String)msg.obj);
 						break;						
 					}
 					case MSG_DB_FAILED: {
@@ -186,7 +186,7 @@ public abstract class ImportBaseActivity extends Activity {
 		
 	}
 	
-	protected void onMsg_InputDataDone() {
+	protected void onMsg_InputDataDone(final String word) {
 		
 	}
 	

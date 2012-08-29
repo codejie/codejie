@@ -37,6 +37,7 @@ public class DataFormat {
 	
 		html.append(STR_1 + data.dict);
 		html.append(STR_2);
+		html.append(data.word);
 		html.append(STR_3);
 		
 		html.append(data.symbol);

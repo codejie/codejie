@@ -28,24 +28,32 @@ public class HttpdServer extends NanoHTTPD {
 	public Response serve(String uri, String method, Properties header,	Properties parms, Properties files) {
 
 		displayDebugInfo(uri, method, header, parms, files);	
+
+		if(uri.length() > 0 && uri.startsWith("/")) {
+			uri = uri.substring(1);
+		}
 		
 		try {
 			if(method.equals("GET")) {
-				if(uri.equals("/") || uri.equals("/index.html")) {
+				if(uri.equals(""))
+				{
+					uri = "index.html";
+				}
+				if(uri.equals("index.html") || uri.equals("index_eng.html")) {
 					return requestRoot(uri, method, header, parms, files);
 				}
 			}
 			else if(method.equals("POST")) {
-				if(uri.equals("/import_file.html")) {
+				if(uri.equals("import_file.html") || uri.equals("import_file_eng.html")) {
 					return requestImportFile(uri, method, header, parms, files);
 				}
-				else if(uri.equals("/import_file_done.html")) {
+				else if(uri.equals("import_file_done.html") || uri.equals("import_file_done_eng.html")) {
 					return requestImportFileDone(uri, method, header, parms, files);
 				}				
-				else if(uri.equals("/input_data.html")) {
+				else if(uri.equals("input_data.html") || uri.equals("input_data_eng.html")) {
 					return requestInputData(uri, method, header, parms, files);
 				}
-				else if(uri.equals("/input_data_done.html")) {
+				else if(uri.equals("input_data_done.html") || uri.equals("input_data_done_eng.html")) {
 					return requestInputDataDone(uri, method, header, parms, files);
 				}			
 			}
@@ -55,6 +63,7 @@ public class HttpdServer extends NanoHTTPD {
 		return unsupportedRequest(uri, method, header, parms, files);
 	}
 
+	@SuppressWarnings("unused")
 	private void displayDebugInfo(String uri, String method, Properties header,	Properties parms, Properties files) {
 		myOut.println( method + " '" + uri + "' " );
 		
@@ -157,12 +166,12 @@ public class HttpdServer extends NanoHTTPD {
 		
 		handler.sendMessage(msg);
 		
-		InputStream stream = context.getAssets().open("input_data_done.html");
+		InputStream stream = context.getAssets().open(uri);//"input_data_done.html");
 		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);		
 	}
 
 	private Response requestInputData(String uri, String method, Properties header, Properties parms, Properties files) throws IOException {
-		InputStream stream = context.getAssets().open("input_data.html");
+		InputStream stream = context.getAssets().open(uri);//"input_data.html");
 		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);
 	}
 
@@ -186,21 +195,22 @@ public class HttpdServer extends NanoHTTPD {
 
 		handler.sendMessage(msg);
 		
-		InputStream stream = context.getAssets().open("import_file_done.html");
+		InputStream stream = context.getAssets().open(uri);//"import_file_done.html");
 		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);
 	}
 
 	private Response requestImportFile(String uri, String method, Properties header, Properties parms, Properties files) throws IOException {
-		InputStream stream = context.getAssets().open("import_file.html");
+		InputStream stream = context.getAssets().open(uri);//"import_file.html");
 		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);
 	}
 
 	private Response requestRoot(String uri, String method, Properties header, Properties parms, Properties files) throws IOException {
-		InputStream stream = context.getAssets().open("index.html");
+		InputStream stream = context.getAssets().open(uri);//"index.html");
 		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);
 	}
 
 	private Response badRequest() {
 		return new Response(HTTP_INTERNALERROR, MIME_PLAINTEXT,	"500 Internal Server Error");	
 	}
+
 }

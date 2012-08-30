@@ -96,8 +96,14 @@ public class HttpdServer extends NanoHTTPD {
 	}
 	
 	private Response missInputParameter(String uri, String method, Properties header, Properties parms, Properties files) throws IOException {
-		InputStream stream = context.getAssets().open("err_missparameter.html");
-		return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);
+		if(uri.indexOf("_eng") == -1) {
+			InputStream stream = context.getAssets().open("err_missparameter.html");
+			return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);
+		}
+		else {
+			InputStream stream = context.getAssets().open("err_missparameter_eng.html");
+			return new Response(NanoHTTPD.HTTP_OK, NanoHTTPD.MIME_HTML, stream);			
+		}
 	}
 
 	private Response requestInputDataDone(String uri, String method, Properties header, Properties parms, Properties files) throws IOException {

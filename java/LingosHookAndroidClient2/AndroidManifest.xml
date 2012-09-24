@@ -15,6 +15,7 @@
             </intent-filter>
         </activity>
         <activity android:name="DictionaryActivity"></activity>
+        <activity android:name="TestActivity" android:launchMode="standard"></activity>
 
     </application>
 

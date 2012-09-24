@@ -13,6 +13,7 @@ public class LingosHookAndroidClientActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		this.setContentView(R.layout.lingoshookandroidclient);
+		//this.setContentView(R.layout.test);
 	}
 
 	@Override
@@ -28,6 +29,11 @@ public class LingosHookAndroidClientActivity extends Activity {
 				this.startActivity(new Intent(this, DictionaryActivity.class));
 				break;
 			}
+			case R.id.item2: {
+				this.startActivity(new Intent(this, TestActivity.class));
+				break;
+			}
+			default:;
 		}
 		// TODO Auto-generated method stub
 		return super.onOptionsItemSelected(item);

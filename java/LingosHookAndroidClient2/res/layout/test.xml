@@ -1,7 +1,6 @@
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+    <RelativeLayout android:layout_width="fill_parent"
+        android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
             android:id="@+id/textView1"
@@ -16,42 +15,27 @@
             android:id="@+id/editText1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView1"
+            android:layout_alignBottom="@+id/textView1"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:ems="10"
-            android:inputType="textPassword" >
-
-            <requestFocus />
-        </EditText>
-
+            android:inputType="textPassword" />
+
         <SlidingDrawer
             android:id="@+id/slidingDrawer1"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_below="@+id/editText1"
+            android:layout_marginTop="76dp"
             android:content="@+id/content"
             android:handle="@+id/handle" >
 
-            <LinearLayout
+            <Button
                 android:id="@+id/handle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <CheckBox
-                    android:id="@+id/checkBox1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CheckBox" />
-
-                <Button
-                    android:id="@+id/handle1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Handle" />
-
-            </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:text="Handle" />
 
             <LinearLayout
                 android:id="@+id/content"
@@ -60,13 +44,11 @@
 
                 <ImageView
                     android:id="@+id/imageView1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:background="#800080"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/ic_launcher" />
 
             </LinearLayout>
-
         </SlidingDrawer>
 
     </RelativeLayout>

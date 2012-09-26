@@ -1,6 +1,7 @@
 package jie.java.android.lingoshook.data;
 
 import jie.java.android.lingoshook.Global;
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
@@ -32,18 +33,45 @@ public class DBAccess extends BaseDataObject {
 			return -1;
 		}
 		
-//		if(initTables() != 0)
-//			return -1;
-//		if(initInfoData() != 0)
-//			return -1;
-//		
+		if(initTables() != 0)
+			return -1;
+		if(initData() != 0)
+			return -1;
+		
 		return 0;		
 
 	}
-
+	
 	@Override
 	protected int release() {
-		// TODO Auto-generated method stub
+		if(db != null) {
+			db.close();
+		}
+		return 0;
+	}
+	
+	protected int initTables() {
+		
+		try {
+			String sql = "CREATE TABLE IF NOT EXIST Test ("
+					+ "id INTEGER PRIMARY KEY,"
+					+ "value TEXT)";
+			db.execSQL(sql);
+		}
+		catch (SQLiteException e) {
+			return -1;
+		}
+		
+		
+		return 0;
+	}
+	
+	protected int initData() {
+		
+		ContentValues values = new ContentValues();
+		
+		db.insert(table, nullColumnHack, values)
+		
 		return 0;
 	}
 	

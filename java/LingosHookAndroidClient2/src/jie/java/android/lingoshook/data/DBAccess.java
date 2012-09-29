@@ -70,7 +70,7 @@ public class DBAccess extends BaseDataObject {
 		
 		ContentValues values = new ContentValues();
 		
-		db.insert(table, nullColumnHack, values)
+//		db.insert(table, nullColumnHack, values)
 		
 		return 0;
 	}

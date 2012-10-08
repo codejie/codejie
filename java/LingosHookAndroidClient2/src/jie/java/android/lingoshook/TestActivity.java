@@ -4,6 +4,7 @@ import jie.java.android.lingoshook.view.RefreshListView;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ public class TestActivity extends Activity {
 	private ArrayAdapter<String> adapter = null;
 	private SlidingDrawer drawer = null;
 	private TextView tv = null;
+	private WebView web = null;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,7 +32,7 @@ public class TestActivity extends Activity {
 	private void initListView() {
 		
 		drawer = (SlidingDrawer) this.findViewById(R.id.slidingDrawer1);
-		tv = (TextView) this.findViewById(R.id.textView1);
+		web = (WebView) this.findViewById(R.id.webView1);
 		
 		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);		
 		
@@ -40,7 +42,7 @@ public class TestActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				String str = adapter.getItem(position);
-				tv.setText(str);
+				web.loadData(str, "text/text", "utf-8");
 				popDrawer(true);
 				listview.setSelection(position);
 			}

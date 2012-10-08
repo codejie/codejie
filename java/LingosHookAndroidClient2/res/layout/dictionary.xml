@@ -2,7 +2,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
-
+
         <EditText
             android:id="@+id/editText1"
             android:layout_width="match_parent"
@@ -13,7 +13,7 @@
 
             <requestFocus />
         </EditText>
-
+
         <jie.java.android.lingoshook.view.RefreshListView
             android:id="@+id/refreshListView1"
             android:layout_width="match_parent"
@@ -31,18 +31,25 @@
             android:layout_below="@+id/editText1"
             android:layout_centerHorizontal="true"
             android:content="@+id/content"
-            android:handle="@+id/handle" >
-
-            <Button
+            android:handle="@+id/handle"
+            android:topOffset="100dp" >
+
+            <ImageView
                 android:id="@+id/handle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Handle" />
+                android:src="@drawable/handler" />
 
             <LinearLayout
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
+
+                <WebView
+                    android:id="@+id/webView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
             </LinearLayout>
         </SlidingDrawer>
 

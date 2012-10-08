@@ -1,5 +1,6 @@
 package jie.java.android.lingoshook;
 
+import jie.java.android.lingoshook.data.DBAccess;
 import jie.java.android.lingoshook.view.RefreshListView;
 import android.app.Activity;
 import android.content.Context;
@@ -9,42 +10,17 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 public class DictionaryActivity extends Activity {
 
-	private class CursorRefreshAdapter extends BaseAdapter {
-
-		public CursorRefreshAdapter(Context context) {
-			// TODO Auto-generated constructor stub
-		}
-
-		public int getCount() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		public Object getItem(int position) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public long getItemId(int position) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		public View getView(int position, View view, ViewGroup parent) {
-			// TODO Auto-generated method stub
-			return null;
-		}		
-	}
-	
 	
 	private EditText input = null;
 	private RefreshListView list = null;
-	private CursorRefreshAdapter adapter = null;
+	private WebView web = null;
+	private DictionaryAdapter adapter = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +29,8 @@ public class DictionaryActivity extends Activity {
 		this.setContentView(R.layout.dictionary);
 		
 		initView();
+		
+		initData();
 	}
 
 	private void initView() {
@@ -73,10 +51,17 @@ public class DictionaryActivity extends Activity {
 			}			
 		});
 		
-		adapter = new CursorRefreshAdapter(this);
+		adapter = new DictionaryAdapter(this, DBAccess.instance);
 		
 		list = (RefreshListView) this.findViewById(R.id.refreshListView1);
 		list.setAdapter(adapter);
+		
+		web = (WebView) this.findViewById(R.id.webView1);
+		web.loadDataWithBaseURL(null, "<HTML><BODY>This is a test for <B>Dictionay</B> data.</BODY></HTML>", "text/html", "utf-8", null);
+	}
+	
+	private void initData() {
+		adapter.load(null);
 	}
 
 }

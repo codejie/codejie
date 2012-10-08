@@ -11,9 +11,10 @@ public class LingosHookAndroidClientActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		Global.init(savedInstanceState);
 		
 		this.setContentView(R.layout.lingoshookandroidclient);
-		//this.setContentView(R.layout.test);
 	}
 
 	@Override

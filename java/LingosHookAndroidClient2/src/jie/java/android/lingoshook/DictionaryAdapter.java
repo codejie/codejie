@@ -71,7 +71,7 @@ public class DictionaryAdapter extends BaseAdapter {
 		return load(condition);
 	}
 
-	private int refresh() {
+	public int refresh() {
 		cursor = db.getTestData(this.condition, offset, maxRows);
 		
 		if(cursor == null)
@@ -92,6 +92,17 @@ public class DictionaryAdapter extends BaseAdapter {
 	
 	public void setMaxRows(int maxRows) {
 		this.maxRows = maxRows;
+	}
+	
+	public void clear() {
+		cursor = null;
+		offset = 0;
+		condition = null;
+		maxRows = 12;
+		
+		array.clear();
+		
+		this.notifyDataSetChanged();
 	}
 
 }

@@ -58,8 +58,8 @@ public class DBAccess extends BaseDataObject {
 		
 		if(initTables() != 0)
 			return -1;
-//		if(initData() != 0)
-//			return -1;
+		if(initData() != 0)
+			return -1;
 		
 		return 0;		
 
@@ -126,7 +126,7 @@ public class DBAccess extends BaseDataObject {
 			values.clear();
 			
 			values.put(COLUMN_ID, String.valueOf(i));
-			values.put(COLUMN_VALUE, String.format("This is %d", i));
+			values.put(COLUMN_VALUE, String.format("%d - This is %d", i, i));
 			db.insert(TABLE_TEST, null, values);
 		}
 		

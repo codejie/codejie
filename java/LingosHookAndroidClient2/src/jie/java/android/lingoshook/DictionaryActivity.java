@@ -46,7 +46,8 @@ public class DictionaryActivity extends Activity {
 
 			public void onTextChanged(CharSequence s, int start, int count, int after) {
 				if(adapter != null) {
-					adapter.load(s.toString());
+					adapter.clear();
+					adapter.load("value like '" + s.toString() + "%'");
 				}
 //				Log.d("this", "onTextChanged():string:" + s.toString() + " - s=" + start + " c=" + count + " a=" + after);
 			}			
@@ -86,6 +87,7 @@ public class DictionaryActivity extends Activity {
 	
 	protected void onRefreshData(int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		adapter.setMaxRows(visibleItemCount);
+		adapter.refresh();
 	}	
 
 }

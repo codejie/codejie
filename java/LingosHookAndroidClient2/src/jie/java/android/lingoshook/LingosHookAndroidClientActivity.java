@@ -3,6 +3,7 @@ package jie.java.android.lingoshook;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -39,5 +40,17 @@ public class LingosHookAndroidClientActivity extends Activity {
 		// TODO Auto-generated method stub
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		Log.d("tag", "onRestoreInstanceState");
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		Log.d("tag", "onSaveInstanceState");
+		super.onSaveInstanceState(outState);
+	}	
 	
 }

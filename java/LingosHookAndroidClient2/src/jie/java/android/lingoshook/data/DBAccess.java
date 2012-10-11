@@ -15,11 +15,33 @@ public class DBAccess extends BaseDataObject {
 	private static final String DATABASE_FILE			=	"/data/data/jie.java.android.lingoshook/LingosHook.db";;
 	public static final int DATABASE_FORMAT_VERSION		=	2;
 	
-	private static final String TABLE_TEST		=	"Test";
+	private static final String TABLE_TEST			=	"Test";
+	private static final String TABLE_WORD			=	"Word";
+	private static final String TABLE_SRC_INDEX		=	"Src_Index";
+	private static final String TABLE_SRC_TEXT		=	"Src_Text";
+	private static final String TABLE_SRC_HTML		=	"Src_Html";
+	private static final String TABLE_DICTIONARY	=	"Dictionary";
+	private static final String TABLE_SCORE			=	"Score";
 	
 	private static final String COLUMN_ID		=	"id";
 	private static final String COLUMN_VALUE	=	"value";
 		
+	private static final String COL_WORDID		=	"wordid";
+	private static final String COL_WORD		=	"word";
+	private static final String COL_FLAG		=	"flag";
+	private static final String COL_SRCID		=	"srcid";
+	private static final String COL_FMT			=	"fmt";
+	private static final String COL_ORIG		=	"orig";
+	private static final String COL_DICTID		=	"dictid";
+	private static final String COL_SYMBOL		=	"symbol";
+	private static final String COL_CATEGORY	=	"category";
+	private static final String COL_MEANING		=	"meaning";
+	private static final String COL_HTML		=	"html";
+	private static final String COL_TITLE		=	"title";
+	private static final String COL_LAST		=	"last";
+	private static final String COL_NEXT		=	"next";//next update
+	private static final String COL_SCORE		=	"score";	
+	
 	private static SQLiteDatabase db = null;
 
 	@Override
@@ -44,20 +66,49 @@ public class DBAccess extends BaseDataObject {
 	}
 	
 	@Override
-	protected int release() {
+	protected void release() {
 		if(db != null) {
 			db.close();
 		}
-		return 0;
 	}
-	
+		
 	protected int initTables() {
 		
 		try {
-			String sql = "CREATE TABLE IF NOT EXISTS Test ("
-					+ "id INTEGER PRIMARY KEY,"
-					+ "value TEXT)";
-			db.execSQL(sql);
+			
+			db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_WORD + " (" 
+						+ COL_WORDID + " INTEGER PRIMARY KEY," 
+						+ COL_WORD + " TEXT,"
+						+ COL_FLAG + " INTEGER)");
+			
+			db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SRC_INDEX + " ("
+						+ COL_WORDID + " INTEGER,"
+						+ COL_FMT + " INTEGER,"
+						+ COL_SRCID + " INTEGER,"
+						+ COL_ORIG + " INTEGER)");
+			
+			db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SRC_TEXT + " ("
+						+ COL_SRCID + " INTEGER,"
+						+ COL_DICTID + " INTEGER,"
+						+ COL_SYMBOL + " TEXT,"
+						+ COL_CATEGORY + " TEXT,"
+						+ COL_MEANING + " TEXT)");
+			
+			db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SRC_HTML + " ("
+						+ COL_SRCID + " INTEGER,"
+						+ COL_HTML + " TEXT)");
+			
+			db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_DICTIONARY + " ("
+						+ COL_DICTID + " INTEGER,"
+						+ COL_TITLE + " TEXT)");
+			
+			db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SCORE + " ("
+						+ COL_WORDID + " INTEGER,"
+						+ COL_LAST + " INTEGER,"
+						+ COL_NEXT + " INTEGER,"
+						+ COL_SCORE + " SCORE)");
+			
+			db.execSQL("CREATE TABLE IF NOT EXISTS Test (id INTEGER PRIMARY KEY,value TEXT)");
 		}
 		catch (SQLiteException e) {
 			return -1;

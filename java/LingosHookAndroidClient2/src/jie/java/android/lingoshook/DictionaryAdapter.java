@@ -65,6 +65,11 @@ public class DictionaryAdapter extends BaseAdapter {
 		
 		return refresh();
 	}
+	
+	public int load(final String condition, int maxRows) {
+		this.maxRows = maxRows;
+		return load(condition);
+	}
 
 	private int refresh() {
 		cursor = db.getTestData(this.condition, offset, maxRows);
@@ -83,6 +88,10 @@ public class DictionaryAdapter extends BaseAdapter {
 		this.notifyDataSetChanged();
 		
 		return offset;		
+	}
+	
+	public void setMaxRows(int maxRows) {
+		this.maxRows = maxRows;
 	}
 
 }

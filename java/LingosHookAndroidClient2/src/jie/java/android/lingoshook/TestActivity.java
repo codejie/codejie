@@ -3,6 +3,7 @@ package jie.java.android.lingoshook;
 import jie.java.android.lingoshook.view.RefreshListView;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -14,6 +15,18 @@ import android.widget.TextView;
 
 public class TestActivity extends Activity {
 
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		Log.d("tag", "onRestoreInstanceState");
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		Log.d("tag", "onSaveInstanceState");
+		super.onSaveInstanceState(outState);
+	}
+
 	private RefreshListView listview = null;
 	
 	private ArrayAdapter<String> adapter = null;
@@ -23,6 +36,8 @@ public class TestActivity extends Activity {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Log.d("tag", "onCreate()");
 		
 		this.setContentView(R.layout.test);
 		

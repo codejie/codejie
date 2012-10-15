@@ -13,8 +13,8 @@ public class Main {
 	
 	private void run() {
 		
-		final String input = "./data/3GPP.ld2";
-		final String output = "./data/3GPP.txt";
+		final String input = "./data/Vicon English-Chinese(S) Dictionary.ld2";
+		final String output = "./data/output.txt";
 		
 		try {
 			

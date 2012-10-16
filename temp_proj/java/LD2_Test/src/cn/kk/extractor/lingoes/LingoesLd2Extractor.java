@@ -251,34 +251,37 @@ public class LingoesLd2Extractor {
     }
 
     private static String strip(String xml) {
-        int open = 0;
-        int end = 0;
-        if ((open = xml.indexOf("<![CDATA[")) != -1) {
-            if ((end = xml.indexOf("]]>", open)) != -1) {
-                return xml.substring(open + "<![CDATA[".length(), end).replace('\t', ' ')
-                        .replace(Helper.SEP_NEWLINE_CHAR, ' ').replace('\u001e', ' ').replace('\u001f', ' ');
-            }
-        } else if ((open = xml.indexOf("<Ô")) != -1) {
-            if ((end = xml.indexOf("</Ô", open)) != -1) {
-                open = xml.indexOf(">", open + 1);
-                return xml.substring(open + 1, end).replace('\t', ' ').replace(Helper.SEP_NEWLINE_CHAR, ' ')
-                        .replace('\u001e', ' ').replace('\u001f', ' ');
-            }
-        } else {
-            StringBuilder sb = new StringBuilder();
-            end = 0;
-            open = xml.indexOf('<');
-            do {
-                if ((open - end) > 1) {
-                    sb.append(xml.substring(end + 1, open));
-                }
-                open = xml.indexOf('<', open + 1);
-                end = xml.indexOf('>', end + 1);
-            } while ((open != -1) && (end != -1));
-            return sb.toString().replace('\t', ' ').replace(Helper.SEP_NEWLINE_CHAR, ' ').replace('\u001e', ' ')
-                    .replace('\u001f', ' ');
-        }
-        return Helper.EMPTY_STRING;
+    	
+    	return xml;
+    	
+//        int open = 0;
+//        int end = 0;
+//        if ((open = xml.indexOf("<![CDATA[")) != -1) {
+//            if ((end = xml.indexOf("]]>", open)) != -1) {
+//                return xml.substring(open + "<![CDATA[".length(), end).replace('\t', ' ')
+//                        .replace(Helper.SEP_NEWLINE_CHAR, ' ').replace('\u001e', ' ').replace('\u001f', ' ');
+//            }
+//        } else if ((open = xml.indexOf("<Ô")) != -1) {
+//            if ((end = xml.indexOf("</Ô", open)) != -1) {
+//                open = xml.indexOf(">", open + 1);
+//                return xml.substring(open + 1, end).replace('\t', ' ').replace(Helper.SEP_NEWLINE_CHAR, ' ')
+//                        .replace('\u001e', ' ').replace('\u001f', ' ');
+//            }
+//        } else {
+//            StringBuilder sb = new StringBuilder();
+//            end = 0;
+//            open = xml.indexOf('<');
+//            do {
+//                if ((open - end) > 1) {
+//                    sb.append(xml.substring(end + 1, open));
+//                }
+//                open = xml.indexOf('<', open + 1);
+//                end = xml.indexOf('>', end + 1);
+//            } while ((open != -1) && (end != -1));
+//            return sb.toString().replace('\t', ' ').replace(Helper.SEP_NEWLINE_CHAR, ' ').replace('\u001e', ' ')
+//                    .replace('\u001f', ' ');
+//        }
+//        return Helper.EMPTY_STRING;
     }
 
     private static final void getIdxData(final ByteBuffer dataRawBytes, final int position, final int[] wordIdxData) {

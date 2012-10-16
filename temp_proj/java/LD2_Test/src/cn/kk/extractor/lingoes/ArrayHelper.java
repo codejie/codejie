@@ -1407,6 +1407,9 @@ public final class ArrayHelper {
                 // so this shouldn't happen
                 throw new Error(x);
             }
+            
+            //System.out.println(ca);
+            
             return safeTrim(ca, cb.position());
         }
     }

@@ -18,7 +18,8 @@ public class DBAccess extends BaseDataObject {
 	private static final String TABLE_TEST			=	"Test";
 	private static final String TABLE_WORD			=	"Word";
 	private static final String TABLE_SRC_INDEX		=	"Src_Index";
-	private static final String TABLE_SRC_TEXT		=	"Src_Text";
+	private static final String TABLE_SRC_TEXT_INDEX	=	"Src_Text_Index";
+	private static final String TABLE_SRC_TEXT_MEANING	=	"Src_Text_Meaning";
 	private static final String TABLE_SRC_HTML		=	"Src_Html";
 	private static final String TABLE_DICTIONARY	=	"Dictionary";
 	private static final String TABLE_SCORE			=	"Score";
@@ -82,15 +83,18 @@ public class DBAccess extends BaseDataObject {
 						+ COL_FLAG + " INTEGER)");
 			
 			db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SRC_INDEX + " ("
+						+ COL_SRCID + " INTEGER PRIMARY KEY,"					
 						+ COL_WORDID + " INTEGER,"
 						+ COL_FMT + " INTEGER,"
-						+ COL_SRCID + " INTEGER,"
 						+ COL_ORIG + " INTEGER)");
 			
-			db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SRC_TEXT + " ("
+			db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SRC_TEXT_INDEX + " ("
 						+ COL_SRCID + " INTEGER,"
 						+ COL_DICTID + " INTEGER,"
-						+ COL_SYMBOL + " TEXT,"
+						+ COL_SYMBOL + " TEXT)");
+			
+			db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SRC_TEXT_MEANING + " ("
+						+ COL_SRCID + " INTEGER,"
 						+ COL_CATEGORY + " TEXT,"
 						+ COL_MEANING + " TEXT)");
 			

@@ -3,7 +3,15 @@
 
 from sgmllib import SGMLParser
 
+class data:
+    extend = ''
+    symbol = ''
+    meaninglist = []    
+    
+mydata = data()
+
 class parser(SGMLParser):
+    global mydata
     flag = -1
     def unknown_starttag(self, tag, attributes):
         if tag == 'm':
@@ -12,7 +20,8 @@ class parser(SGMLParser):
             print tag
         
     def unknown_endtag(self, tag):
-        print tag
+        if tag == 'e' and flag == 0:
+            print tag
         
     def handle_data(self, data):
         print data

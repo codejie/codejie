@@ -9,7 +9,7 @@ class MyParser(HTMLParser):
     result = 0
     levelField = -1
     levelInfo = -1
-    flag = -1
+    flag = -1    
     
 #str = 'abandon = <C><E>abandons|abandoned|abandoning</E><F><H><M>a·ban·don || ə\'bændən</M></H><I><N><U>n.</U>  放纵, 放任; 狂热</N></I><I><N><U>v.</U>  丢弃; 中止, 放弃; 遗弃, 抛弃; 使放纵</N></I></F></C>'
         
@@ -21,6 +21,7 @@ class MyParser(HTMLParser):
         elif tag == 'f':
             self.result.field.append(DictField())
             self.levelField += 1
+            self.levelInfo = -1
             self.flag = 2 #field
         elif tag == 'l':
             self.flag = 3 #link
@@ -34,48 +35,10 @@ class MyParser(HTMLParser):
             self.flag = 6 #meaning
         elif tag == 'u':
             self.flag = 7 #category        
-#        
-#        if tag == 'e':
-#            self.pos = 1
-#        elif tag == 'f':
-#            self.result.field.append(DictField())
-#            self.levelField += 1
-#            self.pos = 2
-#        elif tag == 'h' and self.pos == 2:
-#            self.pos = 3
-#        elif tag == 'm' and self.pos == 3:
-#            self.pos = 4
-#        elif tag == 'i' and self.pos == 2:
-#            self.result.field[self.levelField].meaning.append(DictMeaning())
-#            self.levelMeaning += 1
-#            self.pos = 5
-#        elif tag == 'n' and self.pos == 5:
-#            self.pos = 6
-#        elif tag == 'u' and self.pos == 6:
-#            self.pos = 7
-    
+ 
     def handle_endtag(self, tag):
         if tag == 'u':
             self.flag = 6 #meaning        
-
-#        if self.pos == 4:
-#            self.pos = 3
-#        elif self.pos == 3:
-#            self.pos = 2
-#        elif self.pos == 5:
-#            self.pos = 2
-#        elif self.pos == 2:
-##            self.levelField -= 1
-#            self.pos = -1
-#        elif self.pos == 6:
-#            self.pos = 5
-#        elif self.pos == 7:
-#            self.pos = 6
-#        elif self.pos == 5:
-##            self.levelMeaning -= 1
-#            self.pos = 2
-#        else:
-#            self.pos = -1
         
     def handle_data(self, data):
         if self.flag == 1:
@@ -87,18 +50,13 @@ class MyParser(HTMLParser):
         elif self.flag == 6:
             self.result.field[self.levelField].info[self.levelInfo].meaning = data
         elif self.flag == 7:
-            self.result.field[self.levelField].info[self.levelInfo].category = data
-            
-#            
-#        elif self.pos == 4:
-#            self.result.field[self.levelField].symbol = data
-#        elif self.pos == 7:
-#            self.result.field[self.levelField].meaning[self.levelMeaning].category = data
-#        elif self.pos == 6:
-#            self.result.field[self.levelField].meaning[self.levelMeaning].meaning = data
-            
+            self.result.field[self.levelField].info[self.levelInfo].category = data           
     
     def parse(self, html, data):
+        self.levelField = -1
+        self.levelInfo = -1
+        self.flag = -1  
+                
         self.result = data
         self.feed(html)
             
@@ -131,7 +89,7 @@ def parseHtml(html, output):
     parser.parse(html, output)
     parser.close()
     
-    print output
+#    print output
     
     
 def analyseLine(str, output):
@@ -141,38 +99,3 @@ def analyseLine(str, output):
 #    print 'html=', html
     parseHtml(html, output)
 
-
-
-
-#        
-#class data:
-#    id = 0
-#    value = 'value'
-#    
-#def list_add(l):
-#    d = data()
-#    d.id = 10
-#    d.value = '1'
-#    
-#    l.append(d)
-#        
-#def t(i):
-#    i = 10        
-#
-#list = [data(), data()]    
-#
-#str = 'abandon = <C><E>abandons|abandoned|abandoning</E><F><H><M>a·ban·don || ə\'bændən</M></H><I><N><U>n.</U>  放纵, 放任; 狂热</N></I><I><N><U>v.</U>  丢弃; 中止, 放弃; 遗弃, 抛弃; 使放纵</N></I></F></C>'
-#parser = MyParser()
-#parser.feed(str)
-#parser.close();
-#
-#print list[0].id, list[0].value
-#
-#list_add(list)
-#
-#print list[-1].id, list[-1].value
-#
-#m = 1
-#print m
-#t(m)
-#print m

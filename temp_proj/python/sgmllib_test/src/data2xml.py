@@ -1,8 +1,7 @@
 
 import string
 
-import htmlparser
-
+#<C>
 #<W>Word</W>
 #<D>dictid</D>
 #<E>E1</E>
@@ -27,6 +26,7 @@ import htmlparser
 #<M>Meaning</M>
 #</I>
 #</F>
+#</C>
 
 def addtag(list, stag, etag):
     if len(list) > 0:
@@ -46,10 +46,10 @@ def addInfo(info):
         for i in info:
             ret += '<i>'
             if i.category != '':
-                ret += '<c>' + i.category + '</c>'
+                ret += '<c>' +  string.strip(i.category, ' ') + '</c>'
             if i.meaning != '':
-                ret += '<m>' + i.meaning + '</m>'
-                ret += '</i>'
+                ret += '<m>' +  string.strip(i.meaning, ' ') + '</m>'
+            ret += '</i>'
         return ret
     else:
         return ''
@@ -57,9 +57,9 @@ def addInfo(info):
 def addSubField(f):
     ret = ''
     if f.symbol != '':
-        ret += '<s>' + string.strip(f.symbol, '') + '</s>'
+        ret += '<s>' + string.strip(f.symbol, ' ') + '</s>'
     if f.link != '':
-        ret += '<l>' + f.link + '/l>'
+        ret += '<l>' +  string.strip(f.link, ' ') + '/l>'
     ret += addInfo(f.info)
     return ret 
 
@@ -76,10 +76,11 @@ def addField(field):
     
 
 def data2xml(data):
-    ret = '<w>' + data.word + '</w>' \
+    ret = '<c><w>' +  string.strip(data.word, ' ') + '</w>' \
         + '<d>1</d>' \
         + addExtend(data.extend) \
-        + addField(data.field)
+        + addField(data.field) \
+        + "</c>"
     return ret
 
 

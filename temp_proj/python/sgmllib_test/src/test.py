@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import string
-import array
 
 l = []
 

@@ -11,7 +11,7 @@ import data2xml
 def test():
 #    str = 'a = <C><F><H><M>e?;?</M></H><I><N>字母A</N></I></F></C>'
 #    str = 'A A = <C><E>A A</E><F><H><L>AA (Alcoholics Anonymous)</L></H><I><N>嗜酒者互诫协会</N></I></F><E>A A</E><F><H><L>AA (anti-aircraft)</L></H><I><N>aa, 抵抗飞机, 为保护不受敌人的飞机和直升机伤害</N></I></F></C>'
-    str = 'test = <c><f><i><u>1</u></i><i><u>2</u></i></f><f><i><u>3</u></i></f>'
+    str = 'test = <c><f><i><u>9</u></i><i><u>2</u></i></f><f><i><u>3</u></i></f>'
     data = htmlparser.DictData()
     htmlparser.analyseLine(str, data)
     print data

@@ -1,7 +1,7 @@
 
 import string
 
-#<C>
+#<X>
 #<W>Word</W>
 #<D>dictid</D>
 #<E>E1</E>
@@ -26,7 +26,7 @@ import string
 #<M>Meaning</M>
 #</I>
 #</F>
-#</C>
+#</X>
 
 def addtag(list, stag, etag):
     if len(list) > 0:
@@ -76,11 +76,11 @@ def addField(field):
     
 
 def data2xml(data):
-    ret = '<c><w>' +  string.strip(data.word, ' ') + '</w>' \
+    ret = '<x><w>' +  string.strip(data.word, ' ') + '</w>' \
         + '<d>1</d>' \
         + addExtend(data.extend) \
         + addField(data.field) \
-        + "</c>"
+        + "</x>"
     return ret
 
 

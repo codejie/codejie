@@ -40,10 +40,12 @@ def addtag(list, stag, etag):
 def addExtend(extend):
     return addtag(extend, '<e>', '</e>')
 
-def addInfo(info):
+def addInfo(info, index):
     if len(info) > 0:
         ret = ''
-        for i in info:
+        for i in info[index * 5:(index + 1) * 5]:
+            if i.category == '' and i.meaning == '':
+                break
             ret += '<i>'
             if i.category != '':
                 ret += '<c>' +  string.strip(i.category, ' ') + '</c>'
@@ -54,20 +56,22 @@ def addInfo(info):
     else:
         return ''
 
-def addSubField(f):
+def addSubField(f, index):
     ret = ''
     if f.symbol != '':
         ret += '<s>' + string.strip(f.symbol, ' ') + '</s>'
     if f.link != '':
         ret += '<l>' +  string.strip(f.link, ' ') + '/l>'
-    ret += addInfo(f.info)
+    ret += addInfo(f.info, index)
     return ret 
 
 def addField(field):
+    index = 0
     if len(field) > 0:
         ret = '<f>'
         for f in field:
-            ret += addSubField(f)
+            ret += addSubField(f, index)
+            index += 1
         ret += '</f>'
         return ret
     else:

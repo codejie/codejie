@@ -20,7 +20,7 @@ class MyParser(HTMLParser):
             self.flag = 1 #extend
         elif tag == 'f':
             self.result.field.append(DictField())
-            self.levelField += 1
+            self.levelField += 1            
             self.levelInfo = -1
             print 'levelField =', self.levelField
             self.flag = 2 #field
@@ -30,7 +30,6 @@ class MyParser(HTMLParser):
             self.flag = 4 #symbol
         elif tag == 'i':
             self.result.field[self.levelField].info.append(DictInfo())
-            self.result.field[self.levelField].infocount += 1
             self.levelInfo += 1
             print 'info == levelField = %s levelInfo = %s' % (self.levelField, self.levelInfo)
             self.flag = 5 #info
@@ -74,7 +73,6 @@ class MyParser(HTMLParser):
             
         
 class DictInfo:
-    index = -1
     category = ''
     meaning = ''
     
@@ -84,11 +82,10 @@ class DictInfo:
 class DictField:
     symbol = ''
     link = ''
-    index = -1
-    info = [DictInfo() for i in range(0,10)]#DictInfo()), DictInfo(), DictInfo(), DictInfo(), DictInfo(), DictInfo(), DictInfo(), DictInfo(), DictInfo()]
+    info = [DictInfo() for i in range(0,25)]
     
     def __str__(self):
-        return '[symbol = %s | link = %s infocount = %d info = %s]' % (self.symbol, self.link, self.infocount, string.join(map(str, self.info)))
+        return '[symbol = %s | link = %s info = %s]' % (self.symbol, self.link, string.join(map(str, self.info)))
  
 class DictData:
     word = ''

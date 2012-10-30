@@ -21,8 +21,8 @@ class MyParser(HTMLParser):
         elif tag == 'f':
             self.result.field.append(DictField())
             self.levelField += 1            
-            self.levelInfo = -1
-            print 'levelField =', self.levelField
+#            self.levelInfo = -1
+#            print 'levelField =', self.levelField
             self.flag = 2 #field
         elif tag == 'l':
             self.flag = 3 #link
@@ -31,7 +31,7 @@ class MyParser(HTMLParser):
         elif tag == 'i':
             self.result.field[self.levelField].info.append(DictInfo())
             self.levelInfo += 1
-            print 'info == levelField = %s levelInfo = %s' % (self.levelField, self.levelInfo)
+#            print 'info == levelField = %s levelInfo = %s' % (self.levelField, self.levelInfo)
             self.flag = 5 #info
         elif tag == 'n':        
             self.flag = 6 #meaning
@@ -53,20 +53,20 @@ class MyParser(HTMLParser):
         elif self.flag == 4:
             self.result.field[self.levelField].symbol = data
         elif self.flag == 6:
-            print 'meaning == index = %d' % index
+#           print 'meaning == index = %d' % index
             self.result.field[self.levelField].info[index * 5 + self.levelInfo].meaning = data
-            print 'meaning == levelField=%d levelInfo=%d' % (self.levelField, self.levelInfo)
-            print 'meaning == info: %s' % self.result.field[self.levelField].info[self.levelInfo]
+#            print 'meaning == levelField=%d levelInfo=%d' % (self.levelField, self.levelInfo)
+#            print 'meaning == info: %s' % self.result.field[self.levelField].info[self.levelInfo]
         elif self.flag == 7:
-            print 'category == index = %d' % index 
+#            print 'category == index = %d' % index 
             self.result.field[self.levelField].info[index * 5 + self.levelInfo].category = data
-            print 'category == levelField=%d levelInfo=%d' % (self.levelField, self.levelInfo)
-            print 'category == info: %s' % self.result.field[self.levelField].info[self.levelInfo]           
+#            print 'category == levelField=%d levelInfo=%d' % (self.levelField, self.levelInfo)
+#            print 'category == info: %s' % self.result.field[self.levelField].info[self.levelInfo]           
     
     def parse(self, html, data):
-        self.levelField = -1
-        self.levelInfo = -1
-        self.flag = -1  
+#        self.levelField = -1
+#        self.levelInfo = -1
+#        self.flag = -1  
                 
         self.result = data
         self.feed(html)
@@ -99,11 +99,7 @@ def parseHtml(html, output):
     parser = MyParser()
     parser.parse(html, output)
     parser.close()
-    
-    print 'output = %s ' % output.field[0].info[0]
-    print 'output = %s ' % output.field[0].info[1]
-#    print 'output = %s ' % output.field[0].info[2]
-    
+   
     
 def analyseLine(str, output):
     pos = str.find(' =')

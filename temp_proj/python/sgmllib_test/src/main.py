@@ -30,7 +30,7 @@ def main():
         print line
         data = htmlparser.DictData()
         htmlparser.analyseLine(string.rstrip(line,  '\n'), data)
-        print 'data ===== ', data
+#        print 'data ===== ', data
     
         print data2xml.data2xml(data) + '\n'
         
@@ -42,6 +42,6 @@ def main():
          
     file.close()
 
-#main()
-test()    
+main()
+#test()    
 

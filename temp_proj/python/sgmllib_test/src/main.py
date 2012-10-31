@@ -6,6 +6,7 @@ import string
 
 import htmlparser
 import data2xml
+import dbaccess
 
 
 def test():
@@ -25,21 +26,26 @@ def main():
 #    str = 'test = <c><E>1</E><E>2</E>'
     
     file = open("../data/output.txt", "r")
+    conn = dbaccess.db_create("../data/lac.db3")
+    dbaccess.table_create(conn)
+    dbaccess.add_dict(conn, 'Vicon English-Chinese(S) Dictionary')
     i = 0
     for line in file:
         print line
         data = htmlparser.DictData()
         htmlparser.analyseLine(string.rstrip(line,  '\n'), data)
-#        print 'data ===== ', data
-    
-        print data2xml.data2xml(data) + '\n'
+#        print 'data ===== ', data      
+        
+#        print data2xml.data2xml(data)
+        dbaccess.add_record(conn, data.word, data2xml.data2xml(data))
         
         if i > 10:
             break
         i += 1
 #        print ret + 
 #        break   
-         
+
+    dbaccess.db_close(conn)
     file.close()
 
 main()

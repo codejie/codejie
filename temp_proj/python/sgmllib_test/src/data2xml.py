@@ -2,7 +2,6 @@
 import string
 
 #<X>
-#<W>Word</W>
 #<D>dictid</D>
 #<E>E1</E>
 #<E>E2</E>
@@ -80,7 +79,7 @@ def addField(field):
     
 
 def data2xml(data):
-    ret = '<x><w>' +  string.strip(data.word, ' ') + '</w>' \
+    ret = '<x>' \
         + '<d>1</d>' \
         + addExtend(data.extend) \
         + addField(data.field) \

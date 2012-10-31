@@ -28,10 +28,12 @@ def main():
     file = open("../data/output.txt", "r")
     conn = dbaccess.db_create("../data/lac.db3")
     dbaccess.table_create(conn)
+#    dbaccess.db_test(conn)
+#    return
     dbaccess.add_dict(conn, 'Vicon English-Chinese(S) Dictionary')
     i = 0
     for line in file:
-        print line
+#        print line
         data = htmlparser.DictData()
         htmlparser.analyseLine(string.rstrip(line,  '\n'), data)
 #        print 'data ===== ', data      
@@ -39,9 +41,11 @@ def main():
 #        print data2xml.data2xml(data)
         dbaccess.add_record(conn, data.word, data2xml.data2xml(data))
         
-        if i > 10:
-            break
+#        if i > 10:
+#            break
         i += 1
+        if i % 100  == 0:
+            print 'i =', i 
 #        print ret + 
 #        break   
 

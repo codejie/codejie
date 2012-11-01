@@ -31,6 +31,7 @@ def main():
 #    dbaccess.db_test(conn)
 #    return
     dbaccess.add_dict(conn, 'Vicon English-Chinese(S) Dictionary')
+    cursor = conn.cursor()
     i = 0
     for line in file:
 #        print line
@@ -39,7 +40,7 @@ def main():
 #        print 'data ===== ', data      
         
 #        print data2xml.data2xml(data)
-        dbaccess.add_record(conn, data.word, data2xml.data2xml(data))
+        dbaccess.add_record(conn, cursor, data.word, data2xml.data2xml(data))
         
 #        if i > 10:
 #            break

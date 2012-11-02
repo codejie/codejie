@@ -1,7 +1,7 @@
 <map version="freeplane 1.2.0">
 <!--To view this file, download free mind mapping software Freeplane from http://freeplane.sourceforge.net -->
 <node TEXT="Database Tables" ID="ID_1723255651" CREATED="1283093380553" MODIFIED="1351066129612"><hook NAME="MapStyle">
-    <properties SHOW_NOTE_ICONS="true" SHOW_ICON_FOR_ATTRIBUTES="true" SHOW_NOTES_IN_MAP="false" show_icon_for_attributes="true"/>
+    <properties SHOW_NOTE_ICONS="true" show_icon_for_attributes="true" SHOW_ICON_FOR_ATTRIBUTES="true" SHOW_NOTES_IN_MAP="false"/>
 
 <map_styles>
 <stylenode LOCALIZED_TEXT="styles.root_node">
@@ -31,7 +31,7 @@
 </stylenode>
 </map_styles>
 </hook>
-<hook NAME="AutomaticEdgeColor" COUNTER="2"/>
+<hook NAME="AutomaticEdgeColor" COUNTER="5"/>
 <node TEXT="WordTable" POSITION="right" ID="ID_1991406085" CREATED="1350984011029" MODIFIED="1351064657351" VSHIFT="-50">
 <edge COLOR="#ff0000" WIDTH="3"/>
 <node TEXT="wordid" ID="ID_465252376" CREATED="1350984034643" MODIFIED="1350984040662"/>
@@ -106,10 +106,19 @@
 <node TEXT="fmt" ID="ID_1984316827" CREATED="1351065642351" MODIFIED="1351065818853">
 <node TEXT="1: text" ID="ID_838402064" CREATED="1351065887693" MODIFIED="1351065894450"/>
 <node TEXT="2: html" ID="ID_1032709001" CREATED="1351065895327" MODIFIED="1351065899360"/>
-<node TEXT="3: xml" ID="ID_1015227714" CREATED="1351065904427" MODIFIED="1351677370785">
+<node TEXT="4: vicon" ID="ID_1015227714" CREATED="1351065904427" MODIFIED="1351849615651">
 <attribute NAME="template" VALUE="&lt;x&gt;&lt;D&gt;dictid&lt;/D&gt; &lt;E&gt;E1&lt;/E&gt; &lt;E&gt;E2&lt;/E&gt; &lt;F&gt; &lt;S&gt;Symbol&lt;/S&gt; &lt;L&gt;Link&lt;/L&gt; &lt;I&gt; &lt;C&gt;category&lt;/C&gt; &lt;M&gt;Meaning&lt;/M&gt; &lt;/I&gt; &lt;I&gt; &lt;C&gt;category&lt;/C&gt; &lt;M&gt;Meaning&lt;/M&gt; &lt;/I&gt; &lt;/F&gt; &lt;F&gt; &lt;S&gt;Symbol&lt;/S&gt; &lt;L&gt;Link&lt;/L&gt; &lt;I&gt; &lt;C&gt;category&lt;/C&gt; &lt;M&gt;Meaning&lt;/M&gt; &lt;/I&gt; &lt;/F&gt;&lt;/X&gt;"/>
 </node>
 </node>
+</node>
+<node TEXT="ViconIndexTable" POSITION="left" ID="ID_1619734995" CREATED="1351849538468" MODIFIED="1351850209353">
+<edge COLOR="#ff00ff" WIDTH="3"/>
+<node TEXT="wordid" ID="ID_1690283239" CREATED="1351849558579" MODIFIED="1351849565145"/>
+<node TEXT="start" ID="ID_1001886307" CREATED="1351849566427" MODIFIED="1351849571642"/>
+<node TEXT="size" ID="ID_1472521629" CREATED="1351849572733" MODIFIED="1351849577222"/>
+</node>
+<node TEXT="SrcHtmlTable" POSITION="left" ID="ID_1184235182" CREATED="1351850439861" MODIFIED="1351850468295">
+<edge COLOR="#00ffff" WIDTH="3"/>
 </node>
 </node>
 </map>

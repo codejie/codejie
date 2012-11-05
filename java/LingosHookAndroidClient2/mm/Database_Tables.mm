@@ -31,7 +31,7 @@
 </stylenode>
 </map_styles>
 </hook>
-<hook NAME="AutomaticEdgeColor" COUNTER="5"/>
+<hook NAME="AutomaticEdgeColor" COUNTER="6"/>
 <node TEXT="WordTable" POSITION="right" ID="ID_1991406085" CREATED="1350984011029" MODIFIED="1351064657351" VSHIFT="-50">
 <edge COLOR="#ff0000" WIDTH="3"/>
 <node TEXT="wordid" ID="ID_465252376" CREATED="1350984034643" MODIFIED="1350984040662"/>
@@ -119,6 +119,9 @@
 </node>
 <node TEXT="SrcHtmlTable" POSITION="left" ID="ID_1184235182" CREATED="1351850439861" MODIFIED="1351850468295">
 <edge COLOR="#00ffff" WIDTH="3"/>
+</node>
+<node TEXT="ViconDataFile" POSITION="left" ID="ID_1494901743" CREATED="1352099768577" MODIFIED="1352099778586">
+<edge COLOR="#ffff00" WIDTH="3"/>
 </node>
 </node>
 </map>

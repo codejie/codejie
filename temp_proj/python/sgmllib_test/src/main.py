@@ -7,6 +7,7 @@ import string
 import htmlparser
 import data2xml
 import dbaccess
+import fileaccess
 
 
 def test():
@@ -53,6 +54,35 @@ def main():
     dbaccess.db_close(conn)
     file.close()
 
-main()
-#test()    
+def mainToFile():
+    dfile = open('../data/output.txt', 'r')
+    vfile = fileaccess.openfile('../data/vicondata.db')
+    conn = dbaccess.db_create('../data/lac.db3')
+    dbaccess.table_create(conn)
+    
+    dbaccess.add_dict(conn, 'Vicon English-Chinese(S) Dictionary')
+    
+    i = 0
+    pos = 0
+    size = 0
+    for line in dfile:
+        data = htmlparser.DictData()
+        htmlparser.analyseLine(string.rstrip(line, '\n'), data)
+        size = fileaccess.push2file(vfile, data2xml.data2xml(data)) - pos
+        dbaccess.add_word(conn, data.word, pos, size)
+        pos += size
+        
+#        if i > 10:
+#            break        
+        i += 1
+        if i % 100  == 0:
+            print 'i =', i         
+    
+    dbaccess.db_close(conn)
+    vfile.close()
+    dfile.close()
+
+#main()
+#test()
+mainToFile()    
 

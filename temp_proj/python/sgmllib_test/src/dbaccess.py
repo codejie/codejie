@@ -9,10 +9,11 @@ def table_create(conn):
     cursor = conn.cursor()
     
     sql = [
-           'CREATE TABLE IF NOT EXISTS Word (wordid INTEGER PRIMARY KEY, word TEXT, flag INTEGER)',
+           'CREATE TABLE IF NOT EXISTS Word (wordid INTEGER SECOND KEY, word TEXT PRIMARY KEY, flag INTEGER)',
            'CREATE TABLE IF NOT EXISTS Src (srcid INTEGER PRIMARY KEY, wordid INTEGER, fmt INTEGER, orig INTEGER, content TEXT)',
            'CREATE TABLE IF NOT EXISTS Dict (dictid INTEGER PRIMARY KEY, title TEXT)',
-           'CREATE TABLE IF NOT EXISTS Word2 (wordid INTEGER PRIMARY KEY, word TEXT, flag INTEGER, orig INTEGER, fmt INTEGER')
+           'CREATE TABLE IF NOT EXISTS Word2 (wordid INTEGER PRIMARY KEY, word TEXT, flag INTEGER, orig INTEGER, fmt INTEGER)',
+           'CREATE TABLE IF NOT EXISTS ViconIndex (wordid INTEGER, position INTEGER, size INTEGER)'
            ]
     for s in sql:
         cursor.execute(s)
@@ -32,6 +33,8 @@ def add_record(conn, cursor, word, record):
     
 def add_word(conn, word, pos, len):
     cursor = conn.cursor()
+    cursor.execute('INSERT INTO Word2 (word, flag, orig, fmt) VALUES ("%s",1, 1, 4)' % (word))#'INSERT INTO Word (word, flag) VALUES (\'%s\',1)' % (word))
+    cursor.execute('INSERT INTO ViconIndex (wordid, position, size) VALUES (%d, %d, %d)' % (cursor.lastrowid, pos, len))   
     
     
 def db_create(dbfile):

@@ -1,0 +1,1783 @@
+(U)SIM code group, 1655
+(U)SIM personalisation, 1656
+1.8V technology Smart Card, 0
+1.8V technology Terminal, 1
+1xRTT, 2
+2G, 3
+3G, 4
+3GPP, 5
+3GPP-WLAN Interworking, 12
+3GPP Generic User Profile (GUP), 6
+3GPP system, 7
+3GPP System core network, 8
+3GPP System coverage, 9
+3GPP System IC Card, 10
+3GPP System mobile termination:, 11
+3V technology Smart Card, 13
+3V technology Terminal, 14
+8-PSK, 15
+A-MPR, 17
+A-SGW, 18
+A/Gb mode, 16
+A3, 19
+A38, 20
+A5/1, 21
+A5/2, 22
+A5/X, 23
+A8, 24
+AAL, 25
+AAL2, 26
+AAL5, 27
+AB, 28
+AC, 29
+ACC, 30
+Acceptable Cell, 31
+Access conditions, 32
+Access delay, 33
+Access Stratum SDU (Service Data Unit), 34
+ACCH, 35
+ACELP, 36
+ACIR, 37
+ACK, 38
+ACL, 39
+ACLR, 40
+ACM, 41
+ACMmax, 42
+ACRR, 43
+ACS, 44
+ACU, 45
+ADC, 46
+ADCH, 47
+ADF, 48
+ADM, 49
+ADN, 50
+ADPCM, 51
+AE, 52
+AEC, 53
+AEF, 54
+AESA, 55
+AFC, 56
+AGCH, 57
+aGW, 58
+Ai, 60
+AI, 59
+AICH, 61
+AID, 62
+AIUR, 63
+AK, 64
+AKA, 65
+AKI, 66
+ALCAP, 67
+ALSI, 68
+ALW, 69
+AM, 70
+AMBR, 71
+AMD, 72
+AMF, 73
+AMN, 74
+AMR, 75
+AMR-WB, 76
+AN, 77
+ANP, 78
+ANR, 79
+AoC, 80
+AoCC, 81
+AoCI, 82
+AP, 83
+APDU, 84
+API, 85
+APN, 86
+ARFCN, 87
+ARP, 88
+ARQ, 89
+ARR, 90
+AS, 91
+ASC, 92
+ASCI, 93
+ASE, 94
+ASME, 95
+ASN.1, 96
+AT command, 97
+ATM, 98
+ATR, 99
+ATT (flag), 100
+AU, 101
+AuC, 102
+AUT(H), 103
+Authentication, 104
+AUTN, 105
+Available PLMN, 106
+Average power, 107
+AWGN, 108
+B-ISDN, 109
+BA, 110
+BAIC, 111
+BAOC, 112
+Base Station, 113
+Base Station Controller, 114
+Base Station Subsystem, 115
+Baseline capabilities, 116
+Baseline Implementation Capabilities, 117
+Basic telecommunication service, 118
+BCC, 119
+BCCH, 120
+BCD, 121
+BCF, 122
+BCFE, 123
+BCH, 124
+BCIE, 125
+BDN, 126
+Bearer, 127
+Bearer capability, 128
+Bearer independent protocol, 129
+Bearer service, 130
+BER, 131
+Best effort QoS, 132
+Best effort service, 133
+BFI, 134
+BG, 135
+BGT, 136
+BI, 137
+BIC, 138
+BIC-Roam, 139
+BID, 140
+Billing, 141
+BLER, 142
+Bm, 143
+BMC, 144
+BN, 145
+BO, 146
+BOC, 147
+BOIC, 148
+BOIC-exHC, 149
+BPSK, 150
+Broadcast, 151
+BS, 152
+BSC, 153
+BSG, 154
+BSIC, 155
+BSIC-NCELL, 156
+BSR, 157
+BSS, 158
+BSSAP, 159
+BSSGP, 160
+BSSMAP, 161
+BSSOMAP, 162
+BTFD, 163
+BTS, 164
+BVC, 165
+BVCI, 166
+BWT, 167
+Byte code, 168
+C, 169
+C-, 170
+C-APDU, 171
+C-plane, 173
+C-RNTI, 175
+C-TPDU, 176
+C/I, 172
+C/R, 174
+CA, 177
+CAA, 178
+Cable, Connector, and Combiner Losses (Transmitter) (dB), 179
+Cable, Connector, and Splitter Losses (Receiver) (dB), 180
+CAC (Connection Admission Control), 181
+CAD, 182
+CAI, 183
+Call, 184
+CAMEL, 185
+Camped on a cell, 186
+CAP, 187
+Capability Class, 188
+Card session, 189
+CAZAC, 190
+CB, 191
+CBC, 192
+CBCH, 193
+CBMI, 194
+CBR, 195
+CBS, 196
+CBS DRX cycle, 197
+CC, 198
+CC/PP, 199
+CCBS, 200
+CCCH, 201
+CCE, 202
+ccess protocol, 203
+CCF, 204
+CCH, 205
+CCI, 206
+CCITT, 207
+CCK, 208
+CCM, 209
+CCO, 210
+ccounting, 211
+CCP, 212
+CCPCH, 213
+Cct, 214
+CCTrCH, 215
+ccuracy, 216
+CD, 217
+CDA, 218
+CDCH, 219
+CDD, 220
+CDMA, 221
+CDN, 222
+CDR, 223
+CDUR, 224
+CED, 225
+CEIR, 226
+Cell, 227
+Cell Radio Network Temporary Identifier (C-RNTI), 228
+Cellular Text telephone Modem (CTM), 229
+CEND, 230
+CEPT, 231
+CF, 232
+CFB, 233
+CFI, 234
+CFN, 235
+CFNRc, 236
+CFNRy, 237
+CFU, 238
+CGI, 239
+CHAP, 240
+Chargeable Event, 241
+Charged Party, 242
+Charging, 243
+Charging Data Record (CDR), 244
+CHP, 245
+CHV, 246
+CI, 247
+CID, 248
+CIM, 249
+Cipher key, 250
+CIR, 251
+CK, 252
+CKSN, 253
+CLA, 254
+CLI, 255
+CLIP, 256
+CLIR, 257
+CLK, 258
+CLNP, 259
+CLNS, 260
+Closed group, 261
+Closed Subscriber Group (CSG), 262
+CM, 263
+CMC, 264
+CMD, 265
+CMIP, 266
+CMISE, 267
+CMM, 268
+CN, 269
+CNAP, 270
+CNG, 271
+CNL, 272
+CNTR, 273
+Coded Composite Transport Channel, 274
+COLI, 275
+COLP, 276
+COLR, 277
+COM, 278
+Common Channel, 279
+Confidentiality, 280
+CONNACK, 281
+Connected Mode, 282
+Connection, 283
+Connection mode, 284
+Connectionless (for a bearer service), 285
+Connectionless service, 286
+CONS, 287
+Control channel, 288
+Controlling RNC, 289
+Conversational service, 290
+CORBA, 291
+Core network, 292
+Core Network Operator, 293
+Corporate code, 294
+Corporate personalisation, 295
+Coverage area, 296
+Coverage area (of a mobile cellular system), 297
+CP, 298
+CP-Admin, 299
+CP-TP, 300
+CPBCCH, 301
+CPCH, 302
+CPCS, 303
+CPICH, 304
+CPS, 305
+CPU, 306
+CQI, 307
+CRC, 308
+CRE, 309
+CRNC, 310
+CS, 311
+CS-GW, 312
+CSCF, 313
+CSD, 314
+CSE, 315
+CSG, 316
+CSG cell, 317
+CSG Identity (CSGID), 318
+CSG Indicator, 319
+CSG manager, 320
+CSGID, 321
+CSPDN, 322
+CT, 323
+CTCH, 324
+CTDMA, 325
+CTFC, 326
+ctive communication, 327
+ctive Set, 328
+CTM, 329
+CTR, 330
+CTS, 331
+CUG, 332
+Current directory, 333
+Current EF, 334
+Current serving cell, 335
+CW, 336
+CWI, 337
+CWT, 338
+DAC, 339
+DAD, 340
+DAI, 341
+DAM, 342
+Data field, 343
+Data Object, 344
+DB, 345
+DC, 346
+DCA, 347
+DCCH, 348
+DCE, 349
+DCF, 350
+DCH, 351
+DCI, 352
+DCK, 353
+DCN, 354
+DCS, 355
+DCS1800, 356
+DDI, 357
+De-personalisation, 358
+DECT, 359
+Dedicated Channel, 360
+Dedicated File (DF), 361
+Delivered QoS, 362
+Demand service, 363
+Dependability, 364
+DES, 365
+Destination user, 366
+DET, 367
+DF, 368
+DFT, 369
+DFTS, 370
+DHCP, 371
+DHO, 372
+diff-serv, 373
+Directory, 374
+Directory Number, 375
+DISC, 376
+Distribution service, 377
+djacent Channel Leakage power Ratio (ACLR), 378
+DL, 379
+DL-SCH, 380
+DLCI, 381
+DLD, 382
+Dm, 383
+DMR, 384
+DMTF, 385
+DN, 386
+DNIC, 387
+DNS, 388
+DO, 389
+Domain, 390
+Domain Specific Access Control, 391
+Donor network, 392
+Downlink, 393
+DP, 394
+DPCCH, 395
+DPCH, 396
+DPDCH, 397
+DRAC, 398
+DRB, 399
+Drift RNS, 400
+DRNC, 401
+DRNS, 402
+DRX, 403
+DS-CDMA, 404
+DSAC, 405
+DSCH, 406
+DSE, 407
+DSI, 408
+DSS1, 409
+DTAP, 410
+DTCH, 411
+DTE, 412
+DTMF, 413
+DTX, 414
+DwPTS, 415
+E, 416
+E-AV, 417
+E-GGSN, 418
+E-HLR, 419
+E-RAB, 420
+E-UTRA, 421
+E-UTRAN, 422
+EA, 423
+EARFCN, 424
+EBSG, 425
+Ec/No, 426
+ECB, 427
+ECC, 428
+ECGI, 429
+ECM, 430
+ECSD, 431
+ECT, 432
+ECTRA, 433
+EDC, 434
+EDGE, 435
+EEC, 436
+EEL, 437
+EF, 438
+EFR, 439
+EFS, 440
+EGPRS, 441
+EHPLMN, 442
+EIR, 443
+EIRP, 444
+EL, 445
+Element Management Functions, 446
+Element Manager, 447
+Elementary File (EF), 448
+EM, 449
+EMC, 450
+eMLPP, 451
+EMM, 452
+EMMI, 453
+eNB, 455
+ENB, 454
+End-User, 456
+End-User Identity (EUI), 457
+eNode-B, 458
+Enterprise Systems, 459
+EP, 460
+EPA, 461
+EPC, 462
+EPCCH, 463
+EPRE, 464
+EPROM, 465
+EPS, 466
+Equivalent HPLMN, 467
+Equivalent HPLMN list, 468
+ERP, 469
+ERR, 470
+ESD, 471
+ESM, 472
+Essential UE Requirement (Conditional), 473
+Essential UE Requirement (Unconditional), 474
+ETNS, 475
+ETR, 476
+ETS, 477
+ETSI, 478
+etu, 480
+ETU, 479
+ETWS, 481
+EUI, 482
+EUT, 483
+EUTRAN, 484
+EVA, 485
+EVM, 486
+Evolved Packet Core, 487
+Evolved Packet System, 488
+Evolved UTRA, 489
+Evolved UTRAN, 490
+Explicit Diversity Gain (dB), 491
+Extra SDU delivery probability, 492
+FA, 493
+FAC, 494
+FACCH, 495
+FACCH/F, 496
+FACCH/H, 497
+FACH, 498
+FAUSCH, 499
+FAX, 500
+FB, 501
+FBI, 502
+FC (Flow Control), 503
+FCCH, 504
+FCI, 505
+FCP, 506
+FCS, 507
+FDD, 508
+FDM, 509
+FDMA, 510
+FDN, 511
+FDR, 512
+FEC, 513
+FER, 514
+FFS, 515
+FFT, 516
+FH, 517
+FI, 518
+File, 519
+File identifier (FID), 520
+Fixed Mobile Convergence (FMC), 521
+Fixed Network User Rate, 522
+Flexible Layer One (FLO), 523
+FLO, 524
+FLOOR, 525
+FM, 526
+FMC, 527
+FMS, 528
+FN, 529
+FNUR, 530
+FP, 531
+FPLMN, 532
+FR, 533
+Framework, 534
+FRC, 535
+FTAM, 536
+ftn, 537
+Functional group, 538
+G-RNTI, 539
+GBR, 540
+GC, 541
+GCR, 542
+Geographical routing, 543
+GERAN, 544
+GERAN Radio Network Temporary Identifier (G-RNTI), 545
+GGSN, 546
+GID1, 547
+GID2, 548
+GMLC, 549
+GMM, 550
+GMSC, 551
+GMSK, 552
+GNSS, 553
+GP, 554
+GPA, 555
+GPRS, 556
+GPRS MS, 557
+GRA, 558
+Group, 559
+Group call, 560
+Group call initiator, 561
+Group call participant, 562
+Group call server, 563
+Group call service, 564
+Group controller, 565
+GSA, 566
+GSIM, 567
+GSM, 568
+GSM BSS, 569
+GSM core network, 570
+GSM coverage, 571
+GSM session, 573
+GSM/EDGE Radio Access Network, 572
+GSN, 574
+GT, 575
+GTP, 576
+GTP-U, 577
+GTT, 578
+Guaranteed service, 579
+GUMMEI, 580
+GUP, 581
+GUTI, 582
+H-CSCF, 583
+HANDO, 584
+Handoff Gain/Loss (dB), 585
+Handover, 586
+Hard Handover, 587
+HARQ, 588
+HCS, 589
+HD-FDD, 590
+HDLC, 591
+HE, 592
+HE-VASP, 593
+HF, 594
+HFN, 595
+HHO, 596
+HI, 597
+HLC, 598
+HLR, 599
+HN, 600
+HNB Name, 601
+HO, 602
+HOLD, 603
+Home Environment, 604
+Home PLMN, 605
+HPLMN, 606
+HPS, 607
+HPU, 608
+HR, 609
+HRPD, 610
+HRR, 611
+HSCSD, 612
+HSDPA, 613
+HSN, 614
+HSS, 615
+HTTP, 616
+HTTPS, 617
+HU, 618
+I, 619
+I-Block, 620
+I-ETS, 621
+I-WLAN, 623
+I/O, 622
+IA, 624
+IAM, 625
+IC, 626
+IC Card, 627
+IC card SIM, 628
+IC(pref), 629
+ICB, 630
+ICC, 631
+ICCID, 632
+ICGW, 633
+ICI, 634
+ICIC, 635
+ICM, 636
+ICMP, 637
+ICS, 638
+ICS proforma, 639
+ICT, 640
+ID, 641
+ID-000 SIM, 642
+ID1 SIM, 643
+IDFT, 644
+IDL, 645
+Idle mode, 646
+IDN, 647
+IDNNS, 648
+IE, 649
+IEC, 650
+IED, 651
+IEI, 652
+IEIDL, 653
+IETF, 654
+IF, 655
+IFD, 656
+IFS, 657
+IFSC, 658
+IFSD, 659
+IHOSS, 660
+IIOP, 661
+IK, 662
+IM, 663
+IMA, 664
+IMC, 665
+IMEI, 666
+IMGI, 667
+IMPI, 668
+Implementation capability, 669
+Implementation Conformance Statement (ICS), 670
+IMPU, 671
+IMS, 672
+IMS Credentials (IMC), 673
+IMS Multimedia Telephony, 674
+IMS SIM (ISIM), 675
+IMSI, 676
+IMT-2000, 677
+IMUN, 678
+IN, 679
+INAP, 680
+INF, 681
+Information Data Rate, 682
+Initial paging information, 683
+Initial paging occasion, 684
+Integrity, 685
+Inter PLMN handover, 686
+Inter System Change, 687
+Inter system handover, 688
+Interactive service, 689
+Intercell handover, 690
+Interface, 691
+Interference Signal Code Power (ISCP), 692
+International Mobile Station Equipment Identity (IMEI), 693
+International mobile user number (IMUN), 694
+Interpreter, 695
+Interworking WLAN (I-WLAN), 696
+Intra PLMN handover, 697
+Intracell handover, 698
+IP, 699
+IP-CAN, 700
+IP-Connectivity Access Network (IP-CAN), 702
+IP-Connectivity Access Network bearer (IP-CAN bearer), 701
+IP-M, 703
+IPv4, 704
+IPv6, 705
+IR, 706
+ir Interface User Rate, 707
+IRP, 708
+IRP Information Model, 709
+IRP Information Service, 710
+IRP Solution Set, 711
+ISC, 712
+ISCP, 713
+ISDN, 714
+ISIM, 715
+ISO, 716
+ISP, 717
+ISUP, 718
+ITC, 719
+ITU, 720
+ITUR, 721
+Iu, 722
+Iu-flex, 723
+Iu mode, 724
+Iub, 725
+IUI, 726
+Iur, 727
+IUT, 728
+IWF, 729
+IWMSC, 730
+IWU, 731
+JAR file, 732
+JCRE, 733
+JD, 734
+JNDI, 735
+JP, 736
+JPEG, 737
+JTAPI, 738
+JVM, 739
+k, 741
+K, 740
+kB, 742
+kbps, 743
+Kc, 744
+Key pair, 745
+Ki, 746
+KSI, 747
+ksps, 748
+L1, 749
+L2, 750
+L2ML, 751
+L2R, 752
+L2R BOP, 753
+L2R COP, 754
+L3, 755
+LA, 756
+LAC, 757
+LAI, 758
+LAN, 759
+LAPB, 760
+LAPDm, 761
+LATA, 762
+LAU, 763
+LB, 764
+LCAP, 765
+LCD, 766
+LCN, 767
+LCP, 768
+LCR, 769
+LCS, 770
+LCSC, 771
+LCSS, 772
+LE, 773
+LEN, 774
+LI, 775
+LLC, 776
+llowable PLMN, 777
+llowed CSG list, 778
+Lm, 779
+LMSI, 780
+LMU, 781
+LN, 782
+LNA, 783
+LND, 784
+LNS, 785
+Local Service, 786
+Localised Service Area (LSA), 787
+Location Registration (LR), 788
+Logical Channel, 789
+Logical Channel (UICC), 790
+Logical Model, 791
+Logical O&M, 792
+LPLMN, 793
+LR, 794
+LSA, 795
+LSA exclusive access cell, 796
+LSA only access, 797
+LSA preferential access cell, 798
+LSB, 799
+LSF, 800
+LSTR, 801
+LTE, 802
+LTZ, 803
+LU, 804
+LV, 805
+M, 806
+MA, 807
+MAC, 808
+MAC-A, 809
+MAC-I, 810
+MACN, 811
+Macro cells, 812
+Macro diversity handover, 813
+MAF, 814
+MAH, 815
+MAHO, 816
+MAI, 817
+MAIO, 818
+Management Infrastructure, 819
+Mandatory UE Requirement, 820
+MAP, 821
+Master File (MF), 822
+Maximum output Power, 823
+Maximum possible AIUR, 824
+Maximum Transmitter Power Per Traffic Channel (dBm), 825
+MBMS, 826
+MBR, 827
+MBSFN, 828
+MCC, 829
+MCCH, 830
+MCE, 831
+MCH, 832
+MCI, 833
+MCML, 834
+Mcps, 835
+MCS, 836
+MCU, 837
+MD, 838
+MDL, 839
+MDS, 840
+ME, 841
+Mean bit rate, 842
+Mean transit delay, 843
+Medium Access Control, 844
+MEF, 845
+MEHO, 846
+MER, 847
+Messaging service, 848
+MExE, 849
+MExE Classmark, 850
+MExE executable, 851
+MExE server, 852
+MExE service, 853
+MExE service environment, 854
+MExE service provider, 855
+MExE SIM, 856
+MExE subscriber, 857
+MF, 858
+MGCF, 859
+MGCP, 860
+MGT, 861
+MGW, 862
+MHEG, 863
+MHS, 864
+MIB, 865
+MIC, 866
+Micro cells, 867
+MIM, 868
+MIMO, 869
+Minimum transmit power, 870
+MIP, 871
+MIPS, 872
+MLC, 873
+MM, 874
+MME, 875
+MMI, 876
+MNC, 877
+MNP, 878
+MO, 879
+MO-LR, 880
+MO-SMS, 881
+Mobile Equipment (ME), 882
+Mobile evaluated handover, 883
+Mobile number portability, 884
+Mobile Station (MS), 885
+Mobile Termination (MT), 886
+Mobility, 887
+Mobility Management, 888
+MOHO, 889
+MOP, 890
+MOS, 891
+MoU, 892
+MP, 893
+MPEG, 894
+MPH, 895
+MPTY, 896
+MRF, 897
+MRP, 898
+MS, 899
+MSAP, 900
+MSB, 901
+MSC, 902
+MSCM, 903
+MSCU, 904
+MSE, 905
+MSID, 906
+MSIN, 907
+MSISDN, 908
+MSP, 909
+MSR, 910
+MSRN, 911
+MT, 912
+MT-LR, 913
+MT-SMS, 914
+MTM, 915
+MTP, 916
+MTP3-B, 917
+MTU, 918
+MU, 919
+MUI, 920
+Multi mode terminal, 921
+Multicast service, 922
+Multimedia service, 923
+Multipoint, 924
+MUMS, 925
+MVNO, 926
+N/A, 927
+NACC, 928
+NACK, 929
+NAD, 930
+NAI, 931
+Name, 932
+NAS, 933
+NB, 934
+NBAP, 935
+NBIN, 936
+NCC, 937
+NCELL, 938
+NCH, 939
+NCK, 940
+NCP, 941
+NDC, 942
+NDS, 943
+NDUB, 944
+NE, 945
+NEF, 946
+Negotiated QoS, 947
+NEHO, 948
+NET, 949
+Network code, 950
+Network code group, 951
+Network connection, 952
+Network Element, 953
+Network Manager, 954
+Network operator, 955
+Network personalisation, 956
+Network Resource Model, 957
+Network service data unit (NSDU), 958
+Network subset code, 959
+Network subset code group, 960
+Network subset personalisation, 961
+Network termination, 962
+NEV, 963
+NF, 964
+NH, 965
+NI-LR, 966
+NIC, 967
+NITZ, 968
+NM, 969
+NMC, 970
+NMO, 971
+NMR, 972
+NMS, 973
+NMSI, 974
+NNI, 975
+NNSF, 976
+NO, 977
+Node B, 978
+Nomadic Operating Mode, 979
+Nominal Maximum Output Power, 980
+Non-Access Stratum, 981
+Normal GSM operation, 982
+Normal mode of operation, 983
+Note, 985
+NOTE, 984
+NOTE 1, 986
+NOTE 2, 987
+NOTE 3, 988
+NP, 989
+NPA, 990
+NPI, 991
+NR, 992
+NRI, 993
+NRM, 994
+NRT, 995
+NSAP, 996
+NSAPI, 997
+NSCK, 998
+NSDU, 999
+NSS, 1000
+Nt, 1002
+NT, 1001
+NTAAB, 1003
+NTDD, 1004
+NUA, 1005
+NUI, 1006
+Number, 1007
+Number portability, 1008
+Number range owner network, 1009
+NUP, 1010
+NW, 1011
+O, 1012
+O&M, 1013
+OA, 1014
+OACSU, 1015
+OCB, 1016
+OCCCH, 1017
+OCF, 1018
+OCI, 1019
+OCNG, 1020
+OCNS, 1021
+OCT, 1022
+OD, 1023
+ODB, 1024
+ODCCH, 1025
+ODCH, 1026
+ODMA, 1027
+ODTCH, 1028
+OFDM, 1029
+OFDMA, 1030
+Off-Line charging, 1031
+OFM, 1032
+OID, 1033
+OLR, 1034
+OMC, 1035
+OML, 1036
+On-Line Charging, 1037
+One Stop Billing, 1038
+Open group, 1039
+Open Service Access, 1040
+Operations System, 1041
+Operator CSG list, 1042
+OPLMN, 1043
+Optional UE Requirement, 1044
+OR, 1045
+ORACH, 1046
+Originating network, 1047
+ORLCF, 1048
+Orthogonal Channel Noise Simulator, 1049
+OS, 1050
+OSA, 1051
+OSA Interface, 1052
+OSI, 1053
+OSI RM, 1054
+OSP, 1055
+OSP:IHOSS, 1056
+OTA, 1057
+OTP, 1058
+OVSF, 1059
+P-CCPCH, 1060
+P-CPIH, 1061
+P-GW, 1062
+P-RNTI, 1063
+P-TMSI, 1064
+PA, 1065
+PABX, 1066
+PACCH, 1067
+Packet, 1068
+Packet data protocol (PDP), 1069
+Packet transfer mode, 1070
+PAD, 1071
+Padding, 1072
+PAGCH, 1073
+Paging, 1074
+Paging Block Periodicity (PBP), 1075
+Paging DRX cycle, 1076
+Paging Message Receiving Occasion, 1077
+Paging occasion, 1078
+PAP, 1079
+PAPR, 1080
+PAR, 1081
+PB, 1082
+PBCCH, 1083
+PBCH, 1084
+PBID, 1085
+PBP, 1086
+PBR, 1087
+PBX, 1088
+PC, 1089
+PCB, 1090
+PCCC, 1091
+PCCCH, 1092
+PCCH, 1093
+PCDE, 1094
+PCFICH, 1095
+PCG, 1096
+PCH, 1097
+PCI, 1098
+PCK, 1099
+PCM, 1100
+PCMCIA, 1101
+PCPCH, 1102
+PCS, 1103
+PCU, 1104
+PD, 1105
+PDCCH, 1106
+PDCH, 1107
+PDCP, 1108
+PDH, 1109
+PDN, 1110
+PDP, 1111
+PDSCH, 1112
+PDTCH, 1113
+PDU, 1114
+Peak bit rate, 1115
+Performance, 1116
+Personal Service Environment, 1117
+Personalisation, 1118
+Personalisation entity, 1119
+PG, 1120
+PH, 1121
+PHF, 1122
+PHI, 1123
+PHICH, 1124
+Phonebook, 1125
+PHS, 1126
+PHY, 1127
+PhyCH, 1128
+Physical Channel, 1129
+Physical channel data stream, 1130
+PI, 1131
+PICH, 1132
+PICH Monitoring Occasion, 1133
+Pico cells, 1134
+PICS, 1135
+PID, 1136
+Pilot Identity, 1137
+PIN, 1138
+PIXT, 1139
+PKCS, 1140
+PL, 1141
+PLMN, 1142
+PLMN Area, 1143
+PLMN Operator, 1144
+Plug-in SIM, 1145
+PMCH, 1146
+PMD, 1147
+PMI, 1148
+PN, 1149
+PNE, 1150
+PNP, 1151
+POI, 1152
+point-to-multipoint service, 1153
+Point-to-point, 1154
+Point-to-point service, 1155
+PoR, 1156
+Ported number, 1157
+Ported subscriber, 1158
+Porting process, 1159
+Postpay billing, 1160
+POTS, 1161
+Power control dynamic range, 1162
+PP, 1163
+PPCH, 1164
+PPE, 1165
+PPF, 1166
+pplet, 1167
+pplication, 1168
+pplication Dedicated File (ADF), 1169
+pplication Interface, 1170
+pplication protocol, 1171
+pplications / Clients, 1172
+PPM, 1173
+PPP, 1174
+PPS, 1175
+PRACH, 1176
+PRB, 1177
+Predictive service, 1178
+Pref CUG, 1179
+Prepay billing, 1180
+Proactive SIM, 1181
+Protocol, 1182
+Protocol data unit, 1183
+PS, 1184
+PSC, 1185
+PSCH, 1186
+PSE, 1187
+PSPDN, 1188
+PSS, 1189
+PSS_RA, 1190
+PSTN, 1191
+PTCCH, 1192
+PTM, 1193
+PTM-G, 1194
+PTM-M, 1195
+PTP, 1196
+PU, 1197
+Public land mobile network, 1198
+PUCCH, 1199
+PUCT, 1200
+PUK, 1201
+PUSCH, 1202
+PVC, 1203
+PW, 1204
+QA, 1205
+QAF, 1206
+QAM, 1207
+QCI, 1208
+QoS, 1209
+QoS profile, 1210
+QoS session, 1211
+QPP, 1212
+QPSK, 1213
+Quality of Service, 1214
+R, 1215
+R-APDU, 1216
+R-Block, 1217
+R-SGW, 1219
+R-TPDU, 1220
+r.m.s, 1218
+R99, 1221
+RA, 1222
+RA-RNTI, 1223
+RAB, 1224
+RAC, 1225
+RACH, 1226
+Radio access bearer, 1227
+Radio Access Mode, 1228
+Radio Access Network Application Part, 1229
+Radio Access Network Information Management, 1230
+Radio Access Network Operator, 1231
+Radio Access Technology, 1232
+Radio Bearer, 1233
+Radio frame, 1234
+Radio interface, 1235
+Radio link, 1236
+Radio link addition, 1237
+Radio Link Control, 1238
+Radio link removal, 1239
+Radio Link Set, 1240
+Radio Network Controller, 1241
+Radio Network Subsystem, 1242
+Radio Network Subsystem Application Part, 1243
+Radio Network Temporary Identifier, 1244
+Radio Resource Control, 1245
+Radio system, 1246
+RADIUS, 1247
+RAI, 1248
+RAN, 1249
+RAN sharing, 1250
+RANAP, 1251
+RAND, 1252
+RAT, 1253
+Rated Output Power, 1254
+RAU, 1255
+RB, 1256
+RBC, 1257
+RBER, 1258
+RBG, 1259
+RDF, 1260
+RDI, 1261
+RE, 1262
+Real time, 1263
+REC, 1264
+Received Signal Code Power, 1265
+Receiver Antenna Gain (dBi), 1266
+Receiver Noise Figure (dB), 1267
+Receiver Sensitivity (dBm), 1268
+Recipient network, 1269
+Record, 1270
+Record number, 1271
+Record pointer, 1272
+Reference configuration, 1273
+Reference point, 1274
+REFSENS, 1275
+Regionally Provided Service, 1276
+Registered PLMN (RPLMN), 1277
+Registration, 1278
+Registration Area, 1279
+REJ, 1280
+REL, 1281
+Rel-4, 1282
+Rel-5, 1283
+Relay, 1284
+Relay/Seed Gateway, 1285
+Relaylink, 1286
+Release 99, 1287
+Repeater, 1288
+REQ, 1289
+Requested QoS, 1290
+Required Eb/(No+Io) (dB), 1291
+RES, 1292
+Residual error rate, 1293
+RET, 1294
+Retrieval service, 1295
+RF, 1296
+RFC, 1297
+RFCH, 1298
+RFE, 1299
+RFN, 1300
+RFU, 1301
+RI, 1302
+RIM, 1303
+RL, 1304
+RLC, 1305
+RLCP, 1306
+RLP, 1307
+RLR, 1308
+RLS, 1309
+rms, 1311
+RMS, 1310
+RNC, 1312
+RNL, 1313
+RNS, 1314
+RNSAP, 1315
+RNTABLE, 1316
+RNTI, 1317
+Roaming, 1318
+ROHC, 1319
+Root directory, 1320
+Root Relay, 1321
+RPF, 1322
+RPLMN, 1323
+RPOA, 1324
+RR, 1325
+RRC, 1326
+RRC Connection, 1327
+RRM, 1328
+RS, 1329
+RSA, 1330
+RSCP, 1331
+RSE, 1332
+RSL, 1333
+RSRP, 1334
+RSRQ, 1335
+RSSI, 1336
+RST, 1337
+RSVP, 1338
+RSZI, 1339
+RT, 1340
+RTE, 1341
+RTP, 1342
+RU, 1343
+RWB, 1344
+RX, 1345
+RXLEV, 1346
+RXQUAL, 1347
+S-Block, 1348
+S-CCPCH, 1349
+S-CPICH, 1350
+S-CSCF, 1351
+S-GW, 1352
+S-RNTI, 1353
+S-TMSI, 1354
+S1-C, 1355
+S1-MME, 1356
+S1-U, 1357
+SAAL, 1358
+SABM, 1359
+SACCH, 1360
+SACCH/C4, 1361
+SACCH/C8, 1362
+SACCH/T, 1363
+SACCH/TF, 1364
+SACCH/TH, 1365
+SAD, 1366
+SAE, 1367
+SAP, 1368
+SAPI, 1369
+SAR, 1370
+SAT, 1371
+SB, 1372
+SBLP, 1373
+SBSC, 1374
+SBSS, 1375
+SC, 1376
+SC-FDMA, 1377
+SCCH, 1378
+SCCP, 1379
+SCF, 1380
+SCH, 1381
+SCI, 1382
+SCN, 1383
+SCP, 1384
+SCTP, 1385
+SCUDIF, 1386
+SDCCH, 1387
+SDF, 1388
+SDH, 1389
+SDL, 1390
+SDMA, 1391
+SDN, 1392
+SDP, 1393
+SDT, 1394
+SDU, 1395
+SDU error probability, 1396
+SDU loss probability, 1397
+SDU misdelivery probability, 1398
+SDU transfer delay, 1399
+SDU transfer rate, 1400
+SE, 1401
+Seamless handover, 1402
+Sector, 1403
+Secured Packet, 1404
+Security, 1405
+Seed, 1406
+SEF, 1407
+SeGW, 1408
+Selected PLMN, 1409
+Service, 1410
+Service-less UE, 1427
+Service Access Point, 1411
+Service Area, 1412
+Service attribute, 1413
+Service bit rate, 1414
+Service Capabilities, 1415
+Service Capability Feature, 1416
+Service Capability Server, 1417
+Service category or service class, 1418
+Service Continuity, 1419
+Service Control, 1420
+Service Data Unit (SDU), 1421
+Service delay, 1422
+Service Enabler, 1423
+Service Execution Environment, 1424
+Service Feature, 1425
+Service Implementation Capabilities, 1426
+Service model, 1428
+Service Provider, 1429
+Service receiver, 1430
+Service relationship, 1431
+Service request, 1432
+Service requester, 1433
+Service Specific Entities, 1434
+Service subscriber, 1435
+Services (of a mobile cellular system), 1436
+Serving BSS, 1437
+Serving Network, 1438
+Serving RNS, 1439
+Settlement, 1440
+SF, 1441
+SFH, 1442
+SFI, 1443
+SFN, 1444
+SGSN, 1445
+Shared Channel, 1446
+Shared Network, 1447
+SHCCH, 1448
+Short File Identifier (SFI), 1449
+Short time, 1450
+SI, 1451
+SI-RNTI, 1452
+SIB, 1453
+SIBX, 1454
+SIC, 1455
+SID, 1456
+Signalling, 1457
+Signalling connection, 1458
+Signalling link, 1459
+SIM, 1460
+SIM application toolkit procedures, 1461
+SIM code, 1462
+Simultaneous use of services, 1463
+SINR, 1464
+SIP, 1465
+SIR, 1466
+SLA, 1467
+SLPP, 1468
+SLR, 1469
+SLTM, 1470
+SM, 1471
+SMC, 1472
+SMDS, 1473
+SME, 1474
+SMG, 1475
+SMI, 1476
+SMLC, 1477
+SMS, 1478
+SMS-CB, 1479
+SMS-PP, 1480
+SMS-SC, 1481
+Smt, 1482
+SN, 1483
+SNDCP, 1484
+SNMP, 1485
+SNR, 1486
+SO, 1487
+SOA, 1488
+Soft Handover, 1489
+SoLSA, 1490
+SoR, 1491
+SP, 1492
+SP code, 1493
+SP code group, 1494
+SP personalisation, 1495
+SPC, 1496
+SPCK, 1497
+Speed, 1498
+SPI, 1499
+SPID, 1500
+SPS, 1501
+SPS C-RNTI, 1502
+SQN, 1503
+SR, 1504
+SRB, 1505
+SRES, 1506
+SRNC, 1507
+SRNC Radio Network Temporary Identifier (S-RNTI), 1508
+SRNS, 1509
+SRNS Relocation, 1510
+SRS, 1511
+SS, 1512
+SS7, 1513
+SSC, 1514
+SSCF, 1515
+SSCF-NNI, 1516
+SSCOP, 1517
+SSCS, 1518
+SSDT, 1519
+SSE, 1520
+SSF, 1521
+SSN, 1522
+SSS, 1523
+SSS_RA, 1524
+SSSAR, 1525
+STC, 1526
+Steering of Roaming, 1527
+STMR, 1528
+STP, 1529
+Stratum, 1530
+STTD, 1531
+SU, 1532
+Sub Network Management Functions, 1533
+Subscribed QoS, 1534
+Subscriber, 1535
+Subscription, 1536
+Subscription Management (SuM), 1537
+Suitable Cell, 1538
+SuM, 1539
+Supplementary service, 1540
+SVC, 1541
+SVN, 1542
+SW, 1543
+SW1/SW2, 1544
+System Area, 1545
+T, 1546
+T-SGW, 1547
+TA, 1548
+TAC, 1549
+TAF, 1550
+TAI, 1551
+TAR, 1552
+TB, 1553
+TBD, 1554
+TBF, 1555
+TBR, 1556
+TC, 1557
+TC-TR, 1558
+TCH, 1559
+TCH/F, 1560
+TCH/F2,4, 1561
+TCH/F4,8, 1562
+TCH/F9,6, 1563
+TCH/FS, 1564
+TCH/H, 1565
+TCH/H2,4, 1566
+TCH/H4,8, 1567
+TCH/HS, 1568
+TCI, 1569
+TCP, 1570
+TD-CDMA, 1571
+TDD, 1572
+TDM, 1573
+TDMA, 1574
+TDoc, 1575
+TE, 1576
+TE9, 1577
+Tei, 1578
+TEID, 1579
+Teleaction service, 1580
+Telecommunication service, 1581
+Teleservice, 1582
+Terminal, 1583
+Terminal Equipment (TE), 1584
+Test environment, 1585
+Text conversation, 1586
+Text Telephony, 1587
+TF, 1588
+TFA, 1589
+TFC, 1590
+TFCI, 1591
+TFCS, 1592
+TFI, 1593
+TFIN, 1594
+TFP, 1595
+TFS, 1596
+TFT, 1597
+Throughput, 1598
+TI, 1599
+TLLI, 1600
+TLS, 1601
+TLV, 1602
+TM, 1603
+TMA, 1604
+TMD, 1605
+TMF, 1606
+TMN, 1607
+TMSI, 1608
+TN, 1609
+TNL, 1610
+TO, 1611
+TOA, 1612
+TON, 1613
+Toolkit applet, 1614
+Total Conversation, 1615
+Total power dynamic range, 1616
+TP, 1617
+TPC, 1618
+TPC-RNTI, 1619
+TPDU, 1620
+TPMI, 1621
+TR, 1622
+Traffic channel, 1623
+Transit delay, 1624
+Transmission Time Interval, 1625
+Transmitter Antenna Gain (dBi), 1626
+Transport Block, 1627
+Transport Block Set, 1628
+Transport Block Set Size, 1629
+Transport Block Size, 1630
+Transport channel, 1631
+Transport Format, 1632
+Transport Format Combination, 1633
+Transport Format Combination Indicator (TFCI), 1634
+Transport Format Combination Set, 1635
+Transport Format Identification  (TFI in UTRAN, TFIN in GERAN), 1636
+Transport Format Set, 1637
+TRAU, 1638
+TrCH, 1639
+TRX, 1640
+TS, 1641
+TSC, 1642
+TSDI, 1643
+TSG, 1644
+TSTD, 1645
+TTCN, 1646
+TTI, 1647
+TUP, 1648
+TV, 1649
+TX, 1650
+TX Diversity, 1651
+TXPWR, 1652
+U-plane, 1653
+U-RNTI, 1654
+UARFCN, 1657
+UARFN, 1658
+UART, 1659
+UCI, 1660
+UCS2, 1661
+UDCH, 1662
+UDD, 1663
+UDI, 1664
+UDP, 1665
+UDUB, 1666
+UE, 1667
+UE-AMBR, 1668
+UE Service Capabilities, 1669
+UER, 1670
+UI, 1671
+UIA, 1672
+UIC, 1673
+UICC, 1674
+UL, 1675
+UL-SCH, 1676
+UM, 1677
+UMD, 1678
+UML, 1679
+UMS, 1680
+UMSC, 1681
+UMTS, 1682
+UNI, 1683
+Universal Subscriber Identity Module (USIM), 1684
+Universal Terrestrial Radio Access Network (UTRAN), 1685
+UP, 1686
+UPCMI, 1687
+UPD, 1688
+UPE, 1689
+Uplink, 1690
+UpPTS, 1691
+UPT, 1692
+URA, 1693
+URA updating, 1694
+URAN, 1695
+URB, 1696
+URI, 1697
+URL, 1698
+Usage Parameter Control (UPC), 1699
+USAT, 1700
+USB, 1701
+USC, 1702
+USCH, 1703
+User, 1704
+User-network interface, 1708
+User-user protocol, 1711
+User access or user network access, 1705
+User Equipment (UE), 1706
+User Interface Profile, 1707
+User Profile, 1709
+User Services Profile, 1710
+USF, 1712
+USIM, 1713
+USSD, 1714
+UT, 1715
+UTRA, 1716
+UTRA-NTDD, 1717
+UTRA-TDD, 1719
+UTRA-WTDD, 1720
+UTRA Radio access mode, 1718
+UTRAN, 1721
+UTRAN access point, 1722
+UTRAN Radio Network Temporary Identifier, 1723
+UTRAN Registration Area, 1724
+Uu, 1725
+UUI, 1726
+UUS, 1727
+V, 1728
+V(SD), 1729
+VA, 1730
+VAD, 1731
+Value Added Service Provider, 1732
+VAP, 1733
+Variable bit rate service, 1734
+VASP, 1735
+VBR, 1736
+VBS, 1737
+VC, 1738
+VGCS, 1739
+VHE, 1740
+Virtual Home Environment, 1741
+Virtual Machine, 1742
+Visited PLMN, 1743
+Visited PLMN of home country, 1744
+VLR, 1745
+VMSC, 1746
+VoIP, 1747
+VPLMN, 1748
+VPN, 1749
+VRB, 1750
+VSC, 1751
+VTX host, 1752
+WAE, 1753
+WAP, 1754
+WBEM, 1755
+WCDMA, 1756
+WDP, 1757
+WG, 1758
+WIM, 1759
+WIN, 1760
+WLAN, 1761
+WLAN UE, 1762
+WPA, 1763
+WS, 1764
+WSP, 1765
+WTA, 1766
+WTAI, 1767
+WTDD, 1768
+WTLS, 1769
+WTP, 1770
+WTX, 1771
+WWT, 1772
+WWW, 1773
+X-MAC, 1774
+X2-C, 1775
+X2-U, 1776
+xCH_RA, 1777
+xCH_RB, 1778
+XID, 1779
+XMAC, 1780
+XML, 1781
+XRES, 1782

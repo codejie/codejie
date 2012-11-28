@@ -40,7 +40,9 @@ public class MyReader {
 			
 			final int offset = buf.getInt(0x5C) + 0x60;
 			if(buf.limit() > offset) {
-				
+				Output("Info Offset = 0x" + Integer.toHexString(offset));
+				Output("Info Type = 0x" + Integer.toHexString(buf.getInt(offset)));
+				Output("Info Size = " + (buf.getInt(offset + 4) + offset + 12));
 			}
 			else {
 				Output("The file is not a LD2 file.");

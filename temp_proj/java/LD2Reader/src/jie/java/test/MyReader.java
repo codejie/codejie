@@ -38,11 +38,37 @@ public class MyReader {
 			Output("Version = " + buf.getShort(0x18) + "." + buf.getShort(0x1A));
 			Output("ID = 0x" + Long.toHexString(buf.getLong(0x1C)));
 			
-			final int offset = buf.getInt(0x5C) + 0x60;
+			int offset = buf.getInt(0x5C) + 0x60;
 			if(buf.limit() > offset) {
 				Output("Info Offset = 0x" + Integer.toHexString(offset));
 				Output("Info Type = 0x" + Integer.toHexString(buf.getInt(offset)));
-				Output("Info Size = " + (buf.getInt(offset + 4) + offset + 12));
+				Output("Info Size = 0x" + Integer.toHexString((buf.getInt(offset + 4) + offset + 12)));
+				if (buf.getInt(offset) != 3 && buf.limit() > (offset - 0x1C)) {
+					offset = (buf.getInt(offset + 4) + offset + 12);
+				}
+				else if(buf.getInt(offset) != 3) {
+					Output("The file is not a LD2 local file.");
+					return;
+				}
+				Output("Dictionary Type = 0x" + Integer.toHexString(buf.getInt(offset)));
+				Output("Dictionary Limit = 0x" + Integer.toHexString(buf.getInt(offset + 4) + offset + 8));
+				
+				final int offsetIndex = offset + 0x1C;
+				final int offsetCompressedDataHeader = buf.getInt(offset + 8) + offsetIndex;
+				final int lenInflatedWordsIndex = buf.getInt(offset + 12);
+				final int lenInflatedWords = buf.getInt(offset + 16);
+				final int lenInflatedXml = buf.getInt(offset + 20);
+				final int countDefinitions = (offsetCompressedDataHeader - offsetIndex) / 4;
+				//buf.position(buf.position() + countDefinitions * 4);
+				final int offsetCompressedData = buf.position();
+				
+				Output("Index Offset = 0x" + Integer.toHexString(offsetIndex));
+				Output("Compressed Data Header Offset = 0x" + Integer.toHexString(offsetCompressedDataHeader));
+				Output("Compressed Data Offset = 0x" + Integer.toHexString(offsetCompressedData));
+				Output("Length of Inflated Words Index = 0x" + Integer.toHexString(lenInflatedWordsIndex));
+				Output("Length of Inflated Word = 0x" + Integer.toHexString(lenInflatedWords));
+				Output("Length of Inflated Xml = 0x" + Integer.toHexString(lenInflatedXml));
+				Output("Quantity of Definitions = 0x" + Integer.toHexString(countDefinitions) + "(" + countDefinitions + ")");
 			}
 			else {
 				Output("The file is not a LD2 file.");

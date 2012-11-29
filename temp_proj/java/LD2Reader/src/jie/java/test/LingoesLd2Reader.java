@@ -185,6 +185,7 @@ public class LingoesLd2Reader {
 	        LingoesLd2Reader.decompress(inflatedFile, dataRawBytes, lastOffset, offset - lastOffset, append);
 	        append = true;
 	        lastOffset = offset;
+//	        break;
 	      }
 	    } catch (final Throwable e) {
 	      System.err.println("解压缩失败: 0x" + Integer.toHexString(offset) + ": " + e.toString());

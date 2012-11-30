@@ -1,13 +1,30 @@
 package jie.java.test;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 public class MyReader {
 
+	
+	private static int limitData = 0;
+	private static int offsetIndex = 0;
+	private static int offsetCompressedDataHeader = 0;
+	private static int lenInflatedWordsIndex = 0;
+	private static int lenInflatedWords = 0;
+	private static int lenInflatedXml = 0;
+	private static int countDefinitions = 0;
+	private static int offsetCompressedData = 0;
+	
+	private static ArrayList<Integer> listDataBlock = new ArrayList<Integer>();
+	
 	/**
 	 * @param args
 	 */
@@ -15,7 +32,12 @@ public class MyReader {
 		final String ld2file = "./data/3GPP.ld2";//"./data/Vicon English-Chinese(S) Dictionary.ld2";
 		
 		try {
-			checkLD2File(ld2file);
+			checkFile(ld2file);
+			
+			inflateFile(ld2file);
+			
+			getData(0);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -23,7 +45,7 @@ public class MyReader {
 		
 	}
 
-	private static void checkLD2File(String ld2file) throws IOException {
+	private static void checkFile(String ld2file) throws IOException {
 		
 		RandomAccessFile file = null;
 		try {
@@ -52,29 +74,28 @@ public class MyReader {
 				}
 				Output("Dictionary Type = 0x" + Integer.toHexString(buf.getInt(offset)));
 				
-				final int limitData = buf.getInt(offset + 4) + offset + 8;
+				limitData = buf.getInt(offset + 4) + offset + 8;
 				Output("Data Limit = 0x" + Integer.toHexString(limitData));
 				
-				final int offsetIndex = offset + 0x1C;
-				final int offsetCompressedDataHeader = buf.getInt(offset + 8) + offsetIndex;
-				final int lenInflatedWordsIndex = buf.getInt(offset + 12);
-				final int lenInflatedWords = buf.getInt(offset + 16);
-				final int lenInflatedXml = buf.getInt(offset + 20);
-				final int countDefinitions = (offsetCompressedDataHeader - offsetIndex) / 4;	
+				offsetIndex = offset + 0x1C;
+				offsetCompressedDataHeader = buf.getInt(offset + 8) + offsetIndex;
+				lenInflatedWordsIndex = buf.getInt(offset + 12);
+				lenInflatedWords = buf.getInt(offset + 16);
+				lenInflatedXml = buf.getInt(offset + 20);
+				countDefinitions = (offsetCompressedDataHeader - offsetIndex) / 4;	
 
-				buf.position(offsetCompressedDataHeader + 8);
-				int countCompressedBlock = -1;
+				buf.position(offsetCompressedDataHeader + 8 + 4);
 				do {
 					offset = buf.getInt();
-					++ countCompressedBlock;
+					listDataBlock.add(offset);
 				} while((offset + buf.position()) < limitData); 
 				
-				final int offsetCompressedData = buf.position();
+				offsetCompressedData = buf.position();
 				
 				Output("Index Offset = 0x" + Integer.toHexString(offsetIndex));
 				Output("Compressed Data Header Offset = 0x" + Integer.toHexString(offsetCompressedDataHeader));
 				Output("Compressed Data Offset = 0x" + Integer.toHexString(offsetCompressedData));
-				Output("Quantity of Compressed Data = 0x" + Integer.toHexString(countCompressedBlock) + "(" + countCompressedBlock + ")");
+				Output("Quantity of Compressed Data = 0x" + Integer.toHexString(listDataBlock.size()) + "(" + listDataBlock.size() + ")");
 				Output("Length of Inflated Words Index = 0x" + Integer.toHexString(lenInflatedWordsIndex));
 				Output("Length of Inflated Word = 0x" + Integer.toHexString(lenInflatedWords));
 				Output("Length of Inflated Xml = 0x" + Integer.toHexString(lenInflatedXml));
@@ -87,6 +108,68 @@ public class MyReader {
 		finally {
 			file.close();
 		}
+	}
+
+	private static void inflateFile(String ld2file) throws IOException {
+		RandomAccessFile file = null;
+		try {
+			file = new RandomAccessFile(ld2file, "r");
+			final ByteBuffer buf = ByteBuffer.allocate((int) file.getChannel().size());
+			file.getChannel().read(buf);
+			
+//			buf.position(offsetCompressedData);
+			int offset = offsetCompressedData;
+			int tmp = offsetCompressedData;
+			for (final Integer block : listDataBlock) {
+				tmp = offsetCompressedData + block.intValue();
+				Output("Decompress = " + offset + " length = " + (tmp - offset));
+				decompress(buf, offset, tmp - offset);
+				Output("Done.");
+				offset = tmp;
+			}		
+		}
+		finally {
+			file.close();
+		}
+	}	
+	
+	private static void decompress(ByteBuffer buf, int offset, int length) throws IOException {
+		final Inflater inflater = new Inflater();
+		final InflaterInputStream in = new InflaterInputStream(new ByteArrayInputStream(buf.array(), offset, length), inflater, 1024 * 8);
+		final FileOutputStream out = new FileOutputStream("output.data", true);
+		
+	    final byte[] buffer = new byte[1024 * 8];
+	    int len;
+	    while ((len = in.read(buffer)) > 0) {
+	      out.write(buffer, 0, len);
+	    }		
+		
+		inflater.end();
+		out.close();
+	}
+	
+	private static void getData(final int index) throws IOException {
+		RandomAccessFile file = new RandomAccessFile("output.data", "r");
+		final ByteBuffer buf = ByteBuffer.allocate((int) file.getChannel().size());
+		file.getChannel().read(buf);
+	    buf.order(ByteOrder.LITTLE_ENDIAN);
+		int offset = 0;
+		final int idx[] = new int[6];//		
+		getIndex(buf, offset, idx);
+
+		
+
+		file.close();
+	}
+
+	private static void getIndex(ByteBuffer buf, int offset, final int[] idx) {
+		buf.position(offset);
+		idx[0] = buf.getInt();
+		idx[1] = buf.getInt();
+		idx[2] = buf.get();
+		idx[3] = buf.get();
+		idx[4] = buf.getInt();
+		idx[5] = buf.getInt();
 	}
 
 	private static void Output(String string) {

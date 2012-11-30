@@ -134,7 +134,8 @@ public class LingoesLd2Reader {
 	      dataRawBytes.position(8);
 
 	      for (int i = 0; i < defTotal; i++) {
-	        LingoesLd2Reader.readDefinitionData(dataRawBytes, offsetDefs, offsetXml, dataLen, encodings[0], encodings[1], idxData, defData, i);
+	        //LingoesLd2Reader.readDefinitionData(dataRawBytes, offsetDefs, offsetXml, dataLen, encodings[0], encodings[1], idxData, defData, i);
+	    	  LingoesLd2Reader.readDefinitionData(dataRawBytes, offsetDefs, offsetXml, dataLen, AVAIL_ENCODINGS[0], AVAIL_ENCODINGS[0], idxData, defData, i);
 
 	        words[i] = defData[0];
 	        defsWriter.write(defData[0]);
@@ -148,7 +149,7 @@ public class LingoesLd2Reader {
 	        outputWriter.write(defData[1]);
 	        outputWriter.write("\n");
 
-	        System.out.println(defData[0] + " = " + defData[1]);
+//	        System.out.println(defData[0] + " = " + defData[1]);
 	        counter++;
 	      }
 
@@ -182,6 +183,7 @@ public class LingoesLd2Reader {
 	    try {
 	      for (final Integer offsetRelative : deflateStreams) {
 	        offset = startOffset + offsetRelative.intValue();
+	        System.out.println("offset = " + lastOffset + " Length = " + (offset - lastOffset));
 	        LingoesLd2Reader.decompress(inflatedFile, dataRawBytes, lastOffset, offset - lastOffset, append);
 	        append = true;
 	        lastOffset = offset;

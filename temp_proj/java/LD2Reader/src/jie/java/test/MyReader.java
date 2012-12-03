@@ -7,7 +7,12 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CoderResult;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
@@ -29,7 +34,7 @@ public class MyReader {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		final String ld2file = "./data/3GPP.ld2";//"./data/Vicon English-Chinese(S) Dictionary.ld2";
+		final String ld2file = "./data/Vicon English-Chinese(S) Dictionary.ld2";
 		
 		try {
 			checkFile(ld2file);
@@ -122,9 +127,9 @@ public class MyReader {
 			int tmp = offsetCompressedData;
 			for (final Integer block : listDataBlock) {
 				tmp = offsetCompressedData + block.intValue();
-				Output("Decompress = " + offset + " length = " + (tmp - offset));
+				//Output("Decompress = " + offset + " length = " + (tmp - offset));
 				decompress(buf, offset, tmp - offset);
-				Output("Done.");
+				//Output("Done.");
 				offset = tmp;
 			}		
 		}
@@ -153,12 +158,13 @@ public class MyReader {
 		final ByteBuffer buf = ByteBuffer.allocate((int) file.getChannel().size());
 		file.getChannel().read(buf);
 	    buf.order(ByteOrder.LITTLE_ENDIAN);
-		int offset = 0;
+		int offset = 53;
 		final int idx[] = new int[6];//		
-		getIndex(buf, offset, idx);
-
+		getIndex(buf, offset * 10, idx);
+		Output("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
+		Output("xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+		Output("ref = " + idx[3]);
 		
-
 		file.close();
 	}
 
@@ -171,7 +177,35 @@ public class MyReader {
 		idx[4] = buf.getInt();
 		idx[5] = buf.getInt();
 	}
+	
+	private static final String getWord(ByteBuffer buf, int offset, int len) {
+		String word = new String(UTF8Decode(buf, lenInflatedWordsIndex + offset, len));
+		return word;
+	}
+	
+	private static final String getXml(ByteBuffer buf, int offset, int len) {
+		String xml = new String(UTF8Decode(buf, lenInflatedWordsIndex + lenInflatedWords + offset, len));
+		return xml;
+	}
 
+	private static char[] UTF8Decode(final ByteBuffer buf, final int offset, final int len) {
+		final Charset cs = Charset.forName("UTF-8");
+		final CharsetDecoder cd = cs.newDecoder();
+		int size = (int) cd.maxCharsPerByte();
+		char[] ret = new char[ len * size ];
+		final CharBuffer retbuf = CharBuffer.wrap(ret);
+		
+		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offset, len);
+		CoderResult cr = cd.decode(in, retbuf, true);
+		cr = cd.flush(retbuf);
+		
+		if(ret.length != len) {
+			ret = Arrays.copyOf(ret, len);
+		}
+		
+		return ret;
+	}
+	
 	private static void Output(String string) {
 		System.out.println(string);
 	}

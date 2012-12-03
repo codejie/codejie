@@ -34,7 +34,7 @@ public class LingoesLd2Reader {
 	    // download from
 	    // https://skydrive.live.com/?cid=a10100d37adc7ad3&sc=documents&id=A10100D37ADC7AD3%211172#cid=A10100D37ADC7AD3&sc=documents
 	    // String ld2File = Helper.DIR_IN_DICTS+"\\lingoes\\Prodic English-Vietnamese Business.ld2";
-	    final String ld2File = "./data/3GPP.ld2";
+	    final String ld2File = "./data/Vicon English-Chinese(S) Dictionary.ld2";
 
 	    // read lingoes ld2 into byte array
 	    final ByteBuffer dataRawBytes;
@@ -205,6 +205,9 @@ public class LingoesLd2Reader {
 	    int currenXmlOffset = idxData[5];
 
 	    String xml = LingoesLd2Reader.strip(new String(xmlStringDecoder.decode(inflatedBytes.array(), offsetXml + lastXmlPos, currenXmlOffset - lastXmlPos)));
+	    if(refs > 1) {
+	    	return;
+	    }
 	    while (refs-- > 0) {
 	      final int ref = inflatedBytes.getInt(offsetWords + lastWordPos);
 	      LingoesLd2Reader.getIdxData(inflatedBytes, dataLen * ref, idxData);

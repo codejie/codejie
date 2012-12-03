@@ -205,9 +205,9 @@ public class LingoesLd2Reader {
 	    int currenXmlOffset = idxData[5];
 
 	    String xml = LingoesLd2Reader.strip(new String(xmlStringDecoder.decode(inflatedBytes.array(), offsetXml + lastXmlPos, currenXmlOffset - lastXmlPos)));
-	    if(refs > 1) {
-	    	return;
-	    }
+//	    if(refs > 1) {
+//	    	return;
+//	    }
 	    while (refs-- > 0) {
 	      final int ref = inflatedBytes.getInt(offsetWords + lastWordPos);
 	      LingoesLd2Reader.getIdxData(inflatedBytes, dataLen * ref, idxData);

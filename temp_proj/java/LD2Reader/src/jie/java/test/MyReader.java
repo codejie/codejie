@@ -158,13 +158,30 @@ public class MyReader {
 		final ByteBuffer buf = ByteBuffer.allocate((int) file.getChannel().size());
 		file.getChannel().read(buf);
 	    buf.order(ByteOrder.LITTLE_ENDIAN);
-		int offset = 53;
+		int offset = 29;
 		final int idx[] = new int[6];//		
 		getIndex(buf, offset * 10, idx);
-		Output("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
-		Output("xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
-		Output("ref = " + idx[3]);
-		
+
+		if(idx[5] != idx[1]) {
+			Output("self xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+		}
+		if(idx[3] == 0) {
+			Output("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
+		}
+		else {
+			int ref = idx[3];
+			int offsetword = idx[0];
+			final int lenword = idx[4] - idx[0];
+			
+			while(ref -- > 0) {
+				offset = buf.getInt(lenInflatedWordsIndex + idx[0]);
+				getIndex(buf, offset * 10, idx);
+				Output("ref(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+				offsetword += 4;
+			}
+			Output("word = " + getWord(buf, offsetword, lenword));
+		}
+
 		file.close();
 	}
 

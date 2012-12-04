@@ -17,6 +17,16 @@ import java.util.zip.InflaterInputStream;
 
 public class MyReader {
 
+	public static final class BlockData {
+
+		public int index = 0;
+		public int start = 0;
+		public int end = 0;
+		
+		public final String toString() {
+			return "index (" + index + ") = " + start + " : " + end; 
+		}
+	}	
 
 	private static int offsetCompressedData = 0;
 	private static int lengthCompressedData = 0;
@@ -30,6 +40,8 @@ public class MyReader {
 	
 	private static ArrayList<Integer> listCompressedDataBlock = new ArrayList<Integer>();
 	
+	static ArrayList<BlockData> listInflatedBlock = new ArrayList<BlockData>();
+
 	/**
 	 * @param args
 	 */
@@ -42,7 +54,11 @@ public class MyReader {
 			
 			inflateFile(ld2file);
 			
-			getData(0);
+//			final int countDefinitions = lengthIndex / 4;
+//			for(int i = 0; i < lengthIndex / 4; ++ i) {
+//				getData(i);
+//			}
+			//getData(0);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -131,33 +147,57 @@ public class MyReader {
 			int offset = offsetCompressedData;
 			int tmp = offsetCompressedData;
 			int counter = 0;
+						
+			int start = 0;
+			int size = 0;
+			
 			for (final Integer block : listCompressedDataBlock) {
 				tmp = offsetCompressedData + block.intValue();
-				Output(counter ++ + " : Decompress = " + Integer.toHexString(offset) + " length = " + Integer.toHexString((tmp - offset)));
-				decompress(buf, offset, tmp - offset);
+				Output(counter + " : Decompress = " + Integer.toHexString(offset) + " length = " + Integer.toHexString((tmp - offset)));
+				size = decompress(buf, offset, tmp - offset);
 				Output("Done.");
 				offset = tmp;
+				
+				BlockData data = new BlockData();
+				data.index = counter ++ ;
+				data.start = start;
+				data.end = (start += size);
+				
+				listInflatedBlock.add(data);
 			}		
 		}
 		finally {
 			file.close();
 		}
+		
+		for(final BlockData data : listInflatedBlock) {
+			Output(data.toString());
+		}
 	}	
 	
-	private static void decompress(ByteBuffer buf, int offset, int length) throws IOException {
+	private static int decompress(ByteBuffer buf, int offset, int length) throws IOException {
 		final Inflater inflater = new Inflater();
 		final InflaterInputStream in = new InflaterInputStream(new ByteArrayInputStream(buf.array(), offset, length), inflater, 1024 * 8);
-		final FileOutputStream out = new FileOutputStream("output.data." + offset, true);
+		final FileOutputStream out = new FileOutputStream("output.data", true);
 		
 	    final byte[] buffer = new byte[1024 * 8];
 	    int len;
+	    int ret = 0;
 	    while ((len = in.read(buffer)) > 0) {
 	      out.write(buffer, 0, len);
+	      ret += len;
 	    }		
 		
 		inflater.end();
 		out.close();
+		
+		return ret;
 	}
+	
+	//wordid -> word -> index -> xml offset and length
+	// t1 : wordid -> word -> index
+	// t2 : wordid -> xml offset and length -> block 1 -> block 2
+	// t3 : block index -> block offset -> block size
 	
 	private static void getData(final int index) throws IOException {
 		RandomAccessFile file = new RandomAccessFile("output.data", "r");

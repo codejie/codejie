@@ -1,7 +1,6 @@
 package jie.java.test;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -18,23 +17,25 @@ import java.util.zip.InflaterInputStream;
 
 public class MyReader {
 
-	
-	private static int limitData = 0;
-	private static int offsetIndex = 0;
-	private static int offsetCompressedDataHeader = 0;
-	private static int lenInflatedWordsIndex = 0;
-	private static int lenInflatedWords = 0;
-	private static int lenInflatedXml = 0;
-	private static int countDefinitions = 0;
+
 	private static int offsetCompressedData = 0;
+	private static int lengthCompressedData = 0;
+	private static int offsetIndex = 0;
+	private static int lengthIndex = 0;
+	private static int offsetInflatedWords = 0;
+	private static int lengthInflatedWords = 0;
+	private static int offsetInflatedXml = 0;
+	private static int lengthInflatedXml = 0;
+//	private static int countDefinitions = 0;
 	
-	private static ArrayList<Integer> listDataBlock = new ArrayList<Integer>();
+	private static ArrayList<Integer> listCompressedDataBlock = new ArrayList<Integer>();
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		final String ld2file = "./data/Vicon English-Chinese(S) Dictionary.ld2";
+		final String ld2file = "./data/3GPP.ld2";//"./data/Vicon English-Chinese(S) Dictionary.ld2";
+		//final String ld2file = "./data/Vicon English-Chinese(S) Dictionary.ld2";
 		
 		try {
 			checkFile(ld2file);
@@ -79,31 +80,35 @@ public class MyReader {
 				}
 				Output("Dictionary Type = 0x" + Integer.toHexString(buf.getInt(offset)));
 				
-				limitData = buf.getInt(offset + 4) + offset + 8;
-				Output("Data Limit = 0x" + Integer.toHexString(limitData));
+				lengthCompressedData = buf.getInt(offset + 4) + offset + 8;
+//				Output("Data Limit = 0x" + Integer.toHexString(lengthCompressedData) + "(" + lengthCompressedData + ")");
 				
+				lengthIndex = buf.getInt(offset + 8);// + offsetIndex;
+				offsetInflatedWords = buf.getInt(offset + 12);
+				lengthInflatedWords = buf.getInt(offset + 16);
+				lengthInflatedXml = buf.getInt(offset + 20);
 				offsetIndex = offset + 0x1C;
-				offsetCompressedDataHeader = buf.getInt(offset + 8) + offsetIndex;
-				lenInflatedWordsIndex = buf.getInt(offset + 12);
-				lenInflatedWords = buf.getInt(offset + 16);
-				lenInflatedXml = buf.getInt(offset + 20);
-				countDefinitions = (offsetCompressedDataHeader - offsetIndex) / 4;	
+				offsetInflatedXml = offsetInflatedWords + lengthInflatedWords;
+				
+				final int countDefinitions = (lengthIndex) / 4;	
 
-				buf.position(offsetCompressedDataHeader + 8 + 4);
+				buf.position(offsetIndex + lengthIndex + 8 + 4);
 				do {
 					offset = buf.getInt();
-					listDataBlock.add(offset);
-				} while((offset + buf.position()) < limitData); 
+					listCompressedDataBlock.add(offset);
+				} while((offset + buf.position()) < lengthCompressedData); 
 				
 				offsetCompressedData = buf.position();
 				
 				Output("Index Offset = 0x" + Integer.toHexString(offsetIndex));
-				Output("Compressed Data Header Offset = 0x" + Integer.toHexString(offsetCompressedDataHeader));
+				Output("Index Length = 0x" + Integer.toHexString(lengthIndex));
 				Output("Compressed Data Offset = 0x" + Integer.toHexString(offsetCompressedData));
-				Output("Quantity of Compressed Data = 0x" + Integer.toHexString(listDataBlock.size()) + "(" + listDataBlock.size() + ")");
-				Output("Length of Inflated Words Index = 0x" + Integer.toHexString(lenInflatedWordsIndex));
-				Output("Length of Inflated Word = 0x" + Integer.toHexString(lenInflatedWords));
-				Output("Length of Inflated Xml = 0x" + Integer.toHexString(lenInflatedXml));
+				Output("Compressed Data Length = 0x" + Integer.toHexString(lengthCompressedData));
+				Output("Inflated Words Offset = 0x" + Integer.toHexString(offsetInflatedWords));
+				Output("Inflated Word Length = 0x" + Integer.toHexString(lengthInflatedWords));
+				Output("Inflated Xml Offset = 0x" + Integer.toHexString(offsetInflatedXml));
+				Output("Inflated Xml Length = 0x" + Integer.toHexString(lengthInflatedXml));
+				Output("Quantity of Compressed Data Block = 0x" + Integer.toHexString(listCompressedDataBlock.size()) + "(" + listCompressedDataBlock.size() + ")");			
 				Output("Quantity of Definitions = 0x" + Integer.toHexString(countDefinitions) + "(" + countDefinitions + ")");
 			}
 			else {
@@ -125,11 +130,12 @@ public class MyReader {
 //			buf.position(offsetCompressedData);
 			int offset = offsetCompressedData;
 			int tmp = offsetCompressedData;
-			for (final Integer block : listDataBlock) {
+			int counter = 0;
+			for (final Integer block : listCompressedDataBlock) {
 				tmp = offsetCompressedData + block.intValue();
-				//Output("Decompress = " + offset + " length = " + (tmp - offset));
+				Output(counter ++ + " : Decompress = " + Integer.toHexString(offset) + " length = " + Integer.toHexString((tmp - offset)));
 				decompress(buf, offset, tmp - offset);
-				//Output("Done.");
+				Output("Done.");
 				offset = tmp;
 			}		
 		}
@@ -141,7 +147,7 @@ public class MyReader {
 	private static void decompress(ByteBuffer buf, int offset, int length) throws IOException {
 		final Inflater inflater = new Inflater();
 		final InflaterInputStream in = new InflaterInputStream(new ByteArrayInputStream(buf.array(), offset, length), inflater, 1024 * 8);
-		final FileOutputStream out = new FileOutputStream("output.data", true);
+		final FileOutputStream out = new FileOutputStream("output.data." + offset, true);
 		
 	    final byte[] buffer = new byte[1024 * 8];
 	    int len;
@@ -158,7 +164,7 @@ public class MyReader {
 		final ByteBuffer buf = ByteBuffer.allocate((int) file.getChannel().size());
 		file.getChannel().read(buf);
 	    buf.order(ByteOrder.LITTLE_ENDIAN);
-		int offset = 29;
+		int offset = index;
 		final int idx[] = new int[6];//		
 		getIndex(buf, offset * 10, idx);
 
@@ -174,7 +180,7 @@ public class MyReader {
 			final int lenword = idx[4] - idx[0];
 			
 			while(ref -- > 0) {
-				offset = buf.getInt(lenInflatedWordsIndex + idx[0]);
+				offset = buf.getInt(offsetInflatedWords + idx[0]);
 				getIndex(buf, offset * 10, idx);
 				Output("ref(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
 				offsetword += 4;
@@ -196,12 +202,12 @@ public class MyReader {
 	}
 	
 	private static final String getWord(ByteBuffer buf, int offset, int len) {
-		String word = new String(UTF8Decode(buf, lenInflatedWordsIndex + offset, len));
+		String word = new String(UTF8Decode(buf, offsetInflatedWords + offset, len));
 		return word;
 	}
 	
 	private static final String getXml(ByteBuffer buf, int offset, int len) {
-		String xml = new String(UTF8Decode(buf, lenInflatedWordsIndex + lenInflatedWords + offset, len));
+		String xml = new String(UTF8Decode(buf, offsetInflatedWords + lengthInflatedWords + offset, len));
 		return xml;
 	}
 

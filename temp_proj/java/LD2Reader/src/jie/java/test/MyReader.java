@@ -1,6 +1,7 @@
 package jie.java.test;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,11 +22,13 @@ public class MyReader {
 	public static final class BlockData {
 
 		public int index = 0;
+		public int offset = 0;
+		public int length = 0;
 		public int start = 0;
 		public int end = 0;
 		
 		public final String toString() {
-			return "index (" + index + ") = " + start + " : " + end; 
+			return "index (" + index + ") = [" + offset + "," + length + "] --> [" + start + "," + end + "]"; 
 		}
 	}	
 
@@ -56,23 +59,38 @@ public class MyReader {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		//final String ld2file = "./data/3GPP.ld2";//"./data/Vicon English-Chinese(S) Dictionary.ld2";
-		final String ld2file = "./data/Vicon English-Chinese(S) Dictionary.ld2";
+		
+		private static void get(final int index, final int b_offset, final int b_length, final int x_offset, final int x_length) {		
+		get(0, )
+		return;
+		
+		final String ld2file = "./data/3GPP.ld2";//"./data/Vicon English-Chinese(S) Dictionary.ld2";
+		//final String ld2file = "./data/Vicon English-Chinese(S) Dictionary.ld2";
 		
 		try {
 			checkFile(ld2file);
 			
-			inflateFile(ld2file);
-			
 			oWord = new FileWriter("output.word");
 			oWordIndex = new FileWriter("output.index");
 			oBlockIndex = new FileWriter("output.block");
+						
+			inflateFile(ld2file);
 			
-			final int countDefinitions = lengthIndex / 4;
-			for(int i = 0; i < lengthIndex / 4; ++ i) {
-				getData(i);
+//			final int countDefinitions = lengthIndex / 4;
+//			for(int i = 0; i < lengthIndex / 4; ++ i) {
+//				getData(i);
+//			}
+			getData(0);//(1098);
+			
+			if(oWord != null) {
+				oWord.close();
 			}
-			//getData(0);
+			if(oWordIndex != null) {
+				oWordIndex.close();
+			}
+			if(oBlockIndex != null) {
+				oBlockIndex.close();
+			}
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -165,15 +183,20 @@ public class MyReader {
 			int start = 0;
 			int size = 0;
 			
-			for (final Integer block : listCompressedDataBlock) {
+			for (final Integer block : listCompressedDataBlock) {			
 				tmp = offsetCompressedData + block.intValue();
 				Output(counter + " : Decompress = " + Integer.toHexString(offset) + " length = " + Integer.toHexString((tmp - offset)));
+				
+				oBlockIndex.write(counter + "," + offset + "," + (tmp - offset) + "\r\n");
+				
 				size = decompress(buf, offset, tmp - offset);
 				Output("Done.");
 				offset = tmp;
 				
 				BlockData data = new BlockData();
 				data.index = counter ++ ;
+				data.offset = offset;
+				data.length = (tmp - offset);
 				data.start = start;
 				data.end = (start += size);
 				
@@ -222,31 +245,35 @@ public class MyReader {
 		String word = null;
 		
 		if(idx[5] != idx[1]) {
-			Output("self xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+			//Output("self(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
 			setBlockIndex(index, idx[1], (idx[5] - idx[1]));
 		}
 		if(idx[3] == 0) {
-			Output("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
+			//Output("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
 			word = getWord(buf, idx[0], idx[4] - idx[0]);
 		}
 		else {
 			int ref = idx[3];
 			int offsetword = idx[0];
-			final int lenword = idx[4] - idx[0];
+			int lenword = idx[4] - idx[0];
 			
 			while(ref -- > 0) {
-				offset = buf.getInt(offsetInflatedWords + idx[0]);
+				offset = buf.getInt(offsetInflatedWords + offsetword);
 				getIndex(buf, offset * 10, idx);
-				Output("ref(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+				//Output("ref(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
 				setBlockIndex(index, idx[1], (idx[5] - idx[1]));
 				offsetword += 4;
+				lenword -= 4;
 			}
-			Output("word = " + getWord(buf, offsetword, lenword));
+			//Output("word = " + getWord(buf, offsetword, lenword));
 			word = getWord(buf, offsetword, lenword);
 		}
 		
 		oWord.write(index + "," + word + "\r\n");
 
+//		oWord.flush();
+//		oWordIndex.flush();
+		
 		file.close();
 	}
 
@@ -305,5 +332,52 @@ public class MyReader {
 			}
 		}
 	}
+
+//////////////////////////////////////////////////
+	
+	private static void get(final int index, final int b_offset, final int b_length, final int x_offset, final int x_length) {
+
+		try {
+			RandomAccessFile file = new RandomAccessFile("./data/3GPP.ld2", "r");
+			final byte[] buf = new byte[(b_length)];
+			file.readFully(buf, b_offset, b_length);
+			file.close();
+			
+			//decompress
+			final Inflater inflater = new Inflater();
+			final InflaterInputStream in = new InflaterInputStream(new ByteArrayInputStream(buf, 0, b_length), inflater, b_length);
+			
+			final byte[] out = new byte[16 * 1024];
+			while(in.read(out) > 0);
+			
+			inflater.end();
+			//decode
+			final Charset cs = Charset.forName("UTF-8");
+			final CharsetDecoder cd = cs.newDecoder();
+			int size = (int) cd.maxCharsPerByte();
+			
+			char[] ret = new char[ len * size ];
+			final CharBuffer retbuf = CharBuffer.wrap(ret);
+			
+			final ByteBuffer inbuf = ByteBuffer.wrap(buf, x_offset, x_length);
+			CoderResult cr = cd.decode(inbuf, retbuf, true);
+			cr = cd.flush(retbuf);
+			
+			if(ret.length != x_length) {
+				ret = Arrays.copyOf(ret, x_length);
+			}
+			
+			String xml = new String(ret);
+			
+			Output("xml = " + xml);
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+	
+
 
 }

@@ -2,6 +2,7 @@ package jie.java.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -42,22 +43,35 @@ public class MyReader {
 	
 	static ArrayList<BlockData> listInflatedBlock = new ArrayList<BlockData>();
 
+	// t1 : wordid -> word -> index
+	// t2 : wordid -> xml offset and length -> block 1 -> block 2
+	// t3 : block index -> block offset -> block size
+	// t0 : ld2 base info
+	
+	private static FileWriter oWord = null;
+	private static FileWriter oWordIndex = null;
+	private static FileWriter oBlockIndex = null;	
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		final String ld2file = "./data/3GPP.ld2";//"./data/Vicon English-Chinese(S) Dictionary.ld2";
-		//final String ld2file = "./data/Vicon English-Chinese(S) Dictionary.ld2";
+		//final String ld2file = "./data/3GPP.ld2";//"./data/Vicon English-Chinese(S) Dictionary.ld2";
+		final String ld2file = "./data/Vicon English-Chinese(S) Dictionary.ld2";
 		
 		try {
 			checkFile(ld2file);
 			
 			inflateFile(ld2file);
 			
-//			final int countDefinitions = lengthIndex / 4;
-//			for(int i = 0; i < lengthIndex / 4; ++ i) {
-//				getData(i);
-//			}
+			oWord = new FileWriter("output.word");
+			oWordIndex = new FileWriter("output.index");
+			oBlockIndex = new FileWriter("output.block");
+			
+			final int countDefinitions = lengthIndex / 4;
+			for(int i = 0; i < lengthIndex / 4; ++ i) {
+				getData(i);
+			}
 			//getData(0);
 			
 		} catch (IOException e) {
@@ -194,12 +208,9 @@ public class MyReader {
 		return ret;
 	}
 	
-	//wordid -> word -> index -> xml offset and length
-	// t1 : wordid -> word -> index
-	// t2 : wordid -> xml offset and length -> block 1 -> block 2
-	// t3 : block index -> block offset -> block size
-	
 	private static void getData(final int index) throws IOException {
+
+		
 		RandomAccessFile file = new RandomAccessFile("output.data", "r");
 		final ByteBuffer buf = ByteBuffer.allocate((int) file.getChannel().size());
 		file.getChannel().read(buf);
@@ -208,11 +219,15 @@ public class MyReader {
 		final int idx[] = new int[6];//		
 		getIndex(buf, offset * 10, idx);
 
+		String word = null;
+		
 		if(idx[5] != idx[1]) {
 			Output("self xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+			setBlockIndex(index, idx[1], (idx[5] - idx[1]));
 		}
 		if(idx[3] == 0) {
 			Output("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
+			word = getWord(buf, idx[0], idx[4] - idx[0]);
 		}
 		else {
 			int ref = idx[3];
@@ -223,10 +238,14 @@ public class MyReader {
 				offset = buf.getInt(offsetInflatedWords + idx[0]);
 				getIndex(buf, offset * 10, idx);
 				Output("ref(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+				setBlockIndex(index, idx[1], (idx[5] - idx[1]));
 				offsetword += 4;
 			}
 			Output("word = " + getWord(buf, offsetword, lenword));
+			word = getWord(buf, offsetword, lenword);
 		}
+		
+		oWord.write(index + "," + word + "\r\n");
 
 		file.close();
 	}
@@ -247,7 +266,7 @@ public class MyReader {
 	}
 	
 	private static final String getXml(ByteBuffer buf, int offset, int len) {
-		String xml = new String(UTF8Decode(buf, offsetInflatedWords + lengthInflatedWords + offset, len));
+		String xml = new String(UTF8Decode(buf, offsetInflatedXml + offset, len));
 		return xml;
 	}
 
@@ -271,6 +290,20 @@ public class MyReader {
 	
 	private static void Output(String string) {
 		System.out.println(string);
+	}
+	
+	private static void setBlockIndex(final int index, final int offset, final int length) throws IOException {
+		for(final BlockData data : listInflatedBlock) {
+			if(offsetInflatedXml + offset <= data.start) {
+				if((offsetInflatedXml + offset + length) <= data.end) {
+					oWordIndex.write(index + "," + offset + "," + length + "," + data.index + ",-1\r\n");
+				}
+				else {
+					oWordIndex.write(index + "," + offset + "," + length + "," + data.index + "," + (data.index + 1) + "\r\n");
+				}
+				break;
+			}
+		}
 	}
 
 }

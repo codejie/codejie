@@ -60,10 +60,12 @@ public class MyReader {
 	 */
 	public static void main(String[] args) {
 		
-		private static void get(final int index, final int b_offset, final int b_length, final int x_offset, final int x_length) {		
-		get(0, )
-		return;
+		test();
+		//check();
 		
+	}
+	
+	private static void check() {
 		final String ld2file = "./data/3GPP.ld2";//"./data/Vicon English-Chinese(S) Dictionary.ld2";
 		//final String ld2file = "./data/Vicon English-Chinese(S) Dictionary.ld2";
 		
@@ -95,8 +97,12 @@ public class MyReader {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}		
+	}
+	
+	private static void test() {
+		verify(0, 28809, 7845, 0, 85);
+		return;		
 	}
 
 	private static void checkFile(String ld2file) throws IOException {
@@ -191,7 +197,6 @@ public class MyReader {
 				
 				size = decompress(buf, offset, tmp - offset);
 				Output("Done.");
-				offset = tmp;
 				
 				BlockData data = new BlockData();
 				data.index = counter ++ ;
@@ -201,6 +206,8 @@ public class MyReader {
 				data.end = (start += size);
 				
 				listInflatedBlock.add(data);
+				
+				offset = tmp;
 			}		
 		}
 		finally {
@@ -245,11 +252,11 @@ public class MyReader {
 		String word = null;
 		
 		if(idx[5] != idx[1]) {
-			//Output("self(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+			Output("self(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
 			setBlockIndex(index, idx[1], (idx[5] - idx[1]));
 		}
 		if(idx[3] == 0) {
-			//Output("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
+			Output("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
 			word = getWord(buf, idx[0], idx[4] - idx[0]);
 		}
 		else {
@@ -260,12 +267,12 @@ public class MyReader {
 			while(ref -- > 0) {
 				offset = buf.getInt(offsetInflatedWords + offsetword);
 				getIndex(buf, offset * 10, idx);
-				//Output("ref(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+				Output("ref(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
 				setBlockIndex(index, idx[1], (idx[5] - idx[1]));
 				offsetword += 4;
 				lenword -= 4;
 			}
-			//Output("word = " + getWord(buf, offsetword, lenword));
+			Output("word = " + getWord(buf, offsetword, lenword));
 			word = getWord(buf, offsetword, lenword);
 		}
 		
@@ -335,17 +342,24 @@ public class MyReader {
 
 //////////////////////////////////////////////////
 	
-	private static void get(final int index, final int b_offset, final int b_length, final int x_offset, final int x_length) {
+	private static void verify(final int index, final int b_offset, final int b_length, final int x_offset, final int x_length) {
 
 		try {
+			//RandomAccessFile file = new RandomAccessFile("./data/3GPP.ld2", "r");
 			RandomAccessFile file = new RandomAccessFile("./data/3GPP.ld2", "r");
-			final byte[] buf = new byte[(b_length)];
-			file.readFully(buf, b_offset, b_length);
+			
+			final ByteBuffer bb = ByteBuffer.allocate(b_length);
+			file.getChannel().position(b_offset);
+			int s = file.getChannel().read(bb, b_offset);
+			if(s != b_length) {
+				return;
+			}			
+
 			file.close();
 			
 			//decompress
 			final Inflater inflater = new Inflater();
-			final InflaterInputStream in = new InflaterInputStream(new ByteArrayInputStream(buf, 0, b_length), inflater, b_length);
+			final InflaterInputStream in = new InflaterInputStream(new ByteArrayInputStream(bb.array(), 0, b_length), inflater, b_length);
 			
 			final byte[] out = new byte[16 * 1024];
 			while(in.read(out) > 0);
@@ -356,10 +370,12 @@ public class MyReader {
 			final CharsetDecoder cd = cs.newDecoder();
 			int size = (int) cd.maxCharsPerByte();
 			
-			char[] ret = new char[ len * size ];
+			char[] ret = new char[x_length * size];
 			final CharBuffer retbuf = CharBuffer.wrap(ret);
 			
-			final ByteBuffer inbuf = ByteBuffer.wrap(buf, x_offset, x_length);
+			int offset = 31556 + x_offset - 16384;//offsetInflatedXml + x_offset - 
+			
+			final ByteBuffer inbuf = ByteBuffer.wrap(out, offset, x_length);
 			CoderResult cr = cd.decode(inbuf, retbuf, true);
 			cr = cd.flush(retbuf);
 			

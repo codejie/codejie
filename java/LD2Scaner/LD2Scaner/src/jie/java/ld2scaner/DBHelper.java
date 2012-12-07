@@ -25,6 +25,7 @@ public class DBHelper {
 			Class.forName("org.sqlite.JDBC");
 			
 			conn = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			conn.setAutoCommit(false);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -40,25 +41,36 @@ public class DBHelper {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			
+		
 			stat.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} catch (SQLException e) {			
 			return -1;
 		}
 		return 0;
 	}
 
 	private void createTables() {
-		String sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_block_index (" 
-				+ "index INTEGER PRIMARY KEY,"
+		String sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_block_info (" 
+				+ "idx INTEGER PRIMARY KEY,"
 				+ "offset INTEGER,"
 				+ "length INTEGER,"
 				+ "start INTEGER,"
 				+ "end INTEGER)";
 		
 		execSQL(sql);
-
+		
+		sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_word_index ("
+				+ "idx INTEGER,"
+				+ "offset INTEGER,"
+				+ "length INTEGER,"
+				+ "block1 INTEGER,"
+				+ "block2 INTEGER)";
+		execSQL(sql);
+		
+		sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_word_info ("
+				+ "word TEXT PRIMARY KEY,"
+				+ "idx INTEGER)";
+		execSQL(sql);
 	}
 
 	public static DBHelper create(final String dbfile) {
@@ -73,18 +85,41 @@ public class DBHelper {
 	}
 
 	public void insertBlockInfo(final BlockData data) {
-		// TODO Auto-generated method stub
-		
+		String sql = "INSERT INTO ld2_vicon_block_info VALUES ("
+					+ data.index + "," 
+					+ data.offset + ","
+					+ data.length + ","
+					+ data.start + ","
+					+ data.end + ")";
+		execSQL(sql);
 	}
 
 	public void insertWordInfo(int index, String word) {
-		// TODO Auto-generated method stub
-		
+		String sql = "INSERT INTO ld2_vicon_word_info VALUES ('"
+				+ word + "',"
+				+ index +")";
+		execSQL(sql);
 	}
 	
 	public void insertWordIndex(int index, int offset, int length, int block1, int block2) {
-		// TODO Auto-generated method stub
-		
+		String sql = "INSERT INTO ld2_vicon_word_index VALUES ("
+				+ index + ","
+				+ offset + ","
+				+ length + ","
+				+ block1 + ","
+				+ block2 + ")";
+		execSQL(sql);
+	}
+
+	public void close() {
+		if(conn != null) {
+			try {
+				conn.commit();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

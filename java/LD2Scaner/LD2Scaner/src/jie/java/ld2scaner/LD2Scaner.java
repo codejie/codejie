@@ -1,14 +1,19 @@
 package jie.java.ld2scaner;
 
+import java.util.ArrayList;
+
 public class LD2Scaner {
 
-	public final class WordData {
-		public final int index = 0;
-		public final int offset = 0;
-		public final int length = 0;
-		public final int start = 0;
-		public final int end = 0;
-		public final String word = null;
+	public static final class WordIndex {
+		public int offset = 0;
+		public int length = 0;
+		public int block1 = 0;
+		public int block2 = 0;		
+	}
+	public static final class WordData {
+		public int index = 0;
+		public String word = null;
+		public ArrayList<WordIndex> block = new ArrayList<WordIndex>();
 	}
 	
 	private final static String ld2File = "./data/3GPP.ld2"; 
@@ -17,9 +22,9 @@ public class LD2Scaner {
 		
 		DBHelper db = DBHelper.create("./data/db.db");
 		
-		if(FileScan.scan(ld2File, db) != 0) {
-			System.out.println("FAILED.");
-		}
+//		if(FileScan.scan(ld2File, db) != 0) {
+//			System.out.println("FAILED.");
+//		}
 		
 		verifyData(db, ld2File, 100);
 		
@@ -28,10 +33,13 @@ public class LD2Scaner {
 
 	private static void verifyData(DBHelper db, String ld2file2, int index) {
 		
-		WordData data = new WordData();
+		final WordData data = new WordData();
+		data.index = index;
 		
-		db.getWordData(index, data);
+		if(db.getWordData(data) != 0)
+			return;
 		
+		return;
 	}
 
 }

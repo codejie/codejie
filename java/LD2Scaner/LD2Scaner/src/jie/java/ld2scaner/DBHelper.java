@@ -171,4 +171,27 @@ public class DBHelper {
 		}
 	}
 
+	public int getBlockDat(BlockData data) {
+		String sql = "SELECT offset, length, start, end FROM ld2_vicon_block_info WHERE idx = " + data.index;
+		
+		try {
+			Statement stat = conn.createStatement();
+			ResultSet rs = stat.executeQuery(sql);
+			if(rs == null || rs.next() == false) 
+				return -1;
+			
+			data.offset = rs.getInt(1);
+			data.length = rs.getInt(2);
+			data.start = rs.getInt(3);
+			data.end = rs.getInt(4);
+			
+			rs.close();
+			stat.close();		
+		} catch (SQLException e) {
+			return -1;
+		}
+
+		return 0;
+	}
+
 }

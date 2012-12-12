@@ -31,7 +31,7 @@ public class LD2Scaner {
 		public ArrayList<WordIndex> block = new ArrayList<WordIndex>();
 	}
 	
-	private final static String ld2File = "./data/3GPP.ld2"; 
+	private final static String ld2File = "./data/Vicon English-Chinese(S) Dictionary.ld2";// "./data/3GPP.ld2"; 
 
 	public static void main(String[] args) {
 		
@@ -41,7 +41,7 @@ public class LD2Scaner {
 //			System.out.println("FAILED.");
 //		}
 		
-		if(verifyData(db, ld2File, 100) != 0) {
+		if(verifyData(db, ld2File, 1134) != 0) {
 			System.out.println("VerifyData() failed.");
 		}
 		
@@ -73,7 +73,7 @@ public class LD2Scaner {
 				block2.index = word.block2;
 				if(db.getBlockDat(block2) != 0)
 					return -1;
-				size += block.length;
+				size += block2.length;
 				num = 2;
 			}
 			
@@ -81,9 +81,8 @@ public class LD2Scaner {
 			RandomAccessFile file = null;
 			try {
 				file = new RandomAccessFile(ld2file, "r");
-				file.getChannel().position(block.start);
-				
-				if(file.getChannel().read(in, size) != size)
+//				file.getChannel().position(block.offset);				
+				if(file.getChannel().read(in, block.offset) != size)
 					return -1;
 				file.close();
 			} catch (FileNotFoundException e) {
@@ -97,9 +96,7 @@ public class LD2Scaner {
 			if(decompressBlock(in, size, out) != 0)
 				return -1;
 			//getXml
-			String xml = null;
-			if(getWordXml(out, word, xml) != 0)
-				return -1;
+			String xml = getWordXml(out, num * 16 * 1024, block, word);
 			
 			System.out.println("Xml = " + xml);
 		}	
@@ -107,7 +104,7 @@ public class LD2Scaner {
 		return 0;
 	}
 
-	private static int getWordXml(byte[] out, WordIndex data, String xml) {
+	private static final String getWordXml(final byte[] in, int insize, final BlockData block, final WordIndex data) {
 		
 		final Charset cs = Charset.forName("UTF-8");
 		final CharsetDecoder cd = cs.newDecoder();
@@ -116,67 +113,18 @@ public class LD2Scaner {
 		char[] ret = new char[data.length * size];
 		final CharBuffer retbuf = CharBuffer.wrap(ret);
 		
-		int offset = 31556 + x_offset - 16384;//offsetInflatedXml + x_offset - 
+		int offset = data.offset - block.start; 
 		
-		final ByteBuffer inbuf = ByteBuffer.wrap(out, offset, x_length);
+		final ByteBuffer inbuf = ByteBuffer.wrap(in, offset, data.length);
 		CoderResult cr = cd.decode(inbuf, retbuf, true);
 		cr = cd.flush(retbuf);
 		
-		if(ret.length != x_length) {
-			ret = Arrays.copyOf(ret, x_length);
+		if(ret.length != data.length) {
+			ret = Arrays.copyOf(ret, data.length);
 		}
 		
-		String xml = new String(ret);
-		
-		try {
-			//RandomAccessFile file = new RandomAccessFile("./data/3GPP.ld2", "r");
-			RandomAccessFile file = new RandomAccessFile(ld2file, "r");
-			
-			final ByteBuffer bb = ByteBuffer.allocate(b_length);
-			file.getChannel().position(b_offset);
-			int s = file.getChannel().read(bb, b_offset);
-			if(s != b_length) {
-				return;
-			}			
-
-			file.close();
-			
-			//decompress
-			final Inflater inflater = new Inflater();
-			final InflaterInputStream in = new InflaterInputStream(new ByteArrayInputStream(bb.array(), 0, b_length), inflater, b_length);
-			
-			final byte[] out = new byte[16 * 1024];
-			while(in.read(out) > 0);
-			
-			inflater.end();
-			//decode
-			final Charset cs = Charset.forName("UTF-8");
-			final CharsetDecoder cd = cs.newDecoder();
-			int size = (int) cd.maxCharsPerByte();
-			
-			char[] ret = new char[x_length * size];
-			final CharBuffer retbuf = CharBuffer.wrap(ret);
-			
-			int offset = 31556 + x_offset - 16384;//offsetInflatedXml + x_offset - 
-			
-			final ByteBuffer inbuf = ByteBuffer.wrap(out, offset, x_length);
-			CoderResult cr = cd.decode(inbuf, retbuf, true);
-			cr = cd.flush(retbuf);
-			
-			if(ret.length != x_length) {
-				ret = Arrays.copyOf(ret, x_length);
-			}
-			
-			String xml = new String(ret);
-			
-			Output("xml = " + xml);
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}			
-			}
+		return new String(ret);
+	}
 
 	private static int decompressBlock(ByteBuffer in, int size, final byte[] out) {
 		final Inflater inflater = new Inflater();
@@ -187,6 +135,7 @@ public class LD2Scaner {
 		} catch (IOException e) {
 			return -1;
 		}
+		inflater.end();
 		return 0;
 	}
 

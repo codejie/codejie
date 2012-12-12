@@ -145,25 +145,28 @@ public class DBHelper {
 			Statement stat = null;
 			stat = conn.createStatement();
 			ResultSet rs = stat.executeQuery(sql);
-			if(rs != null && rs.next()) {
-				data.word = rs.getString(1);
-				rs.close();
-				
-				sql = "SELECT offset, length, block1, block2 FROM ld2_vicon_word_index WHERE idx = " + data.index;
-				rs = stat.executeQuery(sql);
-				if(rs != null) {
-					while(rs.next()) {
-						WordIndex wi = new WordIndex();
-						wi.offset = rs.getInt(1);
-						wi.length = rs.getInt(2);
-						wi.block1 = rs.getInt(3);
-						wi.block2 = rs.getInt(4);
-						
-						data.block.add(wi);
-					}
-				}
-				rs.close();
+			if(rs == null || rs.next() == false) {
+				stat.close();
+				return -1;
 			}
+			
+			data.word = rs.getString(1);
+			rs.close();
+				
+			sql = "SELECT offset, length, block1, block2 FROM ld2_vicon_word_index WHERE idx = " + data.index;
+			rs = stat.executeQuery(sql);
+			if(rs != null) {
+				while(rs.next()) {
+					WordIndex wi = new WordIndex();
+					wi.offset = rs.getInt(1);
+					wi.length = rs.getInt(2);
+					wi.block1 = rs.getInt(3);
+					wi.block2 = rs.getInt(4);
+					
+					data.block.add(wi);
+				}
+			}
+			rs.close();
 			stat.close();
 			return 0;
 		} catch (SQLException e) {

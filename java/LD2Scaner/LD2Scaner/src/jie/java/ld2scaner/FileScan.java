@@ -355,7 +355,7 @@ public class FileScan {
 	
 	private static int outputBlockIndex(final DBHelper db, final int index, final int offset, final int length) {
 		for(final BlockData data : listBlockData) {
-			if(offsetInflatedXml + offset <= data.start) {
+			if((offsetInflatedXml + offset) <= data.end) {
 				if((offsetInflatedXml + offset + length) <= data.end) {
 					db.insertWordIndex(index, offsetInflatedXml + offset, length, data.index, -1);
 				}

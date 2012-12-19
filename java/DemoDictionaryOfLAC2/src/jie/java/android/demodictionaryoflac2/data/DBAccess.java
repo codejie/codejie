@@ -31,11 +31,17 @@ public class DBAccess {
 		public int length = 0;
 		public int start = 0;
 		public int end = 0;
-	}	
+	}
+
+	private static final DBAccess instance = new DBAccess();
 	
-	private static SQLiteDatabase db = null;
+	private SQLiteDatabase db = null;
 	
-	public static int init() {
+	public static DBAccess instance() {
+		return instance;
+	}
+	
+	public int init() {
 		try {
 			db = SQLiteDatabase.openOrCreateDatabase(Global.DB_FILE, null);
 		}
@@ -45,7 +51,7 @@ public class DBAccess {
 		return 0;
 	}
 	
-	public static int getWordData(final WordData data) {
+	public int getWordData(final WordData data) {
 		String sql = "SELECT word FROM ld2_vicon_word_info WHERE idx=" + data.index;
 		
 		Cursor cursor = db.rawQuery(sql, null);
@@ -60,7 +66,7 @@ public class DBAccess {
 		return getWordXmlIndex(data.index, data.xmlIndex);
 	}
 	
-	public static int getWordXmlIndex(final int index, final ArrayList<XmlIndex> xmlIndex) {
+	public int getWordXmlIndex(final int index, final ArrayList<XmlIndex> xmlIndex) {
 		String sql = "SELECT offset, length, block1, block2 FROM ld2_vicon_word_index WHERE idx = " + index;
 		Cursor cursor = db.rawQuery(sql, null);
 		if(cursor == null || cursor.isFirst() == false)
@@ -79,7 +85,7 @@ public class DBAccess {
 		return 0;
 	}
 	
-	public static int getBlockData(final BlockData data) {
+	public int getBlockData(final BlockData data) {
 		String sql = "SELECT offset, length, start, end FROM ld2_vicon_block_info WHERE idx = " + data.index;
 		
 		Cursor cursor = db.rawQuery(sql, null);
@@ -92,6 +98,12 @@ public class DBAccess {
 		
 		cursor.close();
 		return 0;		
+	}
+
+	public Cursor getItemData(String condition, int offset, int maxRows) {
+		String sql = "SELECT idx, word FROM ld2_vicon_word_info WHERE " + condition;
+		
+		return db.rawQuery(sql, null);
 	}
 	
 

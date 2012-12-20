@@ -20,9 +20,11 @@ public class DictionaryActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		this.setContentView(R.layout.activity_dictionary);
+		
 		initView();
 		
-		initData();		
+//		initData();		
 	}
 	
 	private void initView() {
@@ -72,8 +74,7 @@ public class DictionaryActivity extends Activity {
 	}
 
 	private void initData() {
-		// TODO Auto-generated method stub
-		
+		adapter.load(null);
 	}
 
 	protected void onInputChange(String string) {

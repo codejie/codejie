@@ -33,17 +33,21 @@ public class DBAccess {
 		public int end = 0;
 	}
 
-	private static final DBAccess instance = new DBAccess();
+	private static DBAccess instance = null;//new DBAccess();
 	
 	private SQLiteDatabase db = null;
 	
 	public static DBAccess instance() {
+		if(instance == null) {
+			instance = new DBAccess();
+			instance.init();
+		}
 		return instance;
 	}
 	
 	public int init() {
 		try {
-			db = SQLiteDatabase.openOrCreateDatabase(Global.DB_FILE, null);
+			db = SQLiteDatabase.openOrCreateDatabase(Global.ASSETS_PATH + Global.DB_FILE, null);
 		}
 		catch (SQLiteException e) {
 			return -1;
@@ -101,7 +105,11 @@ public class DBAccess {
 	}
 
 	public Cursor getItemData(String condition, int offset, int maxRows) {
-		String sql = "SELECT idx, word FROM ld2_vicon_word_info WHERE " + condition;
+		String sql = "SELECT idx, word FROM ld2_vicon_word_info";
+		if(condition != null) {
+			sql += " WHERE " + condition;
+		}
+		sql += " LIMIT " + maxRows + " OFFSET " + offset ;
 		
 		return db.rawQuery(sql, null);
 	}

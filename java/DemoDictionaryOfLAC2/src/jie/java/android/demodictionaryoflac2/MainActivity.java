@@ -1,10 +1,15 @@
 package jie.java.android.demodictionaryoflac2;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import jie.java.android.demodictionaryoflac2.data.AssetsHelper;
+
 import android.os.Bundle;
+import android.os.Environment;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -18,19 +23,13 @@ public class MainActivity extends Activity implements OnTouchListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        try {
-			InputStream is = this.getAssets().open("data/lac2.db");
-			int i = is.read();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        Global.ASSETS_PATH += this.getPackageName();
-        
         setContentView(R.layout.activity_main);
         
-        if(check() != 0) {
+        if(checkData() != 0) {
+        	this.finish();
+        }
+        
+        if(checkExpire() != 0) {
         	this.finish();
         }
         
@@ -38,7 +37,7 @@ public class MainActivity extends Activity implements OnTouchListener {
         rl.setOnTouchListener(this);
     }
 
-    private int check() {  
+    private int checkExpire() {  
 		return 0;
 	}
 
@@ -64,4 +63,33 @@ public class MainActivity extends Activity implements OnTouchListener {
 		this.finish();
 	}
     
+	private int checkData() {
+		Global.DATA_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.SD_ROOT;
+		File f = new File(Global.DATA_ROOT);
+		if(f.exists()) {
+			return 0;
+		}
+		f.mkdirs();
+		
+		final ProgressDialog dlg = new ProgressDialog(this);
+		dlg.setMessage("Unzipping data...");
+		dlg.show();
+
+		try {
+
+			final InputStream input = this.getAssets().open(Global.ASSETS_FILE);
+			
+			new Thread() {
+				public void run() {				
+					AssetsHelper.UnzipTo(input, Global.DATA_ROOT);
+					dlg.dismiss();
+				}
+			}.start();
+		
+		} catch (IOException e) {
+			return -1;
+		}		
+		
+		return 0;
+	}
 }

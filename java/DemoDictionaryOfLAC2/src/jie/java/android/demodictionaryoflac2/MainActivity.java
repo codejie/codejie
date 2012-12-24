@@ -66,10 +66,9 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private int checkData() {
 		Global.DATA_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.SD_ROOT;
 		File f = new File(Global.DATA_ROOT);
-		if(f.exists()) {
+		if(!f.mkdirs()) {
 			return 0;
 		}
-		f.mkdirs();
 		
 		final ProgressDialog dlg = new ProgressDialog(this);
 		dlg.setMessage("Unzipping data...");

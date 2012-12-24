@@ -1,11 +1,15 @@
 package jie.java.android.demodictionaryoflac2.data;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import android.util.Log;
 
 public class AssetsHelper {
 
@@ -22,8 +26,9 @@ public class AssetsHelper {
 			byte[] buf = new byte[64 * 1024];
 			
 			ZipEntry zipEntry = null;
-			while((zipEntry = zipStream.getNextEntry()) != null) {
-				file = new File(outputPath + File.separator + zipEntry.getName());				
+			while((zipEntry = zipStream.getNextEntry())!= null) {
+				file = new File(outputPath + File.separator + zipEntry.getName());
+				Log.d("DDofLAC", "ZIP FILE = " + zipEntry.getName());				
 				if(!zipEntry.isDirectory()) {
 					if(!file.createNewFile())
 						return -1;

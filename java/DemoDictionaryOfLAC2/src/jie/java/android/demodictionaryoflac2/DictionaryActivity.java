@@ -24,7 +24,7 @@ public class DictionaryActivity extends Activity {
 		
 		initView();
 		
-//		initData();		
+		initData();		
 	}
 	
 	private void initView() {

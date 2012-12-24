@@ -77,7 +77,7 @@ public class DictionaryAdapter extends BaseAdapter {
 	private int refresh() {
 		cursor = db.getItemData(condition, offset, maxRows);
 		
-		if(cursor == null || cursor.moveToFirst()) {
+		if(cursor == null || !cursor.moveToFirst()) {
 			return -1;
 		}
 		

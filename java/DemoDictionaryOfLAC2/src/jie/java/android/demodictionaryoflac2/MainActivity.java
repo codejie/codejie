@@ -64,9 +64,9 @@ public class MainActivity extends Activity implements OnTouchListener {
 	}
     
 	private int checkData() {
-		Global.DATA_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.SD_ROOT;
+		Global.DATA_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.DATA_ROOT;
 		File f = new File(Global.DATA_ROOT);
-		if(!f.mkdirs()) {
+		if(!f.mkdirs() || f.isDirectory()) {
 			return 0;
 		}
 		

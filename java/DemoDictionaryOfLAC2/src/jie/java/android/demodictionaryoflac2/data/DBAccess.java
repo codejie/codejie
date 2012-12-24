@@ -47,7 +47,7 @@ public class DBAccess {
 	
 	public int init() {
 		try {
-			db = SQLiteDatabase.openOrCreateDatabase(Global.SD_ROOT + Global.DB_FILE, null);
+			db = SQLiteDatabase.openOrCreateDatabase(Global.DATA_ROOT + Global.DB_FILE, null);
 		}
 		catch (SQLiteException e) {
 			return -1;

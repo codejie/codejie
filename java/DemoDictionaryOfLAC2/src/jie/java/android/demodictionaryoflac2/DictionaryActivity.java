@@ -16,6 +16,8 @@ public class DictionaryActivity extends Activity {
 	
 	private DictionaryAdapter adapter = null;
 	
+	private long inputDelta = 0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,7 +26,9 @@ public class DictionaryActivity extends Activity {
 		
 		initView();
 		
-		initData();		
+		initData();
+		
+		initCheckThread();
 	}
 	
 	private void initView() {
@@ -45,8 +49,7 @@ public class DictionaryActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int count,	int after) {
 				onInputChange(s.toString());
-			}
-			
+			}			
 		});
 		
 		list = (RefreshListView) this.findViewById(R.id.refreshListView1);
@@ -76,10 +79,16 @@ public class DictionaryActivity extends Activity {
 	private void initData() {
 		adapter.load(null);
 	}
+	
+	private void initCheckThread() {
+		
+	}
 
 	protected void onInputChange(String string) {
-		// TODO Auto-generated method stub
-		
+		if(adapter != null) {
+			adapter.clear();
+			adapter.load("word like '" + string.toString() + "%'");
+		}
 	}
 
 	

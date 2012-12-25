@@ -67,7 +67,10 @@ public class MainActivity extends Activity implements OnTouchListener {
 		Global.DATA_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.DATA_ROOT;
 		File f = new File(Global.DATA_ROOT);
 		if(!f.mkdirs() || f.isDirectory()) {
-			return 0;
+			f = new File(Global.DATA_ROOT + Global.DB_FILE);
+			if(f.exists() && f.isFile()) {
+				return 0;
+			}
 		}
 		
 		final ProgressDialog dlg = new ProgressDialog(this);

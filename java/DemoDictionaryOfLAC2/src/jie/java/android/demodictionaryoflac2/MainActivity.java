@@ -64,10 +64,11 @@ public class MainActivity extends Activity implements OnTouchListener {
 	}
     
 	private int checkData() {
-		Global.DATA_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath() + Global.DATA_ROOT;
-		File f = new File(Global.DATA_ROOT);
+		Global.SDCARD_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath();
+		final String sdroot = Global.SDCARD_ROOT + Global.DATA_ROOT;
+		File f = new File(sdroot);
 		if(!f.mkdirs() || f.isDirectory()) {
-			f = new File(Global.DATA_ROOT + Global.DB_FILE);
+			f = new File(sdroot + Global.DB_FILE);
 			if(f.exists() && f.isFile()) {
 				return 0;
 			}
@@ -83,7 +84,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 			
 			new Thread() {
 				public void run() {				
-					AssetsHelper.UnzipTo(input, Global.DATA_ROOT);
+					AssetsHelper.UnzipTo(input, sdroot);
 					dlg.dismiss();
 				}
 			}.start();

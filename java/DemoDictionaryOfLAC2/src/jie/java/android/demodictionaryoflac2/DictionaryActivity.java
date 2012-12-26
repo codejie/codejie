@@ -5,6 +5,8 @@ import jie.java.android.demodictionaryoflac2.data.DictionaryAdapter;
 import jie.java.android.demodictionaryoflac2.view.RefreshListView;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,6 +21,9 @@ public class DictionaryActivity extends Activity {
 	
 	private String inputString = null;
 	
+	private Handler handler = null;
+	Thread thread = null;
+	private boolean checkRun = true;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -83,22 +88,30 @@ public class DictionaryActivity extends Activity {
 	}
 	
 	private void initCheckThread() {
-		Thread thread = new Thread(new Runnable() {
+
+		handler = new Handler() {
+
+			@Override
+			public void handleMessage(Message msg) {
+				if(inputString != null) {
+					onInputChange(inputString);
+					inputString = null;
+				}
+				Log.d("======", "handlemessage.....");				
+			}		
+		};
+		
+		
+		thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while(true) {
+				while(checkRun) {
 					try {
 						Thread.sleep(1200);
+						handler.sendEmptyMessage(0);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-					if(inputString != null) {
-						Log.d("====", "inputString = " + inputString);
-						onInputChange(inputString);
-						inputString = null;
-					} else {
-						Log.d("====", "inputString = null");
 					}
 				}
 			}
@@ -118,6 +131,24 @@ public class DictionaryActivity extends Activity {
 	protected void onRefreshData(int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	protected void onDestroy() {
+		checkRun = false;
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onPause() {
+		checkRun = false;
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		checkRun = true;
+		super.onResume();
 	}
 	
 }

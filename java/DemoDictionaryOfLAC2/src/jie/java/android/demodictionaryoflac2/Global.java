@@ -7,5 +7,6 @@ public final class Global {
 	public static final String LD2_FILE		=	"/Vicon English-Chinese(S) Dictionary.ld2";
 	
 	public static String DATA_ROOT			=	"/jie/lingoshook/lac/data";
+	public static String SDCARD_ROOT		=	null;
 	
 }

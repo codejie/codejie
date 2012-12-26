@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 
 public class DictionaryActivity extends Activity {
@@ -16,7 +17,7 @@ public class DictionaryActivity extends Activity {
 	
 	private DictionaryAdapter adapter = null;
 	
-	private long inputDelta = 0;
+	private String inputString = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,8 @@ public class DictionaryActivity extends Activity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int count,	int after) {
-				onInputChange(s.toString());
+				//onInputChange(s.toString());
+				inputString = s.toString();
 			}			
 		});
 		
@@ -81,7 +83,28 @@ public class DictionaryActivity extends Activity {
 	}
 	
 	private void initCheckThread() {
-		
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while(true) {
+					try {
+						Thread.sleep(1200);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(inputString != null) {
+						Log.d("====", "inputString = " + inputString);
+						onInputChange(inputString);
+						inputString = null;
+					} else {
+						Log.d("====", "inputString = null");
+					}
+				}
+			}
+			
+		});
+		thread.start();
 	}
 
 	protected void onInputChange(String string) {

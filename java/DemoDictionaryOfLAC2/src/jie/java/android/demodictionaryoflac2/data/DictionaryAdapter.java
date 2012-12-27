@@ -86,9 +86,9 @@ public class DictionaryAdapter extends BaseAdapter {
 		
 		offset += cursor.getCount();
 		
-		while(cursor.moveToNext()) {
+		do {
 			array.add(new ItemData(cursor.getInt(0), cursor.getString(1)));
-		}
+		} while(cursor.moveToNext());
 				
 		this.notifyDataSetChanged();
 		

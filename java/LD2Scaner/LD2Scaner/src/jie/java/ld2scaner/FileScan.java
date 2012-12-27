@@ -111,8 +111,9 @@ public class FileScan {
 				file.getChannel().read(buf);
 			    buf.order(ByteOrder.LITTLE_ENDIAN);		
 				
-				final int countDefinitions = lengthIndex / 4;
+				final int countDefinitions = offsetInflatedWords / 10 - 1;//326290;//lengthIndex / 4;
 				for(int i = 0; i < countDefinitions; ++ i) {
+					outputLog("i = " + i);
 					if(checkData(buf, i, db) != 0) {
 						return -1;
 					}
@@ -156,7 +157,7 @@ public class FileScan {
 				outputLog("Dictionary Type = 0x" + Integer.toHexString(buf.getInt(offset)));
 				
 				lengthCompressedData = buf.getInt(offset + 4) + offset + 8;			
-				lengthIndex = buf.getInt(offset + 8);// + offsetIndex;
+				lengthIndex = buf.getInt(offset + 8) + offsetIndex;
 				offsetInflatedWords = buf.getInt(offset + 12);
 				lengthInflatedWords = buf.getInt(offset + 16);
 				lengthInflatedXml = buf.getInt(offset + 20);
@@ -357,10 +358,12 @@ public class FileScan {
 		for(final BlockData data : listBlockData) {
 			if((offsetInflatedXml + offset) <= data.end) {
 				if((offsetInflatedXml + offset + length) <= data.end) {
-					db.insertWordIndex(index, offsetInflatedXml + offset, length, data.index, -1);
+					//db.insertWordIndex(index, offsetInflatedXml + offset, length, data.index, -1);
+					db.insertWordIndex(index, offset, length, data.index, -1);
 				}
 				else {
-					db.insertWordIndex(index, offsetInflatedXml + offset, length, data.index, data.index + 1);
+					//db.insertWordIndex(index, offsetInflatedXml + offset, length, data.index, data.index + 1);
+					db.insertWordIndex(index, offset, length, data.index, data.index + 1);
 				}
 				return 0;
 			}

@@ -37,13 +37,13 @@ public class LD2Scaner {
 		
 		DBHelper db = DBHelper.create("./data/db.db");
 		
-//		if(FileScan.scan(ld2File, db) != 0) {
-//			System.out.println("FAILED.");
-//		}
-		
-		if(verifyData(db, ld2File, 1134) != 0) {
-			System.out.println("VerifyData() failed.");
+		if(FileScan.scan(ld2File, db) != 0) {
+			System.out.println("FAILED.");
 		}
+		
+//		if(verifyData(db, ld2File, 1134) != 0) {
+//			System.out.println("VerifyData() failed.");
+//		}
 		
 		db.close();		
 	}

@@ -9,4 +9,6 @@ public final class Global {
 	public static String DATA_ROOT			=	"/jie/lingoshook/lac/data";
 	public static String SDCARD_ROOT		=	null;
 	
+	public static int INPUT_CHECK_PEROID	=	1000; 
+	
 }

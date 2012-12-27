@@ -107,10 +107,9 @@ public class DictionaryActivity extends Activity {
 			public void run() {
 				while(checkRun) {
 					try {
-						Thread.sleep(1200);
+						Thread.sleep(Global.INPUT_CHECK_PEROID);
 						handler.sendEmptyMessage(0);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -129,8 +128,10 @@ public class DictionaryActivity extends Activity {
 
 	
 	protected void onRefreshData(int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		// TODO Auto-generated method stub
-		
+		if(adapter != null) {
+			adapter.setMaxRows(visibleItemCount);
+			adapter.refresh();
+		}		
 	}
 
 	@Override

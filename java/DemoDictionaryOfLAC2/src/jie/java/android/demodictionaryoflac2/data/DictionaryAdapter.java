@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,9 +65,6 @@ public class DictionaryAdapter extends BaseAdapter {
 	}
 
 	public int load(final String condition) {
-		if(cursor != null) {
-			cursor.close();
-		}
 		
 		this.condition = condition;
 		this.offset = 0;
@@ -74,19 +72,24 @@ public class DictionaryAdapter extends BaseAdapter {
 		return refresh();
 	}
 
-	private int refresh() {
+	public int refresh() {
+
+		if(cursor != null) {
+			cursor.close();
+		}
+		
 		cursor = db.getItemData(condition, offset, maxRows);
 		
 		if(cursor == null || !cursor.moveToFirst()) {
 			return -1;
 		}
 		
+		offset += cursor.getCount();
+		
 		while(cursor.moveToNext()) {
 			array.add(new ItemData(cursor.getInt(0), cursor.getString(1)));
 		}
-		
-		offset += cursor.getCount();
-		
+				
 		this.notifyDataSetChanged();
 		
 		return offset;

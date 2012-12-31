@@ -10,7 +10,11 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class DictionaryActivity extends Activity {
 
@@ -78,7 +82,15 @@ public class DictionaryActivity extends Activity {
 			@Override
 			public void onBeginRefresh() {
 			}
-		});		
+		});
+		list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				onListItemClick(view, position, id);
+			}
+			
+		});
 		list.setAdapter(adapter);
 		
 	}
@@ -133,6 +145,11 @@ public class DictionaryActivity extends Activity {
 			adapter.refresh();
 		}		
 	}
+	
+	protected void onListItemClick(View view, int position, long id) {
+		Toast.makeText(this, "index = " + id, Toast.LENGTH_SHORT).show();
+	}
+	
 
 	@Override
 	protected void onDestroy() {

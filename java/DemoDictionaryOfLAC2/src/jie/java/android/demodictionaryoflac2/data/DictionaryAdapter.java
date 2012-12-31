@@ -60,6 +60,7 @@ public class DictionaryAdapter extends BaseAdapter {
 		}
 		
 		((TextView)view.findViewById(android.R.id.text1)).setText(array.get(index).text);
+		view.setId(array.get(index).index);
 		
 		return view;
 	}

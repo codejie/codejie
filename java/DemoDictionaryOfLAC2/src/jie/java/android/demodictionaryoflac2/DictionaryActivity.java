@@ -141,7 +141,7 @@ public class DictionaryActivity extends Activity {
 	
 	protected void onRefreshData(int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		if(adapter != null) {
-			adapter.setMaxRows(visibleItemCount + 1);
+//			adapter.setMaxRows(visibleItemCount + 1);
 			adapter.refresh();
 		}		
 	}

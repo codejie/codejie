@@ -48,7 +48,7 @@ public class RefreshListView extends ListView implements OnScrollListener {
 			title = new TextView(this.getContext());
 			title.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));// CONTENT));
 			title.setGravity(Gravity.CENTER_VERTICAL);
-			//title.setText("test");
+			title.setText("Release to load...");
 //			progress.setMinimumHeight(40);
 			
 			this.addView(progress);

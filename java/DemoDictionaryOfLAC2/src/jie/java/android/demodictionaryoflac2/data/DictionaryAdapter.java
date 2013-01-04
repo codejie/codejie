@@ -2,6 +2,8 @@ package jie.java.android.demodictionaryoflac2.data;
 
 import java.util.ArrayList;
 
+import jie.java.android.demodictionaryoflac2.R;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
@@ -29,7 +31,7 @@ public class DictionaryAdapter extends BaseAdapter {
 	private Cursor cursor = null;
 	private String condition = null;
 	private int offset = 0;
-	private int maxRows = 12;
+	private int maxRows = 32;
 	
 	private ArrayList<ItemData> array = new ArrayList<ItemData>(); 
 	
@@ -56,12 +58,11 @@ public class DictionaryAdapter extends BaseAdapter {
 	@Override
 	public View getView(int index, View view, ViewGroup parent) {
 		if(view == null) {
-			view = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
+			view = LayoutInflater.from(context).inflate(R.layout.word_item, parent, false);
 		}
 		
-		((TextView)view.findViewById(android.R.id.text1)).setText(array.get(index).text);
-		view.setId(array.get(index).index);
-		
+		((TextView)view.findViewById(R.id.textView1)).setText(array.get(index).text);
+//		((TextView)view.findViewById(R.id.textView2)).setText(String.valueOf(array.get(index).index));
 		return view;
 	}
 

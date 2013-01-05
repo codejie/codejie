@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/searchField"
         android:layout_width="fill_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:maxHeight="64dp"
         android:minHeight="64dp"

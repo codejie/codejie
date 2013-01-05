@@ -11,14 +11,17 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class DictionaryActivity extends Activity {
 
 	private EditText input = null;
+	private ImageButton button = null;
 	private RefreshListView list = null;
 	
 	private DictionaryAdapter adapter = null;
@@ -61,6 +64,16 @@ public class DictionaryActivity extends Activity {
 				//onInputChange(s.toString());
 				inputString = s.toString();
 			}			
+		});
+		
+		button = (ImageButton) this.findViewById(R.id.clear);
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				onClearButton();
+			}
+			
 		});
 		
 		list = (RefreshListView) this.findViewById(R.id.refreshListView1);
@@ -109,7 +122,6 @@ public class DictionaryActivity extends Activity {
 					onInputChange(inputString);
 					inputString = null;
 				}
-				Log.d("======", "handlemessage.....");				
 			}		
 		};
 		
@@ -167,6 +179,10 @@ public class DictionaryActivity extends Activity {
 	protected void onResume() {
 		checkRun = true;
 		super.onResume();
+	}
+
+	protected void onClearButton() {
+		input.setText(null);
 	}
 	
 }

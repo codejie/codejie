@@ -45,7 +45,7 @@ public class DictionaryActivity extends Activity {
 		
 		adapter = new DictionaryAdapter(this, DBAccess.instance());
 		
-		input = (EditText) this.findViewById(R.id.editText1);
+		input = (EditText) this.findViewById(R.id.keyword);
 		input.addTextChangedListener(new TextWatcher() {
 
 			@Override

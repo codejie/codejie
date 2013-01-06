@@ -9,20 +9,33 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.animation.TranslateAnimation;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 public class DictionaryActivity extends Activity {
 
+	private ViewSwitcher switcher = null;
+	
 	private EditText input = null;
 	private ImageButton button = null;
 	private RefreshListView list = null;
+	private WebView web = null;
+	
+	private TranslateAnimation aniResultIn = null;
+	private TranslateAnimation aniWord = null;
+	private TranslateAnimation aniResultOut = null;		
 	
 	private DictionaryAdapter adapter = null;
 	
@@ -35,16 +48,53 @@ public class DictionaryActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		this.setContentView(R.layout.activity_dictionary);
+		this.setContentView(R.layout.activity_dictionary2);
 		
-		initView();
-		
+		initAnination();		
+		initView();		
 		initData();
 		
 		initCheckThread();
 	}
 	
+	private void initAnination() {
+		
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        
+        int SCREEN_HEIGHT = displaymetrics.heightPixels;
+        int SCREEN_WIDTH = displaymetrics.widthPixels;        
+        
+        if(SCREEN_HEIGHT > SCREEN_WIDTH) {		
+			aniResultIn = new TranslateAnimation(SCREEN_WIDTH, 0, 0, 0);
+			aniResultIn.setDuration(700);
+			aniWord = new TranslateAnimation(0, 0, 0, 0);
+			aniWord.setDuration(700);
+			aniResultOut = new TranslateAnimation(0, SCREEN_WIDTH, 0, 0);
+			aniResultOut.setDuration(500);
+        }
+        else {
+        	aniResultIn = new TranslateAnimation(0, 0, SCREEN_HEIGHT, 0);
+			aniResultIn.setDuration(700);
+			aniWord = new TranslateAnimation(0, 0, 0, 0);
+			aniWord.setDuration(700);
+			aniResultOut = new TranslateAnimation(0, 0, 0, SCREEN_HEIGHT);
+			aniResultOut.setDuration(500);
+        }        
+        
+	}	
 	private void initView() {
+		
+		switcher = (ViewSwitcher) this.findViewById(R.id.viewSwitcher1);
+		web = (WebView) switcher.findViewById(R.id.webView);
+		web.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				return false;
+			}
+			
+		});
 		
 		adapter = new DictionaryAdapter(this, DBAccess.instance());
 		
@@ -160,6 +210,7 @@ public class DictionaryActivity extends Activity {
 	
 	protected void onListItemClick(View view, int position, long id) {
 		Toast.makeText(this, "index = " + id, Toast.LENGTH_SHORT).show();
+		showResult();
 	}
 	
 
@@ -184,5 +235,18 @@ public class DictionaryActivity extends Activity {
 	protected void onClearButton() {
 		input.setText(null);
 	}
+
+	private void showWordList() {
+		switcher.clearAnimation();
+		switcher.setInAnimation(aniWord);
+		switcher.setOutAnimation(aniResultOut);
+		switcher.showPrevious();		
+	}
 	
+	private void showResult() {
+		switcher.clearAnimation();
+		switcher.setInAnimation(aniResultIn);
+		switcher.setOutAnimation(aniWord);	
+		switcher.showNext();		
+	}	
 }

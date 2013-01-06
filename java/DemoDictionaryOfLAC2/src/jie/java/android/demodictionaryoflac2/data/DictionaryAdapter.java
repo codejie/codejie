@@ -91,6 +91,8 @@ public class DictionaryAdapter extends BaseAdapter {
 		do {
 			array.add(new ItemData(cursor.getInt(0), cursor.getString(1)));
 		} while(cursor.moveToNext());
+		
+		cursor.close();
 				
 		this.notifyDataSetChanged();
 		

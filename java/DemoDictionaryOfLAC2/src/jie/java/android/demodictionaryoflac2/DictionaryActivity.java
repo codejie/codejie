@@ -67,19 +67,19 @@ public class DictionaryActivity extends Activity {
         
         if(SCREEN_HEIGHT > SCREEN_WIDTH) {		
 			aniResultIn = new TranslateAnimation(SCREEN_WIDTH, 0, 0, 0);
-			aniResultIn.setDuration(700);
+			aniResultIn.setDuration(400);
 			aniWord = new TranslateAnimation(0, 0, 0, 0);
-			aniWord.setDuration(700);
+			aniWord.setDuration(400);
 			aniResultOut = new TranslateAnimation(0, SCREEN_WIDTH, 0, 0);
-			aniResultOut.setDuration(500);
+			aniResultOut.setDuration(400);
         }
         else {
         	aniResultIn = new TranslateAnimation(0, 0, SCREEN_HEIGHT, 0);
-			aniResultIn.setDuration(700);
+			aniResultIn.setDuration(400);
 			aniWord = new TranslateAnimation(0, 0, 0, 0);
 			aniWord.setDuration(700);
 			aniResultOut = new TranslateAnimation(0, 0, 0, SCREEN_HEIGHT);
-			aniResultOut.setDuration(500);
+			aniResultOut.setDuration(400);
         }        
         
 	}	
@@ -90,8 +90,9 @@ public class DictionaryActivity extends Activity {
 		web.setOnTouchListener(new OnTouchListener() {
 
 			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				return false;
+			public boolean onTouch(View view, MotionEvent motion) {
+				onWebTouch(motion);
+				return true;
 			}
 			
 		});
@@ -248,5 +249,11 @@ public class DictionaryActivity extends Activity {
 		switcher.setInAnimation(aniResultIn);
 		switcher.setOutAnimation(aniWord);	
 		switcher.showNext();		
+	}
+	
+	protected void onWebTouch(MotionEvent motion) {
+		if(motion.getAction() == MotionEvent.ACTION_UP) {
+			showWordList();
+		}
 	}	
 }

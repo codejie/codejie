@@ -55,6 +55,14 @@ public class DBAccess {
 		return 0;
 	}
 	
+	@Override
+	protected void finalize() throws Throwable {
+		if(db != null) {
+			db.close();
+		}
+		super.finalize();
+	}
+	
 	public int getWordData(final WordData data) {
 		String sql = "SELECT word FROM ld2_vicon_word_info WHERE idx=" + data.index;
 		
@@ -76,7 +84,7 @@ public class DBAccess {
 		if(cursor == null || cursor.isFirst() == false)
 			return -1;
 
-		while(cursor.moveToNext()) {
+		do {
 			XmlIndex xi = new XmlIndex();
 			xi.offset = cursor.getInt(0) + Magic.getMagicNumber();
 			xi.length = cursor.getInt(1);
@@ -84,7 +92,7 @@ public class DBAccess {
 			xi.block2 = cursor.getInt(3);
 			
 			xmlIndex.add(xi);
-		}
+		} while(cursor.moveToNext());
 		cursor.close();
 		return 0;
 	}

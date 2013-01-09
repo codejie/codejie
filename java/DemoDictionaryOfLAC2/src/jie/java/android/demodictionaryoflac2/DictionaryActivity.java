@@ -1,6 +1,7 @@
 package jie.java.android.demodictionaryoflac2;
 
 import jie.java.android.demodictionaryoflac2.data.DBAccess;
+import jie.java.android.demodictionaryoflac2.data.DataFileAccess;
 import jie.java.android.demodictionaryoflac2.data.DictionaryAdapter;
 import jie.java.android.demodictionaryoflac2.view.RefreshListView;
 import android.app.Activity;
@@ -211,7 +212,31 @@ public class DictionaryActivity extends Activity {
 	
 	protected void onListItemClick(View view, int position, long id) {
 		Toast.makeText(this, "index = " + id, Toast.LENGTH_SHORT).show();
-		showResult();
+		
+		DBAccess.WordData word = new DBAccess.WordData((int) id);
+		
+		DBAccess.instance().getWordData(word);
+		
+		 int size = 0;
+		
+		for(final DBAccess.XmlIndex xi : word.xmlIndex) {			
+			final DBAccess.BlockData block = DBAccess.instance().getBlockData(xi.block1);
+			if(block != null) {
+				size = block.length; 
+			}
+			if(xi.block2 != -1) {
+				final DBAccess.BlockData block2 = DBAccess.instance().getBlockData(xi.block2);
+				if(block2 != null) {
+					size += block2.length; 
+				}
+			}
+			
+			DataFileAccess.instance().setBlockCache(block.index, block.start, block.offset, size);
+			
+			Log.d("=====", "xml = " + DataFileAccess.instance().getWordXml(xi.offset, xi.length));
+		}
+		
+		showResultView();
 	}
 	
 
@@ -237,14 +262,14 @@ public class DictionaryActivity extends Activity {
 		input.setText(null);
 	}
 
-	private void showWordList() {
+	private void showWordListView() {
 		switcher.clearAnimation();
 		switcher.setInAnimation(aniWord);
 		switcher.setOutAnimation(aniResultOut);
 		switcher.showPrevious();		
 	}
 	
-	private void showResult() {
+	private void showResultView() {
 		switcher.clearAnimation();
 		switcher.setInAnimation(aniResultIn);
 		switcher.setOutAnimation(aniWord);	
@@ -253,7 +278,7 @@ public class DictionaryActivity extends Activity {
 	
 	protected void onWebTouch(MotionEvent motion) {
 		if(motion.getAction() == MotionEvent.ACTION_UP) {
-			showWordList();
+			showWordListView();
 		}
 	}	
 }

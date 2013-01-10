@@ -232,8 +232,11 @@ public class DictionaryActivity extends Activity {
 			}
 			
 			DataFileAccess.instance().setBlockCache(block.index, block.start, block.offset, size);
-			
-			Log.d("=====", "xml = " + DataFileAccess.instance().getWordXml(xi.offset, xi.length));
+			String xml = DataFileAccess.instance().getWordXml(xi.offset, xi.length);
+			xml = xml.trim();
+			Log.d("=====", "length = " + xi.length);
+			Log.d("=====", "size = " + xml.length());
+			Log.d("=====", "xml = " + xml);
 		}
 		
 		showResultView();

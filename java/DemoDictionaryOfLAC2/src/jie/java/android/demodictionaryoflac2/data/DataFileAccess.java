@@ -102,15 +102,13 @@ public class DataFileAccess {
 	private final int cdSize = (int)cd.maxCharsPerByte();
 	
 	public final String getWordXml(int offset, int length) {
+		cd.reset();
 		final char[] ret = new char[cdSize * length];
 		final CharBuffer retbuf = CharBuffer.wrap(ret);
 		final ByteBuffer cachebuf = ByteBuffer.wrap(blockCache, offset - blockStart, length);
 		cd.decode(cachebuf, retbuf, true);
 		cd.flush(retbuf);
-		if(ret.length != length) {
-			ret = Arrays.copyOf(ret, length);
-		}		
 		
-		return new String(ret);
+		return new String(ret, 0, length);
 	}
 }

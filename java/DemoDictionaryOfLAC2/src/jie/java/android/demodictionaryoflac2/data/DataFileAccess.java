@@ -109,6 +109,6 @@ public class DataFileAccess {
 		cd.decode(cachebuf, retbuf, true);
 		cd.flush(retbuf);
 		
-		return new String(ret, 0, length);
+		return new String(ret, 0, length).trim();
 	}
 }

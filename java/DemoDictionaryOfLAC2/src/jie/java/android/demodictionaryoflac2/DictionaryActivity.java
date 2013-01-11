@@ -3,6 +3,7 @@ package jie.java.android.demodictionaryoflac2;
 import jie.java.android.demodictionaryoflac2.data.DBAccess;
 import jie.java.android.demodictionaryoflac2.data.DataFileAccess;
 import jie.java.android.demodictionaryoflac2.data.DictionaryAdapter;
+import jie.java.android.demodictionaryoflac2.data.XmlTranslator;
 import jie.java.android.demodictionaryoflac2.view.RefreshListView;
 import android.app.Activity;
 import android.os.Bundle;
@@ -237,6 +238,8 @@ public class DictionaryActivity extends Activity {
 			Log.d("=====", "length = " + xi.length);
 			Log.d("=====", "size = " + xml.length());
 			Log.d("=====", "xml = " + xml);
+			
+			XmlTranslator.translate(xml);
 		}
 		
 		showResultView();

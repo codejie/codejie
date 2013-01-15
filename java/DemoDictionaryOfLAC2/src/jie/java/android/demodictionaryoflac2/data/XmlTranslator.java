@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -28,6 +29,8 @@ public class XmlTranslator {
 		private String ret = null;
 		private Integer tag = -1;
 		
+		private Stack<Integer> tagStack = new Stack<Integer>();
+		
 		public XmlHandler() {
 			initMap();
 		}
@@ -45,17 +48,24 @@ public class XmlTranslator {
 			tagMap.put("M", 9);
 		}
 		
-		public void setWord(final String word) {
+		public void reset(final String word) {
 			this.word = word;
+			this.ret = null;
+			tagStack.clear();
 		}
 
+		public final String getRet() {
+			return this.ret;
+		}
+		
 		@Override
 		public void characters(char[] ch, int start, int length) throws SAXException {
 			Log.d("======", "characters() - ch:" + (new String(ch)).trim() + " length:" + length);// uri + " localName :" + localName + " qName:" + qName);
 			String str = (new String(ch)).trim();
 			switch(tag) {
-			case 1:
-				ret = "<DIV>" + word;
+			case 5:
+				ret += str;
+				break;
 			}
 		}
 		
@@ -67,6 +77,27 @@ public class XmlTranslator {
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			Log.d("======", "endElement() - uri:" + uri + " localName :" + localName + " qName:" + qName);
+			
+			tag = tagMap.get(qName);
+			
+			if(tag == null) {
+				Log.e("========", "Unknown tag - " + qName);
+			}
+			if(tag == null)
+				return;
+			Log.d("=====", "end tag = " + tag);
+			
+			switch(tag) {
+			case 5:
+				ret += "</DIV>";
+				break;
+			}
+			
+			if(tag != tagStack.lastElement()) {
+				Log.e("========", "Does not match tag - " + tag);
+			}
+			
+			tag = tagStack.pop();			
 		}
 
 		@Override
@@ -82,18 +113,34 @@ public class XmlTranslator {
 			if(tag == null) {
 				Log.e("========", "Unknown tag - " + qName);
 			}
+			if(tag == null)
+				return;
+						
+			Log.d("=====", "start tag = " + tag);
+			switch(tag) {
+			case 1:
+				ret = "<DIV>" + word;
+				break;
+			case 5:
+				ret += "</DIV><DIV>";
+				break;
+			}
+			
+			tagStack.push(tag);
+			
 		}
 		
 	}
 	
-	private XmlHandler handler = new XmlHandler();
+	private static XmlHandler handler = new XmlHandler();
 	
 	public static final String translate(final String word, final String xml) {
 		String ret = "<HTML><BODY>";
 		
 //		for(final String x : xml) {
 			try {
-				procXml(xml);
+				handler.reset(word);
+				ret += procXml(xml);
 			} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -120,7 +167,7 @@ public class XmlTranslator {
 	
 		parser.parse(is, handler);
 		
-		return ret;
+		return handler.getRet();
 	}
 	
 }

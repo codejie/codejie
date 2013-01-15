@@ -157,6 +157,7 @@ public class DictionaryActivity extends Activity {
 			}
 			
 		});
+
 		list.setAdapter(adapter);
 		
 	}
@@ -208,6 +209,7 @@ public class DictionaryActivity extends Activity {
 		if(adapter != null) {
 //			adapter.setMaxRows(visibleItemCount + 1);
 			adapter.refresh();
+			list.setSelection(0);
 		}		
 	}
 	
@@ -239,7 +241,7 @@ public class DictionaryActivity extends Activity {
 			Log.d("=====", "size = " + xml.length());
 			Log.d("=====", "xml = " + xml);
 			
-			XmlTranslator.translate(xml);
+			Log.d("=====", "HTML = " + XmlTranslator.translate(word.word, xml));
 		}
 		
 		showResultView();

@@ -240,8 +240,13 @@ public class DictionaryActivity extends Activity {
 			Log.d("=====", "length = " + xi.length);
 			Log.d("=====", "size = " + xml.length());
 			Log.d("=====", "xml = " + xml);
+						
+			xml = XmlTranslator.translate(word.word, xml);
 			
-			Log.d("=====", "HTML = " + XmlTranslator.translate(word.word, xml));
+			Log.d("=====", "HTML = " + xml);
+
+			web.loadDataWithBaseURL(null, xml, "text/html", "utf-8", null);
+			
 		}
 		
 		showResultView();

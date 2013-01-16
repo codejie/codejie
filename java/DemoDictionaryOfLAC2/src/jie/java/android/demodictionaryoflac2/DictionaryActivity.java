@@ -199,8 +199,9 @@ public class DictionaryActivity extends Activity {
 
 	protected void onInputChange(String string) {
 		if(adapter != null) {
-			adapter.clear();
+			adapter.clear();		
 			adapter.load("word like '" + string.toString() + "%'");
+			list.setSelection(0);
 		}
 	}
 
@@ -209,7 +210,6 @@ public class DictionaryActivity extends Activity {
 		if(adapter != null) {
 //			adapter.setMaxRows(visibleItemCount + 1);
 			adapter.refresh();
-			list.setSelection(0);
 		}		
 	}
 	

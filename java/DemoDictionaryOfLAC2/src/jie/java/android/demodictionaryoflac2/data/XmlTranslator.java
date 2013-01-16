@@ -60,10 +60,16 @@ public class XmlTranslator {
 		
 		@Override
 		public void characters(char[] ch, int start, int length) throws SAXException {
-			Log.d("======", "characters() - ch:" + (new String(ch)).trim() + " length:" + length);// uri + " localName :" + localName + " qName:" + qName);
+//			Log.d("======", "characters() - ch:" + (new String(ch)).trim() + " length:" + length);// uri + " localName :" + localName + " qName:" + qName);
 			String str = (new String(ch)).trim();
 			switch(tag) {
 			case 5:
+				ret += str;
+				break;
+			case 7:
+				ret += str;
+				break;
+			case 9:
 				ret += str;
 				break;
 			}
@@ -76,7 +82,7 @@ public class XmlTranslator {
 
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
-			Log.d("======", "endElement() - uri:" + uri + " localName :" + localName + " qName:" + qName);
+//			Log.d("======", "endElement() - uri:" + uri + " localName :" + localName + " qName:" + qName);
 			
 			tag = tagMap.get(qName);
 			
@@ -85,11 +91,17 @@ public class XmlTranslator {
 			}
 			if(tag == null)
 				return;
-			Log.d("=====", "end tag = " + tag);
+//			Log.d("=====", "end tag = " + tag);
 			
 			switch(tag) {
 			case 5:
 				ret += "</DIV>";
+				break;
+			case 7:
+				ret += "</DIV>";
+				break;
+			case 9:
+				ret += "]";
 				break;
 			}
 			
@@ -107,7 +119,7 @@ public class XmlTranslator {
 
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-			Log.d("======", "startElement() - uri:" + uri + " localName :" + localName + " qName:" + qName);
+//			Log.d("======", "startElement() - uri:" + uri + " localName :" + localName + " qName:" + qName);
 			
 			tag = tagMap.get(qName);
 			if(tag == null) {
@@ -116,13 +128,19 @@ public class XmlTranslator {
 			if(tag == null)
 				return;
 						
-			Log.d("=====", "start tag = " + tag);
+//			Log.d("=====", "start tag = " + tag);
 			switch(tag) {
 			case 1:
 				ret = "<DIV>" + word;
 				break;
 			case 5:
 				ret += "</DIV><DIV>";
+				break;
+			case 7:
+				ret += "<DIV>";
+				break;
+			case 9:
+				ret += "[";
 				break;
 			}
 			

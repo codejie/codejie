@@ -108,7 +108,6 @@ public class DictionaryAdapter extends BaseAdapter {
 		offset = 0;
 		condition = null;
 //		maxRows = 12;
-		
 		array.clear();
 		
 		this.notifyDataSetChanged();

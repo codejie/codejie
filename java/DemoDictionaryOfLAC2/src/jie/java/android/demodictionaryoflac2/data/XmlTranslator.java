@@ -22,30 +22,35 @@ public class XmlTranslator {
 
 	public static class XmlHandler extends DefaultHandler {
 
-		private HashMap<String, Integer> tagMap = null;
+		private enum Tags {
+			UNKNOWN, C, F, H, L, N, I, E, U, M
+		}
+		
+		private HashMap<String, Tags> tagMap = null;
 		
 		private String word = null;
 		
 		private String ret = null;
-		private Integer tag = -1;
+		private Tags tag = Tags.UNKNOWN;
 		
-		private Stack<Integer> tagStack = new Stack<Integer>();
+		private Stack<Tags> tagStack = new Stack<Tags>();
 		
 		public XmlHandler() {
 			initMap();
 		}
 		
 		private void initMap() {
-			tagMap = new HashMap<String, Integer>();
-			tagMap.put("C", 1);
-			tagMap.put("F", 2);
-			tagMap.put("H", 3);
-			tagMap.put("L", 4);
-			tagMap.put("N", 5);
-			tagMap.put("I", 6);
-			tagMap.put("E", 7);
-			tagMap.put("U", 8);
-			tagMap.put("M", 9);
+			tagMap = new HashMap<String, Tags>();
+			
+			tagMap.put("C", Tags.C);
+			tagMap.put("F", Tags.F);
+			tagMap.put("H", Tags.H);
+			tagMap.put("L", Tags.L);
+			tagMap.put("N", Tags.N);
+			tagMap.put("I", Tags.I);
+			tagMap.put("E", Tags.E);
+			tagMap.put("U", Tags.U);
+			tagMap.put("M", Tags.M);
 		}
 		
 		public void reset(final String word) {
@@ -63,13 +68,16 @@ public class XmlTranslator {
 //			Log.d("======", "characters() - ch:" + (new String(ch)).trim() + " length:" + length);// uri + " localName :" + localName + " qName:" + qName);
 			String str = (new String(ch)).trim();
 			switch(tag) {
-			case 5:
+			case N:
 				ret += str;
 				break;
-			case 7:
+			case E:
 				ret += str;
 				break;
-			case 9:
+			case M:
+				ret += str;
+				break;
+			case U:
 				ret += str;
 				break;
 			}
@@ -94,20 +102,19 @@ public class XmlTranslator {
 //			Log.d("=====", "end tag = " + tag);
 			
 			switch(tag) {
-			case 5:
+			case C:
 				ret += "</DIV>";
 				break;
-			case 7:
+			case N:
 				ret += "</DIV>";
 				break;
-			case 9:
+			case E:
+				ret += "</DIV>";
+				break;
+			case M:
 				ret += "]";
 				break;
-			}
-			
-			if(tag != tagStack.lastElement()) {
-				Log.e("========", "Does not match tag - " + tag);
-			}
+			}			
 			
 			tag = tagStack.pop();			
 		}
@@ -130,18 +137,22 @@ public class XmlTranslator {
 						
 //			Log.d("=====", "start tag = " + tag);
 			switch(tag) {
-			case 1:
+			case C:
 				ret = "<DIV>" + word;
 				break;
-			case 5:
+			case N:
 				ret += "</DIV><DIV>";
 				break;
-			case 7:
+			case E:
 				ret += "<DIV>";
 				break;
-			case 9:
+			case M:
 				ret += "[";
 				break;
+			case U:
+				ret += "<P>";
+				break;
+				
 			}
 			
 			tagStack.push(tag);

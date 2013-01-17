@@ -35,6 +35,8 @@ public class XmlTranslator {
 		
 		private Stack<Tags> tagStack = new Stack<Tags>();
 		
+		private String extension = null;
+		
 		public XmlHandler() {
 			initMap();
 		}
@@ -65,14 +67,15 @@ public class XmlTranslator {
 		
 		@Override
 		public void characters(char[] ch, int start, int length) throws SAXException {
-//			Log.d("======", "characters() - ch:" + (new String(ch)).trim() + " length:" + length);// uri + " localName :" + localName + " qName:" + qName);
-			String str = (new String(ch)).trim();
+			Log.d("======", "characters() - ch:" + (new String(ch)).trim() + " start = " + start + " length:" + length);// uri + " localName :" + localName + " qName:" + qName);
+			String str = (new String(ch, start, length)).trim();
+			Log.d("=====", "characters = " + str);
 			switch(tag) {
 			case N:
 				ret += str;
 				break;
 			case E:
-				ret += str;
+				extension = str;
 				break;
 			case M:
 				ret += str;
@@ -104,15 +107,20 @@ public class XmlTranslator {
 			switch(tag) {
 			case C:
 				ret += "</DIV>";
+				if(extension != null) {
+					ret += "<DIV>" + extension + "</DIV>";
+					extension = null;
+				}
 				break;
 			case N:
 				ret += "</DIV>";
 				break;
-			case E:
-				ret += "</DIV>";
-				break;
 			case M:
 				ret += "]";
+				break;
+			case U:
+				ret += "</FONT>";
+//				ret += "</P>";
 				break;
 			}			
 			
@@ -143,14 +151,12 @@ public class XmlTranslator {
 			case N:
 				ret += "</DIV><DIV>";
 				break;
-			case E:
-				ret += "<DIV>";
-				break;
 			case M:
 				ret += "[";
 				break;
 			case U:
-				ret += "<P>";
+//				ret += "<P>";
+				ret += "<FONT COLOR='#990000'>";
 				break;
 				
 			}

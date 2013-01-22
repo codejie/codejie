@@ -67,7 +67,7 @@ public class XmlTranslator {
 		
 		@Override
 		public void characters(char[] ch, int start, int length) throws SAXException {
-			Log.d("======", "characters() - ch:" + (new String(ch)).trim() + " start = " + start + " length:" + length);// uri + " localName :" + localName + " qName:" + qName);
+//			Log.d("======", "characters() - ch:" + (new String(ch)).trim() + " start = " + start + " length:" + length);// uri + " localName :" + localName + " qName:" + qName);
 			String str = (new String(ch, start, length)).trim();
 			Log.d("=====", "characters = " + str);
 			switch(tag) {
@@ -108,19 +108,18 @@ public class XmlTranslator {
 			case C:
 				ret += "</DIV>";
 				if(extension != null) {
-					ret += "<DIV>" + extension + "</DIV>";
+					ret += "<DIV>Extension : [" + extension + "]</DIV>";
 					extension = null;
 				}
 				break;
 			case N:
-				ret += "</DIV>";
+				ret += "</DIV></DIV>";
 				break;
 			case M:
-				ret += "]";
+				ret += "</FONT>]</SPAN>";
 				break;
 			case U:
 				ret += "</FONT>";
-//				ret += "</P>";
 				break;
 			}			
 			
@@ -146,13 +145,13 @@ public class XmlTranslator {
 //			Log.d("=====", "start tag = " + tag);
 			switch(tag) {
 			case C:
-				ret = "<DIV>" + word;
+				ret = "<DIV><SPAN style=\"LINE-HEIGHT: normal; COLOR: #000000; FONT-SIZE: 14pt\"><B>" + word;
 				break;
 			case N:
-				ret += "</DIV><DIV>";
+				ret += "</DIV><DIV style=\"MARGIN: 0px 0px 5px\"><DIV style=\"MARGIN: 4px 0px\">";
 				break;
 			case M:
-				ret += "[";
+				ret += "</B></SPAN>&nbsp;&nbsp;<SPAN style=\"LINE-HEIGHT: normal; FONT-SIZE: 13pt\">[<FONT color='#009900'>";
 				break;
 			case U:
 //				ret += "<P>";
@@ -170,7 +169,7 @@ public class XmlTranslator {
 	private static XmlHandler handler = new XmlHandler();
 	
 	public static final String translate(final String word, final String xml) {
-		String ret = "<HTML><BODY>";
+		String ret = "<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/></HEAD><BODY>";
 		
 //		for(final String x : xml) {
 			try {

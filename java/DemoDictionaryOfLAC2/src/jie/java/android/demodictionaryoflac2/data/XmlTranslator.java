@@ -20,8 +20,14 @@ import android.util.Log;
 
 public class XmlTranslator {
 
+	private static final String DEF_PART_1 = "<DIV style=\"PADDING-BOTTOM: 0px; LINE-HEIGHT: 1.2em; PADDING-LEFT: 10px; WIDTH: 100%; PADDING-RIGHT: 10px; FONT-FAMILY: 'Tahoma'; FONT-SIZE: 10.5pt; PADDING-TOP: 10px\"><TABLE border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><TBODY><TR><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid; BORDER-LEFT: #92b0dd 1px solid; LINE-HEIGHT: 1em; BACKGROUND: #cfddf0; COLOR: #000080; FONT-SIZE: 9pt; BORDER-TOP: #92b0dd 1px solid; BORDER-RIGHT: #92b0dd 1px solid\" nowrap><SPAN style=\"PADDING-BOTTOM: 0px; PADDING-LEFT: 2px; PADDING-RIGHT: 4px; PADDING-TOP: 0px\">Vicon English-Chinese(S) Dictionary</SPAN></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\"></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\" width=\"100%\" align=\"right\"><DIV style=\"WIDTH: 11px; HEIGHT: 11px; MARGIN-RIGHT: 10px\"></DIV></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\"><DIV style=\"WIDTH: 11px; HEIGHT: 11px; \"></DIV></TD></TR></TBODY></TABLE><DIV ><DIV style=\"MARGIN: 5px 0px\"><DIV style=\"WIDTH: 100%\"><DIV style=\"LINE-HEIGHT: normal; FLOAT: left\">&nbsp;</DIV><DIV style=\"OVERFLOW-X: hidden; WIDTH: 100%\"><DIV style=\"LINE-HEIGHT: normal; MARGIN: 0px 0px 5px; COLOR: #808080\"><SPAN style=\"LINE-HEIGHT: normal; COLOR: #000000; FONT-SIZE: 10.5pt\"><B>";
+	private static final String DEF_PART_2 = "</B></SPAN> &nbsp;<SPAN style=\"LINE-HEIGHT: normal;FONT-SIZE: 10.5pt\">[<FONT color=\"#009900\">";
+	private static final String DEF_PART_3 = "</FONT>]</SPAN></DIV><DIV style=\"MARGIN: 0px 0px 5px\">";
+	private static final String DEF_PART_4 = "</DIV></DIV></DIV></DIV></DIV></DIV>";
+	
 	public static class XmlHandler extends DefaultHandler {
 
+		//<C><F><H><M>e?;?</M></H><I><N>×ÖÄ¸A</N></I></F></C>
 		private enum Tags {
 			UNKNOWN, C, F, H, L, N, I, E, U, M
 		}
@@ -106,17 +112,17 @@ public class XmlTranslator {
 			
 			switch(tag) {
 			case C:
-				ret += "</DIV>";
+//				ret += "</DIV>";
 				if(extension != null) {
 					ret += "<DIV>Extension : [" + extension + "]</DIV>";
 					extension = null;
 				}
 				break;
 			case N:
-				ret += "</DIV></DIV>";
+//				ret += "</DIV></DIV>";
 				break;
 			case M:
-				ret += "</FONT>]</SPAN>";
+//				ret += "</FONT>]</SPAN>";
 				break;
 			case U:
 				ret += "</FONT>";
@@ -145,13 +151,13 @@ public class XmlTranslator {
 //			Log.d("=====", "start tag = " + tag);
 			switch(tag) {
 			case C:
-				ret = "<DIV><SPAN style=\"LINE-HEIGHT: normal; COLOR: #000000; FONT-SIZE: 14pt\"><B>" + word;
+				ret = DEF_PART_1 + word;
 				break;
 			case N:
-				ret += "</DIV><DIV style=\"MARGIN: 0px 0px 5px\"><DIV style=\"MARGIN: 4px 0px\">";
+				ret += DEF_PART_3;
 				break;
 			case M:
-				ret += "</B></SPAN>&nbsp;&nbsp;<SPAN style=\"LINE-HEIGHT: normal; FONT-SIZE: 13pt\">[<FONT color='#009900'>";
+				ret += DEF_PART_2;
 				break;
 			case U:
 //				ret += "<P>";

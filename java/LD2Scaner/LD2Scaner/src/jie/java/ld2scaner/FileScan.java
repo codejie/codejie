@@ -266,11 +266,14 @@ public class FileScan {
 		getIndex(buf, offset * 10, idx);
 
 		String word = null;
-		
+			
 		if(idx[5] != idx[1]) {
 			outputLog("self(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
-			outputBlockIndex(db, index, idx[1], (idx[5] - idx[1]));
+			outputBlockIndex(db, index, idx[1], (idx[5] - idx[1]));			
+		} else {
+			return 0;//used to filter the 'extension' word, because I need not make the index for them now.
 		}
+		
 		if(idx[3] == 0) {
 			outputLog("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
 			word = getWord(buf, idx[0], idx[4] - idx[0]);

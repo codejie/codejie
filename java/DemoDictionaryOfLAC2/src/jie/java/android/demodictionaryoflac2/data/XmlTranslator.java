@@ -20,10 +20,34 @@ import android.util.Log;
 
 public class XmlTranslator {
 
-	private static final String DEF_PART_1 = "<DIV style=\"PADDING-BOTTOM: 0px; LINE-HEIGHT: 1.2em; PADDING-LEFT: 10px; WIDTH: 100%; PADDING-RIGHT: 10px; FONT-FAMILY: 'Tahoma'; FONT-SIZE: 10.5pt; PADDING-TOP: 10px\"><TABLE border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><TBODY><TR><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid; BORDER-LEFT: #92b0dd 1px solid; LINE-HEIGHT: 1em; BACKGROUND: #cfddf0; COLOR: #000080; FONT-SIZE: 9pt; BORDER-TOP: #92b0dd 1px solid; BORDER-RIGHT: #92b0dd 1px solid\" nowrap><SPAN style=\"PADDING-BOTTOM: 0px; PADDING-LEFT: 2px; PADDING-RIGHT: 4px; PADDING-TOP: 0px\">Vicon English-Chinese(S) Dictionary</SPAN></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\"></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\" width=\"100%\" align=\"right\"><DIV style=\"WIDTH: 11px; HEIGHT: 11px; MARGIN-RIGHT: 10px\"></DIV></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\"><DIV style=\"WIDTH: 11px; HEIGHT: 11px; \"></DIV></TD></TR></TBODY></TABLE><DIV ><DIV style=\"MARGIN: 5px 0px\"><DIV style=\"WIDTH: 100%\"><DIV style=\"LINE-HEIGHT: normal; FLOAT: left\">&nbsp;</DIV><DIV style=\"OVERFLOW-X: hidden; WIDTH: 100%\"><DIV style=\"LINE-HEIGHT: normal; MARGIN: 0px 0px 5px; COLOR: #808080\"><SPAN style=\"LINE-HEIGHT: normal; COLOR: #000000; FONT-SIZE: 10.5pt\"><B>";
-	private static final String DEF_PART_2 = "</B></SPAN> &nbsp;<SPAN style=\"LINE-HEIGHT: normal;FONT-SIZE: 10.5pt\">[<FONT color=\"#009900\">";
-	private static final String DEF_PART_3 = "</FONT>]</SPAN></DIV><DIV style=\"MARGIN: 0px 0px 5px\">";
-	private static final String DEF_PART_4 = "</DIV></DIV></DIV></DIV></DIV></DIV>";
+//	private static final String DEF_PART_1 = "<DIV style=\"PADDING-BOTTOM: 0px; LINE-HEIGHT: 1.2em; PADDING-LEFT: 10px; WIDTH: 100%; PADDING-RIGHT: 10px; FONT-FAMILY: 'Tahoma'; FONT-SIZE: 10.5pt; PADDING-TOP: 10px\"><TABLE border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><TBODY><TR><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid; BORDER-LEFT: #92b0dd 1px solid; LINE-HEIGHT: 1em; BACKGROUND: #cfddf0; COLOR: #000080; FONT-SIZE: 9pt; BORDER-TOP: #92b0dd 1px solid; BORDER-RIGHT: #92b0dd 1px solid\" nowrap><SPAN style=\"PADDING-BOTTOM: 0px; PADDING-LEFT: 2px; PADDING-RIGHT: 4px; PADDING-TOP: 0px\">Vicon English-Chinese(S) Dictionary</SPAN></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\"></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\" width=\"100%\" align=\"right\"><DIV style=\"WIDTH: 11px; HEIGHT: 11px; MARGIN-RIGHT: 10px\"></DIV></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\"><DIV style=\"WIDTH: 11px; HEIGHT: 11px; \"></DIV></TD></TR></TBODY></TABLE><DIV ><DIV style=\"MARGIN: 5px 0px\"><DIV style=\"WIDTH: 100%\"><DIV style=\"LINE-HEIGHT: normal; FLOAT: left\">&nbsp;</DIV><DIV style=\"OVERFLOW-X: hidden; WIDTH: 100%\"><DIV style=\"LINE-HEIGHT: normal; MARGIN: 0px 0px 5px; COLOR: #808080\"><SPAN style=\"LINE-HEIGHT: normal; COLOR: #000000; FONT-SIZE: 10.5pt\"><B>";
+//	private static final String DEF_PART_2 = "</B></SPAN> &nbsp;<SPAN style=\"LINE-HEIGHT: normal;FONT-SIZE: 10.5pt\">[<FONT color=\"#009900\">";
+//	private static final String DEF_PART_3 = "</FONT>]</SPAN></DIV><DIV style=\"MARGIN: 0px 0px 5px\">";
+//	private static final String DEF_PART_4 = "</DIV></DIV></DIV></DIV></DIV></DIV>";
+	
+	private static final String DEF_C_START = "<DIV style=\"PADDING-BOTTOM: 0px; LINE-HEIGHT: 1.2em; PADDING-LEFT: 10px; WIDTH: 100%; PADDING-RIGHT: 10px; FONT-FAMILY: 'Tahoma'; FONT-SIZE: 14pt; PADDING-TOP: 10px\"><TABLE border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><TBODY><TR><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid; BORDER-LEFT: #92b0dd 1px solid; LINE-HEIGHT: 1em; BACKGROUND: #cfddf0; COLOR: #000080; FONT-SIZE: 10pt; BORDER-TOP: #92b0dd 1px solid; BORDER-RIGHT: #92b0dd 1px solid\" nowrap><SPAN style=\"PADDING-BOTTOM: 0px; PADDING-LEFT: 2px; PADDING-RIGHT: 4px; PADDING-TOP: 0px\">Vicon English-Chinese(S) Dictionary</SPAN></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\"></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\" width=\"100%\" align=\"right\"><DIV style=\"WIDTH: 11px; HEIGHT: 11px; MARGIN-RIGHT: 10px\"></DIV></TD><TD style=\"BORDER-BOTTOM: #92b0dd 1px solid\"><DIV style=\"WIDTH: 11px; HEIGHT: 11px; \"></DIV></TD></TR></TBODY></TABLE><DIV style=\"MARGIN: 5px 0px\"><DIV style=\"WIDTH: 100%\"><DIV style=\"LINE-HEIGHT: normal; FLOAT: left\"></DIV><DIV style=\"OVERFLOW-X: hidden; WIDTH: 100%\">";
+	private static final String DEF_C_END = "</DIV></DIV></DIV></DIV>";
+	private static final String DEF_WORD_START = "<DIV style=\"LINE-HEIGHT: normal; MARGIN: 0px 0px 5px; COLOR: #808080\"><SPAN style=\"LINE-HEIGHT: 150%; COLOR: #000000; FONT-SIZE: 150%\"><B>";
+	private static final String DEF_WORD_END = "</B></SPAN>";
+	private static final String DEF_F_START = "</DIV><DIV style=\"MARGIN: 0px 0px 5px\">";
+	private static final String DEF_F_END = "</DIV>";
+	private static final String DEF_H_START = "<DIV style=\"MARGIN: 4px 0px\">";//"<DIV style=\"LINE-HEIGHT: normal; MARGIN: 0px 0px 5px; COLOR: #808080\"><SPAN style=\"LINE-HEIGHT: normal; COLOR: #000000; FONT-SIZE: 10.5pt\"><B>";
+	private static final String DEF_H_END = "</DIV>";//"</B></SPAN></DIV>";
+	private static final String DEF_M_START = "<SPAN style=\"LINE-HEIGHT: 150%;FONT-SIZE: 100%\">[<FONT color=\"#009900\">";
+	private static final String DEF_M_END = "</FONT>]</SPAN>";
+	
+	private static final String DEF_I_START = "<DIV style=\"MARGIN: 0px 0px 5px\">";
+	private static final String DEF_I_END = "</DIV>";	
+	private static final String DEF_N_START = "<DIV style=\"MARGIN: 4px 0px\">";
+	private static final String DEF_N_END = "</DIV>";
+	private static final String DEF_U_START = "<FONT color=\"#C00000\">";
+	private static final String DEF_U_END = "</FONT>";
+	private static final String DEF_L_START = "<SPAN style=\"LINE-HEIGHT: normal; COLOR: #000000; FONT-SIZE: 110%\"><B>";
+	private static final String DEF_L_END = "</B></SPAN>";
+	
+	private static final String DEF_EXTENSION_START = "<DIV style=\"COLOR: #4444EE\">Extension</DIV><DIV style=\"LINE-HEIGHT:150%;FONT-SIZE: 110%\">";
+	private static final String DEF_EXTENSION_END = "</DIV>";
+
 	
 	public static class XmlHandler extends DefaultHandler {
 
@@ -70,6 +94,54 @@ public class XmlTranslator {
 		public final String getRet() {
 			return this.ret;
 		}
+
+		@Override
+		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+//			Log.d("======", "startElement() - uri:" + uri + " localName :" + localName + " qName:" + qName);
+			
+			tag = tagMap.get(qName);
+			if(tag == null) {
+				Log.e("========", "Unknown tag - " + qName);
+			}
+			if(tag == null)
+				return;
+						
+//			Log.d("=====", "start tag = " + tag);
+			switch(tag) {
+			case C:
+				ret = DEF_C_START;
+				ret += DEF_WORD_START;
+				ret += word;
+				break;
+			case H:
+				ret += DEF_H_START;
+				//ret += word;
+				break;
+			case F:
+				ret += DEF_WORD_END;
+				ret += DEF_F_START;
+				break;
+			case M:
+				ret += DEF_M_START;
+				break;
+			case I:
+				ret += DEF_I_START;
+				break;
+			case U:
+				ret += DEF_U_START;
+				break;
+			case N:
+				ret += DEF_N_START;
+				break;
+			case L:
+				ret += DEF_L_START;
+				break;
+				
+			}
+			
+			tagStack.push(tag);
+			
+		}
 		
 		@Override
 		public void characters(char[] ch, int start, int length) throws SAXException {
@@ -77,25 +149,24 @@ public class XmlTranslator {
 			String str = (new String(ch, start, length)).trim();
 			Log.d("=====", "characters = " + str);
 			switch(tag) {
+			case M:
+				ret += str;
+				break;
 			case N:
 				ret += str;
 				break;
 			case E:
 				extension = str;
 				break;
-			case M:
+			case U:
 				ret += str;
 				break;
-			case U:
+			case L:
 				ret += str;
 				break;
 			}
 		}
 		
-		@Override
-		public void endDocument() throws SAXException {
-			super.endDocument();
-		}
 
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -112,20 +183,35 @@ public class XmlTranslator {
 			
 			switch(tag) {
 			case C:
-//				ret += "</DIV>";
+
 				if(extension != null) {
-					ret += "<DIV>Extension : [" + extension + "]</DIV>";
+					ret += DEF_EXTENSION_START;
+					ret += extension;
+					ret += DEF_EXTENSION_END;
 					extension = null;
 				}
+				ret += DEF_C_END;
 				break;
-			case N:
-//				ret += "</DIV></DIV>";
+			case F:
+				ret += DEF_F_END;
+				break;
+			case H:
+				ret += DEF_H_END;
 				break;
 			case M:
-//				ret += "</FONT>]</SPAN>";
+				ret += DEF_M_END;
+				break;
+			case I:
+				ret += DEF_I_END;
 				break;
 			case U:
-				ret += "</FONT>";
+				ret += DEF_U_END;
+				break;
+			case N:
+				ret += DEF_N_END;
+				break;
+			case L:
+				ret += DEF_L_END;
 				break;
 			}			
 			
@@ -135,39 +221,15 @@ public class XmlTranslator {
 		@Override
 		public void startDocument() throws SAXException {
 			super.startDocument();
+			
+			//ret = DEF_HEAD_START;
 		}
 
 		@Override
-		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-//			Log.d("======", "startElement() - uri:" + uri + " localName :" + localName + " qName:" + qName);
+		public void endDocument() throws SAXException {
+			super.endDocument();
 			
-			tag = tagMap.get(qName);
-			if(tag == null) {
-				Log.e("========", "Unknown tag - " + qName);
-			}
-			if(tag == null)
-				return;
-						
-//			Log.d("=====", "start tag = " + tag);
-			switch(tag) {
-			case C:
-				ret = DEF_PART_1 + word;
-				break;
-			case N:
-				ret += DEF_PART_3;
-				break;
-			case M:
-				ret += DEF_PART_2;
-				break;
-			case U:
-//				ret += "<P>";
-				ret += "<FONT COLOR='#990000'>";
-				break;
-				
-			}
-			
-			tagStack.push(tag);
-			
+			//ret += DEF_HEAD_END;
 		}
 		
 	}

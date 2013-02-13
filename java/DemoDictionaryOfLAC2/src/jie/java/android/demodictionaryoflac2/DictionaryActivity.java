@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +24,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -56,7 +59,9 @@ public class DictionaryActivity extends Activity {
 		initView();		
 		initData();
 		
-		initCheckThread();
+		initHandler();
+		
+		//initCheckThread();
 	}
 	
 	private void initAnination() {
@@ -166,8 +171,7 @@ public class DictionaryActivity extends Activity {
 		adapter.load(null);
 	}
 	
-	private void initCheckThread() {
-
+	private void initHandler() {
 		handler = new Handler() {
 
 			@Override
@@ -178,11 +182,14 @@ public class DictionaryActivity extends Activity {
 				}
 			}		
 		};
-		
+	}
+	
+	private void initCheckThread() {	
 		
 		thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				checkRun = true;
 				while(checkRun) {
 					try {
 						Thread.sleep(Global.INPUT_CHECK_PEROID);
@@ -214,7 +221,7 @@ public class DictionaryActivity extends Activity {
 	}
 	
 	protected void onListItemClick(View view, int position, long id) {
-		Toast.makeText(this, "index = " + id, Toast.LENGTH_SHORT).show();
+//		Toast.makeText(this, "index = " + id, Toast.LENGTH_SHORT).show();
 		
 		DBAccess.WordData word = new DBAccess.WordData((int) id);
 		
@@ -236,14 +243,15 @@ public class DictionaryActivity extends Activity {
 			
 			DataFileAccess.instance().setBlockCache(block.index, block.start, block.offset, size);
 			String xml = DataFileAccess.instance().getWordXml(xi.offset, xi.length);
+//			Log.d("=====", "before xml = " + xml);
 			xml = xml.trim();
-			Log.d("=====", "length = " + xi.length);
-			Log.d("=====", "size = " + xml.length());
-			Log.d("=====", "xml = " + xml);
+//			Log.d("=====", "length = " + xi.length);
+//			Log.d("=====", "size = " + xml.length());
+//			Log.d("=====", "xml = " + xml);
 						
 			xml = XmlTranslator.translate(word.word, xml);
 			
-			Log.d("=====", "HTML = " + xml);
+//			Log.d("=====", "HTML = " + xml);
 
 			web.loadDataWithBaseURL(null, xml, "text/html", "utf-8", null);
 			
@@ -267,8 +275,9 @@ public class DictionaryActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		checkRun = true;
 		super.onResume();
+
+		initCheckThread();
 	}
 
 	protected void onClearButton() {

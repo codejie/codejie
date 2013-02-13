@@ -41,26 +41,31 @@ public class RefreshListView extends ListView implements OnScrollListener {
 			
 			layout.setOrientation(HORIZONTAL);
 */			
-			//this.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
+			//this.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 			progress = new ProgressBar(this.getContext());
 			progress.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-			progress.setPadding(80, 10, 20, 10);
+			//progress.setPadding(80, 10, 20, 10);
 			title = new TextView(this.getContext());
 			title.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));// CONTENT));
 			title.setGravity(Gravity.CENTER_VERTICAL);
+			title.setPadding(20, 0, 0, 0);
 			title.setText("Release to load...");
 //			progress.setMinimumHeight(40);
 			
 			this.addView(progress);
 			this.addView(title);
 			
+			//this.setPadding(0, 50, 0, 10);
+			this.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+			
 //			this.addView(layout);
+			//this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 		}
 		
 		public void setVisible(boolean isVisible) {
-			progress.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-			title.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-			//this.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+			//progress.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+			//title.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+			this.setVisibility(isVisible ? View.VISIBLE : View.GONE);
 		}
 			
 		public void setText(String text) {
@@ -113,7 +118,10 @@ public class RefreshListView extends ListView implements OnScrollListener {
 		footer = new FooterView(this.getContext());
 		
 		footer.setVisible(false);
+		//footer.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		this.addFooterView(footer);
+		
+		//footer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 		
 		measureView(footer);
 		

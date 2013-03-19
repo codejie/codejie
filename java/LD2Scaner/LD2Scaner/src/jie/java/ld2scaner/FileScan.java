@@ -43,6 +43,7 @@ public class FileScan {
 	private static int lengthInflatedXml = 0;
 	
 	private static ArrayList<BlockData> listBlockData = new ArrayList<BlockData>();
+
 	
 	final static Charset charset = Charset.forName("UTF-8");
 	final static CharsetDecoder charsetDecodeer = charset.newDecoder();
@@ -331,8 +332,9 @@ public class FileScan {
 		charsetDecodeer.decode(in, retbuf, true);
 		charsetDecodeer.flush(retbuf);
 		
-		if(ret.length != len) {
-			ret = Arrays.copyOf(ret, len);
+		int size = retbuf.length();
+		if(ret.length != size) {
+			ret = Arrays.copyOf(ret, size);
 		}
 		
 		return ret;

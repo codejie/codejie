@@ -31,7 +31,8 @@ public class LD2Scaner {
 		public ArrayList<WordIndex> block = new ArrayList<WordIndex>();
 	}
 	
-	private final static String ld2File = "./data/Vicon English-Chinese(S) Dictionary.ld2";// "./data/3GPP.ld2"; 
+	//private final static String ld2File = "./data/Vicon English-Chinese(S) Dictionary.ld2";// "./data/3GPP.ld2"; 
+	private final static String ld2File = "./data/Vicon Chinese(S)-English Dictionary.ld2";
 
 	public static void main(String[] args) {
 		

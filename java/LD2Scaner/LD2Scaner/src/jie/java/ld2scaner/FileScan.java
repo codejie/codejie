@@ -43,12 +43,13 @@ public class FileScan {
 	private static int lengthInflatedXml = 0;
 	
 	private static ArrayList<BlockData> listBlockData = new ArrayList<BlockData>();
-
 	
-	final static Charset charset = Charset.forName("UTF-8");
-	final static CharsetDecoder charsetDecodeer = charset.newDecoder();
-	final static int sizeCharsPerByte = (int) charsetDecodeer.maxCharsPerByte();	
+//	final static Charset charset = Charset.forName("UTF-8");
+//	final static CharsetDecoder charsetDecodeer = charset.newDecoder();
+//	final static int sizeCharsPerByte = (int) charsetDecodeer.maxCharsPerByte();	
 		
+	final static DecodeHelper decoder = new DecodeHelper();
+	
 	public static int scan(final String ld2file, final DBHelper db) {
 		
 		outputLog("file = " + ld2file);			
@@ -314,31 +315,36 @@ public class FileScan {
 	}
 	
 	private static final String getWord(ByteBuffer buf, int offset, int len) {
-		String word = new String(UTF8Decode(buf, offsetInflatedWords + offset, len));
-		return word;
+		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedWords + offset, len);
+		return decoder.DecodeWordData(in, len);
+//		String word = new String(UTF8Decode(buf, offsetInflatedWords + offset, len));
+//		return word;
 	}
 	
 	private static final String getXml(ByteBuffer buf, int offset, int len) {
-		String xml = new String(UTF8Decode(buf, offsetInflatedXml + offset, len));
-		return xml;
+		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedXml + offset, len);
+		return decoder.DecodeXmlData(in, len);
+		
+//		String xml = new String(UTF8Decode(buf, offsetInflatedXml + offset, len));
+//		return xml;
 	}
 	
-	private static char[] UTF8Decode(final ByteBuffer buf, final int offset, final int len) {
-		charsetDecodeer.reset();
-		char[] ret = new char[ len * sizeCharsPerByte ];
-		final CharBuffer retbuf = CharBuffer.wrap(ret);
-		
-		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offset, len);
-		charsetDecodeer.decode(in, retbuf, true);
-		charsetDecodeer.flush(retbuf);
-		
-		int size = retbuf.length();
-		if(ret.length != size) {
-			ret = Arrays.copyOf(ret, size);
-		}
-		
-		return ret;
-	}
+//	private static char[] UTF8Decode(final ByteBuffer buf, final int offset, final int len) {
+//		charsetDecodeer.reset();
+//		char[] ret = new char[ len * sizeCharsPerByte ];
+//		final CharBuffer retbuf = CharBuffer.wrap(ret);
+//		
+//		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offset, len);
+//		charsetDecodeer.decode(in, retbuf, true);
+//		charsetDecodeer.flush(retbuf);
+//		
+//		int size = retbuf.length();
+//		if(ret.length != size) {
+//			ret = Arrays.copyOf(ret, size);
+//		}
+//		
+//		return ret;
+//	}
 	
 	private static void outputLog(String string) {
 		System.out.println(string);

@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
@@ -31,7 +32,12 @@ public class FileScan {
 		public final String toString() {
 			return "index (" + index + ") = [" + offset + "," + length + "] --> [" + start + "," + end + "]"; 
 		}
-	}	
+	}
+	
+	protected interface OnDataListener {
+		public void OnWordData(int index, final ByteBuffer buf, int offset, int length);
+		public void OnXmlData(int index, final ByteBuffer buf, int offset, int length);
+	}
 
 	private static int offsetIndex = 0;
 	private static int lengthIndex = 0;
@@ -48,7 +54,9 @@ public class FileScan {
 //	final static CharsetDecoder charsetDecodeer = charset.newDecoder();
 //	final static int sizeCharsPerByte = (int) charsetDecodeer.maxCharsPerByte();	
 		
-	final static DecodeHelper decoder = new DecodeHelper();
+	//final static DecodeHelper decoder = new DecodeHelper();
+	final static Decoder wordDecoder = null;
+	final static Decoder xmlDecoder = null;
 	
 	public static int scan(final String ld2file, final DBHelper db) {
 		
@@ -122,7 +130,11 @@ public class FileScan {
 				}
 			} finally {
 				file.close();
-			}			
+			}
+		} catch (CharacterCodingException e) {
+			// CharacterCoding is not supported.
+			e.printStackTrace();			
+			return -1;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return -1;
@@ -261,7 +273,37 @@ public class FileScan {
 		return ret;
 	}
 	
-	private static int checkData(ByteBuffer buf, final int index, final DBHelper db) {
+	private static int detectDecoder(ByteBuffer buf) {
+		
+		int maxLoop = 10;
+		
+		OnDataListener listener = new OnDataListener() {
+
+			@Override
+			public void OnWordData(int index, ByteBuffer buf, int offset, int length) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void OnXmlData(int index, ByteBuffer buf, int offset, int length) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
+		
+		for(int i = 0; i < maxLoop; ++ i) {
+			
+		}			
+		
+	}
+	
+	private static void getData(ByteBuffer buf, final int index, OnDataListener wordListener, OnDataListener xmlListener) {
+		
+	}
+	
+	private static int checkData(ByteBuffer buf, final int index, final DBHelper db) throws CharacterCodingException {
 		
 		int offset = index;
 		final int idx[] = new int[6];		
@@ -314,14 +356,14 @@ public class FileScan {
 		idx[5] = buf.getInt();
 	}
 	
-	private static final String getWord(ByteBuffer buf, int offset, int len) {
+	private static final String getWord(ByteBuffer buf, int offset, int len) throws CharacterCodingException {
 		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedWords + offset, len);
 		return decoder.DecodeWordData(in, len);
 //		String word = new String(UTF8Decode(buf, offsetInflatedWords + offset, len));
 //		return word;
 	}
 	
-	private static final String getXml(ByteBuffer buf, int offset, int len) {
+	private static final String getXml(ByteBuffer buf, int offset, int len) throws CharacterCodingException {
 		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedXml + offset, len);
 		return decoder.DecodeXmlData(in, len);
 		

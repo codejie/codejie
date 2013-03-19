@@ -1,9 +1,12 @@
 package jie.java.ld2scaner;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CoderResult;
 import java.util.Arrays;
 
 public class DecodeHelper {
@@ -19,11 +22,23 @@ public class DecodeHelper {
 			charsPerByte = (int) decoder.maxCharsPerByte();
 		}
 		
-		public final char[] decode(final ByteBuffer in, final int length) {
+		public final char[] decode(final ByteBuffer in, final int length) throws CharacterCodingException {
+			
+			if(decoder == null) 
+				return null;
+			
+			decoder.reset();
+			
 			char[] ret = new char[length * charsPerByte];
 			final CharBuffer out = CharBuffer.wrap(ret);
-			decoder.decode(in, out, true);
-			decoder.flush(out);
+			
+			CoderResult cr = decoder.decode(in, out, true);
+			if(!cr.isUnderflow())
+				cr.throwException();
+			cr = decoder.flush(out);
+			if(!cr.isUnderflow())
+				cr.throwException();
+			
 			if(ret.length != out.length()) {
 				ret = Arrays.copyOf(ret, out.length());
 			}
@@ -42,32 +57,41 @@ public class DecodeHelper {
 	
 	private String[] decoderName = new String[] { "UTF-8", "UTF-16LE", "UTF-16BE", "EUC-JP" };
 	
-	public final String detectWordDecoder(final ByteBuffer in, final int length) {
+	public boolean detectWordDecoder(final ByteBuffer in, final int length) {
 		for(int i = 0; i < decoderName.length; ++ i) {
 			try {
-				wordDecoder = new Decoder(decoderName[i]);
-				return new String(wordDecoder.decode(in, length));				
+				for(int j = 0; j < 1; ++ j) {
+					wordDecoder = new Decoder(decoderName[i]);
+					wordDecoder.decode(in, length);
+				}
+				return true;				
 				
+			} catch (final CharacterCodingException e) {
+				continue;
 			} catch (final Throwable e) {
 				continue;
 			}
 		}
 		wordDecoder = null;
-		return null;
+		return false;
 	}
 
-	public final String detectXmlDecoder(final ByteBuffer in, final int length) {
+	public boolean detectXmlDecoder(final ByteBuffer in, final int length) {
 		for(int i = 0; i < decoderName.length; ++ i) {
 			try {
 				xmlDecoder = new Decoder(decoderName[i]);
-				return new String(xmlDecoder.decode(in, length));		
+				xmlDecoder.decode(in, length);
 				
-			} catch (final Throwable e) {
+				return true;
+				
+			} catch (final CharacterCodingException e) {
 				continue;
+			} catch (final Throwable e) {
+				continue;				
 			}
 		}
 		xmlDecoder = null;
-		return null;
+		return false;
 	}
 	
 	public void reset() {
@@ -75,19 +99,21 @@ public class DecodeHelper {
 		xmlDecoder = null;
 	}
 	
-	public final String DecodeWordData(final ByteBuffer in, final int length) {
+	public final String DecodeWordData(final ByteBuffer in, final int length) throws CharacterCodingException {
 		if(wordDecoder == null) {
-			return detectWordDecoder(in, length);
+			if(!detectWordDecoder(in, length))
+				throw new CharacterCodingException();
 		}
-		wordDecoder.reset();
+
 		return new String(wordDecoder.decode(in, length));
 	}
 	
-	public final String DecodeXmlData(final ByteBuffer in, final int length) {
+	public final String DecodeXmlData(final ByteBuffer in, final int length) throws CharacterCodingException {
 		if(xmlDecoder == null) {
-			return detectXmlDecoder(in, length);
+			if(!detectXmlDecoder(in, length))
+				throw new CharacterCodingException();
 		}
-		xmlDecoder.reset();
+
 		return new String(xmlDecoder.decode(in, length));		
 	}
   

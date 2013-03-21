@@ -45,7 +45,31 @@ public class Decoder {
 		charsPerByte = (int) decoder.maxCharsPerByte();		
 	}
 	
-	public final char[] decode(final ByteBuffer in, final int length) throws CharacterCodingException {
+	public void detect(final ByteBuffer in, final int length) throws CharacterCodingException {
+		if(decoder != null)
+		{
+			decoder.reset();
+			
+			char[] ret = new char[length * charsPerByte];
+			final CharBuffer out = CharBuffer.wrap(ret);
+			
+			try {
+				CoderResult cr = decoder.decode(in, out, true);
+				if(!cr.isUnderflow())
+					cr.throwException();
+				cr = decoder.flush(out);
+				if(!cr.isUnderflow())
+					cr.throwException();
+			}
+			catch (final Throwable e) {
+				throw new CharacterCodingException(); 
+			}
+		} else {
+			throw new CharacterCodingException();
+		}
+	}
+	
+	public final char[] decode(final ByteBuffer in, final int length) {
 		
 		if(decoder == null) 
 			return null;
@@ -55,16 +79,15 @@ public class Decoder {
 		char[] ret = new char[length * charsPerByte];
 		final CharBuffer out = CharBuffer.wrap(ret);
 		
-		CoderResult cr = decoder.decode(in, out, true);
-		if(!cr.isUnderflow())
-			cr.throwException();
-		cr = decoder.flush(out);
-		if(!cr.isUnderflow())
-			cr.throwException();
+		decoder.decode(in, out, true);
+		decoder.flush(out);
 		
-		if(ret.length != out.length()) {
-			ret = Arrays.copyOf(ret, out.length());
+		int size = out.position();
+		
+		if(ret.length != size) {
+			ret = Arrays.copyOf(ret, size);
 		}
+		
 		return ret;
 	}	
 	

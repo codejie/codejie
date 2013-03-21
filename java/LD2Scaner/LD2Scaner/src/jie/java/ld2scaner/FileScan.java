@@ -3,19 +3,13 @@ package jie.java.ld2scaner;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CoderResult;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
@@ -54,9 +48,8 @@ public class FileScan {
 //	final static CharsetDecoder charsetDecodeer = charset.newDecoder();
 //	final static int sizeCharsPerByte = (int) charsetDecodeer.maxCharsPerByte();	
 		
-	//final static DecodeHelper decoder = new DecodeHelper();
-	final static Decoder wordDecoder = null;
-	final static Decoder xmlDecoder = null;
+	static Decoder wordDecoder = null;
+	static Decoder xmlDecoder = null;
 	
 	public static int scan(final String ld2file, final DBHelper db) {
 		
@@ -64,7 +57,15 @@ public class FileScan {
 		
 		if(scanInfo(ld2file, db) != 0) {
 			return -1;
-		}			
+		}
+		
+		try {
+			if(detectDecoder(ld2file + ".inflated") != 0)
+				return -1;
+		} catch (final ArrayIndexOutOfBoundsException e) {
+			return -1;
+		}
+
 		
 		if(scanData(ld2file + ".inflated", db) != 0) {
 			return -1;
@@ -113,6 +114,23 @@ public class FileScan {
 
 	private static int scanData(final String inflatedfile, final DBHelper db) {
 
+		OnDataListener dataListener = new OnDataListener() {
+
+			@Override
+			public void OnWordData(int index, ByteBuffer buf, int offset, int length) {
+				String word = getWord(buf, offset, length);
+				outputLog("word = " + word);
+				outputWord(db, index, word);				
+			}
+
+			@Override
+			public void OnXmlData(int index, ByteBuffer buf, int offset, int length) {
+				outputLog("self(" + offset + ") xml = " + getXml(buf, offset, length));
+				outputBlockIndex(db, index, offset, length);					
+			}
+			
+		};
+		
 		try {
 			RandomAccessFile file = null;
 			try {
@@ -124,9 +142,10 @@ public class FileScan {
 				final int countDefinitions = offsetInflatedWords / 10 - 1;//326290;//lengthIndex / 4;
 				for(int i = 0; i < countDefinitions; ++ i) {
 					outputLog("i = " + i);
-					if(checkData(buf, i, db) != 0) {
-						return -1;
-					}
+					getData(buf, i, dataListener);
+//					if(checkData(buf, i, db) != 0) {
+//						return -1;
+//					}
 				}
 			} finally {
 				file.close();
@@ -273,38 +292,89 @@ public class FileScan {
 		return ret;
 	}
 	
-	private static int detectDecoder(ByteBuffer buf) {
-		
-		int maxLoop = 10;
-		
-		OnDataListener listener = new OnDataListener() {
+	private static boolean flag = true;
 
+	private static int detectDecoder(final String inflatedfile) throws ArrayIndexOutOfBoundsException {
+				
+		OnDataListener dataListener = new OnDataListener() {
+			final int maxTry = 50;
+			int trying = 0;
 			@Override
 			public void OnWordData(int index, ByteBuffer buf, int offset, int length) {
-				// TODO Auto-generated method stub
+				if(wordDecoder == null) {
+					wordDecoder = new Decoder();
+				}
+				try {
+					final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedWords + offset, length);
+					wordDecoder.detect(in, length);
 				
+					if(++ trying > maxTry) {
+						flag = false;
+					}
+				} catch (final CharacterCodingException e) {
+					try {
+						wordDecoder.next();
+						trying = 0;
+					} catch (final ArrayIndexOutOfBoundsException e1) {
+						throw e1;
+					}
+				}
 			}
 
 			@Override
 			public void OnXmlData(int index, ByteBuffer buf, int offset, int length) {
-				// TODO Auto-generated method stub
-				
-			}
-			
+				if(xmlDecoder == null) {
+					xmlDecoder = new Decoder();
+				}
+				try {
+					final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedXml + offset, length);
+					xmlDecoder.detect(in, length);
+					if(++ trying > maxTry) {
+						flag = false;
+					}
+				} catch (final CharacterCodingException e) {
+					try {
+						xmlDecoder.next();
+						trying = 0;
+					} catch (final ArrayIndexOutOfBoundsException e1) {
+						throw e1;
+					}
+				}				
+			}			
 		};
 		
-		for(int i = 0; i < maxLoop; ++ i) {
-			
-		}			
+		try {
+			RandomAccessFile file = null;
+			try {
+				file = new RandomAccessFile(inflatedfile, "r");
+				final ByteBuffer buf = ByteBuffer.allocate((int) file.getChannel().size());
+				file.getChannel().read(buf);
+			    buf.order(ByteOrder.LITTLE_ENDIAN);		
+				
+				final int countDefinitions = offsetInflatedWords / 10 - 1;//326290;//lengthIndex / 4;
+				for(int i = 0; i < countDefinitions; ++ i) {
+					if(!flag) {
+						break;
+					}
+					outputLog("i = " + i);
+					getData(buf, i, dataListener);
+				}
+			} finally {
+				file.close();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return -1;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return -1;
+		}
 		
+		return 0;
 	}
 	
-	private static void getData(ByteBuffer buf, final int index, OnDataListener wordListener, OnDataListener xmlListener) {
-		
-	}
+	private static void getData(ByteBuffer buf, final int index, OnDataListener dataListener) {
 	
-	private static int checkData(ByteBuffer buf, final int index, final DBHelper db) throws CharacterCodingException {
-		
 		int offset = index;
 		final int idx[] = new int[6];		
 		getIndex(buf, offset * 10, idx);
@@ -312,15 +382,13 @@ public class FileScan {
 		String word = null;
 			
 		if(idx[5] != idx[1]) {
-			outputLog("self(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
-			outputBlockIndex(db, index, idx[1], (idx[5] - idx[1]));			
+			dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
 		} else {
-			return 0;//used to filter the 'extension' word, because I need not make the index for them now.
+			return;//used to filter the 'extension' word, because I need not make the index for them now.
 		}
 		
 		if(idx[3] == 0) {
-			outputLog("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
-			word = getWord(buf, idx[0], idx[4] - idx[0]);
+			dataListener.OnWordData(index, buf, idx[0], idx[4] - idx[0]);
 		}
 		else {
 			int ref = idx[3];
@@ -330,21 +398,56 @@ public class FileScan {
 			while(ref -- > 0) {
 				offset = buf.getInt(offsetInflatedWords + offsetword);
 				getIndex(buf, offset * 10, idx);
-				outputLog("ref(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
-				outputBlockIndex(db, index, idx[1], (idx[5] - idx[1]));
+				dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
 				offsetword += 4;
 				lenword -= 4;
 			}
-			outputLog("word = " + getWord(buf, offsetword, lenword));
-			word = getWord(buf, offsetword, lenword);
+			dataListener.OnWordData(index, buf, offsetword, lenword);
 		}
-		
-		if(outputWord(db, index, word) != 0) {
-			return -1;
-		}
-		
-		return 0;
 	}
+	
+//	private static int checkData(ByteBuffer buf, final int index, final DBHelper db) throws CharacterCodingException {
+//		
+//		int offset = index;
+//		final int idx[] = new int[6];		
+//		getIndex(buf, offset * 10, idx);
+//
+//		String word = null;
+//			
+//		if(idx[5] != idx[1]) {
+//			outputLog("self(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+//			outputBlockIndex(db, index, idx[1], (idx[5] - idx[1]));			
+//		} else {
+//			return 0;//used to filter the 'extension' word, because I need not make the index for them now.
+//		}
+//		
+//		if(idx[3] == 0) {
+//			outputLog("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
+//			word = getWord(buf, idx[0], idx[4] - idx[0]);
+//		}
+//		else {
+//			int ref = idx[3];
+//			int offsetword = idx[0];
+//			int lenword = idx[4] - idx[0];
+//			
+//			while(ref -- > 0) {
+//				offset = buf.getInt(offsetInflatedWords + offsetword);
+//				getIndex(buf, offset * 10, idx);
+//				outputLog("ref(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
+//				outputBlockIndex(db, index, idx[1], (idx[5] - idx[1]));
+//				offsetword += 4;
+//				lenword -= 4;
+//			}
+//			outputLog("word = " + getWord(buf, offsetword, lenword));
+//			word = getWord(buf, offsetword, lenword);
+//		}
+//		
+//		if(outputWord(db, index, word) != 0) {
+//			return -1;
+//		}
+//		
+//		return 0;
+//	}
 
 	private static void getIndex(ByteBuffer buf, int offset, final int[] idx) {
 		buf.position(offset);
@@ -356,16 +459,16 @@ public class FileScan {
 		idx[5] = buf.getInt();
 	}
 	
-	private static final String getWord(ByteBuffer buf, int offset, int len) throws CharacterCodingException {
+	private static final String getWord(ByteBuffer buf, int offset, int len) {
 		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedWords + offset, len);
-		return decoder.DecodeWordData(in, len);
+		return new String(wordDecoder.decode(in, len));
 //		String word = new String(UTF8Decode(buf, offsetInflatedWords + offset, len));
 //		return word;
 	}
 	
-	private static final String getXml(ByteBuffer buf, int offset, int len) throws CharacterCodingException {
+	private static final String getXml(ByteBuffer buf, int offset, int len) {
 		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedXml + offset, len);
-		return decoder.DecodeXmlData(in, len);
+		return new String(xmlDecoder.decode(in, len));
 		
 //		String xml = new String(UTF8Decode(buf, offsetInflatedXml + offset, len));
 //		return xml;

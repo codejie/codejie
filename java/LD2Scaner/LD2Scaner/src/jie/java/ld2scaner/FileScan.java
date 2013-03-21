@@ -1,5 +1,6 @@
 package jie.java.ld2scaner;
 
+
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -9,9 +10,16 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.CharacterCodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class FileScan {
 
@@ -85,8 +93,11 @@ public class FileScan {
 				file.getChannel().read(buf);
 				
 				buf.order(ByteOrder.LITTLE_ENDIAN);
-	
-				if(check(buf) != 0) {
+				
+				checkHeader(buf);
+
+				buf.position(0);
+				if(checkIndex(buf) != 0) {
 					return -1;
 				}
 				
@@ -165,7 +176,54 @@ public class FileScan {
 		return 0;
 	}	
 
-	private static int check(final ByteBuffer buf) {
+	private static int checkHeader(final ByteBuffer buf) {
+		
+		try {
+			outputLog("Type = " + new String(buf.array(), 0, 4, "ASCII"));
+			outputLog("Version = " + buf.getShort(0x18) + "." + buf.getShort(0x1A));
+			outputLog("ID = 0x" + Long.toHexString(buf.getLong(0x1C)));	
+			
+			int size = buf.getInt(92);
+			outputLog("Info Xml size = " + size);
+			
+//			byte[] xml = new byte[size];
+			
+			ByteBuffer in = ByteBuffer.wrap(buf.array(), 96, size);
+//			buf.get(xml, 96, size);
+			
+			
+			try {
+				String xmlout = Decrypter.decrypt(in.array());
+				outputLog("xml = " + xmlout);
+			} catch (InvalidKeyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalBlockSizeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (BadPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidKeySpecException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return -1;
+		}		
+		
+		return 0;
+	}
+	
+	private static int checkIndex(final ByteBuffer buf) {
 		
 		try {
 			outputLog("Type = " + new String(buf.array(), 0, 4, "ASCII"));

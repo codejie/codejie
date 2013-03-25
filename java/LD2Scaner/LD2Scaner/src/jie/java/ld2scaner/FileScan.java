@@ -63,10 +63,17 @@ public class FileScan {
 	private String ld2file = null;
 	private DBHelper db = null;
 	
+	private int indexOffset = 0;
+	
 	public FileScan(int fileId, final String ld2file, final DBHelper db) {
 		this.fileId = fileId;
 		this.ld2file = ld2file;
 		this.db = db;
+	}
+	
+	public boolean init() {
+		indexOffset = db.getNextWordIdex();
+		return true;
 	}
 	
 	public int scan() {
@@ -85,7 +92,7 @@ public class FileScan {
 		}
 
 		
-		if(scanData(ld2file + ".inflated", db) != 0) {
+		if(scanData(fileId, ld2file + ".inflated", db) != 0) {
 			return -1;
 		}
 		
@@ -133,7 +140,8 @@ public class FileScan {
 		return 0;
 	}
 
-	private int scanData(final String inflatedfile, final DBHelper db) {
+	private int wordIndex = 0;
+	private int scanData(final int fileId, final String inflatedfile, final DBHelper db) {
 
 		OnDataListener dataListener = new OnDataListener() {
 
@@ -141,13 +149,13 @@ public class FileScan {
 			public void OnWordData(int index, ByteBuffer buf, int offset, int length) {
 				String word = getWord(buf, offset, length);
 				outputLog("word = " + word);
-				outputWord(db, index, word);				
+				wordIndex = outputWord(db, index, word);				
 			}
 
 			@Override
 			public void OnXmlData(int index, ByteBuffer buf, int offset, int length) {
 				outputLog("self(" + offset + ") xml = " + getXml(buf, offset, length));
-				outputBlockIndex(db, index, offset, length);					
+				outputBlockIndex(db, fileId, wordIndex, offset, length);					
 			}
 			
 		};
@@ -568,26 +576,26 @@ public class FileScan {
 	private int outputBaseInfo(int fileId, final String ld2file, final DBHelper db) {
 		db.insertBaseInfo(fileId, ld2file, offsetInflatedXml);
 		for(final BlockData data : listBlockData) {
-			db.insertBlockInfo(data);
+			db.insertBlockInfo(fileId, data);
 		}
 		return 0;
 	}
 	
 	private int outputWord(final DBHelper db, int index, final String word) {
-		db.insertWordInfo(index, word);
-		return 0;
+		return db.insertWordInfo(indexOffset + index, word);
+//		return 0;
 	}	
 	
-	private int outputBlockIndex(final DBHelper db, final int index, final int offset, final int length) {
+	private int outputBlockIndex(final DBHelper db, int fileid, final int index, final int offset, final int length) {
 		for(final BlockData data : listBlockData) {
 			if((offsetInflatedXml + offset) <= data.end) {
 				if((offsetInflatedXml + offset + length) <= data.end) {
 					//db.insertWordIndex(index, offsetInflatedXml + offset, length, data.index, -1);
-					db.insertWordIndex(index, offset, length, data.index, -1);
+					db.insertWordIndex(index, fileid, offset, length, data.index, -1);
 				}
 				else {
 					//db.insertWordIndex(index, offsetInflatedXml + offset, length, data.index, data.index + 1);
-					db.insertWordIndex(index, offset, length, data.index, data.index + 1);
+					db.insertWordIndex(index, fileid, offset, length, data.index, data.index + 1);
 				}
 				return 0;
 			}

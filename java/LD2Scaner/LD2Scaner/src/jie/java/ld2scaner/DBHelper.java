@@ -40,16 +40,18 @@ public class DBHelper {
 	}		
 	
 	private int execSQL(final String sql) {
+		int last = -1;
 		Statement stat = null;
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
 		
+			last = stat.getGeneratedKeys().getInt(0);
 			stat.close();
 		} catch (SQLException e) {			
 			return -1;
 		}
-		return 0;
+		return last;
 	}
 	
 	private ResultSet querySQL(final String sql) {
@@ -66,33 +68,33 @@ public class DBHelper {
 
 	private void createTables() {
 		
-		String sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_file_info ("
+		String sql = "CREATE TABLE IF NOT EXISTS dict_info ("
 				+ " idx INTEGER PRIMARY KEY,"
-				+ " name TEXT,"
+				+ " title TEXT,"
 				+ " offset INTEGER)";
 		execSQL(sql);
-//		
-//		sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_block_info (" 
-//				+ "idx INTEGER PRIMARY KEY,"
-//				+ "offset INTEGER,"
-//				+ "length INTEGER,"
-//				+ "start INTEGER,"
-//				+ "end INTEGER)";
-//		
-//		execSQL(sql);
-//		
-//		sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_word_index ("
-//				+ "idx INTEGER,"
-//				+ "offset INTEGER,"
-//				+ "length INTEGER,"
-//				+ "block1 INTEGER,"
-//				+ "block2 INTEGER)";
-//		execSQL(sql);
 		
-		sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_word_info ("
-				+ "word TEXT PRIMARY KEY,"
-				+ "dictid INTEGER,"
-				+ "idx INTEGER)";
+		sql = "CREATE TABLE IF NOT EXISTS block_info ("
+				+ " idx INTEGER,"
+				+ " dictid INTEGER,"
+				+ " offset INTEGER,"
+				+ " length INTEGER,"
+				+ " start INTEGER,"
+				+ " end INTEGER)";
+		execSQL(sql);
+		
+		sql = "CREATE TABLE IF NOT EXISTS word_info ("
+				+ " word TEXT PRIMARY KEY,"
+				+ " idx INTEGER AUTOINCREMENT)";
+		execSQL(sql);
+		
+		sql = "CREATE TABLE IF NOT EXISTS word_index ("
+				+ " wordid INTEGER PRIMARY KEY,"
+				+ " dictid INTEGER,"
+				+ " offset INTEGER,"
+				+ " length INTEGER,"
+				+ " blcok1 INTEGER,"
+				+ " block2 INTEGER)";
 		execSQL(sql);
 	}
 
@@ -101,21 +103,18 @@ public class DBHelper {
 		return new DBHelper(dbfile);
 		
 	}
-	
-	private void createDictTables(int id, final String name) {
 		
-	}
-	
-	public void insertBaseInfo(int id, final String name, int offset) {
-		String sql = "INSERT INTO ld2_vicon_file_info VALUES ("
-				+ id + ","
-				+ name + ","
+	public void insertBaseInfo(int dictid, final String title, int offset) {
+		String sql = "INSERT INTO dict_info VALUES ("
+				+ dictid + ","
+				+ title + ","
 				+ offset + ")";
 		execSQL(sql);
 	}
 
-	public void insertBlockInfo(final BlockData data) {
-		String sql = "INSERT INTO ld2_vicon_block_info VALUES ("
+	public void insertBlockInfo(int dictid, final BlockData data) {
+		String sql = "INSERT INTO block_info VALUES ("
+					+ dictid + ","
 					+ data.index + "," 
 					+ data.offset + ","
 					+ data.length + ","
@@ -124,16 +123,16 @@ public class DBHelper {
 		execSQL(sql);
 	}
 
-	public void insertWordInfo(int index, String word) {
-		String sql = "INSERT INTO ld2_vicon_word_info VALUES ('"
-				+ word + "',"
-				+ index +")";
-		execSQL(sql);
+	public int insertWordInfo(int index, String word) {
+		String sql = "INSERT INTO word_info VALUES ('"
+				+ word +")";
+		return execSQL(sql);
 	}
 	
-	public void insertWordIndex(int index, int offset, int length, int block1, int block2) {
-		String sql = "INSERT INTO ld2_vicon_word_index VALUES ("
+	public void insertWordIndex(int index, int dictid, int offset, int length, int block1, int block2) {
+		String sql = "INSERT INTO word_index VALUES ("
 				+ index + ","
+				+ dictid + ","
 				+ offset + ","
 				+ length + ","
 				+ block1 + ","
@@ -141,6 +140,25 @@ public class DBHelper {
 		execSQL(sql);
 	}
 
+	public int getNextWordIdex() {
+		
+		int ret = 0;
+		
+		String sql = "SELECT COUNT(*) FROM word_index";
+		try {
+			Statement stat = conn.createStatement();
+			ResultSet rs = stat.executeQuery(sql);
+			if(rs != null && rs.first()) {
+				ret = rs.getInt(0);
+			}
+			stat.close();
+		} catch (final SQLException e) {
+			return 0;
+		}
+		
+		return (ret + 1);
+	}
+	
 	public void close() {
 		if(conn != null) {
 			try {
@@ -152,64 +170,65 @@ public class DBHelper {
 		}
 	}
 
-	public int getWordData(final WordData data) {
-		
-		String sql = "SELECT word FROM ld2_vicon_word_info WHERE idx=" + data.index;
-		
-		try {
-			Statement stat = null;
-			stat = conn.createStatement();
-			ResultSet rs = stat.executeQuery(sql);
-			if(rs == null || rs.next() == false) {
-				stat.close();
-				return -1;
-			}
-			
-			data.word = rs.getString(1);
-			rs.close();
-				
-			sql = "SELECT offset, length, block1, block2 FROM ld2_vicon_word_index WHERE idx = " + data.index;
-			rs = stat.executeQuery(sql);
-			if(rs != null) {
-				while(rs.next()) {
-					WordIndex wi = new WordIndex();
-					wi.offset = rs.getInt(1);
-					wi.length = rs.getInt(2);
-					wi.block1 = rs.getInt(3);
-					wi.block2 = rs.getInt(4);
-					
-					data.block.add(wi);
-				}
-			}
-			rs.close();
-			stat.close();
-			return 0;
-		} catch (SQLException e) {
-			return -1;
-		}
-	}
-
-	public int getBlockDat(BlockData data) {
-		String sql = "SELECT offset, length, start, end FROM ld2_vicon_block_info WHERE idx = " + data.index;
-		
-		try {
-			Statement stat = conn.createStatement();
-			ResultSet rs = stat.executeQuery(sql);
-			if(rs == null || rs.next() == false) 
-				return -1;
-			
-			data.offset = rs.getInt(1);
-			data.length = rs.getInt(2);
-			data.start = rs.getInt(3);
-			data.end = rs.getInt(4);
-			
-			rs.close();
-			stat.close();		
-		} catch (SQLException e) {
-			return -1;
-		}
-
-		return 0;
-	}
+//	
+//	public int getWordData(final WordData data) {
+//		
+//		String sql = "SELECT word FROM ld2_vicon_word_info WHERE idx=" + data.index;
+//		
+//		try {
+//			Statement stat = null;
+//			stat = conn.createStatement();
+//			ResultSet rs = stat.executeQuery(sql);
+//			if(rs == null || rs.next() == false) {
+//				stat.close();
+//				return -1;
+//			}
+//			
+//			data.word = rs.getString(1);
+//			rs.close();
+//				
+//			sql = "SELECT offset, length, block1, block2 FROM ld2_vicon_word_index WHERE idx = " + data.index;
+//			rs = stat.executeQuery(sql);
+//			if(rs != null) {
+//				while(rs.next()) {
+//					WordIndex wi = new WordIndex();
+//					wi.offset = rs.getInt(1);
+//					wi.length = rs.getInt(2);
+//					wi.block1 = rs.getInt(3);
+//					wi.block2 = rs.getInt(4);
+//					
+//					data.block.add(wi);
+//				}
+//			}
+//			rs.close();
+//			stat.close();
+//			return 0;
+//		} catch (SQLException e) {
+//			return -1;
+//		}
+//	}
+//
+//	public int getBlockDat(BlockData data) {
+//		String sql = "SELECT offset, length, start, end FROM ld2_vicon_block_info WHERE idx = " + data.index;
+//		
+//		try {
+//			Statement stat = conn.createStatement();
+//			ResultSet rs = stat.executeQuery(sql);
+//			if(rs == null || rs.next() == false) 
+//				return -1;
+//			
+//			data.offset = rs.getInt(1);
+//			data.length = rs.getInt(2);
+//			data.start = rs.getInt(3);
+//			data.end = rs.getInt(4);
+//			
+//			rs.close();
+//			stat.close();		
+//		} catch (SQLException e) {
+//			return -1;
+//		}
+//
+//		return 0;
+//	}
 
 }

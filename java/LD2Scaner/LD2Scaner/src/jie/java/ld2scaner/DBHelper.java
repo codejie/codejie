@@ -65,25 +65,33 @@ public class DBHelper {
 	}	 
 
 	private void createTables() {
-		String sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_block_info (" 
-				+ "idx INTEGER PRIMARY KEY,"
-				+ "offset INTEGER,"
-				+ "length INTEGER,"
-				+ "start INTEGER,"
-				+ "end INTEGER)";
 		
+		String sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_file_info ("
+				+ " idx INTEGER PRIMARY KEY,"
+				+ " name TEXT,"
+				+ " offset INTEGER)";
 		execSQL(sql);
-		
-		sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_word_index ("
-				+ "idx INTEGER,"
-				+ "offset INTEGER,"
-				+ "length INTEGER,"
-				+ "block1 INTEGER,"
-				+ "block2 INTEGER)";
-		execSQL(sql);
+//		
+//		sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_block_info (" 
+//				+ "idx INTEGER PRIMARY KEY,"
+//				+ "offset INTEGER,"
+//				+ "length INTEGER,"
+//				+ "start INTEGER,"
+//				+ "end INTEGER)";
+//		
+//		execSQL(sql);
+//		
+//		sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_word_index ("
+//				+ "idx INTEGER,"
+//				+ "offset INTEGER,"
+//				+ "length INTEGER,"
+//				+ "block1 INTEGER,"
+//				+ "block2 INTEGER)";
+//		execSQL(sql);
 		
 		sql = "CREATE TABLE IF NOT EXISTS ld2_vicon_word_info ("
 				+ "word TEXT PRIMARY KEY,"
+				+ "dictid INTEGER,"
 				+ "idx INTEGER)";
 		execSQL(sql);
 	}
@@ -94,9 +102,16 @@ public class DBHelper {
 		
 	}
 	
-	public void insertBaseInfo() {
-		// TODO Auto-generated method stub
+	private void createDictTables(int id, final String name) {
 		
+	}
+	
+	public void insertBaseInfo(int id, final String name, int offset) {
+		String sql = "INSERT INTO ld2_vicon_file_info VALUES ("
+				+ id + ","
+				+ name + ","
+				+ offset + ")";
+		execSQL(sql);
 	}
 
 	public void insertBlockInfo(final BlockData data) {

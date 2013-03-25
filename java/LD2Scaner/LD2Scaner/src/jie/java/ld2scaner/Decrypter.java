@@ -30,9 +30,9 @@ public class Decrypter {
         kg.init(sr);  
         SecretKey key = kg.generateKey();       
 
-        byte rawKeyData[] = key.getEncoded();// "key".getBytes();  
+        byte rawKeyData[] = "11111111".getBytes();//key.getEncoded();// "key".getBytes();  
  
-        String str = "123"; // 待加密数据  
+        String str = "123dfsdkfklsdfjksdjfsdklfjskl"; // 待加密数据  
         byte[] encryptedData = encrypt(rawKeyData, str);  
         String ret = decrypt(rawKeyData, encryptedData);
         System.out.println("ret = " + ret);
@@ -86,7 +86,7 @@ public class Decrypter {
 //
         byte rawKeyData[] = null;
 		try {
-			rawKeyData = "87654321".getBytes("UTF-8");
+			rawKeyData = "language".getBytes("UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

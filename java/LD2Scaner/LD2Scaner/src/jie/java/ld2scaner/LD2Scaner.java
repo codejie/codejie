@@ -32,16 +32,22 @@ public class LD2Scaner {
 	}
 	
 	//private final static String ld2File = "./data/Vicon English-Chinese(S) Dictionary.ld2";// "./data/3GPP.ld2"; 
-	private final static String ld2File = "./data/Vicon Chinese(S)-English Dictionary.ld2";
+//	private final static String ld2File = "./data/Vicon Chinese(S)-English Dictionary.ld2";
+	
+	private final static String[] ld2File = new String[] { "./data/Vicon English-Chinese(S) Dictionary.ld2", "./data/Vicon Chinese(S)-English Dictionary.ld2"};
 
 	public static void main(String[] args) {
 		
 		DBHelper db = DBHelper.create("./data/db.db");
 		
-		if(FileScan.scan(ld2File, db) != 0) {
-			System.out.println("FAILED.");
-		}
-		
+		for(int i = 0; i < ld2File.length; ++ i) {		
+			
+			FileScan scan = new FileScan();
+			
+			if(scan.scan(i, ld2File[i], db) != 0) {
+				System.out.println("FAILED.");
+			}
+		}		
 //		if(verifyData(db, ld2File, 1134) != 0) {
 //			System.out.println("VerifyData() failed.");
 //		}

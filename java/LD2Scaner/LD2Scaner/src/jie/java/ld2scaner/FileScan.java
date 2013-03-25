@@ -41,25 +41,35 @@ public class FileScan {
 		public void OnXmlData(int index, final ByteBuffer buf, int offset, int length);
 	}
 
-	private static int offsetIndex = 0;
-	private static int lengthIndex = 0;
-	private static int offsetCompressedData = 0;
-	private static int lengthCompressedData = 0;
-	private static int offsetInflatedWords = 0;
-	private static int lengthInflatedWords = 0;
-	private static int offsetInflatedXml = 0;
-	private static int lengthInflatedXml = 0;
+	private int offsetIndex = 0;
+	private int lengthIndex = 0;
+	private int offsetCompressedData = 0;
+	private int lengthCompressedData = 0;
+	private int offsetInflatedWords = 0;
+	private int lengthInflatedWords = 0;
+	private int offsetInflatedXml = 0;
+	private int lengthInflatedXml = 0;
 	
-	private static ArrayList<BlockData> listBlockData = new ArrayList<BlockData>();
+	private ArrayList<BlockData> listBlockData = new ArrayList<BlockData>();
 	
 //	final static Charset charset = Charset.forName("UTF-8");
 //	final static CharsetDecoder charsetDecodeer = charset.newDecoder();
 //	final static int sizeCharsPerByte = (int) charsetDecodeer.maxCharsPerByte();	
 		
-	static Decoder wordDecoder = null;
-	static Decoder xmlDecoder = null;
+	private Decoder wordDecoder = null;
+	private Decoder xmlDecoder = null;
 	
-	public static int scan(final String ld2file, final DBHelper db) {
+	private int fileId = -1;
+	private String ld2file = null;
+	private DBHelper db = null;
+	
+	public FileScan(int fileId, final String ld2file, final DBHelper db) {
+		this.fileId = fileId;
+		this.ld2file = ld2file;
+		this.db = db;
+	}
+	
+	public int scan() {
 		
 		outputLog("file = " + ld2file);			
 		
@@ -84,7 +94,7 @@ public class FileScan {
 		return 0;
 	}
 	
-	private static int scanInfo(String ld2file, DBHelper db) {
+	private int scanInfo(String ld2file, DBHelper db) {
 		try {
 			RandomAccessFile file = null;
 			try {
@@ -94,7 +104,7 @@ public class FileScan {
 				
 				buf.order(ByteOrder.LITTLE_ENDIAN);
 				
-				checkHeader(buf);
+//				checkHeader(buf);
 
 				buf.position(0);
 				if(checkIndex(buf) != 0) {
@@ -117,13 +127,13 @@ public class FileScan {
 			return -1;
 		}
 		
-		if(outputBaseInfo(db) != 0) {
+		if(outputBaseInfo(fileId, ld2file, db) != 0) {
 			return -1;
 		}			
 		return 0;
 	}
 
-	private static int scanData(final String inflatedfile, final DBHelper db) {
+	private int scanData(final String inflatedfile, final DBHelper db) {
 
 		OnDataListener dataListener = new OnDataListener() {
 
@@ -175,8 +185,8 @@ public class FileScan {
 		
 		return 0;
 	}	
-
-	private static int checkHeader(final ByteBuffer buf) {
+//
+	private int checkHeader(final ByteBuffer buf) {
 		
 		try {
 			outputLog("Type = " + new String(buf.array(), 0, 4, "ASCII"));
@@ -222,8 +232,8 @@ public class FileScan {
 		
 		return 0;
 	}
-	
-	private static int checkIndex(final ByteBuffer buf) {
+//	
+	private int checkIndex(final ByteBuffer buf) {
 		
 		try {
 			outputLog("Type = " + new String(buf.array(), 0, 4, "ASCII"));
@@ -300,7 +310,7 @@ public class FileScan {
 		return 0;
 	}
 	
-	private static int inflate(final ByteBuffer buf, final String inflatedfile) {
+	private int inflate(final ByteBuffer buf, final String inflatedfile) {
 		
 		int offset = offsetCompressedData;
 		int counter = 0;
@@ -332,7 +342,7 @@ public class FileScan {
 		return 0;
 	}
 	
-	private static int decompress(final FileOutputStream output, ByteBuffer buf, int offset, int length) throws IOException {
+	private int decompress(final FileOutputStream output, ByteBuffer buf, int offset, int length) throws IOException {
 		
 		final Inflater inflater = new Inflater();
 		final InflaterInputStream in = new InflaterInputStream(new ByteArrayInputStream(buf.array(), offset, length), inflater, 1024 * 8);
@@ -350,9 +360,9 @@ public class FileScan {
 		return ret;
 	}
 	
-	private static boolean flag = true;
+	private boolean flag = true;
 
-	private static int detectDecoder(final String inflatedfile) throws ArrayIndexOutOfBoundsException {
+	private int detectDecoder(final String inflatedfile) throws ArrayIndexOutOfBoundsException {
 				
 		OnDataListener dataListener = new OnDataListener() {
 			final int maxTry = 50;
@@ -431,7 +441,7 @@ public class FileScan {
 		return 0;
 	}
 	
-	private static void getData(ByteBuffer buf, final int index, OnDataListener dataListener) {
+	private void getData(ByteBuffer buf, final int index, OnDataListener dataListener) {
 	
 		int offset = index;
 		final int idx[] = new int[6];		
@@ -507,7 +517,7 @@ public class FileScan {
 //		return 0;
 //	}
 
-	private static void getIndex(ByteBuffer buf, int offset, final int[] idx) {
+	private void getIndex(ByteBuffer buf, int offset, final int[] idx) {
 		buf.position(offset);
 		idx[0] = buf.getInt();
 		idx[1] = buf.getInt();
@@ -517,14 +527,14 @@ public class FileScan {
 		idx[5] = buf.getInt();
 	}
 	
-	private static final String getWord(ByteBuffer buf, int offset, int len) {
+	private final String getWord(ByteBuffer buf, int offset, int len) {
 		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedWords + offset, len);
 		return new String(wordDecoder.decode(in, len));
 //		String word = new String(UTF8Decode(buf, offsetInflatedWords + offset, len));
 //		return word;
 	}
 	
-	private static final String getXml(ByteBuffer buf, int offset, int len) {
+	private final String getXml(ByteBuffer buf, int offset, int len) {
 		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedXml + offset, len);
 		return new String(xmlDecoder.decode(in, len));
 		
@@ -549,26 +559,26 @@ public class FileScan {
 //		return ret;
 //	}
 	
-	private static void outputLog(String string) {
+	private void outputLog(String string) {
 		System.out.println(string);
 	}
 
 //////////////////////////////////////////////////////////
 	
-	private static int outputBaseInfo(final DBHelper db) {
-		db.insertBaseInfo();
+	private int outputBaseInfo(int fileId, final String ld2file, final DBHelper db) {
+		db.insertBaseInfo(fileId, ld2file, offsetInflatedXml);
 		for(final BlockData data : listBlockData) {
 			db.insertBlockInfo(data);
 		}
 		return 0;
 	}
 	
-	private static int outputWord(final DBHelper db, int index, final String word) {
+	private int outputWord(final DBHelper db, int index, final String word) {
 		db.insertWordInfo(index, word);
 		return 0;
 	}	
 	
-	private static int outputBlockIndex(final DBHelper db, final int index, final int offset, final int length) {
+	private int outputBlockIndex(final DBHelper db, final int index, final int offset, final int length) {
 		for(final BlockData data : listBlockData) {
 			if((offsetInflatedXml + offset) <= data.end) {
 				if((offsetInflatedXml + offset + length) <= data.end) {

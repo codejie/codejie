@@ -14,6 +14,8 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
@@ -571,7 +573,18 @@ public class FileScan {
 //////////////////////////////////////////////////////////
 	
 	private int outputBaseInfo(int fileId, final String ld2file, final DBHelper db) {
-		db.insertBaseInfo(fileId, ld2file, offsetInflatedXml);
+		String regex = "[^(/|\\|\\\\|//)][\\w\\s()-]+(\\.ld2)";
+		Pattern p = Pattern.compile(regex);
+		Matcher matcher = p.matcher(ld2file);
+		boolean f = matcher.find();
+		if(!f) {
+			return -1;
+		}
+		int pos = matcher.start();
+		String str = ld2file.substring(pos);
+		
+		db.insertBaseInfo(fileId, str, offsetInflatedXml);
+		
 		for(final BlockData data : listBlockData) {
 			db.insertBlockInfo(fileId, data);
 		}

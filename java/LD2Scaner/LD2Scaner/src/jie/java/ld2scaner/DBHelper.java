@@ -39,14 +39,25 @@ public class DBHelper {
 		}		
 	}		
 	
-	private int execSQL(final String sql) {
+	private void execSQL(final String sql) {
+		Statement stat = null;
+		try {
+			stat = conn.createStatement();
+			stat.executeUpdate(sql);	
+			stat.close();
+		} catch (SQLException e) {			
+
+		}
+	}	
+	
+	private int execSQLWithReturn(final String sql) {
 		int last = -1;
 		Statement stat = null;
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-		
-			last = stat.getGeneratedKeys().getInt(0);
+
+			last = stat.getGeneratedKeys().getInt(1);
 			stat.close();
 		} catch (SQLException e) {			
 			return -1;
@@ -75,8 +86,8 @@ public class DBHelper {
 		execSQL(sql);
 		
 		sql = "CREATE TABLE IF NOT EXISTS block_info ("
-				+ " idx INTEGER,"
 				+ " dictid INTEGER,"
+				+ " idx INTEGER,"
 				+ " offset INTEGER,"
 				+ " length INTEGER,"
 				+ " start INTEGER,"
@@ -84,8 +95,8 @@ public class DBHelper {
 		execSQL(sql);
 		
 		sql = "CREATE TABLE IF NOT EXISTS word_info ("
-				+ " word TEXT PRIMARY KEY,"
-				+ " idx INTEGER AUTOINCREMENT)";
+				+ " idx INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " word TEXT)";
 		execSQL(sql);
 		
 		sql = "CREATE TABLE IF NOT EXISTS word_index ("
@@ -93,8 +104,8 @@ public class DBHelper {
 				+ " dictid INTEGER,"
 				+ " offset INTEGER,"
 				+ " length INTEGER,"
-				+ " blcok1 INTEGER,"
-				+ " block2 INTEGER)";
+				+ " block1 INTEGER)";//,"
+				//+ " block2 INTEGER)";
 		execSQL(sql);
 	}
 
@@ -106,8 +117,8 @@ public class DBHelper {
 		
 	public void insertBaseInfo(int dictid, final String title, int offset) {
 		String sql = "INSERT INTO dict_info VALUES ("
-				+ dictid + ","
-				+ title + ","
+				+ dictid + ",'"
+				+ title + "',"
 				+ offset + ")";
 		execSQL(sql);
 	}
@@ -124,39 +135,24 @@ public class DBHelper {
 	}
 
 	public int insertWordInfo(int index, String word) {
-		String sql = "INSERT INTO word_info VALUES ('"
-				+ word +")";
-		return execSQL(sql);
+		String sql = "INSERT INTO word_info (word) VALUES ('"
+				+ word +"')";
+		return execSQLWithReturn(sql);
 	}
 	
 	public void insertWordIndex(int index, int dictid, int offset, int length, int block1, int block2) {
+		
+		if(block2 != -1)
+			block1 = -block1;
+		
 		String sql = "INSERT INTO word_index VALUES ("
 				+ index + ","
 				+ dictid + ","
 				+ offset + ","
 				+ length + ","
-				+ block1 + ","
-				+ block2 + ")";
+				+ block1 + ")";//,"
+				//+ block2 + ")";
 		execSQL(sql);
-	}
-
-	public int getNextWordIdex() {
-		
-		int ret = 0;
-		
-		String sql = "SELECT COUNT(*) FROM word_index";
-		try {
-			Statement stat = conn.createStatement();
-			ResultSet rs = stat.executeQuery(sql);
-			if(rs != null && rs.first()) {
-				ret = rs.getInt(0);
-			}
-			stat.close();
-		} catch (final SQLException e) {
-			return 0;
-		}
-		
-		return (ret + 1);
 	}
 	
 	public void close() {

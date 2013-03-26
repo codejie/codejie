@@ -63,8 +63,6 @@ public class FileScan {
 	private String ld2file = null;
 	private DBHelper db = null;
 	
-	private int indexOffset = 0;
-	
 	public FileScan(int fileId, final String ld2file, final DBHelper db) {
 		this.fileId = fileId;
 		this.ld2file = ld2file;
@@ -72,7 +70,6 @@ public class FileScan {
 	}
 	
 	public boolean init() {
-		indexOffset = db.getNextWordIdex();
 		return true;
 	}
 	
@@ -582,7 +579,7 @@ public class FileScan {
 	}
 	
 	private int outputWord(final DBHelper db, int index, final String word) {
-		return db.insertWordInfo(indexOffset + index, word);
+		return db.insertWordInfo(index, word);
 //		return 0;
 	}	
 	

@@ -170,7 +170,7 @@ public class FileScan {
 				final int countDefinitions = offsetInflatedWords / 10 - 1;//326290;//lengthIndex / 4;
 				for(int i = 0; i < countDefinitions; ++ i) {
 					outputLog("i = " + i);
-					getData(buf, i, dataListener);
+					getData2(buf, i, dataListener);
 //					if(checkData(buf, i, db) != 0) {
 //						return -1;
 //					}
@@ -432,7 +432,7 @@ public class FileScan {
 						break;
 					}
 					outputLog("i = " + i);
-					getData(buf, i, dataListener);
+					getData2(buf, i, dataListener);
 				}
 			} finally {
 				file.close();
@@ -480,6 +480,58 @@ public class FileScan {
 			dataListener.OnWordData(index, buf, offsetword, lenword);
 		}
 	}
+	
+	private void getData2(ByteBuffer buf, final int index, OnDataListener dataListener) {
+	
+		int offset = index * 10;
+		final int idx[] = new int[6];		
+		getIndex(buf, offset, idx);
+		
+		if(idx[3] == 0) {
+			dataListener.OnWordData(index, buf, idx[0], idx[4] - idx[0]);
+			dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
+		} else {
+			int ref = idx[3];
+			int offsetword = idx[0];
+			int lenword = idx[4] - idx[0];
+			
+			while(ref -- > 0) {
+				offset = buf.getInt(offsetInflatedWords + offsetword);
+				getIndex(buf, offset * 10, idx);
+				dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
+				dataListener.OnWordData(index, buf, offsetword, lenword);
+				offsetword += 4;
+				lenword -= 4;
+			}
+			//dataListener.OnWordData(index, buf, offsetword, lenword); 
+		}
+		
+		
+//		getData3(index, buf, idx, dataListener);
+//		if(idx[3] != 1) {
+//			dataListener.OnWordData(index, buf, idx[0], idx[4] - idx[0]);
+//			dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
+//		} else {
+//			int offset = buf.getInt(offsetInflatedWords + idx[0]);
+//			getData2(buf, )
+//		}
+	
+	}
+	
+	private void getData3(int index, ByteBuffer buf, final int idx[], OnDataListener dataListener) {
+		
+		
+		if(idx[3] == 0) {
+			dataListener.OnWordData(index, buf, idx[0], idx[4] - idx[0]);
+			dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
+		} else {
+			int offset = buf.getInt(offsetInflatedWords + idx[0]);
+			getData2(buf, offset, dataListener);
+		}
+		
+	}
+	
+
 	
 //	private static int checkData(ByteBuffer buf, final int index, final DBHelper db) throws CharacterCodingException {
 //		
@@ -537,35 +589,13 @@ public class FileScan {
 	private final String getWord(ByteBuffer buf, int offset, int len) {
 		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedWords + offset, len);
 		return new String(wordDecoder.decode(in, len));
-//		String word = new String(UTF8Decode(buf, offsetInflatedWords + offset, len));
-//		return word;
 	}
 	
 	private final String getXml(ByteBuffer buf, int offset, int len) {
 		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offsetInflatedXml + offset, len);
 		return new String(xmlDecoder.decode(in, len));
-		
-//		String xml = new String(UTF8Decode(buf, offsetInflatedXml + offset, len));
-//		return xml;
 	}
-	
-//	private static char[] UTF8Decode(final ByteBuffer buf, final int offset, final int len) {
-//		charsetDecodeer.reset();
-//		char[] ret = new char[ len * sizeCharsPerByte ];
-//		final CharBuffer retbuf = CharBuffer.wrap(ret);
-//		
-//		final ByteBuffer in = ByteBuffer.wrap(buf.array(), offset, len);
-//		charsetDecodeer.decode(in, retbuf, true);
-//		charsetDecodeer.flush(retbuf);
-//		
-//		int size = retbuf.length();
-//		if(ret.length != size) {
-//			ret = Arrays.copyOf(ret, size);
-//		}
-//		
-//		return ret;
-//	}
-	
+		
 	private void outputLog(String string) {
 		System.out.println(string);
 	}

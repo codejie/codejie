@@ -102,10 +102,21 @@ public class DBHelper {
 		sql = "CREATE TABLE IF NOT EXISTS word_index ("
 				+ " wordid INTEGER PRIMARY KEY,"
 				+ " dictid INTEGER,"
+				+ " idx INTEGER,"
 				+ " offset INTEGER,"
 				+ " length INTEGER,"
 				+ " block1 INTEGER)";//,"
 				//+ " block2 INTEGER)";
+		execSQL(sql);
+		
+		sql = "CREATE TABLE IF NOT EXISTS reference_info ("
+				+ " idx INTEGER,"
+				+ " word TEXT)";
+		execSQL(sql);
+		
+		sql = "CREATE TABLE IF NOT EXISTS reference_index ("
+				+ " idx INTEGER,"
+				+ " ref_index INTEGER)";
 		execSQL(sql);
 	}
 
@@ -140,19 +151,35 @@ public class DBHelper {
 		return execSQLWithReturn(sql);
 	}
 	
-	public void insertWordIndex(int index, int dictid, int offset, int length, int block1, int block2) {
+	public void insertWordIndex(int wordid, int dictid, int index, int offset, int length, int block1, int block2) {
 		
 		if(block2 != -1)
 			block1 = -block1;
 		
 		String sql = "INSERT INTO word_index VALUES ("
-				+ index + ","
+				+ wordid + ","
 				+ dictid + ","
+				+ index + ","
 				+ offset + ","
 				+ length + ","
 				+ block1 + ")";//,"
 				//+ block2 + ")";
 		execSQL(sql);
+	}
+	
+	public void insertReferenceInfo(int index, final String word) {
+		String sql = "INSERT INTO reference_info VALUES ("
+				+ index + ",'"
+				+ word +"')";
+		execSQL(sql);		
+	}
+	
+	public void insertReferenceIndex(int index, int ref) {
+		String sql = "INSERT INTO reference_index VALUES ("
+				+ index + ","
+				+ ref +")";
+		execSQL(sql);	
+		
 	}
 	
 	public void close() {
@@ -165,6 +192,8 @@ public class DBHelper {
 			}
 		}
 	}
+	
+ 
 
 //	
 //	public int getWordData(final WordData data) {

@@ -177,7 +177,7 @@ public class FileScan {
 					outputLog("i = " + i);
 					//getData(buf, i, dataListener);
 					//getData_without_index(buf, i, dataListener);
-					getData_with_index(buf, i, dataListener);
+					getData_without_index(buf, i, dataListener);
 //					if(checkData(buf, i, db) != 0) {
 //						return -1;
 //					}
@@ -397,7 +397,8 @@ public class FileScan {
 						break;
 					}
 					outputLog("i = " + i);
-					getData(buf, i, dataListener);
+					//getData(buf, i, dataListener);
+					getData_without_index(buf, i, dataListener);
 				}
 			} finally {
 				file.close();
@@ -493,87 +494,6 @@ public class FileScan {
 			offset += 4;
 		}
 	}
-	
-//	
-//	private void getData2(ByteBuffer buf, final int index, OnDataListener dataListener) {
-//	
-//		int offset = index * 10;
-//		final int idx[] = new int[6];		
-//		getIndex(buf, offset, idx);
-//		
-//		if(idx[3] == 0) {
-//			dataListener.OnWordData(index, buf, idx[0], idx[4] - idx[0]);
-//			dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
-//		} else {
-//			int ref = idx[3];
-//			int offsetword = idx[0];
-//			dataListener.OnWordData(index, buf, offsetword + ref * 4, (idx[4] - offsetword) - ref * 4);
-//			int i = 0;
-//			offsetword += offsetInflatedWords;
-//			while(i < ref) {
-//				offset = buf.getInt(offsetword + i * 4);
-//				getIndex(buf, offset * 10, idx);
-//				dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
-//				++ i;
-//			}
-//		}
-//		
-//		
-//		getData3(index, buf, idx, dataListener);
-//		if(idx[3] != 1) {
-//			dataListener.OnWordData(index, buf, idx[0], idx[4] - idx[0]);
-//			dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
-//		} else {
-//			int offset = buf.getInt(offsetInflatedWords + idx[0]);
-//			getData2(buf, )
-//		}
-	
-//	}
-
-
-	
-//	private static int checkData(ByteBuffer buf, final int index, final DBHelper db) throws CharacterCodingException {
-//		
-//		int offset = index;
-//		final int idx[] = new int[6];		
-//		getIndex(buf, offset * 10, idx);
-//
-//		String word = null;
-//			
-//		if(idx[5] != idx[1]) {
-//			outputLog("self(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
-//			outputBlockIndex(db, index, idx[1], (idx[5] - idx[1]));			
-//		} else {
-//			return 0;//used to filter the 'extension' word, because I need not make the index for them now.
-//		}
-//		
-//		if(idx[3] == 0) {
-//			outputLog("word = " + getWord(buf, idx[0], idx[4] - idx[0]));
-//			word = getWord(buf, idx[0], idx[4] - idx[0]);
-//		}
-//		else {
-//			int ref = idx[3];
-//			int offsetword = idx[0];
-//			int lenword = idx[4] - idx[0];
-//			
-//			while(ref -- > 0) {
-//				offset = buf.getInt(offsetInflatedWords + offsetword);
-//				getIndex(buf, offset * 10, idx);
-//				outputLog("ref(" + offset + ") xml = " + getXml(buf, idx[1], idx[5] - idx[1]));
-//				outputBlockIndex(db, index, idx[1], (idx[5] - idx[1]));
-//				offsetword += 4;
-//				lenword -= 4;
-//			}
-//			outputLog("word = " + getWord(buf, offsetword, lenword));
-//			word = getWord(buf, offsetword, lenword);
-//		}
-//		
-//		if(outputWord(db, index, word) != 0) {
-//			return -1;
-//		}
-//		
-//		return 0;
-//	}
 
 	private void getIndex(ByteBuffer buf, int offset, final int[] idx) {
 		buf.position(offset);

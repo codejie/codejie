@@ -46,7 +46,7 @@ public class DBHelper {
 			stat.executeUpdate(sql);	
 			stat.close();
 		} catch (SQLException e) {			
-
+			return;
 		}
 	}	
 	
@@ -148,8 +148,8 @@ public class DBHelper {
 	}
 
 	public int insertWordInfo(int index, String word) {
-		String sql = "INSERT INTO word_info (word) VALUES ('"
-				+ word +"')";
+		String sql = "INSERT INTO word_info (word) VALUES (\""
+				+ word+"\")";
 		return execSQLWithReturn(sql);
 	}
 	

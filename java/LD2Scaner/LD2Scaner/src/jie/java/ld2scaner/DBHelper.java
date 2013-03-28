@@ -15,6 +15,10 @@ public class DBHelper {
 
 	private Connection conn = null;
 	
+	public static DBHelper create(final String dbfile) {
+		return new DBHelper(dbfile);	
+	}	
+	
 	public DBHelper(final String dbfile) {
 		
 		init(dbfile);
@@ -85,47 +89,63 @@ public class DBHelper {
 				+ " offset INTEGER)";
 		execSQL(sql);
 		
-		sql = "CREATE TABLE IF NOT EXISTS block_info ("
-				+ " dictid INTEGER,"
+//		sql = "CREATE TABLE IF NOT EXISTS block_info ("
+//				+ " dictid INTEGER,"
+//				+ " idx INTEGER,"
+//				+ " offset INTEGER,"
+//				+ " length INTEGER,"
+//				+ " start INTEGER,"
+//				+ " end INTEGER)";
+//		execSQL(sql);
+		
+		sql = "CREATE TABLE IF NOT EXISTS word_info ("
+				+ " idx INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " word TEXT,"
+				+ " flag INTEGER)";
+		execSQL(sql);
+		
+//		sql = "CREATE TABLE IF NOT EXISTS word_index ("
+//				+ " wordid INTEGER PRIMARY KEY,"
+//				+ " dictid INTEGER,"
+//				+ " idx INTEGER,"
+//				+ " offset INTEGER,"
+//				+ " length INTEGER,"
+//				+ " block1 INTEGER)";//,"
+//				//+ " block2 INTEGER)";
+//		execSQL(sql);
+				
+//		sql = "CREATE TABLE IF NOT EXISTS reference_index ("
+//				+ " wordid INTEGER,"
+//				+ " dictid INTEGER,"
+//				+ " idx INTEGER,"
+//				+ " ref_idx INTEGER)";
+//		execSQL(sql);
+	}
+	
+	public void createDictionaryTables(int dictid) {
+		//block info
+		String sql = "CREATE TABLE IF NOT EXISTS block_info_" + dictid + " ("
 				+ " idx INTEGER,"
 				+ " offset INTEGER,"
 				+ " length INTEGER,"
 				+ " start INTEGER,"
 				+ " end INTEGER)";
 		execSQL(sql);
-		
-		sql = "CREATE TABLE IF NOT EXISTS word_info ("
-				+ " idx INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ " word TEXT)";
-		execSQL(sql);
-		
-		sql = "CREATE TABLE IF NOT EXISTS word_index ("
+		//word index
+		sql = "CREATE TABLE IF NOT EXISTS word_index_" + dictid + " ("
 				+ " wordid INTEGER PRIMARY KEY,"
-				+ " dictid INTEGER,"
 				+ " idx INTEGER,"
 				+ " offset INTEGER,"
 				+ " length INTEGER,"
 				+ " block1 INTEGER)";//,"
 				//+ " block2 INTEGER)";
 		execSQL(sql);
-		
-//		sql = "CREATE TABLE IF NOT EXISTS reference_info ("
-//				+ " idx INTEGER,"
-//				+ " word TEXT)";
-//		execSQL(sql);
-		
-		sql = "CREATE TABLE IF NOT EXISTS reference_index ("
+		//reference index
+		sql = "CREATE TABLE IF NOT EXISTS ref_index_" + dictid + " ("
 				+ " wordid INTEGER,"
-				+ " dictid INTEGER,"
 				+ " idx INTEGER,"
 				+ " ref_idx INTEGER)";
-		execSQL(sql);
-	}
-
-	public static DBHelper create(final String dbfile) {
-		
-		return new DBHelper(dbfile);
-		
+		execSQL(sql);		
 	}
 		
 	public void insertBaseInfo(int dictid, final String title, int offset) {

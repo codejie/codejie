@@ -109,14 +109,16 @@ public class DBHelper {
 				//+ " block2 INTEGER)";
 		execSQL(sql);
 		
-		sql = "CREATE TABLE IF NOT EXISTS reference_info ("
-				+ " idx INTEGER,"
-				+ " word TEXT)";
-		execSQL(sql);
+//		sql = "CREATE TABLE IF NOT EXISTS reference_info ("
+//				+ " idx INTEGER,"
+//				+ " word TEXT)";
+//		execSQL(sql);
 		
 		sql = "CREATE TABLE IF NOT EXISTS reference_index ("
+				+ " wordid INTEGER,"
+				+ " dictid INTEGER,"
 				+ " idx INTEGER,"
-				+ " ref_index INTEGER)";
+				+ " ref_idx INTEGER)";
 		execSQL(sql);
 	}
 
@@ -167,17 +169,19 @@ public class DBHelper {
 		execSQL(sql);
 	}
 	
-	public void insertReferenceInfo(int index, final String word) {
-		String sql = "INSERT INTO reference_info VALUES ("
-				+ index + ",'"
-				+ word +"')";
-		execSQL(sql);		
-	}
+//	public void insertReferenceInfo(int index, final String word) {
+//		String sql = "INSERT INTO reference_info VALUES ("
+//				+ index + ",'"
+//				+ word +"')";
+//		execSQL(sql);		
+//	}
 	
-	public void insertReferenceIndex(int index, int ref) {
+	public void insertReferenceIndex(int wordid, int dictid, int index, int refindex) {
 		String sql = "INSERT INTO reference_index VALUES ("
+				+ wordid + ","
+				+ dictid + ","
 				+ index + ","
-				+ ref +")";
+				+ refindex +")";
 		execSQL(sql);	
 		
 	}

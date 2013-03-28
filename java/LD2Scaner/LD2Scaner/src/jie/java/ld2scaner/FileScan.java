@@ -39,10 +39,9 @@ public class FileScan {
 	}
 	
 	protected interface OnDataListener {
-		public void OnWordData(int index, final ByteBuffer buf, int offset, int length);
-		public void OnXmlData(int index, final ByteBuffer buf, int offset, int length);
-		public void OnReferenceData(int index, final ByteBuffer buf, int offset, int length);
-		public void OnReferenceIndexData(int index, int refindex);		
+		public int OnWordData(int index, final ByteBuffer buf, int offset, int length);
+		public void OnXmlData(int wordid, int index, final ByteBuffer buf, int offset, int length);
+		public void OnReferenceData(int wordid, int index, int refindex);		
 	}
 
 	private int offsetIndex = 0;
@@ -141,34 +140,28 @@ public class FileScan {
 		return 0;
 	}
 
-	private int wordIndex = 0;
 	private int scanData(final int dictid, final String inflatedfile, final DBHelper db) {
 
-		OnDataListener dataListener = new OnDataListener() {
-
+		OnDataListener dataListener = new OnDataListener() {			
+				
 			@Override
-			public void OnWordData(int index, ByteBuffer buf, int offset, int length) {
+			public int OnWordData(int index, final ByteBuffer buf, int offset, int length) {
 				String word = getWord(buf, offset, length);
 				outputLog("word = " + word);
-				wordIndex = outputWord(db, index, word);				
+				return outputWord(db, index, word);
 			}
 
 			@Override
-			public void OnXmlData(int index, ByteBuffer buf, int offset, int length) {
+			public void OnXmlData(int wordid, int index, final ByteBuffer buf, int offset, int length) {
 				outputLog("self(" + offset + ") xml = " + getXml(buf, offset, length));
-				outputBlockIndex(db, wordIndex, dictid, index, offset, length);					
+				outputWordIndex(db, wordid, dictid, index, offset, length);					
 			}
 			
 			@Override
-			public void OnReferenceData(int index, final ByteBuffer buf, int offset, int length) {
-				String word = getWord(buf, offset, length);
-				outputLog("reference word = " + word);
-				outputReference(db, index, word);
+			public void OnReferenceData(int wordid, int index, int refindex) {
+				outputReference(db, wordid, dictid, index, refindex);
 			}
-			@Override
-			public void OnReferenceIndexData(int index, int refindex) {
-				outputReferenceIndex(db, index, refindex);
-			}
+			
 		};
 		
 		try {
@@ -338,11 +331,12 @@ public class FileScan {
 
 	private int detectDecoder(final String inflatedfile) throws ArrayIndexOutOfBoundsException {
 				
-		OnDataListener dataListener = new OnDataListener() {
+		OnDataListener dataListener = new OnDataListener() {	
+			
 			final int maxTry = 50;
 			int trying = 0;
 			@Override
-			public void OnWordData(int index, ByteBuffer buf, int offset, int length) {
+			public int OnWordData(int index, final ByteBuffer buf, int offset, int length) {
 				if(wordDecoder == null) {
 					wordDecoder = new Decoder();
 				}
@@ -361,10 +355,11 @@ public class FileScan {
 						throw e1;
 					}
 				}
+				return 0;
 			}
 
 			@Override
-			public void OnXmlData(int index, ByteBuffer buf, int offset, int length) {
+			public void OnXmlData(int wordid, int index, final ByteBuffer buf, int offset, int length) {
 				if(xmlDecoder == null) {
 					xmlDecoder = new Decoder();
 				}
@@ -384,9 +379,8 @@ public class FileScan {
 				}				
 			}
 			
-			public void OnReferenceData(int index, final ByteBuffer buf, int offset, int length) {}
 			@Override
-			public void OnReferenceIndexData(int index, int refindex) {}			
+			public void OnReferenceData(int wordid, int index, int refindex) {}			
 		};
 		
 		try {
@@ -425,10 +419,10 @@ public class FileScan {
 		final int idx[] = new int[6];		
 		getIndex(buf, offset * 10, idx);
 
-		String word = null;
+		int wordid = -1;
 			
 		if(idx[5] != idx[1]) {
-			dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
+			dataListener.OnXmlData(wordid, index, buf, idx[1], idx[5] - idx[1]);
 		} else {
 			return;//used to filter the 'extension' word, because I need not make the index for them now.
 		}
@@ -445,11 +439,11 @@ public class FileScan {
 				offset = buf.getInt(offsetInflatedWords + offsetword);
 				getIndex(buf, offset * 10, idx);
 //				dataListener.OnWordData(index, buf, idx[0], idx[4] - idx[0]);
-				dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
+				dataListener.OnXmlData(wordid, index, buf, idx[1], idx[5] - idx[1]);
 				offsetword += 4;
 				lenword -= 4;
 			}
-			dataListener.OnWordData(index, buf, offsetword, lenword);
+			wordid = dataListener.OnWordData(index, buf, offsetword, lenword);
 		}
 	}
 
@@ -461,38 +455,43 @@ public class FileScan {
 
 		if((idx[5] - idx[1]) > 0) {
 			//word
-			dataListener.OnWordData(index, buf, idx[0], idx[4] - idx[0]);
+			int wordid = dataListener.OnWordData(index, buf, idx[0] + idx[3] * 4, (idx[4] - idx[0]) - idx[3] * 4);
 			//xml data
-			dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
+			dataListener.OnXmlData(wordid, index, buf, idx[1], idx[5] - idx[1]);
 		}
 	}
-	
+
 	private void getData_with_index(ByteBuffer buf, final int index, OnDataListener dataListener) {
 		
 		int offset = index;
 		final int idx[] = new int[6];		
-		getIndex(buf, offset * 10, idx);	
+		getIndex(buf, offset * 10, idx);
 		
-		if((idx[5] - idx[1]) > 0) {
+		int wordid = -1;
+		
+		if ((idx[3] == 0) && ((idx[5] - idx[1]) > 0)) {
 			//word
-			dataListener.OnWordData(index, buf, idx[0], idx[4] - idx[0]);
-			//xml data
-			dataListener.OnXmlData(index, buf, idx[1], idx[5] - idx[1]);
+			wordid = dataListener.OnWordData(index, buf, idx[0], idx[4] - idx[0]);
+			dataListener.OnXmlData(wordid, index, buf, idx[1], idx[5] - idx[1]);
+		} else if ((idx[3] == 0) && ((idx[5] - idx[1]) == 0)) {
+			//impossible
+		} else if ((idx[3] > 0) && ((idx[5] - idx[1]) > 0)) {
+			//word + index
+			wordid = dataListener.OnWordData(index, buf, idx[0] + idx[3] * 4, (idx[4] - idx[0]) - idx[3] * 4);
+			dataListener.OnXmlData(wordid, index, buf, idx[1], idx[5] - idx[1]);
+			getReferenceData(wordid, index, buf, idx[3], idx[0], dataListener);
+		} else if ((idx[3] > 0) && ((idx[5] - idx[1]) == 0)) {
+			//only index
+			wordid = dataListener.OnWordData(index, buf, idx[0] + idx[3] * 4, (idx[4] - idx[0]) - idx[3] * 4);
+			getReferenceData(wordid, index, buf, idx[3], idx[0], dataListener);
 		}
+	}
 	
-		if(idx[3] > 0) {
-			int ref = idx[3];
-			int offsetword = idx[0];
-			int lenword = idx[4] - idx[0];
-			
-			dataListener.OnReferenceData(index, buf, offsetword + ref * 4, lenword - ref * 4);
-			
-			while(ref -- > 0) {
-				offset = buf.getInt(offsetInflatedWords + offsetword);
-				dataListener.OnReferenceIndexData(index, offset);
-				offsetword += 4;
-			}
-		}		
+	private void getReferenceData(int wordid, int index, ByteBuffer buf, int ref, int offset, OnDataListener dataListener) {
+		while(ref -- > 0) {
+			dataListener.OnReferenceData(wordid, index, buf.getInt(offsetInflatedWords + offset));
+			offset += 4;
+		}
 	}
 	
 //	
@@ -626,7 +625,7 @@ public class FileScan {
 //		return 0;
 	}	
 	
-	private int outputBlockIndex(final DBHelper db, int wordid, int dictid, final int index, final int offset, final int length) {
+	private int outputWordIndex(final DBHelper db, int wordid, int dictid, final int index, final int offset, final int length) {
 		for(final BlockData data : listBlockData) {
 			if((offsetInflatedXml + offset) <= data.end) {
 				if((offsetInflatedXml + offset + length) <= data.end) {
@@ -643,12 +642,7 @@ public class FileScan {
 		return -1;
 	}
 
-
-	protected void outputReferenceIndex(DBHelper db, int index, int refindex) {
-		db.insertReferenceIndex(index, refindex);
-	}
-
-	protected void outputReference(DBHelper db, int index, String word) {
-		db.insertReferenceInfo(index, word);
+	protected void outputReference(DBHelper db, int wordid, int dictid, int index, int refindex) {
+		db.insertReferenceIndex(wordid, dictid, index, refindex);
 	}	
 }

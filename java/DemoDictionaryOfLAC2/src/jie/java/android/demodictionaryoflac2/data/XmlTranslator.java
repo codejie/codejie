@@ -148,6 +148,8 @@ public class XmlTranslator {
 //			Log.d("======", "characters() - ch:" + (new String(ch)).trim() + " start = " + start + " length:" + length);// uri + " localName :" + localName + " qName:" + qName);
 			String str = (new String(ch, start, length)).trim();
 			Log.d("=====", "characters = " + str);
+			if(tag == null)
+				return;			
 			switch(tag) {
 			case M:
 				ret += str;
@@ -261,6 +263,9 @@ public class XmlTranslator {
 	}
 	
 	private static final String procXml(final String xml) throws ParserConfigurationException, SAXException, IOException {
+		
+		Log.d("===", "xml = " + xml);
+		
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser parser = factory.newSAXParser();
 		InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));

@@ -13,16 +13,31 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class DictionaryAdapter extends BaseAdapter {
+public class WordListAdapter extends BaseAdapter {
 
 	public static final class ItemData {
-		public int index = -1;
-		public String text = null;
+		private int index = -1;
+		private String text = null;
+		private int flag = -1;
 		
-		public ItemData(int index, final String text) {
+		public ItemData(int index, final String text, int flag) {
 			this.index = index;
 			this.text = text;
+			this.flag = flag;
 		}
+		
+		public int getIndex() {
+			return index;
+		}
+		
+		public final String getText() {
+			return text;			
+		}
+		
+		public int getFlag() {
+			return flag;
+		}
+		
 	}
 	
 	private Context context = null;	
@@ -35,7 +50,7 @@ public class DictionaryAdapter extends BaseAdapter {
 	
 	private ArrayList<ItemData> array = new ArrayList<ItemData>(); 
 	
-	public DictionaryAdapter(Context context, final DBAccess db) {
+	public WordListAdapter(Context context, final DBAccess db) {
 		this.context = context;
 		this.db = db;
 	}
@@ -60,7 +75,7 @@ public class DictionaryAdapter extends BaseAdapter {
 		if(view == null) {
 			view = LayoutInflater.from(context).inflate(R.layout.word_item, parent, false);
 		}
-		
+	
 		((TextView)view.findViewById(R.id.textView1)).setText(array.get(index).text);
 //		((TextView)view.findViewById(R.id.textView2)).setText(String.valueOf(array.get(index).index));
 		return view;
@@ -89,7 +104,7 @@ public class DictionaryAdapter extends BaseAdapter {
 		offset += cursor.getCount();
 		
 		do {
-			array.add(new ItemData(cursor.getInt(0), cursor.getString(1)));
+			array.add(new ItemData(cursor.getInt(0), cursor.getString(1), cursor.getInt(2)));
 		} while(cursor.moveToNext());
 		
 		cursor.close();

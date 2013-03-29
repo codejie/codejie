@@ -26,7 +26,12 @@ public class DBAccess {
 		
 		public WordData(int idx) {
 			index = idx;
-		}		
+		}
+		
+		public WordData(int idx, final String word) {
+			this.index = idx;
+			this.word = word;
+		}
 	}	
 	
 	public static final class BlockData {
@@ -145,13 +150,21 @@ public class DBAccess {
 	}
 
 	public Cursor getItemData(String condition, int offset, int maxRows) {
-		String sql = "SELECT idx, word FROM ld2_vicon_word_info";
+		String sql = "SELECT idx, word, flag FROM word_info";
 		if(condition != null) {
 			sql += " WHERE " + condition;
 		}
 		sql += " LIMIT " + maxRows + " OFFSET " + offset ;
 		
 		return db.rawQuery(sql, null);
+	}
+
+	public Cursor queryBlockData(int dictid) {
+		return db.query("block_info_" + dictid, new String[] { "offset", "length", "start", "end" }, null, null, null, null, "ORDER BY idx");
+	}
+
+	public Cursor queryDictionary() {
+		return db.query("dict_info", new String[] { "idx", "title", "file", "offset" }, null, null, null, null, "ORDER BY idx");
 	}
 	
 

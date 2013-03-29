@@ -2,7 +2,9 @@ package jie.java.android.demodictionaryoflac2;
 
 import jie.java.android.demodictionaryoflac2.data.DBAccess;
 import jie.java.android.demodictionaryoflac2.data.DataFileAccess;
-import jie.java.android.demodictionaryoflac2.data.DictionaryAdapter;
+import jie.java.android.demodictionaryoflac2.data.Word;
+import jie.java.android.demodictionaryoflac2.data.WordListAdapter;
+import jie.java.android.demodictionaryoflac2.data.WordListAdapter.ItemData;
 import jie.java.android.demodictionaryoflac2.data.XmlTranslator;
 import jie.java.android.demodictionaryoflac2.view.RefreshListView;
 import android.app.Activity;
@@ -42,7 +44,7 @@ public class DictionaryActivity extends Activity {
 	private TranslateAnimation aniWord = null;
 	private TranslateAnimation aniResultOut = null;		
 	
-	private DictionaryAdapter adapter = null;
+	private WordListAdapter adapter = null;
 	
 	private String inputString = null;
 	
@@ -104,7 +106,7 @@ public class DictionaryActivity extends Activity {
 			
 		});
 		
-		adapter = new DictionaryAdapter(this, DBAccess.instance());
+		adapter = new WordListAdapter(this, DBAccess.instance());
 		
 		input = (EditText) this.findViewById(R.id.keyword);
 		input.addTextChangedListener(new TextWatcher() {
@@ -223,7 +225,11 @@ public class DictionaryActivity extends Activity {
 	protected void onListItemClick(View view, int position, long id) {
 //		Toast.makeText(this, "index = " + id, Toast.LENGTH_SHORT).show();
 		
-		DBAccess.WordData word = new DBAccess.WordData((int) id);
+		ItemData item = (ItemData) list.getItemAtPosition(position);
+		onWordItemClick(new Word(item.getIndex(), item.getText(), item.getFlag()));
+		
+		
+		DBAccess.WordData word = new DBAccess.WordData(item.getIndex(), item.getText());
 		
 		DBAccess.instance().getWordData(word);
 		
@@ -260,6 +266,14 @@ public class DictionaryActivity extends Activity {
 		showResultView();
 	}
 	
+
+	private void onWordItemClick(Word word) {
+		Dictionary.getXml(word);
+		String html = HtmlMaker.make(word, Dictionary);
+		web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+		
+		showResultView();
+	}
 
 	@Override
 	protected void onDestroy() {

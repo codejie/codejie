@@ -86,6 +86,7 @@ public class DBHelper {
 		String sql = "CREATE TABLE IF NOT EXISTS dict_info ("
 				+ " idx INTEGER PRIMARY KEY,"
 				+ " title TEXT,"
+				+ " file TEXT,"
 				+ " offset INTEGER)";
 		execSQL(sql);
 		
@@ -125,7 +126,7 @@ public class DBHelper {
 	public void createDictionaryTables(int dictid) {
 		//block info
 		String sql = "CREATE TABLE IF NOT EXISTS block_info_" + dictid + " ("
-				+ " idx INTEGER,"
+				+ " idx INTEGER PRIMARY KEY,"
 				+ " offset INTEGER,"
 				+ " length INTEGER,"
 				+ " start INTEGER,"
@@ -148,17 +149,17 @@ public class DBHelper {
 		execSQL(sql);		
 	}
 		
-	public void insertBaseInfo(int dictid, final String title, int offset) {
+	public void insertBaseInfo(int dictid, final String title, final String file, int offset) {
 		String sql = "INSERT INTO dict_info VALUES ("
-				+ dictid + ",'"
-				+ title + "',"
+				+ dictid + ",\""
+				+ title + "\",\""
+				+ file + "\","
 				+ offset + ")";
 		execSQL(sql);
 	}
 
 	public void insertBlockInfo(int dictid, final BlockData data) {
-		String sql = "INSERT INTO block_info VALUES ("
-					+ dictid + ","
+		String sql = "INSERT INTO block_info_" + dictid + " VALUES ("
 					+ data.index + "," 
 					+ data.offset + ","
 					+ data.length + ","
@@ -167,9 +168,10 @@ public class DBHelper {
 		execSQL(sql);
 	}
 
-	public int insertWordInfo(int index, String word) {
-		String sql = "INSERT INTO word_info (word) VALUES (\""
-				+ word+"\")";
+	public int insertWordInfo(int index, String word, int flag) {
+		String sql = "INSERT INTO word_info (word, flag) VALUES (\""
+				+ word+"\","
+				+ flag + ")";
 		return execSQLWithReturn(sql);
 	}
 	
@@ -178,9 +180,8 @@ public class DBHelper {
 		if(block2 != -1)
 			block1 = -block1;
 		
-		String sql = "INSERT INTO word_index VALUES ("
+		String sql = "INSERT INTO word_index_" + dictid + " VALUES ("
 				+ wordid + ","
-				+ dictid + ","
 				+ index + ","
 				+ offset + ","
 				+ length + ","
@@ -197,9 +198,8 @@ public class DBHelper {
 //	}
 	
 	public void insertReferenceIndex(int wordid, int dictid, int index, int refindex) {
-		String sql = "INSERT INTO reference_index VALUES ("
+		String sql = "INSERT INTO ref_index_" + dictid + " VALUES ("
 				+ wordid + ","
-				+ dictid + ","
 				+ index + ","
 				+ refindex +")";
 		execSQL(sql);	

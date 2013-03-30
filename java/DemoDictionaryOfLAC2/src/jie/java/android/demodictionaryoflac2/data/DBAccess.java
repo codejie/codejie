@@ -166,6 +166,10 @@ public class DBAccess {
 	public Cursor queryDictionary() {
 		return db.query("dict_info", new String[] { "idx", "title", "file", "offset" }, null, null, null, null, "ORDER BY idx");
 	}
+
+	public Cursor queryWordXmlIndex(int dictid, int wordid) {
+		return db.query("word_info_" + dictid, new String[] { "offset", "length", "block1" }, "wordid=?", new String[] { String.valueOf(wordid) }, null, null, null);
+	}
 	
 
 	

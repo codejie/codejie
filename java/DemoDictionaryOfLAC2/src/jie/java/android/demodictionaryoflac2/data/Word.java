@@ -7,9 +7,10 @@ public class Word {
 	public static final class XmlData {
 		private int dictid = -1;
 //		private int flag = -1;
-		private final String xml;
+		//next time, add the xml type, such as self or ref. Maybe the ref-word can be set also
+		private final ArrayList<String> xml;// = new ArrayList<String>();
 		
-		public XmlData(int dictid, final String xml) {
+		public XmlData(int dictid, final ArrayList<String> xml) {
 			this.dictid = dictid;
 			this.xml = xml;
 		}
@@ -18,7 +19,7 @@ public class Word {
 			return dictid;
 		}
 
-		public String getXml() {
+		public final ArrayList<String> getXml() {
 			return xml;
 		}
 	}
@@ -35,7 +36,7 @@ public class Word {
 		this.flag = flag;
 	}
 	
-	public void addXmlData(int dictid, final String xml) {
+	public void addXmlData(int dictid, final ArrayList<String> xml) {
 		xmlData.add(new XmlData(dictid, xml));
 	}
 

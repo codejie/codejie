@@ -21,6 +21,13 @@ public class Dictionary {
 		public int end = 0;
 	}
 	
+	public static final class XmlIndex {
+		public int offset = 0;
+		public int length = 0;
+		public int block1 = 0;
+		public int block2 = 0;		
+	}
+	
 	public static final class Item {
 		
 		private final int id;
@@ -62,6 +69,14 @@ public class Dictionary {
 			}
 		}
 		
+		public int getId() {
+			return id;
+		}
+
+		public String getTitle() {
+			return title;
+		}		
+		
 		private int loadBlockData(DBAccess db) {
 			Cursor cursor = db.queryBlockData(id);
 			if(cursor != null && cursor.moveToFirst()) {
@@ -80,21 +95,59 @@ public class Dictionary {
 			return 0;
 		}
 		
-		public final String getXmlData(DBAccess db, int wordid) {
-			//get word index
-			//get ref
-			//get xml
+		public final ArrayList<String> getWordXmlData(DBAccess db, int wordid) {
+			ArrayList<String> ret = new ArrayList<String>();
+			//get self xml
+			String self = getSelfXml(db, wordid);
+			if (self != null) {
+				ret.add(self);
+			}
+			//get ref xml
+			getRefXml(db, wordid, ret); 
+
+			if (ret.size() > 0) {
+				return ret;
+			} else {
+				return null;
+			}
+		}
+
+		private String getSelfXml(DBAccess db, int wordid) {
+			//get from word_index
+			XmlIndex index = getWordXmlIndex(db, wordid);
+			if(index != null) {
+				return getXmlData(db, index);
+			}
+
 			return null;
 		}
 
-		public int getId() {
-			return id;
+		private void getRefXml(DBAccess db, int wordid, ArrayList<String> ret) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+
+		private XmlIndex getWordXmlIndex(DBAccess db, int wordid) {
+			Cursor cursor = db.queryWordXmlIndex(id, wordid);
+			if(cursor != null && cursor.moveToFirst()) {
+				XmlIndex ret = new XmlIndex();
+				ret.offset = cursor.getInt(0);
+				ret.length = cursor.getInt(1);
+				ret.block1 = cursor.getInt(2);
+				if(ret.block1 < 0) {
+					ret.block1 = -ret.block1;
+					ret.block2 = ret.block2 + 1;
+				}
+				return ret;
+			}
+			return null;
 		}
 
-		public String getTitle() {
-			return title;
-		}
-
+		private String getXmlData(DBAccess db, XmlIndex index) {
+			// TODO Auto-generated method stub
+			return null;
+		}		
 		
 	}
 	
@@ -134,7 +187,7 @@ public class Dictionary {
 	
 	public static int getXmlData(int wordid, ArrayList<XmlData> xmlData) {
 		for(final Item dict : dictMap.values()) { 
-			String xml = dict.getXmlData(db, wordid);
+			ArrayList<String> xml = dict.getWordXmlData(db, wordid);
 			if(xml != null) {
 				xmlData.add(new XmlData(dict.getId(), xml));
 			}

@@ -111,4 +111,7 @@ public class DataFileAccess {
 		
 		return new String(ret, 0, length).trim();
 	}
+	
+	//
+	public static final String getXml()
 }

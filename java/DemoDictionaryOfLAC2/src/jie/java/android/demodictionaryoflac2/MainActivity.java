@@ -9,7 +9,7 @@ import java.util.Date;
 
 import jie.java.android.demodictionaryoflac2.data.AssetsHelper;
 import jie.java.android.demodictionaryoflac2.data.DBAccess;
-import jie.java.android.demodictionaryoflac2.data.DataFileAccess;
+import jie.java.android.demodictionaryoflac2.data.Dictionary;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -83,8 +83,10 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private int initData() {
     	if(DBAccess.init(Global.SDCARD_ROOT + Global.DATA_ROOT + Global.DB_FILE) != 0)
     		return -1;
-    	if(DataFileAccess.init(Global.SDCARD_ROOT + Global.DATA_ROOT + Global.LD2_FILE) != 0)
-    		return -1;
+		Dictionary.open(DBAccess.instance());
+    	
+//    	if(DataFileAccess.init(Global.SDCARD_ROOT + Global.DATA_ROOT + Global.LD2_FILE) != 0)
+//    		return -1;
     	return 0;
 	}
 

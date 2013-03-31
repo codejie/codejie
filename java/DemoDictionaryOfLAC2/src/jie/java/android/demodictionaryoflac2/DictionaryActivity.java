@@ -1,9 +1,12 @@
 package jie.java.android.demodictionaryoflac2;
 
+import java.util.ArrayList;
+
 import jie.java.android.demodictionaryoflac2.data.DBAccess;
-import jie.java.android.demodictionaryoflac2.data.DataFileAccess;
+import jie.java.android.demodictionaryoflac2.data.Dictionary;
 import jie.java.android.demodictionaryoflac2.data.Word;
 import jie.java.android.demodictionaryoflac2.data.WordListAdapter;
+import jie.java.android.demodictionaryoflac2.data.Word.XmlData;
 import jie.java.android.demodictionaryoflac2.data.WordListAdapter.ItemData;
 import jie.java.android.demodictionaryoflac2.data.XmlTranslator;
 import jie.java.android.demodictionaryoflac2.view.RefreshListView;
@@ -32,7 +35,7 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 public class DictionaryActivity extends Activity {
-
+	
 	private ViewSwitcher switcher = null;
 	
 	private EditText input = null;
@@ -56,7 +59,7 @@ public class DictionaryActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		this.setContentView(R.layout.activity_dictionary2);
-		
+				
 		initAnination();		
 		initView();		
 		initData();
@@ -169,7 +172,7 @@ public class DictionaryActivity extends Activity {
 		
 	}
 
-	private void initData() {
+	private void initData() {		
 		adapter.load(null);
 	}
 	
@@ -227,50 +230,51 @@ public class DictionaryActivity extends Activity {
 		
 		ItemData item = (ItemData) list.getItemAtPosition(position);
 		onWordItemClick(new Word(item.getIndex(), item.getText(), item.getFlag()));
-		
-		
-		DBAccess.WordData word = new DBAccess.WordData(item.getIndex(), item.getText());
-		
-		DBAccess.instance().getWordData(word);
-		
-		 int size = 0;
-		
-		for(final DBAccess.XmlIndex xi : word.xmlIndex) {			
-			final DBAccess.BlockData block = DBAccess.instance().getBlockData(xi.block1);
-			if(block != null) {
-				size = block.length; 
-			}
-			if(xi.block2 != -1) {
-				final DBAccess.BlockData block2 = DBAccess.instance().getBlockData(xi.block2);
-				if(block2 != null) {
-					size += block2.length; 
-				}
-			}
+//		
+//		
+//		DBAccess.WordData word = new DBAccess.WordData(item.getIndex(), item.getText());
+//		
+//		DBAccess.instance().getWordData(word);
+//		
+//		 int size = 0;
+//		
+//		for(final DBAccess.XmlIndex xi : word.xmlIndex) {			
+//			final DBAccess.BlockData block = DBAccess.instance().getBlockData(xi.block1);
+//			if(block != null) {
+//				size = block.length; 
+//			}
+//			if(xi.block2 != -1) {
+//				final DBAccess.BlockData block2 = DBAccess.instance().getBlockData(xi.block2);
+//				if(block2 != null) {
+//					size += block2.length; 
+//				}
+//			}
+//			
+//			DataFileAccess.instance().setBlockCache(block.index, block.start, block.offset, size);
+//			String xml = DataFileAccess.instance().getWordXml(xi.offset, xi.length);
+////			Log.d("=====", "before xml = " + xml);
+//			xml = xml.trim();
+////			Log.d("=====", "length = " + xi.length);
+////			Log.d("=====", "size = " + xml.length());
+////			Log.d("=====", "xml = " + xml);
+//						
+//			xml = XmlTranslator.translate(word.word, xml);
+//			
+////			Log.d("=====", "HTML = " + xml);
+//
+//			web.loadDataWithBaseURL(null, xml, "text/html", "utf-8", null);
 			
-			DataFileAccess.instance().setBlockCache(block.index, block.start, block.offset, size);
-			String xml = DataFileAccess.instance().getWordXml(xi.offset, xi.length);
-//			Log.d("=====", "before xml = " + xml);
-			xml = xml.trim();
-//			Log.d("=====", "length = " + xi.length);
-//			Log.d("=====", "size = " + xml.length());
-//			Log.d("=====", "xml = " + xml);
-						
-			xml = XmlTranslator.translate(word.word, xml);
-			
-//			Log.d("=====", "HTML = " + xml);
-
-			web.loadDataWithBaseURL(null, xml, "text/html", "utf-8", null);
-			
-		}
+//		}
 		
-		showResultView();
+//		showResultView();
 	}
 	
 
 	private void onWordItemClick(Word word) {
-		Dictionary.getXml(word);
-		String html = HtmlMaker.make(word, Dictionary);
-		web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+		ArrayList<XmlData> xmlData = new ArrayList<XmlData>();
+		Dictionary.getXmlData(DBAccess.instance(), word.getIndex(), xmlData);
+//		String html = HtmlMaker.make(word, Dictionary);
+//		web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
 		
 		showResultView();
 	}

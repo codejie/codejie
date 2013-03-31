@@ -106,6 +106,8 @@ public class FileScan {
 		} catch (final ArrayIndexOutOfBoundsException e) {
 			return -1;
 		}
+		
+		outputDecoderInfo(db, dictid, wordDecoder, xmlDecoder);
 
 		
 		if(scanData(dictid, ld2file + ".inflated", db) != 0) {
@@ -116,7 +118,7 @@ public class FileScan {
 		
 		return 0;
 	}
-	
+
 	private int scanInfo(String ld2file, DBHelper db) {
 		try {
 			RandomAccessFile file = null;
@@ -558,6 +560,7 @@ public class FileScan {
 		String title = file.substring(0, matcher.start()); 
 		
 		db.insertBaseInfo(dictid, title, file, offsetInflatedXml);
+		
 		db.createDictionaryTables(dictid);
 		
 		for(final BlockData data : listBlockData) {
@@ -590,5 +593,10 @@ public class FileScan {
 
 	protected void outputReference(DBHelper db, int wordid, int dictid, int index, int refindex) {
 		db.insertReferenceIndex(wordid, dictid, index, refindex);
+	}
+	
+	
+	private void outputDecoderInfo(DBHelper db, int dictid, Decoder wordDecoder, Decoder xmlDecoder) {
+		db.updateDecoderInfo(dictid, wordDecoder.getIndex(), xmlDecoder.getIndex());		
 	}	
 }

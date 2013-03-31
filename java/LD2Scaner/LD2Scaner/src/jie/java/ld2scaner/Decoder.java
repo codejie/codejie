@@ -89,6 +89,17 @@ public class Decoder {
 		}
 		
 		return ret;
-	}	
+	}
+	
+	public final String getName() {
+		if(charset != null) {
+			return charset.name();
+		}
+		return null;
+	}
+	
+	public int getIndex() {
+		return index;
+	}
 	
 }

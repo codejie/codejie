@@ -87,7 +87,9 @@ public class DBHelper {
 				+ " idx INTEGER PRIMARY KEY,"
 				+ " title TEXT,"
 				+ " file TEXT,"
-				+ " offset INTEGER)";
+				+ " offset INTEGER,"
+				+ " d_decoder INTGER,"
+				+ " x_decoder INTEGER)";
 		execSQL(sql);
 		
 //		sql = "CREATE TABLE IF NOT EXISTS block_info ("
@@ -150,7 +152,7 @@ public class DBHelper {
 	}
 		
 	public void insertBaseInfo(int dictid, final String title, final String file, int offset) {
-		String sql = "INSERT INTO dict_info VALUES ("
+		String sql = "INSERT INTO dict_info (idx,title,file,offset) VALUES ("
 				+ dictid + ",\""
 				+ title + "\",\""
 				+ file + "\","
@@ -158,6 +160,13 @@ public class DBHelper {
 		execSQL(sql);
 	}
 
+
+	public void updateDecoderInfo(int dictid, int indexWordDecoder, int indexXmlDecoder) {
+		String sql = "UPDATE dict_info SET d_decoder=" + indexWordDecoder + ",x_decoder=" + indexXmlDecoder
+				+ " WHERE idx=" + dictid;
+		execSQL(sql);
+	}
+	
 	public void insertBlockInfo(int dictid, final BlockData data) {
 		String sql = "INSERT INTO block_info_" + dictid + " VALUES ("
 					+ data.index + "," 
@@ -216,7 +225,6 @@ public class DBHelper {
 			}
 		}
 	}
-	
  
 
 //	

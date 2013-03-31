@@ -166,7 +166,7 @@ public class Dictionary {
 			if(fileAccess.setBlockCache(id, file, index.block1, start, offset, size) != 0)
 				return null;
 			
-			return fileAccess.getXml(xmlDecoder, index.offset, index.length);
+			return fileAccess.getXml(xmlDecoder, this.offsetMagic + index.offset, index.length);
 		}	
 		
 	}

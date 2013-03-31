@@ -147,8 +147,9 @@ public class DictFileAccess {
 		}
 		
 		final ByteBuffer in = ByteBuffer.wrap(blockCache, offset - currentStart, length);
-		
-		return new String(xmlDecoder.decode(in, length), 0, length).trim();
+		char[] ret = xmlDecoder.decode(in, length);
+		String xml = new String(ret);//, 0, length);
+		return xml;
 	}
 			
 }

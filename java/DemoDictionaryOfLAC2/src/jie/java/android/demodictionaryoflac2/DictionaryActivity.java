@@ -229,50 +229,21 @@ public class DictionaryActivity extends Activity {
 //		Toast.makeText(this, "index = " + id, Toast.LENGTH_SHORT).show();
 		
 		ItemData item = (ItemData) list.getItemAtPosition(position);
-		onWordItemClick(new Word(item.getIndex(), item.getText(), item.getFlag()));
-//		
-//		
-//		DBAccess.WordData word = new DBAccess.WordData(item.getIndex(), item.getText());
-//		
-//		DBAccess.instance().getWordData(word);
-//		
-//		 int size = 0;
-//		
-//		for(final DBAccess.XmlIndex xi : word.xmlIndex) {			
-//			final DBAccess.BlockData block = DBAccess.instance().getBlockData(xi.block1);
-//			if(block != null) {
-//				size = block.length; 
-//			}
-//			if(xi.block2 != -1) {
-//				final DBAccess.BlockData block2 = DBAccess.instance().getBlockData(xi.block2);
-//				if(block2 != null) {
-//					size += block2.length; 
-//				}
-//			}
-//			
-//			DataFileAccess.instance().setBlockCache(block.index, block.start, block.offset, size);
-//			String xml = DataFileAccess.instance().getWordXml(xi.offset, xi.length);
-////			Log.d("=====", "before xml = " + xml);
-//			xml = xml.trim();
-////			Log.d("=====", "length = " + xi.length);
-////			Log.d("=====", "size = " + xml.length());
-////			Log.d("=====", "xml = " + xml);
-//						
-//			xml = XmlTranslator.translate(word.word, xml);
-//			
-////			Log.d("=====", "HTML = " + xml);
-//
-//			web.loadDataWithBaseURL(null, xml, "text/html", "utf-8", null);
-			
-//		}
 		
-//		showResultView();
+		onWordItemClick(new Word(item.getIndex(), item.getText(), item.getFlag()));
 	}
 	
 
 	private void onWordItemClick(Word word) {
-		ArrayList<XmlData> xmlData = new ArrayList<XmlData>();
-		Dictionary.getXmlData(DBAccess.instance(), word.getIndex(), xmlData);
+		Dictionary.getWordData(DBAccess.instance(), word);
+
+		for(final XmlData data : word.getXmlData()) {
+			Log.d("======", "Dict = " + data.getDictid());
+			for(final String xml : data.getXml()) {
+				Log.d("=====", "XML = " + xml);
+			}
+		}
+		
 //		String html = HtmlMaker.make(word, Dictionary);
 //		web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
 		

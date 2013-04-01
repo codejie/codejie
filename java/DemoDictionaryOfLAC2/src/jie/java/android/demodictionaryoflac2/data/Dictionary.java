@@ -10,6 +10,7 @@ import jie.java.android.demodictionaryoflac2.Global;
 import jie.java.android.demodictionaryoflac2.data.Word.XmlData;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 
 public class Dictionary {
 
@@ -102,10 +103,7 @@ public class Dictionary {
 		public final ArrayList<String> getWordXmlData(DBAccess db, int wordid) {
 			ArrayList<String> ret = new ArrayList<String>();
 			//get self xml
-			String self = getSelfXml(db, wordid);
-			if (self != null) {
-				ret.add(self);
-			}
+			getSelfXml(db, wordid, ret);
 			//get ref xml
 			getRefXml(db, wordid, ret); 
 
@@ -116,19 +114,62 @@ public class Dictionary {
 			}
 		}
 
-		private String getSelfXml(DBAccess db, int wordid) {
+		private void getSelfXml(DBAccess db, int wordid, ArrayList<String> ret) {
 			//get from word_index
-			XmlIndex index = getWordXmlIndex(db, wordid);
-			if(index != null) {
-				return getXmlData(index);
+			Cursor cursor = db.queryWordXmlIndex(id, wordid);
+			if(cursor != null && cursor.moveToFirst()) {
+				XmlIndex index = new XmlIndex();
+				index.offset = cursor.getInt(0);
+				index.length = cursor.getInt(1);
+				index.block1 = cursor.getInt(2);
+				if(index.block1 < 0) {
+					index.block1 = -index.block1;
+					index.block2 = index.block2 + 1;
+				} else {
+					index.block2 = -1;
+				}
+				
+				String xml = getXmlData(index);
+				if (xml != null) {
+					ret.add(xml);
+				}
 			}
-
-			return null;
+//			
+//			
+//			XmlIndex index = getWordXmlIndex(db, wordid);
+//			if(index != null) {
+//				String xml = getXmlData(index);
+//				if (xml != null) {
+//					ret.add(xml);
+//				}				
+//			}
+//
+//			return null;
 		}
 
 		private void getRefXml(DBAccess db, int wordid, ArrayList<String> ret) {
-			// TODO Auto-generated method stub
-			
+			//get ref index
+			Cursor cursor = db.queryRefXmlIndex(id, wordid);
+			if(cursor != null && cursor.moveToFirst()) {
+				do {
+					XmlIndex index = new XmlIndex();
+					index.offset = cursor.getInt(0);
+					index.length = cursor.getInt(1);
+					index.block1 = cursor.getInt(2);
+					if(index.block1 < 0) {
+						index.block1 = -index.block1;
+						index.block2 = index.block2 + 1;
+					} else {
+						index.block2 = -1;
+					}
+					
+					String xml = getXmlData(index);
+					if (xml != null) {
+						ret.add(xml);
+					}
+					
+				} while(cursor.moveToNext());
+			}
 		}
 		
 
@@ -207,11 +248,12 @@ public class Dictionary {
 		return 0;
 	}	
 	
-	public static int getXmlData(DBAccess db, int wordid, ArrayList<XmlData> xmlData) {
+	public static int getWordData(DBAccess db, Word word) {
 		for(final Item dict : dictMap.values()) { 
-			ArrayList<String> xml = dict.getWordXmlData(db, wordid);
+			ArrayList<String> xml = dict.getWordXmlData(db, word.getIndex());
 			if(xml != null) {
-				xmlData.add(new XmlData(dict.getId(), xml));
+				word.addXmlData(dict.getId(), xml);
+//				xmlData.add(new XmlData(dict.getId(), xml));
 			}
 		}
 		return 0;

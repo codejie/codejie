@@ -22,6 +22,7 @@ public class Word {
 		public final ArrayList<String> getXml() {
 			return xml;
 		}
+		
 	}
 	
 	private final int index;

@@ -177,8 +177,11 @@ public class DBAccess {
 	}
 
 	public Cursor queryRefXmlIndex(int dictid, int wordid) {
-		return db.rawQuery("select offset, length, block1 from word_index_" + dictid + ",ref_index_" + dictid
-				+ " where ref_index_" + dictid + ".wordid = ? and word_index_" + dictid + ".idx = ref_index_" + dictid + ".ref_idx", new String[] { String.valueOf(wordid) });
+//		return db.rawQuery("select offset, length, block1 from word_index_" + dictid + ",ref_index_" + dictid
+//				+ " where ref_index_" + dictid + ".wordid = ? and word_index_" + dictid + ".idx = ref_index_" + dictid + ".ref_idx", new String[] { String.valueOf(wordid) });
+		
+		return db.rawQuery("select offset, length, block1 from word_index_" + dictid + " inner join ref_index_" + dictid + " on ((word_index_" + dictid + ".idx = ref_index_" + dictid + ".ref_idx)) where (ref_index_" + dictid + ".wordid=?)", new String[] { String.valueOf(wordid) });
+		
 		//select * from word_index_0 inner join ref_index_0 on (word_index_0.idx=ref_index_0.ref_idx) where ref_index_0.wordid=1381
 		//select * from word_index_0 inner join (select word_info.idx from word_info, ref_index_0 where word_info.idx=ref_index_0.ref_idx and ref_index_0.wordid=1381) as r on (word_index_0.idx=r.idx)
 	}

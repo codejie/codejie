@@ -1,5 +1,7 @@
 package jie.java.android.demodictionaryoflac2;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import jie.java.android.demodictionaryoflac2.data.DBAccess;
@@ -235,6 +237,25 @@ public class DictionaryActivity extends Activity {
 	
 
 	private void onWordItemClick(Word word) {
+		
+		InputStream xmlFile = null;
+		try {
+			xmlFile = this.getResources().getAssets().open("a.xml");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		InputStream xsltFile = null;
+		try {
+			xsltFile = this.getResources().getAssets().open("a.xsl");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		XmlTranslator.test(xmlFile, xsltFile);
+		
+		
 		Dictionary.getWordData(DBAccess.instance(), word);
 
 		for(final XmlData data : word.getXmlData()) {

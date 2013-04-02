@@ -143,11 +143,18 @@ public class DBHelper {
 				+ " block1 INTEGER)";//,"
 				//+ " block2 INTEGER)";
 		execSQL(sql);
+		
+		sql = "CREATE INDEX index_word_index_" + dictid + "_idx ON word_index_" + dictid + " (idx ASC)";
+		execSQL(sql);
 		//reference index
 		sql = "CREATE TABLE IF NOT EXISTS ref_index_" + dictid + " ("
 				+ " wordid INTEGER,"
 				+ " idx INTEGER,"
 				+ " ref_idx INTEGER)";
+		execSQL(sql);
+		sql = "CREATE INDEX index_ref_index_" + dictid + "_wordid ON ref_index_" + dictid + " (wordid ASC)";		
+		execSQL(sql);
+		sql = "CREATE INDEX index_ref_index_" + dictid + "_ref_idx ON ref_index_" + dictid + " (ref_idx ASC)";		
 		execSQL(sql);		
 	}
 		

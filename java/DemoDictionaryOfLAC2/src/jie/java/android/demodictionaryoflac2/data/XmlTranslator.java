@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -44,8 +46,31 @@ public class XmlTranslator {
 	
  */
 	
-	public void init() {
-		
+	private static Transformer transformer = null;
+	
+	public static void init(final InputStream xslFile) {
+		Source xslt = new StreamSource(xslFile);
+		try {
+			transformer = TransformerFactory.newInstance().newTransformer(xslt);
+		} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+		} catch (TransformerFactoryConfigurationError e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static final String trans(final String xml) {
+		Source input = new StreamSource(new StringReader(xml));
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        
+        try {
+			transformer.transform(input, new StreamResult(output));
+		} catch (TransformerException e) {
+			return null;
+		}
+        
+        return output.toString();
 	}
 	
 	public static void test(final InputStream xmlFile, final InputStream xsltFile) {

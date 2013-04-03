@@ -237,38 +237,35 @@ public class DictionaryActivity extends Activity {
 	
 
 	private void onWordItemClick(Word word) {
-		
-		InputStream xmlFile = null;
-		try {
-			xmlFile = this.getResources().getAssets().open("a.xml");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		InputStream xsltFile = null;
-		try {
-			xsltFile = this.getResources().getAssets().open("a.xsl");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-		XmlTranslator.test(xmlFile, xsltFile);
-		
+
 		
 		Dictionary.getWordData(DBAccess.instance(), word);
-
-		for(final XmlData data : word.getXmlData()) {
-			Log.d("======", "Dict = " + data.getDictid());
-			for(final String xml : data.getXml()) {
-				Log.d("=====", "XML = " + xml);
-			}
+		String xml = Dictionary.assembleXml(word);
+		if(xml != null) {
+			displayResult(xml);
 		}
+
+//		for(final XmlData data : word.getXmlData()) {
+//			Log.d("======", "Dict = " + data.getDictid());
+//			for(final String xml : data.getXml()) {
+//				Log.d("=====", "XML = " + xml);
+//				String html = XmlTranslator.trans(xml);
+//				web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+//			}
+//		}
 		
 //		String html = HtmlMaker.make(word, Dictionary);
 //		web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
 		
-		showResultView();
+//		showResultView();
+	}
+
+	private void displayResult(final String xml) {
+		final String html = XmlTranslator.trans(xml);
+		if(html != null) {
+			web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+			showResultView();			
+		}
 	}
 
 	@Override

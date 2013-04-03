@@ -111,7 +111,7 @@ public class Dictionary {
 			getSelfXml(db, wordid, ret);
 			Log.d("===", "self xml over.");
 			//get ref xml
-			getRefXml(db, wordid, ret);
+			//getRefXml(db, wordid, ret);
 			Log.d("===", "ref xml over.");
 
 			if (ret.size() > 0) {
@@ -282,6 +282,21 @@ public class Dictionary {
 			}
 		}
 		return 0;
+	}
+
+	public static final String assembleXml(Word word) {
+		if(word.getXmlData().size() == 0)
+			return null;
+		
+		String ret = "<W>" + word.getText() + "</W>";
+		for (final XmlData data : word.getXmlData()) {
+			ret += "<D>" +  dictMap.get(data.getDictid()).getTitle() + "</D>";
+			for(final String xml : data.getXml()) {
+				ret += xml;
+			}
+		}
+		
+		return ret;
 	}
 	
 	

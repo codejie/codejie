@@ -288,13 +288,14 @@ public class Dictionary {
 		if(word.getXmlData().size() == 0)
 			return null;
 		
-		String ret = "<W>" + word.getText() + "</W>";
+		String ret = "<LAC><W>" + word.getText() + "</W>";
 		for (final XmlData data : word.getXmlData()) {
 			ret += "<D>" +  dictMap.get(data.getDictid()).getTitle() + "</D>";
 			for(final String xml : data.getXml()) {
 				ret += xml;
 			}
 		}
+		ret += "</LAC>";
 		
 		return ret;
 	}

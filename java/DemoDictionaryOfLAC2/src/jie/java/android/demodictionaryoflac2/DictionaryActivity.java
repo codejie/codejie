@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import jie.java.android.demodictionaryoflac2.data.DBAccess;
 import jie.java.android.demodictionaryoflac2.data.Dictionary;
+import jie.java.android.demodictionaryoflac2.data.Speaker;
 import jie.java.android.demodictionaryoflac2.data.Word;
 import jie.java.android.demodictionaryoflac2.data.WordListAdapter;
 import jie.java.android.demodictionaryoflac2.data.Word.XmlData;
@@ -44,6 +45,7 @@ public class DictionaryActivity extends Activity {
 	private ImageButton button = null;
 	private RefreshListView list = null;
 	private WebView web = null;
+	private TextView wordView = null;
 	
 	private TranslateAnimation aniResultIn = null;
 	private TranslateAnimation aniWord = null;
@@ -100,6 +102,17 @@ public class DictionaryActivity extends Activity {
 	private void initView() {
 		
 		switcher = (ViewSwitcher) this.findViewById(R.id.viewSwitcher1);
+		
+		wordView = (TextView)switcher.findViewById(R.id.textView1);
+		wordView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				onWordViewClick();
+			}
+			
+		});
+		
 		web = (WebView) switcher.findViewById(R.id.webView);
 		web.setOnTouchListener(new OnTouchListener() {
 
@@ -174,7 +187,15 @@ public class DictionaryActivity extends Activity {
 		
 	}
 
-	private void initData() {		
+	protected void onWordViewClick() {
+		final String text = wordView.getText().toString();
+		Speaker.speak(text);
+	}
+
+	private void initData() {
+		
+		Speaker.init(this);
+		
 		adapter.load(null);
 	}
 	
@@ -242,35 +263,39 @@ public class DictionaryActivity extends Activity {
 		Dictionary.getWordData(DBAccess.instance(), word);
 		String xml = Dictionary.assembleXml(word);
 		if(xml != null) {
-			displayResult(xml);
+			Log.d("=====", "XML = " + xml);
+			displayResult(word, xml);
+		} else {
+			Toast.makeText(this, "This is a reference data.", Toast.LENGTH_SHORT).show();
 		}
-
-//		for(final XmlData data : word.getXmlData()) {
-//			Log.d("======", "Dict = " + data.getDictid());
-//			for(final String xml : data.getXml()) {
-//				Log.d("=====", "XML = " + xml);
-//				String html = XmlTranslator.trans(xml);
-//				web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
-//			}
-//		}
-		
-//		String html = HtmlMaker.make(word, Dictionary);
-//		web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
-		
-//		showResultView();
 	}
 
-	private void displayResult(final String xml) {
+	private void displayResult(final Word word, final String xml) {
 		final String html = XmlTranslator.trans(xml);
 		if(html != null) {
+			Log.d("=====", "html = " + html);
+			
+			wordView.setText(word.getText());
+			
 			web.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
 			showResultView();			
+		} else {
+			Toast.makeText(this, "This is a reference data.", Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	@Override
 	protected void onDestroy() {
 		checkRun = false;
+		
+		try {
+			Dictionary.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Speaker.release();
+		
 		super.onDestroy();
 	}
 

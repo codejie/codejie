@@ -10,6 +10,7 @@ import java.util.Date;
 import jie.java.android.demodictionaryoflac2.data.AssetsHelper;
 import jie.java.android.demodictionaryoflac2.data.DBAccess;
 import jie.java.android.demodictionaryoflac2.data.Dictionary;
+import jie.java.android.demodictionaryoflac2.data.Speaker;
 import jie.java.android.demodictionaryoflac2.data.XmlTranslator;
 
 import android.os.Bundle;
@@ -61,7 +62,7 @@ public class MainActivity extends Activity implements OnTouchListener {
         rl.setOnTouchListener(this);
     }
 
-    private void initHandler() {
+	private void initHandler() {
     	handler = new Handler() {
     		@Override
     		public void handleMessage(Message msg) {
@@ -82,6 +83,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 	}
 
 	private int initData() {
+
     	if(DBAccess.init(Global.SDCARD_ROOT + Global.DATA_ROOT + Global.DB_FILE) != 0)
     		return -1;
     	try {
@@ -95,6 +97,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 //    		return -1;
     	return 0;
 	}
+
 
 	private int checkExpire() {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");

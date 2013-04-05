@@ -8,18 +8,24 @@
 	</BODY></HTML>
 </xsl:template>
 
-<xsl:template match="W">
+<xsl:template match="LAC-W">
+<!-- //Display the word in a TextView not WebView
 	<DIV>
 	<SPAN style="LINE-HEIGHT: 150%; COLOR: #000000; FONT-SIZE: 180%"><B>
 		<xsl:value-of select="."/>
 	</B></SPAN>
 	</DIV>
+-->	
+	<xsl:for-each select="LAC-R">
+		<xsl:apply-templates/>
+	</xsl:for-each>
 </xsl:template>
 
-<xsl:template match="D">
-	<DIV style="LINE-HEIGHT: 120%; background-color:#cfddf0; COLOR:#000080; FONT-SIZE: 100%"><B>
-		<xsl:value-of select="."/>
-	</B>
+<xsl:template match="LAC-D">
+	<DIV style="LINE-HEIGHT: 120%; background-color:#cfddf0; COLOR:#000080; FONT-SIZE: 100%">
+		<B>
+			<xsl:value-of select="."/>
+		</B>
 	</DIV>
 </xsl:template>
 
@@ -36,6 +42,7 @@
 			<FONT COLOR="#229922">
 				<xsl:for-each select="E">
 					<xsl:value-of select="."/>
+	 				<xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
 				</xsl:for-each>
 			</FONT>
 		</DIV>		

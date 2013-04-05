@@ -128,22 +128,24 @@ public class Dictionary {
 			if(cursor != null) {
 				try {
 					if (cursor.moveToFirst()) {
-						Log.d("===", "5.");
-						XmlIndex index = new XmlIndex();
-						index.offset = cursor.getInt(0);
-						index.length = cursor.getInt(1);
-						index.block1 = cursor.getInt(2);
-						if(index.block1 < 0) {
-							index.block1 = -index.block1;
-							index.block2 = index.block2 + 1;
-						} else {
-							index.block2 = -1;
-						}
-						
-						String xml = getXmlData(index);
-						if (xml != null) {
-							ret.add(xml);
-						}
+						do {
+							Log.d("===", "5.");
+							XmlIndex index = new XmlIndex();
+							index.offset = cursor.getInt(0);
+							index.length = cursor.getInt(1);
+							index.block1 = cursor.getInt(2);
+							if(index.block1 < 0) {
+								index.block1 = -index.block1;
+								index.block2 = index.block2 + 1;
+							} else {
+								index.block2 = -1;
+							}
+							
+							String xml = getXmlData(index);
+							if (xml != null) {
+								ret.add(xml);
+							}
+						} while(cursor.moveToNext());
 					}
 				} finally {
 					cursor.close();
@@ -183,31 +185,31 @@ public class Dictionary {
 			}
 		}
 		
-
-		private XmlIndex getWordXmlIndex(DBAccess db, int wordid) {
-			Cursor cursor = db.queryWordXmlIndex(id, wordid);
-			if(cursor != null) {
-				try {
-					if (cursor.moveToFirst()) {
-						XmlIndex ret = new XmlIndex();
-						ret.offset = cursor.getInt(0);
-						ret.length = cursor.getInt(1);
-						ret.block1 = cursor.getInt(2);
-						if(ret.block1 < 0) {
-							ret.block1 = -ret.block1;
-							ret.block2 = ret.block2 + 1;
-						} else {
-							ret.block2 = -1;
-						}
-						
-						return ret;
-					}
-				} finally {
-					cursor.close();
-				}
-			}
-			return null;
-		}
+//
+//		private XmlIndex getWordXmlIndex(DBAccess db, int wordid) {
+//			Cursor cursor = db.queryWordXmlIndex(id, wordid);
+//			if(cursor != null) {
+//				try {
+//					if (cursor.moveToFirst()) {
+//						XmlIndex ret = new XmlIndex();
+//						ret.offset = cursor.getInt(0);
+//						ret.length = cursor.getInt(1);
+//						ret.block1 = cursor.getInt(2);
+//						if(ret.block1 < 0) {
+//							ret.block1 = -ret.block1;
+//							ret.block2 = ret.block2 + 1;
+//						} else {
+//							ret.block2 = -1;
+//						}
+//						
+//						return ret;
+//					}
+//				} finally {
+//					cursor.close();
+//				}
+//			}
+//			return null;
+//		}
 
 		private String getXmlData(XmlIndex index) {
 			if(index.block1 > blockData.size())
@@ -248,7 +250,7 @@ public class Dictionary {
 		return 0;
 	}
 
-	private static void close() throws IOException {
+	public static void close() throws IOException {
 		for(final Item dict : dictMap.values()) {
 			dict.close();
 		}
@@ -288,13 +290,27 @@ public class Dictionary {
 		if(word.getXmlData().size() == 0)
 			return null;
 		
-		String ret = "<LAC><W>" + word.getText() + "</W>";
+		String ret = "<LAC><LAC-W>" + word.getText() + "</LAC-W>";
 		for (final XmlData data : word.getXmlData()) {
-			ret += "<D>" +  dictMap.get(data.getDictid()).getTitle() + "</D>";
+			ret += "<LAC-R><LAC-D>" +  dictMap.get(data.getDictid()).getTitle() + "</LAC-D>";
 			for(final String xml : data.getXml()) {
 				ret += xml;
 			}
+			
+//			for(final String xml : data.getXml()) {
+//				ret += xml;
+//			}
+//			
+			ret += "</LAC-R>";
 		}
+//		for (final XmlData data : word.getXmlData()) {
+//			ret += "<LAC-R><LAC-D>" +  dictMap.get(data.getDictid()).getTitle() + "</LAC-D>";
+//			for(final String xml : data.getXml()) {
+//				ret += xml;
+//			}
+//			ret += "</LAC-R>";
+//		}
+		
 		ret += "</LAC>";
 		
 		return ret;

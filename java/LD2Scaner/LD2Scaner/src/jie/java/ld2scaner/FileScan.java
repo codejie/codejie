@@ -194,8 +194,8 @@ public class FileScan {
 				for(int i = 0; i < countDefinitions; ++ i) {
 					outputLog("i = " + i);
 					//getData(buf, i, dataListener);					
-					//getData_without_index(buf, i, dataListener);
-					getData_with_index(buf, i, dataListener);
+					getData_without_index(buf, i, dataListener);
+					//getData_with_index(buf, i, dataListener);
 //					if(checkData(buf, i, db) != 0) {
 //						return -1;
 //					}
@@ -471,12 +471,36 @@ public class FileScan {
 		int offset = index;
 		final int idx[] = new int[6];		
 		getIndex(buf, offset * 10, idx);
-
-		if((idx[5] - idx[1]) > 0) {
+		
+		int wordid = -1;
+		
+		if ((idx[3] == 0) && ((idx[5] - idx[1]) > 0)) {
 			//word
-			int wordid = dataListener.OnWordData(WordFlag.Normal, index, buf, idx[0] + idx[3] * 4, (idx[4] - idx[0]) - idx[3] * 4);
-			//xml data
+			wordid = dataListener.OnWordData(WordFlag.Normal, index, buf, idx[0], idx[4] - idx[0]);
 			dataListener.OnXmlData(wordid, index, buf, idx[1], idx[5] - idx[1]);
+		} else if ((idx[3] == 0) && ((idx[5] - idx[1]) == 0)) {
+			//impossible
+		} else if ((idx[3] > 0) && ((idx[5] - idx[1]) > 0)) {
+			//word + index
+			wordid = dataListener.OnWordData(WordFlag.Normal_Reference, index, buf, idx[0] + idx[3] * 4, (idx[4] - idx[0]) - idx[3] * 4);
+			dataListener.OnXmlData(wordid, index, buf, idx[1], idx[5] - idx[1]);
+			getXmlIndexData(wordid, index, buf, idx[3], idx[0], dataListener);
+			//getReferenceData(wordid, index, buf, idx[3], idx[0], dataListener);
+		} else if ((idx[3] > 0) && ((idx[5] - idx[1]) == 0)) {
+			//only index
+			//wordid = dataListener.OnWordData(WordFlag.Reference, index, buf, idx[0] + idx[3] * 4, (idx[4] - idx[0]) - idx[3] * 4);
+			//getReferenceData(wordid, index, buf, idx[3], idx[0], dataListener);
+		}
+	}
+
+	private void getXmlIndexData(int wordid, int index, ByteBuffer buf, int ref, int offset, OnDataListener dataListener) {
+		final int idx[] = new int[6];
+		int next = offset;
+		while(ref -- > 0) {
+			next = buf.getInt(offsetInflatedWords + offset);
+			getIndex(buf, next * 10, idx);
+			dataListener.OnXmlData(wordid, index, buf, idx[1], idx[5] - idx[1]);
+			offset += 4;
 		}
 	}
 

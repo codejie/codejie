@@ -136,7 +136,7 @@ public class DBHelper {
 		execSQL(sql);
 		//word index
 		sql = "CREATE TABLE IF NOT EXISTS word_index_" + dictid + " ("
-				+ " wordid INTEGER PRIMARY KEY,"
+				+ " wordid INTEGER,"
 				+ " idx INTEGER,"
 				+ " offset INTEGER,"
 				+ " length INTEGER,"

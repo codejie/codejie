@@ -143,6 +143,9 @@ public class DBHelper {
 				+ " block1 INTEGER)";//,"
 				//+ " block2 INTEGER)";
 		execSQL(sql);
+		sql = "CREATE INDEX index_word_index_" + dictid + "_wordid ON word_index_" + dictid + " (wordid ASC)";		
+		execSQL(sql);
+
 		
 		sql = "CREATE INDEX index_word_index_" + dictid + "_idx ON word_index_" + dictid + " (idx ASC)";
 		execSQL(sql);

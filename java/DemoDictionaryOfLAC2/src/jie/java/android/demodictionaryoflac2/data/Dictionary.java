@@ -10,7 +10,6 @@ import jie.java.android.demodictionaryoflac2.Global;
 import jie.java.android.demodictionaryoflac2.data.Word.XmlData;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 public class Dictionary {

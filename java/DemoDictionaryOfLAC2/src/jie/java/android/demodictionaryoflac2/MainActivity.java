@@ -102,7 +102,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private int checkExpire() {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			Date expire = sf.parse("2013-06-31");
+			Date expire = sf.parse("2013-10-31");
 			Date now = new Date();
 			if(now.compareTo(expire) > 0) {
 				return -1;
